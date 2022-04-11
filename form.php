@@ -18,8 +18,8 @@
                 <input id="lab-name" type="text" name="labName">
                 <label for="micro-ref">Référence du microscope</label>
                 <input id="micro-ref" type="text" name="microRef">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" cols="30" rows="10"></textarea>
+                <label for="desc">Description</label>
+                <textarea id="desc" name="desc" cols="30" rows="10"></textarea>
             </fieldset>
             <fieldset>
                 <legend>Coordonnées</legend>
