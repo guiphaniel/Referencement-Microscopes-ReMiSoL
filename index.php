@@ -15,7 +15,7 @@
     </main>
     <footer>
         <address>
-            <a href="mailto:xxx.xxx@XXX.fr">xxx.xxx@xxx.fr</a>
+            <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
         </address>
     </footer>
 </body>
