@@ -3,7 +3,11 @@
     include_once("../model/Microscope.php");
     include_once("../model/Coordinates.php");
 
-    //TODO: verify that all fields are sent by form
+    //verify that all fields were sent by the form
+    if (!isset($_POST["labName"]) || !isset($_POST["microRef"]) || !isset($_POST["desc"]) || !isset($_POST["lat"]) || !isset($_POST["lon"])) {
+        header('location: /form.php');
+        exit();
+    }
 
     $microscope = new Microscope();
     $microscope
@@ -19,5 +23,4 @@
     ]);
 
     header('location: /index.php');
-    exit();
 

@@ -17,18 +17,18 @@
             <fieldset>
                 <legend>Informations générales</legend>
                 <label for="lab-name">Nom du laboratoire</label>
-                <input id="lab-name" type="text" name="labName">
+                <input id="lab-name" type="text" name="labName" required>
                 <label for="micro-ref">Référence du microscope</label>
-                <input id="micro-ref" type="text" name="microRef">
+                <input id="micro-ref" type="text" name="microRef" required>
                 <label for="desc">Description</label>
-                <textarea id="desc" name="desc" cols="30" rows="10"></textarea>
+                <textarea id="desc" name="desc" cols="30" rows="10" required></textarea>
             </fieldset>
             <fieldset>
                 <legend>Coordonnées</legend>
                 <label for="lat">Latitude</label>
-                <input id="lat" type="text" name="lat">
+                <input id="lat" type="number" name="lat" min="-90" max="90" step="0.00001" required>
                 <label for="lon">Longitude</label>
-                <input id="lon" type="text" name="lon">
+                <input id="lon" type="number" name="lon" min="-180" max="180" step="0.00001" required>
             </fieldset>
             <input type="submit">
         </form>
