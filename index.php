@@ -17,7 +17,7 @@
         <h1>Accueil</h1>
     </header>
     <main>
-        <p>Bienvenu sur notre site !</p>
+        <p>Bienvenue sur notre site !</p>
         <div id="map" style="height: 400px;"></div>
     </main>
     <footer>
