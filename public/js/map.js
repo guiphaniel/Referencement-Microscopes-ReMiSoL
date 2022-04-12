@@ -7,6 +7,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
 	attribution: '&copy; OpenStreetMap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+// show the scale bar on the lower left corner
+L.control.scale({imperial: true, metric: true}).addTo(map);
+
 // show microscopes' markers on the map
 loadAndShowMicroscopes();
 
