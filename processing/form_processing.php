@@ -12,9 +12,11 @@
         ->setDesc($_POST["desc"])
         ->setCoor(new Coordinates($_POST["lat"], $_POST["lon"]));
 
-    $sql = $pdo->prepare("INSERT INTO microscope VALUES (NULL, :serialized)");
+    $sql = $pdo->prepare("INSERT INTO microscopes VALUES (NULL, :serialized)");
 
     $sql->execute([
         'serialized' => serialize($microscope)
     ]);
+
+    header('location:/index.php');
 
