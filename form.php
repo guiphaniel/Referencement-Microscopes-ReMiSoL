@@ -1,3 +1,7 @@
+<?php 
+    include_once("view/generators/HeaderCreator.php");
+    $header = new HeaderCreator("Formulaire"); 
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,9 +11,7 @@
     <title>Formulaire</title>
 </head>
 <body>
-    <header>
-        <h1>Formulaire</h1>
-    </header>
+    <?php $header->create() ?>
     <main>
         <form action="processing/form_processing.php" method="post">
             <fieldset>

@@ -1,3 +1,7 @@
+<?php 
+    include_once("view/generators/HeaderCreator.php");
+    $header = new HeaderCreator("Accueil"); 
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -13,9 +17,9 @@
     <title>Accueil</title>
 </head>
 <body>
-    <header>
-        <h1>Accueil</h1>
-    </header>
+    <?php 
+        $header->create()
+    ?>
     <main>
         <p>Bienvenue sur notre site !</p>
         <div id="map" style="height: 400px;"></div>
