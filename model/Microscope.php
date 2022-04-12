@@ -1,11 +1,25 @@
 <?php
 include_once("Coordinates.php");
 
-class Microscope {
+// needs to implement JsonSerializable because fields are private
+class Microscope implements JsonSerializable {
     private $labName;
     private $ref;
     private $desc;
     private $coor;
+
+    public function jsonSerialize() : mixed {
+        $reflector = new ReflectionClass('Microscope');
+
+        $properties = $reflector->getProperties();
+        
+        $json = [];
+        foreach($properties as $property) {
+            $json[$property->getName()] = $property->getValue($this);
+        }
+        
+        return $json;
+    }
 
     public function getLabName()
     {
