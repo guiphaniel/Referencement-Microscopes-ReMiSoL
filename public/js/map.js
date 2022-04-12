@@ -1,5 +1,5 @@
 // initialize Leaflet
-var map = L.map('map').setView([45.78209592175619, 4.872300243795213], 13);
+var map = L.map('map').setView([46.606111, 1.875278], 5);
 
 // add the OpenStreetMap tile and display the license attribution
 L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
