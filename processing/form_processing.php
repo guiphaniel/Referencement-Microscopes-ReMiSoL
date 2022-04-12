@@ -1,5 +1,5 @@
 <?php
-    include_once("../model/start-db.php");
+    include_once("../model/start_db.php");
     include_once("../model/Microscope.php");
     include_once("../model/Coordinates.php");
 
