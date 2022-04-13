@@ -1,0 +1,8 @@
+BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "microscopes";
+CREATE TABLE IF NOT EXISTS "microscopes" (
+	"id"	INTEGER,
+	"serialized"	BLOB,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+COMMIT;
