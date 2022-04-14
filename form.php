@@ -38,6 +38,17 @@
                     <label for="lon">Longitude</label>
                     <input id="lon" type="number" name="lon" min="-180" max="180" step="0.00001" required>
                 </fieldset>
+                <fieldset id="micro-field-0">
+                    <legend>Votre microscope</legend>
+                    <label for="micro-brand-0">Marque</label>
+                    <input id="micro-brand-0" type="text" name="microscopes[0][microBrand]" required>
+                    <label for="micro-ref-0">Référence</label>
+                    <input id="micro-ref-0" type="text" name="microscopes[0][microRef]" required>
+                    <label for="micro-rate-0">Tarification</label>
+                    <input id="micro-rate-0" type="text" name="microscopes[0][microRate]" required>
+                    <label for="micro-desc-0">Description</label>
+                    <textarea id="micro-desc-0" name="microscopes[0][microDesc]" cols="30" rows="10" required></textarea>
+                </fieldset>
                 <div id="add-micro"></div>
             </fieldset>
             <input type="submit">

@@ -1,5 +1,5 @@
 let microscopeFields = document.getElementById("microscopes")
-let nextMicroFieldId = 0;
+let nextMicroFieldId = 1;
 
 let addMicroButton = document.getElementById("add-micro");
 addMicroButton.onclick = addMicroscopeField;
