@@ -45,7 +45,7 @@
                     <label for="micro-ref-0">Référence</label>
                     <input id="micro-ref-0" type="text" name="microscopes[0][ref]" required>
                     <label for="micro-rate-0">Tarification</label>
-                    <input id="micro-rate-0" type="text" name="microscopes[0][rate]" required>
+                    <input id="micro-rate-0" type="number" name="microscopes[0][rate]" min="0" step="0.01" required>
                     <label for="micro-desc-0">Description</label>
                     <textarea id="micro-desc-0" name="microscopes[0][desc]" cols="30" rows="10" required></textarea>
                 </fieldset>

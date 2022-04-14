@@ -17,7 +17,7 @@ function addMicroscopeField() {
         <label for="micro-ref-${id}">Référence</label>
         <input id="micro-ref-${id}" type="text" name="microscopes[${id}][ref]" required>
         <label for="micro-rate-${id}">Tarification</label>
-        <input id="micro-rate-${id}" type="text" name="microscopes[${id}][rate]" required>
+        <input id="micro-rate-${id}" type="number" name="microscopes[${id}][rate]" min="0" step="0.01" required>
         <label for="micro-desc-${id}">Description</label>
         <textarea id="micro-desc-${id}" name="microscopes[${id}][desc]" cols="30" rows="10" required></textarea>
     `;
