@@ -6,6 +6,8 @@ addMicroButton.onclick = addMicroscopeField;
 
 function addMicroscopeField() {
     id = nextMicroFieldId++;
+
+    // create the form fieldset
     microscope = document.createElement("fieldset");
     microscope.id = "micro-field-" + id;
     microscope.innerHTML = `
@@ -20,13 +22,16 @@ function addMicroscopeField() {
         <textarea id="micro-desc-${id}" name="microscopes[${id}][microDesc]" cols="30" rows="10" required></textarea>
     `;
 
+    // add the remove button in the fieldset
     let rmButton = document.createElement("div")
-    rmButton.className = "rm-micro"
-    //TODO: corriger cette partie qui ne fonctionne pas (remove)
+    rmButton.className = "rm-micro";
+    rmButton.id = "rm-micro-" + id;
     rmButton.addEventListener('click', function(){
-        document.getElementById("micro-field-" + id).remove();
+        let microId = this.id.split('-')[2]; // retrieve the id of the rmButton, which is the one of the fieldset too
+        document.getElementById("micro-field-" + microId).remove();
     });
     microscope.append(rmButton);
     
+    // add the form fieldset at the end of the form
     microscopeFields.insertBefore(microscope, addMicroButton);
 }
