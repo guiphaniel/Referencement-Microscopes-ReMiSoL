@@ -52,8 +52,8 @@
 
             // bind microscopes to the group
             foreach($group->getMicroscopes() as $micro) {
-                $microId = getMicroscopeId($micro);
-                $sth = $pdo->prepare("INSERT INTO belong VALUES (:groupId, microId, :rate, :desc)");
+                $microId = $this->getMicroscopeId($micro);
+                $sth = $pdo->prepare("INSERT INTO belong VALUES (:groupId, :microId, :rate, :desc)");
 
                 $sth->execute([
                     "groupId" => $groupId,
