@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS "manage" (
 	"contact_id"	INTEGER,
 	"microscopes_group_id"	INTEGER,
 	PRIMARY KEY("contact_id","microscopes_group_id"),
-	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
-	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id")
+	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id"),
+	FOREIGN KEY("contact_id") REFERENCES "contact"("id")
 );
 DROP TABLE IF EXISTS "belong_theme";
 CREATE TABLE IF NOT EXISTS "belong_theme" (
@@ -50,16 +50,14 @@ CREATE TABLE IF NOT EXISTS "belong" (
 	"rate"	NUMERIC,
 	"desc"	TEXT,
 	PRIMARY KEY("microscopes_group_id","microscope_id"),
-	FOREIGN KEY("microscope_id") REFERENCES "microscope"("id"),
-	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id")
+	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id"),
+	FOREIGN KEY("microscope_id") REFERENCES "microscope"("id")
 );
 DROP TABLE IF EXISTS "microscope";
 CREATE TABLE IF NOT EXISTS "microscope" (
 	"id"	INTEGER,
 	"brand"	TEXT,
 	"ref"	TEXT,
-	"group_id"	INTEGER,
-	CONSTRAINT "pk_microscope" PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("group_id") REFERENCES "microscopes_group"("id")
+	CONSTRAINT "pk_microscope" PRIMARY KEY("id" AUTOINCREMENT)
 );
 COMMIT;
