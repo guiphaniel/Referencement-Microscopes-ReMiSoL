@@ -3,10 +3,8 @@ include_once("Coordinates.php");
 
 // needs to implement JsonSerializable because fields are private
 class Microscope implements JsonSerializable {
-    private $labName;
-    private $ref;
-    private $desc;
-    private $coor;
+
+    function __construct(private $brand, private $ref) {}
 
     public function jsonSerialize() : mixed {
         $reflector = new ReflectionClass('Microscope');
@@ -14,21 +12,21 @@ class Microscope implements JsonSerializable {
         $properties = $reflector->getProperties();
         
         $json = [];
-        foreach($properties as $property) {
+        foreach($properties as $property) 
             $json[$property->getName()] = $property->getValue($this);
-        }
+        
         
         return $json;
     }
 
-    public function getLabName()
+    public function getBrand()
     {
-        return $this->labName;
+        return $this->brand;
     }
 
-    public function setLabName($labName)
+    public function setBrand($brand)
     {
-        $this->labName = $labName;
+        $this->brand = $brand;
 
         return $this;
     }
@@ -41,30 +39,6 @@ class Microscope implements JsonSerializable {
     public function setRef($ref)
     {
         $this->ref = $ref;
-
-        return $this;
-    }
-
-    public function getDesc()
-    {
-        return $this->desc;
-    }
-
-    public function setDesc($desc)
-    {
-        $this->desc = $desc;
-
-        return $this;
-    }
-
-    public function getCoor()
-    {
-        return $this->coor;
-    }
-
-    public function setCoor($coor)
-    {
-        $this->coor = $coor;
 
         return $this;
     }
