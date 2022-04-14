@@ -41,13 +41,13 @@
                 <fieldset id="micro-field-0">
                     <legend>Votre microscope</legend>
                     <label for="micro-brand-0">Marque</label>
-                    <input id="micro-brand-0" type="text" name="microscopes[0][microBrand]" required>
+                    <input id="micro-brand-0" type="text" name="microscopes[0][brand]" required>
                     <label for="micro-ref-0">Référence</label>
-                    <input id="micro-ref-0" type="text" name="microscopes[0][microRef]" required>
+                    <input id="micro-ref-0" type="text" name="microscopes[0][ref]" required>
                     <label for="micro-rate-0">Tarification</label>
-                    <input id="micro-rate-0" type="text" name="microscopes[0][microRate]" required>
+                    <input id="micro-rate-0" type="text" name="microscopes[0][rate]" required>
                     <label for="micro-desc-0">Description</label>
-                    <textarea id="micro-desc-0" name="microscopes[0][microDesc]" cols="30" rows="10" required></textarea>
+                    <textarea id="micro-desc-0" name="microscopes[0][desc]" cols="30" rows="10" required></textarea>
                 </fieldset>
                 <div id="add-micro"></div>
             </fieldset>

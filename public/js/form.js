@@ -13,13 +13,13 @@ function addMicroscopeField() {
     microscope.innerHTML = `
         <legend>Votre microscope</legend>
         <label for="micro-brand-${id}">Marque</label>
-        <input id="micro-brand-${id}" type="text" name="microscopes[${id}][microBrand]" required>
+        <input id="micro-brand-${id}" type="text" name="microscopes[${id}][brand]" required>
         <label for="micro-ref-${id}">Référence</label>
-        <input id="micro-ref-${id}" type="text" name="microscopes[${id}][microRef]" required>
+        <input id="micro-ref-${id}" type="text" name="microscopes[${id}][ref]" required>
         <label for="micro-rate-${id}">Tarification</label>
-        <input id="micro-rate-${id}" type="text" name="microscopes[${id}][microRate]" required>
+        <input id="micro-rate-${id}" type="text" name="microscopes[${id}][rate]" required>
         <label for="micro-desc-${id}">Description</label>
-        <textarea id="micro-desc-${id}" name="microscopes[${id}][microDesc]" cols="30" rows="10" required></textarea>
+        <textarea id="micro-desc-${id}" name="microscopes[${id}][desc]" cols="30" rows="10" required></textarea>
     `;
 
     // add the remove button in the fieldset
