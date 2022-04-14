@@ -36,7 +36,7 @@
             // if the contact is not yet in the db, add it
             $id = self::getContactId($contact);
             if ($id < 0) {
-                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :name, :email");
+                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :name, :email)");
         
                 $sth->execute([
                     "name" => $contact->getName(),
