@@ -4,7 +4,7 @@ include_once("Coordinates.php");
 // needs to implement JsonSerializable because fields are private
 class Microscope implements JsonSerializable {
 
-    function __construct(private $brand, private $ref) {}
+    function __construct(private $brand, private $ref, private float $rate, private $desc) {}
 
     public function jsonSerialize() : mixed {
         $reflector = new ReflectionClass('Microscope');
@@ -39,6 +39,33 @@ class Microscope implements JsonSerializable {
     public function setRef($ref)
     {
         $this->ref = $ref;
+
+        return $this;
+    }
+
+    public function getRate() : float
+    {
+        return $this->rate;
+    }
+
+    public function setRate(float $rate)
+    {
+        if ($rate < 0.0)
+            $rate = 0.0;
+        
+        $this->rate = $rate;
+
+        return $this;
+    }
+
+    public function getDesc() : string
+    {
+        return $this->desc;
+    }
+
+    public function setDesc(string $desc)
+    {
+        $this->desc = $desc;
 
         return $this;
     }
