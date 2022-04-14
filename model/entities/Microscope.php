@@ -1,5 +1,5 @@
 <?php
-include_once("Coordinates.php");
+include_once(__DIR__ . "/Coordinates.php");
 
 // needs to implement JsonSerializable because fields are private
 class Microscope implements JsonSerializable {

@@ -1,6 +1,6 @@
 <?php
-    include_once("../start_db.php");
-    include_once("../entities/Contact.php");
+    include_once(__DIR__ . "/../start_db.php");
+    include_once(__DIR__ . "/../entities/Contact.php");
 
     class ContactService {
         static private $instance;
@@ -24,9 +24,10 @@
                 "email" => $contact->getEmail()
             ]);
     
-            $id = $sth->fetch()[0];
+            $row = $sth->fetch();
 
-            return $id > 0 ? $id : -1;
+            // if this contact exists, reutrn its id, else reutrn -1
+            return $row ? $row[0] : -1;
         }
     
         function save(Contact $contact) {

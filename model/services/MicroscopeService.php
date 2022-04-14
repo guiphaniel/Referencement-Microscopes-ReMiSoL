@@ -1,7 +1,7 @@
 <?php
-    include_once("../start_db.php");
-    include_once("../entities/MicroscopeGroup.php");
-    include_once("../services/ContactService.php");
+    include_once(__DIR__ . "/../start_db.php");
+    include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
+    include_once(__DIR__ . "/ContactService.php");
 
     class MicroscopeService {
         static private $instance;
@@ -25,7 +25,10 @@
                 "ref" => $micro->getRef()
             ]);
 
-            return $sth->fetch()[0];
+            $row = $sth->fetch();
+
+            // if this microscope exists, reutrn its id, else reutrn -1
+            return $row ? $row[0] : -1;
         }
 
         function saveGroup(MicroscopesGroup $group) {

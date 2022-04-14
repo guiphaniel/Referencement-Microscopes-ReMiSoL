@@ -1,7 +1,7 @@
 <?php
-    include_once("Microscope.php");
-    include_once("Contact.php");
-    include_once("Lab.php");
+    include_once(__DIR__ . "/Microscope.php");
+    include_once(__DIR__ . "/Contact.php");
+    include_once(__DIR__ . "/Lab.php");
 
     class MicroscopesGroup {
         private array $microscopes;
