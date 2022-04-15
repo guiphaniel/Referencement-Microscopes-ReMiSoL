@@ -1,0 +1,15 @@
+BEGIN TRANSACTION;
+INSERT INTO "lab" VALUES (1,'name1','address1');
+INSERT INTO "lab" VALUES (2,'name2','address2');
+INSERT INTO "microscope" VALUES (1,'brand1','ref1');
+INSERT INTO "microscope" VALUES (2,'brand2','ref2');
+INSERT INTO "contact" VALUES (1,'name1','email1');
+INSERT INTO "contact" VALUES (2,'name2','email2');
+INSERT INTO "microscopes_group" VALUES (1,1.0,1.0,1);
+INSERT INTO "microscopes_group" VALUES (2,2.0,2.0,2);
+INSERT INTO "belong" VALUES (1,1,11,'desc11');
+INSERT INTO "belong" VALUES (2,1,21,'desc21');
+INSERT INTO "belong" VALUES (2,2,22,'desc22');
+INSERT INTO "manage" VALUES (1,1);
+INSERT INTO "manage" VALUES (2,2);
+COMMIT;
