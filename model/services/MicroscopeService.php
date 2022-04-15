@@ -2,6 +2,7 @@
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
     include_once(__DIR__ . "/ContactService.php");
+    include_once(__DIR__ . "/LabService.php");
 
     class MicroscopeService {
         static private $instance;
@@ -35,12 +36,12 @@
             global $pdo;
             
             // save the group and bind the lab
-            $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labName)");
+            $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labId)");
 
             $sth->execute([
                 "lat" => $group->getLat(),
                 "lon" => $group->getLon(),
-                "labName" => $group->getLab()->getName()
+                "labId" => LabService::getInstance()->getLabId($group->getLab())
             ]);
 
             // get the generated group id
