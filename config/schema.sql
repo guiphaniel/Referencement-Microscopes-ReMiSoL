@@ -4,14 +4,6 @@ CREATE TABLE IF NOT EXISTS "theme" (
 	"type"	TEXT,
 	PRIMARY KEY("type")
 );
-DROP TABLE IF EXISTS "contact";
-CREATE TABLE IF NOT EXISTS "contact" (
-	"id"	INTEGER,
-	"firstname"	TEXT,
-	"lastname"	TEXT,
-	"email"	TEXT,
-	PRIMARY KEY("id" AUTOINCREMENT)
-);
 DROP TABLE IF EXISTS "manage";
 CREATE TABLE IF NOT EXISTS "manage" (
 	"microscopes_group_id"	INTEGER,
@@ -19,6 +11,14 @@ CREATE TABLE IF NOT EXISTS "manage" (
 	PRIMARY KEY("microscopes_group_id","contact_id"),
 	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id"),
 	FOREIGN KEY("contact_id") REFERENCES "contact"("id")
+);
+DROP TABLE IF EXISTS "contact";
+CREATE TABLE IF NOT EXISTS "contact" (
+	"id"	INTEGER,
+	"firstname"	TEXT,
+	"lastname"	TEXT,
+	"email"	TEXT UNIQUE,
+	PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "belong_theme";
 CREATE TABLE IF NOT EXISTS "belong_theme" (
