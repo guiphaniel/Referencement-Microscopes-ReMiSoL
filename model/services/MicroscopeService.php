@@ -36,7 +36,6 @@
             
             // save the group and bind the lab
             $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labName)");
-            $groupId = $pdo->lastInsertId();
 
             $sth->execute([
                 "lat" => $group->getLat(),
@@ -44,6 +43,8 @@
                 "labName" => $group->getLab()->getName()
             ]);
 
+            // get the generated group id
+            $groupId = $pdo->lastInsertId();
               
             // save the contact, if it's not yet in the db
             $contactService = ContactService::getInstance();
