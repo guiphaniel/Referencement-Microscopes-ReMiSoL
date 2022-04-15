@@ -44,16 +44,7 @@
                     "lastname" => $contact->getLastname(),
                     "email" => $contact->getEmail()
                 ]);
-            } else { //else, update it
-                $sth = $pdo->prepare("UPDATE contact SET firstname = :firstname, lastname = :lastname, email = :email WHERE id = :id");
-        
-                $sth->execute([
-                    "firstname" => $contact->getFirstname(),
-                    "lastname" => $contact->getLastname(),
-                    "email" => $contact->getEmail(),
-                    "id" => $id
-                ]);
-            }  
+            }
         }    
     }
 
