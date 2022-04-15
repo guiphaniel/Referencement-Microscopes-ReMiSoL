@@ -1,19 +1,4 @@
 BEGIN TRANSACTION;
-DROP TABLE IF EXISTS "lab";
-CREATE TABLE IF NOT EXISTS "lab" (
-	"name"	TEXT,
-	"address"	TEXT,
-	PRIMARY KEY("name")
-);
-DROP TABLE IF EXISTS "microscopes_group";
-CREATE TABLE IF NOT EXISTS "microscopes_group" (
-	"id"	INTEGER,
-	"lat"	REAL,
-	"lon"	REAL,
-	"lab_name"	TEXT,
-	CONSTRAINT "pk_microscope_group" PRIMARY KEY("id" AUTOINCREMENT),
-	CONSTRAINT "fk_microscope_group_lab" FOREIGN KEY("lab_name") REFERENCES "lab"("name") ON DELETE CASCADE
-);
 DROP TABLE IF EXISTS "theme";
 CREATE TABLE IF NOT EXISTS "theme" (
 	"type"	TEXT,
@@ -31,8 +16,8 @@ CREATE TABLE IF NOT EXISTS "manage" (
 	"contact_id"	INTEGER,
 	"microscopes_group_id"	INTEGER,
 	PRIMARY KEY("contact_id","microscopes_group_id"),
-	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id"),
-	FOREIGN KEY("contact_id") REFERENCES "contact"("id")
+	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
+	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id")
 );
 DROP TABLE IF EXISTS "belong_theme";
 CREATE TABLE IF NOT EXISTS "belong_theme" (
@@ -40,8 +25,8 @@ CREATE TABLE IF NOT EXISTS "belong_theme" (
 	"belong_microscope_id"	INTEGER,
 	"theme_type"	INTEGER,
 	PRIMARY KEY("belong_microscopes_group_id","belong_microscope_id","theme_type"),
-	FOREIGN KEY("belong_microscopes_group_id","belong_microscope_id") REFERENCES "belong"("microscopes_group_id","microscope_id"),
-	FOREIGN KEY("theme_type") REFERENCES "theme"("type")
+	FOREIGN KEY("theme_type") REFERENCES "theme"("type"),
+	FOREIGN KEY("belong_microscopes_group_id","belong_microscope_id") REFERENCES "belong"("microscopes_group_id","microscope_id")
 );
 DROP TABLE IF EXISTS "belong";
 CREATE TABLE IF NOT EXISTS "belong" (
@@ -49,15 +34,32 @@ CREATE TABLE IF NOT EXISTS "belong" (
 	"microscope_id"	INTEGER,
 	"rate"	NUMERIC,
 	"desc"	TEXT,
-	PRIMARY KEY("microscopes_group_id","microscope_id"),
+	FOREIGN KEY("microscope_id") REFERENCES "microscope"("id"),
 	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id"),
-	FOREIGN KEY("microscope_id") REFERENCES "microscope"("id")
+	PRIMARY KEY("microscopes_group_id","microscope_id")
+);
+DROP TABLE IF EXISTS "lab";
+CREATE TABLE IF NOT EXISTS "lab" (
+	"id"	INTEGER,
+	"name"	TEXT UNIQUE,
+	"address"	TEXT,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "microscopes_group";
+CREATE TABLE IF NOT EXISTS "microscopes_group" (
+	"id"	INTEGER,
+	"lat"	REAL,
+	"lon"	REAL,
+	"lab_id"	INTEGER,
+	FOREIGN KEY("lab_id") REFERENCES "lab"("id") ON DELETE CASCADE,
+	CONSTRAINT "pk_microscope_group" PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "microscope";
 CREATE TABLE IF NOT EXISTS "microscope" (
 	"id"	INTEGER,
 	"brand"	TEXT,
 	"ref"	TEXT,
+	CONSTRAINT "u_brand_ref" UNIQUE("brand","ref"),
 	CONSTRAINT "pk_microscope" PRIMARY KEY("id" AUTOINCREMENT)
 );
 COMMIT;
