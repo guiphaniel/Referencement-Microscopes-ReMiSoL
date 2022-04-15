@@ -56,11 +56,11 @@
             }
                 
             // bind the contact to the group
-            $sth = $pdo->prepare("INSERT INTO manage VALUES (:contactId, :groupId)");
+            $sth = $pdo->prepare("INSERT INTO manage VALUES (:groupId, :contactId)");
 
             $sth->execute([
-                "contactId" => $contactId,
-                "groupId" => $groupId
+                "groupId" => $groupId,
+                "contactId" => $contactId
             ]);
 
             // bind microscopes to the group

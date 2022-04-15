@@ -13,11 +13,11 @@ CREATE TABLE IF NOT EXISTS "contact" (
 );
 DROP TABLE IF EXISTS "manage";
 CREATE TABLE IF NOT EXISTS "manage" (
-	"contact_id"	INTEGER,
 	"microscopes_group_id"	INTEGER,
-	PRIMARY KEY("contact_id","microscopes_group_id"),
-	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
-	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id")
+	"contact_id"	INTEGER,
+	PRIMARY KEY("microscopes_group_id","contact_id"),
+	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id"),
+	FOREIGN KEY("contact_id") REFERENCES "contact"("id")
 );
 DROP TABLE IF EXISTS "belong_theme";
 CREATE TABLE IF NOT EXISTS "belong_theme" (
