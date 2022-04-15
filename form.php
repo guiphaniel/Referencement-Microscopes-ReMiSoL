@@ -19,13 +19,13 @@
                 <legend>Votre Laboratoire</legend>
                 <label for="lab-name">Nom</label>
                 <input id="lab-name" type="text" name="labName" required>
-                <label for="lab-address">Adresse</label>
+                <label for="lab-address">Adresse postale</label>
                 <input id="lab-address" type="text" name="labAddress" required>
             </fieldset>
             <fieldset id="microscopes">
                 <legend>Vos microscopes</legend>
                 <fieldset>
-                    <legend>Contact</legend>
+                    <legend>Référent·e</legend>
                     <label for="contact-firstname">Prénom</label>
                     <input id="contact-firstname" type="text" name="contactFirstname" required>
                     <label for="contact-lastname">Nom</label>
