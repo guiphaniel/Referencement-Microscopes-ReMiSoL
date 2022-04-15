@@ -26,8 +26,10 @@
                 <legend>Vos microscopes</legend>
                 <fieldset>
                     <legend>Contact</legend>
-                    <label for="contact-name">Nom</label>
-                    <input id="contact-name" type="text" name="contactName" required>
+                    <label for="contact-firstname">Prénom</label>
+                    <input id="contact-firstname" type="text" name="contactFirstname" required>
+                    <label for="contact-lastname">Nom</label>
+                    <input id="contact-lastname" type="text" name="contactLastname" required>
                     <label for="contact-email">Email</label>
                     <input id="contact-email" type="text" name="contactEmail" required>
                 </fieldset>

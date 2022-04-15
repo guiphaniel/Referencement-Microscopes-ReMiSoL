@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS "theme" (
 DROP TABLE IF EXISTS "contact";
 CREATE TABLE IF NOT EXISTS "contact" (
 	"id"	INTEGER,
-	"name"	TEXT,
+	"firstname"	TEXT,
+	"lastname"	TEXT,
 	"email"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );

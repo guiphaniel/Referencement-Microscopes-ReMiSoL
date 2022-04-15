@@ -7,7 +7,7 @@
 
     // TODO: verifier que les laboratoires, les microscopes et les thèmes font bien parti de ceux déjà présent en bd
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form 
-    if (!isset($_POST["labName"]) || !isset($_POST["labAddress"]) || !isset($_POST["contactName"]) || !isset($_POST["contactEmail"]) || !isset($_POST["lat"]) || !isset($_POST["lon"])) {
+    if (!isset($_POST["labName"]) || !isset($_POST["labAddress"]) || !isset($_POST["contactFirstname"]) || !isset($_POST["contactLastname"]) || !isset($_POST["contactEmail"]) || !isset($_POST["lat"]) || !isset($_POST["lon"])) {
         header('location: /form.php');
         exit();
     }
@@ -21,7 +21,7 @@
 
     // Convert form values into objects...
     $lab = new Lab($_POST["labName"], $_POST["labAddress"]);
-    $contact = new Contact($_POST["contactName"], $_POST["contactEmail"]);
+    $contact = new Contact($_POST["contactFirstname"], $_POST["contactLastname"], $_POST["contactEmail"]);
     $group = new MicroscopesGroup($_POST["lat"], $_POST["lon"], $lab, $contact);
 
     foreach($_POST["microscopes"] as $micro)

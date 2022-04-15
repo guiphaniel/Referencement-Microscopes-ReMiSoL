@@ -1,15 +1,27 @@
 <?php
     class Contact {
-        function __construct(private $name, private $email) {}
+        function __construct(private $firstname, private $lastname, private $email) {}
 
-        public function getName() : string
+        public function getFirstname()
         {
-            return $this->name;
+            return $this->firstname;
         }
 
-        public function setName($name)
+        public function setFirstname($firstname)
         {
-            $this->name = $name;
+            $this->firstname = $firstname;
+
+            return $this;
+        }
+
+        public function getLastname()
+        {
+            return $this->lastname;
+        }
+
+        public function setLastname($lastname)
+        {
+            $this->lastname = $lastname;
 
             return $this;
         }
