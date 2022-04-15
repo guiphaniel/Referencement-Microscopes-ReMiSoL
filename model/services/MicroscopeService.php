@@ -48,8 +48,19 @@
               
             // save the contact, if it's not yet in the db
             $contactService = ContactService::getInstance();
-            if (!$contactService->getContactId($group->getContact()) >= 0)
-                $contactService->save($group->getContact());            
+            $contactId = $contactService->getContactId($group->getContact());
+            if ($contactId <= -1) {
+                $contactService->save($group->getContact());   
+                $contactId = $pdo->lastInsertId();
+            }
+                
+            // bind the contact to the group
+            $sth = $pdo->prepare("INSERT INTO manage VALUES (:contactId, :groupId)");
+
+            $sth->execute([
+                "contactId" => $contactId,
+                "groupId" => $groupId
+            ]);
 
             // bind microscopes to the group
             foreach($group->getMicroscopes() as $micro) {
