@@ -3,8 +3,8 @@ DROP TABLE IF EXISTS "manage";
 CREATE TABLE IF NOT EXISTS "manage" (
 	"microscopes_group_id"	INTEGER,
 	"contact_id"	INTEGER,
-	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id"),
 	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
+	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id"),
 	PRIMARY KEY("microscopes_group_id","contact_id")
 );
 DROP TABLE IF EXISTS "contact";
@@ -75,8 +75,8 @@ DROP TABLE IF EXISTS "microscope";
 CREATE TABLE IF NOT EXISTS "microscope" (
 	"id"	INTEGER,
 	"model"	TEXT,
-	"controller_name"	TEXT NOT NULL,
 	"brand_name"	TEXT,
+	"controller_name"	TEXT NOT NULL,
 	FOREIGN KEY("controller_name") REFERENCES "controller"("name"),
 	FOREIGN KEY("brand_name") REFERENCES "brand"("name") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
