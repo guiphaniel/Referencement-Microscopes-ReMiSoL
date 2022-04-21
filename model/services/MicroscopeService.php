@@ -1,8 +1,10 @@
 <?php
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
-    include_once(__DIR__ . "/ContactService.php");
     include_once(__DIR__ . "/LabService.php");
+    include_once(__DIR__ . "/ContactService.php");
+    include_once(__DIR__ . "/ModelService.php");
+    include_once(__DIR__ . "/ControllerService.php");
 
     class MicroscopeService {
         static private $instance;
@@ -16,44 +18,43 @@
             return self::$instance;
         }
 
-        function getMicroscopeId(Microscope $micro) {
-            global $pdo;
-
-            $sth = $pdo->prepare("SELECT id FROM microscope where brand = :brand and ref = :ref");
-
-            $sth->execute([
-                "brand" => $micro->getBrand(),
-                "ref" => $micro->getRef()
-            ]);
-
-            $row = $sth->fetch();
-
-            // if this microscope exists, reutrn its id, else reutrn -1
-            return $row ? $row[0] : -1;
-        }
-
-        function saveGroup(MicroscopesGroup $group) {
+        // TODO: handle keywords
+        function addMicro(Microscope $micro) : int {
             global $pdo;
             
-            // save the group and bind the lab
+            $sth = $pdo->prepare("INSERT INTO microscope VALUES (NULL, :rate, :desc, :modId, :ctrId)");
+
+            $sth->execute([
+                "rate" => $micro->getRate(),
+                "desc" => $micro->getDesc(),
+                "modId" => ModelService::getInstance()->getModelId($micro->getModel()),
+                "ctrId" => ControllerService::getInstance()->getControllerId($micro->getController())
+            ]);     
+
+            return $pdo->lastInsertId();
+        }
+
+        // TODO: check if the lab / brand / controller / are already in db, else add them but also add them in a table "to_verify", maybe in the add/save functions of each Service
+        function addGroup(MicroscopesGroup $group) {
+            global $pdo;
+            
+            //save the Lab
+            $labId = LabService::getInstance()->save($group->getLab());
+
+            // save the group and bind it to the lab
             $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labId)");
 
             $sth->execute([
                 "lat" => $group->getLat(),
                 "lon" => $group->getLon(),
-                "labId" => LabService::getInstance()->getLabId($group->getLab())
+                "labId" => $labId
             ]);
 
             // get the generated group id
             $groupId = $pdo->lastInsertId();
               
-            // save the contact, if it's not yet in the db
-            $contactService = ContactService::getInstance();
-            $contactId = $contactService->getContactId($group->getContact());
-            if ($contactId <= -1) {
-                $contactService->save($group->getContact());   
-                $contactId = $pdo->lastInsertId();
-            }
+            // save the contact
+            $contactId = ContactService::getInstance()->save($group->getContact());   
                 
             // bind the contact to the group
             $sth = $pdo->prepare("INSERT INTO manage VALUES (:groupId, :contactId)");
@@ -63,17 +64,8 @@
                 "contactId" => $contactId
             ]);
 
-            // bind microscopes to the group
-            foreach($group->getMicroscopes() as $micro) {
-                $microId = $this->getMicroscopeId($micro);
-                $sth = $pdo->prepare("INSERT INTO belong VALUES (:groupId, :microId, :rate, :desc)");
-
-                $sth->execute([
-                    "groupId" => $groupId,
-                    "microId" => $microId,
-                    "rate" => $micro->getRate(),
-                    "desc" => $micro->getDesc()
-                ]);
-            }
+            // add the microscopes to the db
+            foreach($group->getMicroscopes() as $micro)
+                $this->addMicro($micro);
         }
     }
