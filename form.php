@@ -1,5 +1,7 @@
 <?php 
     include_once("view/generators/HeaderCreator.php");
+    include_once("model/services/KeywordService.php");
+    include_once("model/services/CompagnyService.php");
     $header = new HeaderCreator("Formulaire"); 
 ?>
 <!DOCTYPE html>
@@ -24,6 +26,14 @@
             </fieldset>
             <fieldset id="microscopes">
                 <legend>Vos microscopes</legend>
+                <!-- Here is the datalist for compagnies -->
+                <datalist id="compagnies">
+                <?php 
+                echo var_dump(CompagnyService::getInstance()->getAllCompagnies());
+                    foreach (CompagnyService::getInstance()->getAllCompagnies() as $compagny): ?>
+                        <option value="<?=$compagny->getName()?>">
+                    <?php endforeach; ?>
+                </datalist>
                 <fieldset>
                     <legend>Référent·e</legend>
                     <label for="contact-firstname">Prénom</label>
@@ -42,14 +52,36 @@
                 </fieldset>
                 <fieldset id="micro-field-0">
                     <legend>Votre microscope</legend>
+                    <label for="micro-compagny-0">Société</label>
+                    <!-- The datalist for compagnies is at the beginnnig of the microscopes fieldset -->
+                    <input id="micro-compagny-0" list="compagnies" name="microscopes[0][compagny]" required>
                     <label for="micro-brand-0">Marque</label>
                     <input id="micro-brand-0" type="text" name="microscopes[0][brand]" required>
-                    <label for="micro-ref-0">Référence</label>
-                    <input id="micro-ref-0" type="text" name="microscopes[0][ref]" required>
-                    <label for="micro-rate-0">Tarification</label>
-                    <input id="micro-rate-0" type="number" name="microscopes[0][rate]" min="0" step="0.01" required>
+                    <label for="micro-model-0">Modèle</label>
+                    <input id="micro-model-0" type="text" name="microscopes[0][model]" required>
+                    <label for="micro-controller-0">Électronique - contrôleur</label>
+                    <input id="micro-controller-0" type="text" name="microscopes[0][controller]" required>
+                    <label for="micro-rate-0">Tarification (lien)</label>
+                    <input id="micro-rate-0" type="text" name="microscopes[0][rate]" required>
                     <label for="micro-desc-0">Description</label>
                     <textarea id="micro-desc-0" name="microscopes[0][desc]" cols="30" rows="10" required></textarea>
+                    <fieldset id="keywords">
+                    <legend>Mots-clés</legend>
+                    <?php 
+                        $keyWordService = KeywordService::getInstance();
+                        $cats = $keyWordService->getAllCategories();
+                        foreach ($cats as $cat): ?>
+                            <label for="cat-<?=$cat?>"><?=$cat?></label>
+                            <input id="cat-<?=$cat?>" list="cats-<?=$cat?>" name="microscopes[0][keywords][<?=$cat?>]">
+                            <datalist id="cats-<?=$cat?>">
+                            <?php 
+                                $tags = $keyWordService->getAllTags($cat);
+                                foreach ($tags as $tag): ?>
+                                    <option value="<?=$tag?>">
+                                <?php endforeach; ?>
+                            </datalist>
+                        <?php endforeach; ?>
+                    </fieldset>
                 </fieldset>
                 <div id="add-micro"></div>
             </fieldset>

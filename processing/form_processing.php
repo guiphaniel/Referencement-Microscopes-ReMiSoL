@@ -2,10 +2,11 @@
     include_once("../model/start_db.php");
     include_once("../model/entities/Lab.php");
     include_once("../model/entities/Contact.php");
+    include_once("../model/entities/Model.php");
+    include_once("../model/entities/Controller.php");
     include_once("../model/entities/MicroscopesGroup.php");
     include_once("../model/services/MicroscopeService.php");
 
-    // TODO: verifier que les laboratoires, les microscopes et les thèmes font bien parti de ceux déjà présent en bd
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form 
     if (!isset($_POST["labName"]) || !isset($_POST["labAddress"]) || !isset($_POST["contactFirstname"]) || !isset($_POST["contactLastname"]) || !isset($_POST["contactEmail"]) || !isset($_POST["lat"]) || !isset($_POST["lon"])) {
         header('location: /form.php');
@@ -13,7 +14,7 @@
     }
 
     foreach($_POST["microscopes"] as $micro) {
-        if (!isset($micro["brand"]) || !isset($micro["ref"]) || !isset($micro["rate"]) || !isset($micro["desc"])) {
+        if (!isset($micro["compagny"]) || !isset($micro["brand"]) || !isset($micro["model"]) || !isset($micro["controller"]) || !isset($micro["rate"]) || !isset($micro["desc"])) {
             header('location: /form.php');
             exit();
         }
@@ -24,11 +25,17 @@
     $contact = new Contact($_POST["contactFirstname"], $_POST["contactLastname"], $_POST["contactEmail"]);
     $group = new MicroscopesGroup($_POST["lat"], $_POST["lon"], $lab, $contact);
 
-    foreach($_POST["microscopes"] as $micro)
-        $group->addMicroscope(new Microscope($micro["brand"], $micro["ref"], $micro["rate"], $micro["desc"]));
+    foreach($_POST["microscopes"] as $micro) {
+        $com = new Compagny($micro["compagny"]);
+        $bra = new Brand($micro["brand"], $com);
+        $mod = new Model($micro["model"], $bra);
+        $ctr = new Controller($micro["controller"], $bra);
 
+        $group->addMicroscope(new Microscope($mod, $ctr, $micro["rate"], $micro["desc"], $micro["keywords"]??[]));
+    }
+        
     // ...and save the group into db
-    MicroscopeService::getInstance()->saveGroup($group);
+    MicroscopeService::getInstance()->addGroup($group);
 
     header('location: /index.php');
 
