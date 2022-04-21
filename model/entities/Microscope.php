@@ -3,10 +3,22 @@ include_once(__DIR__ . "/Coordinates.php");
 include_once(__DIR__ . "/Model.php");
 include_once(__DIR__ . "/Controller.php");
 
-class Microscope {
+class Microscope implements JsonSerializable {
 
     function __construct(private Model $model, private Controller $controller, private string $rate, private string $desc, private array $keywords = []) {}
 
+    public function jsonSerialize() : mixed {
+        $reflector = new ReflectionClass('Microscope');
+        $properties = $reflector->getProperties();
+        
+        $json = [];
+        foreach($properties as $property) {
+            $json[$property->getName()] = $property->getValue($this);
+        }
+        
+        return $json;
+    }
+    
     public function getModel() : Model
     {
         return $this->model;

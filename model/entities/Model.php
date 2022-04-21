@@ -1,9 +1,16 @@
 <?php
     include_once("Brand.php");
 
-    class Model {
+    class Model implements JsonSerializable {
         function __construct(private string $name, private Brand $brand) {}
  
+        public function jsonSerialize() : mixed {
+            return [
+                'name' => $this->name,
+                'brand' => $this->brand
+            ];
+        }
+        
         public function getName() : string
         {
             return $this->name;

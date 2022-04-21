@@ -1,6 +1,18 @@
 <?php
-    class Contact {
+    class Contact implements JsonSerializable {
         function __construct(private $firstname, private $lastname, private $email) {}
+
+        public function jsonSerialize() : mixed {
+            $reflector = new ReflectionClass('Contact');
+            $properties = $reflector->getProperties();
+            
+            $json = [];
+            foreach($properties as $property) {
+                $json[$property->getName()] = $property->getValue($this);
+            }
+            
+            return $json;
+        }
 
         public function getFirstname()
         {

@@ -1,7 +1,13 @@
 <?php
-    class Compagny {
+    class Compagny implements JsonSerializable {
         function __construct(private string $name) {}
  
+        public function jsonSerialize() : mixed {
+            return [
+                'name' => $this->name
+            ];
+        }
+
         public function getName() : string
         {
             return $this->name;

@@ -3,10 +3,22 @@
     include_once(__DIR__ . "/Contact.php");
     include_once(__DIR__ . "/Lab.php");
 
-    class MicroscopesGroup {
+    class MicroscopesGroup implements JsonSerializable {
         private array $microscopes;
 
         function __construct(private float $lat, private float $lon, private Lab $lab, private Contact $contact) {}
+
+        public function jsonSerialize() : mixed {
+            $reflector = new ReflectionClass('MicroscopesGroup');
+            $properties = $reflector->getProperties();
+            
+            $json = [];
+            foreach($properties as $property) {
+                $json[$property->getName()] = $property->getValue($this);
+            }
+            
+            return $json;
+        }
 
         public function getMicroscopes() : array
         {
