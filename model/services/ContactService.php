@@ -31,12 +31,14 @@
             return $row ? $row[0] : -1;
         }
     
+        /** Saves the contact if it doesn't exist yet, and returns its id */
         function save(Contact $contact) {
             global $pdo;
 
-            // if the contact is not yet in the db, add it
-            $id = self::getContactId($contact);
-            if ($id < 0) {
+            $id = $this->getContactId($contact);
+
+            // if the microscope isn't already in the db, add it
+            if ($id == -1)  {
                 $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :firstname, :lastname, :email)");
         
                 $sth->execute([
@@ -44,7 +46,11 @@
                     "lastname" => $contact->getLastname(),
                     "email" => $contact->getEmail()
                 ]);
-            }
+                
+                $id = $pdo->lastInsertId();
+            }          
+
+            return $id;
         }    
     }
 
