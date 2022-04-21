@@ -39,8 +39,10 @@ CREATE TABLE IF NOT EXISTS "microscope" (
 	"desc"	TEXT,
 	"model_id"	INTEGER,
 	"controller_id"	INTEGER,
+	"microscopes_group_id" INTEGER,
 	FOREIGN KEY("controller_id") REFERENCES "controller"("id"),
 	FOREIGN KEY("model_id") REFERENCES "model"("id"),
+	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "microscope_keyword";

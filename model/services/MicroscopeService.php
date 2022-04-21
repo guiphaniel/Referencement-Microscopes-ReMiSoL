@@ -19,16 +19,17 @@
         }
 
         // TODO: handle keywords
-        function addMicro(Microscope $micro) : int {
+        function addMicro(int $groupId, Microscope $micro) : int {
             global $pdo;
             
-            $sth = $pdo->prepare("INSERT INTO microscope VALUES (NULL, :rate, :desc, :modId, :ctrId)");
+            $sth = $pdo->prepare("INSERT INTO microscope VALUES (NULL, :rate, :desc, :modId, :ctrId, :groupId)");
 
             $sth->execute([
                 "rate" => $micro->getRate(),
                 "desc" => $micro->getDesc(),
                 "modId" => ModelService::getInstance()->getModelId($micro->getModel()),
-                "ctrId" => ControllerService::getInstance()->getControllerId($micro->getController())
+                "ctrId" => ControllerService::getInstance()->getControllerId($micro->getController()),
+                "groupId" => $groupId
             ]);     
 
             return $pdo->lastInsertId();
@@ -66,6 +67,6 @@
 
             // add the microscopes to the db
             foreach($group->getMicroscopes() as $micro)
-                $this->addMicro($micro);
+                $this->addMicro($groupId, $micro);
         }
     }
