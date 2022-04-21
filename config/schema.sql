@@ -1,12 +1,4 @@
 BEGIN TRANSACTION;
-DROP TABLE IF EXISTS "manage";
-CREATE TABLE IF NOT EXISTS "manage" (
-	"microscopes_group_id"	INTEGER,
-	"contact_id"	INTEGER,
-	PRIMARY KEY("microscopes_group_id","contact_id"),
-	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
-	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id")
-);
 DROP TABLE IF EXISTS "contact";
 CREATE TABLE IF NOT EXISTS "contact" (
 	"id"	INTEGER,
@@ -21,7 +13,9 @@ CREATE TABLE IF NOT EXISTS "microscopes_group" (
 	"lat"	REAL,
 	"lon"	REAL,
 	"lab_id"	INTEGER,
+	"contact_id"	INTEGER,
 	FOREIGN KEY("lab_id") REFERENCES "lab"("id") ON DELETE CASCADE,
+	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
 	CONSTRAINT "pk_microscope_group" PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "keyword";

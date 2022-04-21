@@ -42,29 +42,22 @@
             //save the Lab
             $labId = LabService::getInstance()->save($group->getLab());
 
-            // save the group and bind it to the lab
-            $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labId)");
+            // save the contact
+            $contactId = ContactService::getInstance()->save($group->getContact());  
+
+            // save the group and bind it to the lab and the contact
+            $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labId, :contactId)");
 
             $sth->execute([
                 "lat" => $group->getLat(),
                 "lon" => $group->getLon(),
-                "labId" => $labId
-            ]);
-
-            // get the generated group id
-            $groupId = $pdo->lastInsertId();
-              
-            // save the contact
-            $contactId = ContactService::getInstance()->save($group->getContact());   
-                
-            // bind the contact to the group
-            $sth = $pdo->prepare("INSERT INTO manage VALUES (:groupId, :contactId)");
-
-            $sth->execute([
-                "groupId" => $groupId,
+                "labId" => $labId,
                 "contactId" => $contactId
             ]);
 
+            // get the generated group id
+            $groupId = $pdo->lastInsertId(); 
+                
             // add the microscopes to the db
             foreach($group->getMicroscopes() as $micro)
                 $this->addMicro($groupId, $micro);
