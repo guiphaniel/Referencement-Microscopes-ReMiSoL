@@ -1,58 +1,43 @@
 <?php
 include_once(__DIR__ . "/Coordinates.php");
+include_once(__DIR__ . "/Model.php");
+include_once(__DIR__ . "/Controller.php");
 
-// needs to implement JsonSerializable because fields are private
-class Microscope implements JsonSerializable {
+class Microscope {
 
-    function __construct(private $brand, private $ref, private float $rate, private $desc) {}
+    function __construct(private Model $model, private Controller $controller, private string $rate, private string $desc, private array $keywords = []) {}
 
-    public function jsonSerialize() : mixed {
-        $reflector = new ReflectionClass('Microscope');
+    public function getModel() : Model
+    {
+        return $this->model;
+    }
+    
+    public function setModel(Model $model)
+    {
+        $this->model = $model;
 
-        $properties = $reflector->getProperties();
-        
-        $json = [];
-        foreach($properties as $property) 
-            $json[$property->getName()] = $property->getValue($this);
-        
-        
-        return $json;
+        return $this;
+    }
+    
+    public function getController() : Controller
+    {
+        return $this->controller;
     }
 
-    public function getBrand()
+    public function setController(Controller $controller)
     {
-        return $this->brand;
-    }
-
-    public function setBrand($brand)
-    {
-        $this->brand = $brand;
+        $this->controller = $controller;
 
         return $this;
     }
 
-    public function getRef()
-    {
-        return $this->ref;
-    }
-
-    public function setRef($ref)
-    {
-        $this->ref = $ref;
-
-        return $this;
-    }
-
-    public function getRate() : float
+    public function getRate() : string
     {
         return $this->rate;
     }
 
-    public function setRate(float $rate)
-    {
-        if ($rate < 0.0)
-            $rate = 0.0;
-        
+    public function setRate(string $rate)
+    {       
         $this->rate = $rate;
 
         return $this;
@@ -68,5 +53,15 @@ class Microscope implements JsonSerializable {
         $this->desc = $desc;
 
         return $this;
+    }
+
+    public function addKeyword(string $cat, string $tag) 
+    {
+        $this->keywords[$cat][] = $tag;
+    }
+
+    public function removeKeyword(string $cat, string $tag) 
+    {
+        unset($this->keywords[$cat][$tag]);
     }
 }
