@@ -1,5 +1,4 @@
 <?php
-    include_once("../../model/start_db.php");
     include_once("../../model/services/MicroscopesGroupService.php");
 
     $request_method = $_SERVER["REQUEST_METHOD"];
