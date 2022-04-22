@@ -1,18 +1,8 @@
 <?php
-    class Contact implements JsonSerializable {
-        function __construct(private $firstname, private $lastname, private $email) {}
+    include_once(__DIR__ . "/AbstractEntity.php");
 
-        public function jsonSerialize() : mixed {
-            $reflector = new ReflectionClass('Contact');
-            $properties = $reflector->getProperties();
-            
-            $json = [];
-            foreach($properties as $property) {
-                $json[$property->getName()] = $property->getValue($this);
-            }
-            
-            return $json;
-        }
+    class Contact extends AbstractEntity  {
+        function __construct(private $firstname, private $lastname, private $email) {}
 
         public function getFirstname()
         {

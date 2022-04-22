@@ -1,14 +1,9 @@
 <?php
-    class Lab implements JsonSerializable {
+    include_once(__DIR__ . "/AbstractEntity.php");
+    
+    class Lab extends AbstractEntity {
         function __construct(private string $name, private string $address) {}
  
-        public function jsonSerialize() : mixed {
-            return [
-                'name' => $this->name,
-                'address' => $this->address
-            ];
-        }
-
         public function getName()
         {
             return $this->name;

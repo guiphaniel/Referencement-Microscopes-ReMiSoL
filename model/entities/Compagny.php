@@ -1,12 +1,8 @@
 <?php
-    class Compagny implements JsonSerializable {
+    include_once(__DIR__ . "/AbstractEntity.php");
+
+    class Compagny extends AbstractEntity  {
         function __construct(private string $name) {}
- 
-        public function jsonSerialize() : mixed {
-            return [
-                'name' => $this->name
-            ];
-        }
 
         public function getName() : string
         {

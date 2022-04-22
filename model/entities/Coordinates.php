@@ -1,19 +1,13 @@
 <?php
-    // needs to implement JsonSerializable because fields are private
-    class Coordinates implements JsonSerializable {
+    include_once(__DIR__ . "/AbstractEntity.php");
+    
+    class Coordinates extends AbstractEntity  {
         private $lat;
         private $lon;
 
         function __construct(float $lat, float $lon) {
             $this->lat = $lat;
             $this->lon = $lon;
-        }
-
-        public function jsonSerialize() : mixed {
-            return [
-                'lat' => $this->lat,
-                'lon' => $this->lon
-            ];
         }
 
         public function getLat() { return $this->lat; }

@@ -1,15 +1,8 @@
 <?php
     include_once(__DIR__ . "/Brand.php");
 
-    class Controller implements JsonSerializable {
+    class Controller extends AbstractEntity  {
         function __construct(private string $name, private Brand $brand) {}
- 
-        public function jsonSerialize() : mixed {
-            return [
-                'name' => $this->name,
-                'brand' => $this->brand
-            ];
-        }
 
         public function getName() : string
         {
