@@ -1,33 +1,48 @@
 BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "microscopes_group";
 DROP TABLE IF EXISTS "contact";
-CREATE TABLE IF NOT EXISTS "contact" (
+DROP TABLE IF EXISTS "lab";
+DROP TABLE IF EXISTS "microscope_keyword";
+DROP TABLE IF EXISTS "microscope";
+DROP TABLE IF EXISTS "keyword";
+DROP TABLE IF EXISTS "controller";
+DROP TABLE IF EXISTS "model";
+DROP TABLE IF EXISTS "brand";
+DROP TABLE IF EXISTS "compagny";
+CREATE TABLE "compagny" (
 	"id"	INTEGER,
-	"firstname"	TEXT,
-	"lastname"	TEXT,
-	"email"	TEXT UNIQUE,
+	"com_name"	TEXT UNIQUE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-DROP TABLE IF EXISTS "microscopes_group";
-CREATE TABLE IF NOT EXISTS "microscopes_group" (
+CREATE TABLE "brand" (
 	"id"	INTEGER,
-	"lat"	REAL,
-	"lon"	REAL,
-	"lab_id"	INTEGER,
-	"contact_id"	INTEGER,
-	FOREIGN KEY("lab_id") REFERENCES "lab"("id") ON DELETE CASCADE,
-	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
-	CONSTRAINT "pk_microscope_group" PRIMARY KEY("id" AUTOINCREMENT)
+	"bra_name"	TEXT UNIQUE,
+	"compagny_id"	INTEGER,
+	FOREIGN KEY("compagny_id") REFERENCES "compagny"("id") ON DELETE CASCADE,
+	PRIMARY KEY("id" AUTOINCREMENT)
 );
-DROP TABLE IF EXISTS "keyword";
-CREATE TABLE IF NOT EXISTS "keyword" (
+CREATE TABLE "model" (
+	"id"	INTEGER,
+	"mod_name"	TEXT UNIQUE,
+	"brand_id"	INTEGER,
+	FOREIGN KEY("brand_id") REFERENCES "brand"("id") ON DELETE CASCADE,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE "controller" (
+	"id"	INTEGER,
+	"ctr_name"	TEXT UNIQUE,
+	"brand_id"	INTEGER,
+	FOREIGN KEY("brand_id") REFERENCES "brand"("id") ON DELETE CASCADE,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE "keyword" (
 	"id"	INTEGER,
 	"cat"	TEXT,
 	"tag"	TEXT,
 	UNIQUE("cat","tag"),
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-DROP TABLE IF EXISTS "microscope";
-CREATE TABLE IF NOT EXISTS "microscope" (
+CREATE TABLE "microscope" (
 	"id"	INTEGER,
 	"rate"	TEXT,
 	"desc"	TEXT,
@@ -39,49 +54,34 @@ CREATE TABLE IF NOT EXISTS "microscope" (
 	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-DROP TABLE IF EXISTS "microscope_keyword";
-CREATE TABLE IF NOT EXISTS "microscope_keyword" (
+CREATE TABLE "microscope_keyword" (
 	"microscope_id"	INTEGER,
 	"keyword_id"	INTEGER,
 	FOREIGN KEY("keyword_id") REFERENCES "keyword"("id"),
 	FOREIGN KEY("microscope_id") REFERENCES "microscope"("id"),
 	PRIMARY KEY("microscope_id","keyword_id")
 );
-DROP TABLE IF EXISTS "lab";
-CREATE TABLE IF NOT EXISTS "lab" (
+CREATE TABLE "lab" (
 	"id"	INTEGER,
 	"lab_name"	TEXT UNIQUE,
 	"address"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-DROP TABLE IF EXISTS "model";
-CREATE TABLE IF NOT EXISTS "model" (
+CREATE TABLE "contact" (
 	"id"	INTEGER,
-	"mod_name"	TEXT UNIQUE,
-	"brand_id"	INTEGER,
-	FOREIGN KEY("brand_id") REFERENCES "brand"("id") ON DELETE CASCADE,
+	"firstname"	TEXT,
+	"lastname"	TEXT,
+	"email"	TEXT UNIQUE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-DROP TABLE IF EXISTS "controller";
-CREATE TABLE IF NOT EXISTS "controller" (
+CREATE TABLE "microscopes_group" (
 	"id"	INTEGER,
-	"ctr_name"	TEXT UNIQUE,
-	"brand_id"	INTEGER,
-	FOREIGN KEY("brand_id") REFERENCES "brand"("id") ON DELETE CASCADE,
-	PRIMARY KEY("id" AUTOINCREMENT)
-);
-DROP TABLE IF EXISTS "brand";
-CREATE TABLE IF NOT EXISTS "brand" (
-	"id"	INTEGER,
-	"bra_name"	TEXT UNIQUE,
-	"compagny_id"	INTEGER,
-	FOREIGN KEY("compagny_id") REFERENCES "compagny"("id") ON DELETE CASCADE,
-	PRIMARY KEY("id" AUTOINCREMENT)
-);
-DROP TABLE IF EXISTS "compagny";
-CREATE TABLE IF NOT EXISTS "compagny" (
-	"id"	INTEGER,
-	"com_name"	TEXT UNIQUE,
-	PRIMARY KEY("id" AUTOINCREMENT)
+	"lat"	REAL,
+	"lon"	REAL,
+	"lab_id"	INTEGER,
+	"contact_id"	INTEGER,
+	FOREIGN KEY("lab_id") REFERENCES "lab"("id") ON DELETE CASCADE,
+	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
+	CONSTRAINT "pk_microscope_group" PRIMARY KEY("id" AUTOINCREMENT)
 );
 COMMIT;
