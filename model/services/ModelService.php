@@ -51,4 +51,23 @@
 
             return $id;
         }   
+
+        function getAllModels(Brand $brand) : array {
+            global $pdo;
+            $models = [];
+            
+            $sth = $pdo->prepare("SELECT mod_name FROM model where brand_id = :brandId");
+
+            $sth->execute([
+                "brandId" => BrandService::getInstance()->getBrandId($brand)
+            ]);
+
+            $names = $sth->fetchAll(PDO::FETCH_COLUMN);
+
+            foreach ($names as $name) {
+                $models[] = new Model($name, $brand);
+            }
+
+            return $models;
+        }
     }            

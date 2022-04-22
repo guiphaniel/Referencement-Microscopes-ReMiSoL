@@ -51,4 +51,23 @@
 
             return $id;
         }  
+
+        function getAllBrands(Compagny $compagny) : array {
+            global $pdo;
+            $brands = [];
+            
+            $sth = $pdo->prepare("SELECT bra_name FROM brand where compagny_id = :compagnyId");
+
+            $sth->execute([
+                "compagnyId" => CompagnyService::getInstance()->getCompagnyId($compagny)
+            ]);
+
+            $names = $sth->fetchAll(PDO::FETCH_COLUMN);
+
+            foreach ($names as $name) {
+                $brands[] = new Brand($name, $compagny);
+            }
+
+            return $brands;
+        }
     }            

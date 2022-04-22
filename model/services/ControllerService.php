@@ -28,4 +28,23 @@
             // if this lab exists, reutrn its id, else return -1
             return $row ? $row[0] : -1;
         }
+
+        function getAllControllers(Brand $brand) : array {
+            global $pdo;
+            $controllers = [];
+            
+            $sth = $pdo->prepare("SELECT ctr_name FROM controller where brand_id = :brandId");
+
+            $sth->execute([
+                "brandId" => BrandService::getInstance()->getBrandId($brand)
+            ]);
+
+            $names = $sth->fetchAll(PDO::FETCH_COLUMN);
+
+            foreach ($names as $name) {
+                $controllers[] = new Controller($name, $brand);
+            }
+
+            return $controllers;
+        }
     }            
