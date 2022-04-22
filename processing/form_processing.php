@@ -5,7 +5,7 @@
     include_once("../model/entities/Model.php");
     include_once("../model/entities/Controller.php");
     include_once("../model/entities/MicroscopesGroup.php");
-    include_once("../model/services/MicroscopeService.php");
+    include_once("../model/services/MicroscopesGroupService.php");
 
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form 
     if (!isset($_POST["labName"]) || !isset($_POST["labAddress"]) || !isset($_POST["contactFirstname"]) || !isset($_POST["contactLastname"]) || !isset($_POST["contactEmail"]) || !isset($_POST["lat"]) || !isset($_POST["lon"])) {
@@ -34,8 +34,10 @@
         $group->addMicroscope(new Microscope($mod, $ctr, $micro["rate"], $micro["desc"], $micro["keywords"]??[]));
     }
         
-    // ...and save the group into db
-    MicroscopeService::getInstance()->addGroup($group);
+    // ...and save the lab, contact and group into the db
+    LabService::getInstance()->save($group->getLab());
+    ContactService::getInstance()->save($group->getContact()); 
+    MicroscopesGroupService::getInstance()->add($group);
 
     header('location: /index.php');
 
