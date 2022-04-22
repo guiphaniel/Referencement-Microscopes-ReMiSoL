@@ -26,7 +26,7 @@
 
             $row = $sth->fetch();
 
-            // if this lab exists, reutrn its id, else return -1
+            // if this lab exists, return its id, else return -1
             return $row ? $row[0] : -1;
         }
 
