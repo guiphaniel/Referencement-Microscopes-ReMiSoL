@@ -25,8 +25,8 @@
             $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labId, :contactId)");
 
             $sth->execute([
-                "lat" => $group->getLat(),
-                "lon" => $group->getLon(),
+                "lat" => $group->getCoor()->getLat(),
+                "lon" => $group->getCoor()->getLon(),
                 "labId" => LabService::getInstance()->getLabId($group->getLab()),
                 "contactId" => ContactService::getInstance()->getContactId($group->getContact())
             ]);
@@ -74,7 +74,7 @@
                 $sth = $pdo->query($sql);
                 $microscopes = $sth->fetchAll(PDO::FETCH_NAMED);
 
-                $groupResult = new MicroscopesGroup($group["lat"], $group["lon"], new Lab($group["labName"], $group["labAddress"]), new Contact($group["contactFirstname"], $group["contactLastname"], $group["contactEmail"]));
+                $groupResult = new MicroscopesGroup(new Coordinates($group["lat"], $group["lon"]), new Lab($group["labName"], $group["labAddress"]), new Contact($group["contactFirstname"], $group["contactLastname"], $group["contactEmail"]));
                 foreach ($microscopes as $micro) {
                     $com = new Compagny($micro["compagnyName"]);
                     $bra = new Brand($micro["brandName"], $com);

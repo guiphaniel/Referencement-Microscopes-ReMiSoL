@@ -1,12 +1,13 @@
 <?php
     include_once(__DIR__ . "/Microscope.php");
+    include_once(__DIR__ . "/Coordinates.php");
     include_once(__DIR__ . "/Contact.php");
     include_once(__DIR__ . "/Lab.php");
 
     class MicroscopesGroup extends AbstractEntity {
         private array $microscopes;
 
-        function __construct(private float $lat, private float $lon, private Lab $lab, private Contact $contact) {}
+        function __construct(private Coordinates $coor, private Lab $lab, private Contact $contact) {}
 
         public function getMicroscopes() : array
         {
@@ -21,28 +22,16 @@
             unset($microscopes[array_search($microscope, $this->microscopes, true)]);
         }
 
-        public function getLat() : float
+        public function getCoor()
         {
-            return $this->lat;
+                return $this->coor;
         }
 
-        public function setLat(float $lat)
+        public function setCoor($coor)
         {
-            $this->lat = $lat;
+                $this->coor = $coor;
 
-            return $this;
-        }
-
-        public function getLon() : float
-        {
-            return $this->lon;
-        }
-
-        public function setLon(float $lon)
-        {
-            $this->lon = $lon;
-
-            return $this;
+                return $this;
         }
 
         public function getContact() : Contact

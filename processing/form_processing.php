@@ -23,7 +23,7 @@
     // Convert form values into objects...
     $lab = new Lab($_POST["labName"], $_POST["labAddress"]);
     $contact = new Contact($_POST["contactFirstname"], $_POST["contactLastname"], $_POST["contactEmail"]);
-    $group = new MicroscopesGroup($_POST["lat"], $_POST["lon"], $lab, $contact);
+    $group = new MicroscopesGroup(new Coordinates($_POST["lat"], $_POST["lon"]), $lab, $contact);
 
     foreach($_POST["microscopes"] as $micro) {
         $com = new Compagny($micro["compagny"]);
