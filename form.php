@@ -70,15 +70,15 @@
                     <!-- The datalist for compagnies is at the beginnnig of the microscopes fieldset -->
                     <input id="micro-compagny-0" list="compagnies" name="microscopes[0][compagny]" required>
                     <label for="micro-brand-0">Marque</label>
-                    <input id="micro-brand-0" list="micro-brands-0" name="microscopes[0][brand]" required>
+                    <input id="micro-brand-0" list="micro-brands-0" name="microscopes[0][brand]" required disabled>
                     <datalist id="micro-brands-0">
                     </datalist>
                     <label for="micro-model-0">Modèle</label>
-                    <input id="micro-model-0" list="micro-models-0" name="microscopes[0][model]" required>
+                    <input id="micro-model-0" list="micro-models-0" name="microscopes[0][model]" required disabled>
                     <datalist id="micro-models-0">
                     </datalist>
                     <label for="micro-controller-0">Électronique - contrôleur</label>
-                    <input id="micro-controller-0" list="micro-controllers-0" name="microscopes[0][controller]" required>
+                    <input id="micro-controller-0" list="micro-controllers-0" name="microscopes[0][controller]" required disabled>
                     <datalist id="micro-controllers-0">
                     </datalist>
                     <label for="micro-rate-0">Tarification (lien)</label>
