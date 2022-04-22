@@ -14,11 +14,11 @@ L.control.scale({imperial: true, metric: true}).addTo(map);
 loadAndShowMicroscopes();
 
 async function loadAndShowMicroscopes() {
-	const response = await fetch("/api/v1/microscopes.php");
-	const microscopes = await response.json();
+	const response = await fetch("/api/v1/listMicroscopesGroups.php");
+	const groups = await response.json();
 
-	for (let microscope of microscopes) {
-		let coor = microscope.coor;
-		L.marker([coor.lat, coor.lon]).bindPopup(microscope.ref).addTo(map);
+	for (let group of groups) {
+		let coor = group.coor;
+		L.marker([coor.lat, coor.lon]).bindPopup(group.lab.name).addTo(map);
 	}
 }
