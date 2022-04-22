@@ -1,6 +1,7 @@
 <?php
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/Controller.php");
+    include_once(__DIR__ . "/../services/BrandService.php");
 
     class ControllerService {
         static private $instance;
