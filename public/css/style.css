@@ -1,12 +1,12 @@
 /*FORM*/
 
-#add-micro {
+.add-bt {
     width: 20px;
     height: 20px;
     background-color: green;
 }
 
-.rm-micro {
+.rm-bt {
     width: 20px;
     height: 20px;
     background-color: red;

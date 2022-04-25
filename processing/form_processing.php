@@ -7,7 +7,7 @@
     include_once("../model/entities/MicroscopesGroup.php");
     include_once("../model/services/MicroscopesGroupService.php");
 
-    //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form 
+    //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form TODO: check that keywords aren't duplicated
     if (!isset($_POST["labName"]) || !isset($_POST["labAddress"]) || !isset($_POST["contactFirstname"]) || !isset($_POST["contactLastname"]) || !isset($_POST["contactEmail"]) || !isset($_POST["lat"]) || !isset($_POST["lon"])) {
         header('location: /form.php');
         exit();

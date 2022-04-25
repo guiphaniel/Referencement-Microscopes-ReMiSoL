@@ -90,12 +90,15 @@
                             $keyWordService = KeywordService::getInstance();
                             $cats = $keyWordService->getAllCategories();
                             foreach ($cats as $key => $cat): ?>
-                                <label for="cat-<?=$key?>"><?=$cat?></label>
-                                <input id="cat-<?=$key?>" list="cats-<?=$key?>" name="microscopes[0][keywords][<?=$cat?>]">
+                                <div>
+                                    <label for="cat-<?=$key?>"><?=$cat?></label>
+                                    <input id="cat-<?=$key?>" list="cats-<?=$key?>">
+                                    <input id="micro-kw-<?=$key?>-0" type="hidden" name="microscopes[0][keywords][<?=$cat?>]">
+                                </div>
                             <?php endforeach; ?>
                     </fieldset>
                 </fieldset>
-                <div id="add-micro"></div>
+                <div id="add-micro" class="add-bt"></div>
             </fieldset>
             <input type="submit">
         </form>

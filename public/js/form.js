@@ -1,10 +1,11 @@
 // TODO: block submit button if fields are badly filled (disabled, bad email)
-// fill coherent microscope infomations dataLists on focusout
+/* fill coherent microscope infomations dataLists on focusout */
 
-//init focusout listeners for inputs
+//init focusout listeners for microscopes inputs
 {
     let compagnyInput = document.getElementById("micro-compagny-0");
     compagnyInput.addEventListener("focusout", compagnyFocusOut);
+
     let brandInput = document.getElementById("micro-brand-0");
     brandInput.addEventListener("focusout", brandFocusOut);
 }
@@ -69,7 +70,7 @@ function isInputDatalistValid(input, datalist) {
     return datalist.querySelector("option[value='" + input.value + "']") != null;
 }
 
-// add new fieldsets on add button click
+/* add new fieldsets on add button click */
 let microscopeFields = document.getElementById("microscopes")
 let nextMicroFieldId = 1;
 
@@ -89,7 +90,7 @@ function addMicroscopeField() {
 
     // append the remove button to the fieldset
     let rmButton = document.createElement("div")
-    rmButton.className = "rm-micro";
+    rmButton.className = "rm-bt";
     rmButton.id = "rm-micro-" + id;
     rmButton.addEventListener('click', function(){
         let microId = this.id.split('-')[2]; // retrieve the id of the rmButton, which is the one of the fieldset too
@@ -98,7 +99,56 @@ function addMicroscopeField() {
     });
     microscopeFields.insertBefore(rmButton, addMicroButton);
 
+    //add listeners
     // add focusout listeners on inputs to fill datalists
     document.getElementById("micro-compagny-" + id).addEventListener("focusout", compagnyFocusOut);
     document.getElementById("micro-brand-" + id).addEventListener("focusout", brandFocusOut);
+}
+
+/* add multiple keywords */
+//init first default fieldset
+{
+    let microField = document.getElementById("micro-field-0");
+    initKeywordFocusout(microField);
+}
+
+/** init focusout listeners for keywords inputs */
+function initKeywordFocusout(microField) {
+    let nbCats = 0;
+
+    //let catInput = document.querySelector(`#keywords div:nth-of-type(${nbCats++}) input`);
+    let catInput = microField.querySelector(`#cat-${nbCats++}`);
+
+    while (catInput != null) {
+        catInput.addEventListener('focusout', function() {
+            let id = this.id.split('-')[1]; // retrieve the id of the input
+
+            if(!isInputDatalistValid(this, document.getElementById("cats-" + id)))
+                return;
+
+            addKeyword(this.value, this)
+        });
+
+        //catInput = document.querySelector(`#keywords div:nth-of-type(${nbCats++}) input`);
+        catInput = document.getElementById(`cat-${nbCats++}`);
+    }
+}
+
+function addKeyword(keyword, catInput) {
+    catInput.value = "";
+
+    const tag = document.createElement('div');
+    tag.className = "tag";
+
+    const rmBt = document.createElement("div");
+    rmBt.className = "rm-bt"
+    rmBt.dataset.tagId = tag.id;
+    rmBt.addEventListener('click', function() {
+        this.parentElement.remove();
+    });
+    tag.append(rmBt);
+
+    tag.append(keyword);
+
+    catInput.parentElement.append(tag);
 }
