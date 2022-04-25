@@ -2,6 +2,7 @@
     include_once("view/generators/HeaderCreator.php");
     include_once("model/services/KeywordService.php");
     include_once("model/services/CompagnyService.php");
+    include_once("utils/normalize_utf8_string.php");
     $header = new HeaderCreator("Formulaire"); 
 ?>
 <!DOCTYPE html>
@@ -37,9 +38,9 @@
                 <?php 
                     $keyWordService = KeywordService::getInstance();
                     $cats = $keyWordService->getAllCategories();
-                    foreach ($cats as $key => $cat): 
+                    foreach ($cats as $cat): 
                         echo "<!-- $cat datalist -->" ?>
-                        <datalist id="cats-<?=$key?>">
+                        <datalist id="cats-<?=HTMLNormalize($cat)?>">
                         <?php 
                             $tags = $keyWordService->getAllTags($cat);
                             foreach ($tags as $tag): ?>
@@ -89,11 +90,12 @@
                         <?php 
                             $keyWordService = KeywordService::getInstance();
                             $cats = $keyWordService->getAllCategories();
-                            foreach ($cats as $key => $cat): ?>
+                            foreach ($cats as $cat): 
+                                $normCat = HTMLNormalize($cat)?>
                                 <div>
-                                    <label for="cat-<?=$key?>"><?=$cat?></label>
-                                    <input id="cat-<?=$key?>" list="cats-<?=$key?>">
-                                    <input id="micro-kw-<?=$key?>-0" type="hidden" name="microscopes[0][keywords][<?=$cat?>]">
+                                    <label for="cat-<?=$normCat?>"><?=$cat?></label>
+                                    <input id="cat-<?=$normCat?>" class="cat-input" list="cats-<?=$normCat?>">
+                                    <input id="micro-kw-<?=$normCat?>-0" type="hidden" name="microscopes[0][keywords][<?=$normCat?>]">
                                 </div>
                             <?php endforeach; ?>
                     </fieldset>

@@ -77,16 +77,19 @@ let nextMicroFieldId = 1;
 let addMicroButton = document.getElementById("add-micro");
 addMicroButton.onclick = addMicroscopeField;
 
+// save original fieldset innerHTML (so keywords won't be duplicated when adding new micro)
+originalMicroFieldHTML = document.getElementById("micro-field-0").innerHTML;
+
 function addMicroscopeField() {
     id = nextMicroFieldId++;
 
     // create the form fieldset
-    microscope = document.createElement("fieldset");
-    microscope.id = "micro-field-" + id;
-    microscope.innerHTML = document.getElementById("micro-field-0").innerHTML.replaceAll("[0]", `[${id}]`).replaceAll("-0", `-${id}`);
+    microField = document.createElement("fieldset");
+    microField.id = "micro-field-" + id;
+    microField.innerHTML = originalMicroFieldHTML.replaceAll("[0]", `[${id}]`).replaceAll("-0", `-${id}`);
     
     // add the form fieldset at the end of the form
-    microscopeFields.insertBefore(microscope, addMicroButton);
+    microscopeFields.insertBefore(microField, addMicroButton);
 
     // append the remove button to the fieldset
     let rmButton = document.createElement("div")
@@ -100,9 +103,11 @@ function addMicroscopeField() {
     microscopeFields.insertBefore(rmButton, addMicroButton);
 
     //add listeners
-    // add focusout listeners on inputs to fill datalists
+    // add focusout listeners on micro infos inputs to fill datalists
     document.getElementById("micro-compagny-" + id).addEventListener("focusout", compagnyFocusOut);
     document.getElementById("micro-brand-" + id).addEventListener("focusout", brandFocusOut);
+    // add focusout listeners on keywords input
+    initKeywordFocusout(microField)
 }
 
 /* add multiple keywords */
@@ -114,12 +119,9 @@ function addMicroscopeField() {
 
 /** init focusout listeners for keywords inputs */
 function initKeywordFocusout(microField) {
-    let nbCats = 0;
+    let catInputs = microField.getElementsByClassName("cat-input");
 
-    //let catInput = document.querySelector(`#keywords div:nth-of-type(${nbCats++}) input`);
-    let catInput = microField.querySelector(`#cat-${nbCats++}`);
-
-    while (catInput != null) {
+    for (const catInput of catInputs) {
         catInput.addEventListener('focusout', function() {
             let id = this.id.split('-')[1]; // retrieve the id of the input
 
@@ -128,13 +130,17 @@ function initKeywordFocusout(microField) {
 
             addKeyword(this.value, this)
         });
-
-        //catInput = document.querySelector(`#keywords div:nth-of-type(${nbCats++}) input`);
-        catInput = document.getElementById(`cat-${nbCats++}`);
     }
 }
-
+//TODO: add keyword to hidden input
 function addKeyword(keyword, catInput) {
+    // if the keyword is already selected, do nothing
+    tags = catInput.parentElement.getElementsByClassName("tag");
+    for (const tag of tags) {
+        if(tag.textContent == keyword)
+            return;
+    }
+
     catInput.value = "";
 
     const tag = document.createElement('div');
