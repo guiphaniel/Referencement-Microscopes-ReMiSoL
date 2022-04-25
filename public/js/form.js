@@ -10,39 +10,49 @@
 }
 
 async function compagnyFocusOut() {
-	const fieldsetId = this.id.split('-')[2];
+    const fieldsetId = this.id.split('-')[2];
+    
+    if(!isInputDatalistValid(this, document.getElementById("micro-compagnies"))) {
+        document.getElementById(`micro-brand-` + fieldsetId).disabled = true;
+        document.getElementById(`micro-model-` + fieldsetId).disabled = true;
+        document.getElementById(`micro-controller-` + fieldsetId).disabled = true;
+
+        return;
+    }
     
     const url = `/api/v1/listBrands.php?compagny=${this.value}`;
     
     let brandDatalist = document.getElementById(`micro-brands-` + fieldsetId);
 
-    // enable/disable the inputs wether the datalist is filled/empty (i.e. the compagny doesn't exist)
-    let empty = !await fillDatalist(brandDatalist, url);
-    if(empty) {
-        document.getElementById(`micro-brand-` + fieldsetId).disabled = true
-        document.getElementById(`micro-model-` + fieldsetId).disabled = true
-        document.getElementById(`micro-controller-` + fieldsetId).disabled = true
-    } else
-        document.getElementById(`micro-brand-` + fieldsetId).disabled = false
+    await fillDatalist(brandDatalist, url);
+    
+    document.getElementById(`micro-brand-` + fieldsetId).disabled = false;
 }
 
 async function brandFocusOut() {
     const fieldsetId = this.id.split('-')[2];
 
+    if(!isInputDatalistValid(this, document.getElementById("micro-brands-" + fieldsetId))) {
+        document.getElementById(`micro-model-` + fieldsetId).disabled = true;
+        document.getElementById(`micro-controller-` + fieldsetId).disabled = true;
+
+        return;
+    }
+
     let compagnyInput = document.getElementById("micro-compagny-" + fieldsetId);
 
 	const modelsUrl = `/api/v1/listModels.php?compagny=${compagnyInput.value}&brand=${this.value}`;
     let modelDatalist = document.getElementById(`micro-models-` + fieldsetId);
-    // enable/disable the input wether the datalist is filled/empty (i.e. the brand doesn't exist)
-    document.getElementById(`micro-model-` + fieldsetId).disabled = !await fillDatalist(modelDatalist, modelsUrl);
+    await fillDatalist(modelDatalist, modelsUrl);
 
     const controllersUrl = `/api/v1/listControllers.php?compagny=${compagnyInput.value}&brand=${this.value}`
     let controllerDatalist = document.getElementById(`micro-controllers-` + fieldsetId);
-    // enable/disable the input wether the datalist is filled/empty (i.e. the compagny doesn't exist)
-    document.getElementById(`micro-controller-` + fieldsetId).disabled = !await fillDatalist(controllerDatalist, controllersUrl);
+    await fillDatalist(controllerDatalist, controllersUrl);
+
+    document.getElementById(`micro-model-` + fieldsetId).disabled = false;
+    document.getElementById(`micro-controller-` + fieldsetId).disabled = false;
 }
 
-/** Returns false if the datalist is empty */
 async function fillDatalist(datalist, url) {
     // get data from the url
     const response = await fetch(url);
@@ -53,8 +63,10 @@ async function fillDatalist(datalist, url) {
 		innerHTML += `<option value="${item.name}">`;
 	}
     datalist.innerHTML = innerHTML;
+}
 
-    return innerHTML != ""
+function isInputDatalistValid(input, datalist) {
+    return datalist.querySelector("option[value='" + input.value + "']") != null;
 }
 
 // add new fieldsets on add button click
