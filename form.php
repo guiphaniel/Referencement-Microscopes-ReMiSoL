@@ -27,9 +27,8 @@
             <fieldset id="microscopes">
                 <legend>Vos microscopes</legend>
                 <!-- Compagnies datalist -->
-                <datalist id="compagnies">
+                <datalist id="micro-compagnies">
                 <?php 
-                echo var_dump(CompagnyService::getInstance()->getAllCompagnies());
                     foreach (CompagnyService::getInstance()->getAllCompagnies() as $compagny): ?>
                         <option value="<?=$compagny->getName()?>">
                     <?php endforeach; ?>
@@ -68,7 +67,7 @@
                     <legend>Votre microscope</legend>
                     <label for="micro-compagny-0">Société</label>
                     <!-- The datalist for compagnies is at the beginnnig of the microscopes fieldset -->
-                    <input id="micro-compagny-0" list="compagnies" name="microscopes[0][compagny]" required>
+                    <input id="micro-compagny-0" list="micro-compagnies" name="microscopes[0][compagny]" required>
                     <label for="micro-brand-0">Marque</label>
                     <input id="micro-brand-0" list="micro-brands-0" name="microscopes[0][brand]" required disabled>
                     <datalist id="micro-brands-0">
