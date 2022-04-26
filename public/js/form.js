@@ -81,10 +81,10 @@ addContactButton.onclick = addContactField;
 originalContactFieldHTML = document.getElementById("contact-field-0").innerHTML;
 
 function addContactField() {
-    id = nextContactFieldId++;
+    let id = nextContactFieldId++;
 
     // create the form fieldset
-    contactField = document.createElement("fieldset");
+    let contactField = document.createElement("fieldset");
     contactField.id = "contact-field-" + id;
     contactField.innerHTML = originalContactFieldHTML.replaceAll("[0]", `[${id}]`).replaceAll("-0", `-${id}`);
     
@@ -112,10 +112,10 @@ addMicroButton.onclick = addMicroscopeField;
 originalMicroFieldHTML = document.getElementById("micro-field-0").innerHTML;
 
 function addMicroscopeField() {
-    id = nextMicroFieldId++;
+    let id = nextMicroFieldId++;
 
     // create the form fieldset
-    microField = document.createElement("fieldset");
+    let microField = document.createElement("fieldset");
     microField.id = "micro-field-" + id;
     microField.innerHTML = originalMicroFieldHTML.replaceAll("[0]", `[${id}]`).replaceAll("-0", `-${id}`);
     
