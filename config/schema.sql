@@ -1,14 +1,16 @@
 BEGIN TRANSACTION;
-DROP TABLE IF EXISTS "microscopes_group";
+DROP TABLE IF EXISTS "manage";
 DROP TABLE IF EXISTS "contact";
+DROP TABLE IF EXISTS "microscopes_group";
 DROP TABLE IF EXISTS "lab";
 DROP TABLE IF EXISTS "microscope_keyword";
-DROP TABLE IF EXISTS "microscope";
 DROP TABLE IF EXISTS "keyword";
+DROP TABLE IF EXISTS "microscope";
 DROP TABLE IF EXISTS "controller";
 DROP TABLE IF EXISTS "model";
 DROP TABLE IF EXISTS "brand";
 DROP TABLE IF EXISTS "compagny";
+
 CREATE TABLE "compagny" (
 	"id"	INTEGER,
 	"com_name"	TEXT UNIQUE,
@@ -35,13 +37,6 @@ CREATE TABLE "controller" (
 	FOREIGN KEY("brand_id") REFERENCES "brand"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-CREATE TABLE "keyword" (
-	"id"	INTEGER,
-	"cat"	TEXT,
-	"tag"	TEXT,
-	UNIQUE("cat","tag"),
-	PRIMARY KEY("id" AUTOINCREMENT)
-);
 CREATE TABLE "microscope" (
 	"id"	INTEGER,
 	"rate"	TEXT,
@@ -52,6 +47,13 @@ CREATE TABLE "microscope" (
 	FOREIGN KEY("controller_id") REFERENCES "controller"("id"),
 	FOREIGN KEY("model_id") REFERENCES "model"("id"),
 	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id") ON DELETE CASCADE,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE "keyword" (
+	"id"	INTEGER,
+	"cat"	TEXT,
+	"tag"	TEXT,
+	UNIQUE("cat","tag"),
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "microscope_keyword" (
@@ -67,13 +69,6 @@ CREATE TABLE "lab" (
 	"address"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-CREATE TABLE "contact" (
-	"id"	INTEGER,
-	"firstname"	TEXT,
-	"lastname"	TEXT,
-	"email"	TEXT UNIQUE,
-	PRIMARY KEY("id" AUTOINCREMENT)
-);
 CREATE TABLE "microscopes_group" (
 	"id"	INTEGER,
 	"lat"	REAL,
@@ -83,5 +78,19 @@ CREATE TABLE "microscopes_group" (
 	FOREIGN KEY("lab_id") REFERENCES "lab"("id") ON DELETE CASCADE,
 	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
 	CONSTRAINT "pk_microscope_group" PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE "contact" (
+	"id"	INTEGER,
+	"firstname"	TEXT,
+	"lastname"	TEXT,
+	"email"	TEXT UNIQUE,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE "manage" (
+	"contact_id"	INTEGER,
+	"microscope_group_id"	INTEGER,
+	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
+	FOREIGN KEY("microscope_group_id") REFERENCES "microscope_group"("id"),
+	PRIMARY KEY("contact_id","microscope_group_id")
 );
 COMMIT;
