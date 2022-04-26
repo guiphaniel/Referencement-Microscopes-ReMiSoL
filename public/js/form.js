@@ -107,18 +107,18 @@ function addMicroscopeField() {
     document.getElementById("micro-compagny-" + id).addEventListener("input", onCompagnyInput);
     document.getElementById("micro-brand-" + id).addEventListener("input", onBrandInput);
     // add input listeners on keywords input
-    initKeywordInput(microField)
+    initKeywordCatInput(microField)
 }
 
 /* add multiple keywords */
 //init first default fieldset
 {
     let microField = document.getElementById("micro-field-0");
-    initKeywordInput(microField);
+    initKeywordCatInput(microField);
 }
 
 /** init input listeners for keywords inputs */
-function initKeywordInput(microField) {
+function initKeywordCatInput(microField) {
     let catInputs = microField.getElementsByClassName("cat-input");
 
     for (const catInput of catInputs) {
