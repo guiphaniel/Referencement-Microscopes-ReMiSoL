@@ -1,11 +1,11 @@
 BEGIN TRANSACTION;
 DROP TABLE IF EXISTS "manage";
 DROP TABLE IF EXISTS "contact";
-DROP TABLE IF EXISTS "microscopes_group";
-DROP TABLE IF EXISTS "lab";
 DROP TABLE IF EXISTS "microscope_keyword";
 DROP TABLE IF EXISTS "keyword";
 DROP TABLE IF EXISTS "microscope";
+DROP TABLE IF EXISTS "microscopes_group";
+DROP TABLE IF EXISTS "lab";
 DROP TABLE IF EXISTS "controller";
 DROP TABLE IF EXISTS "model";
 DROP TABLE IF EXISTS "brand";
