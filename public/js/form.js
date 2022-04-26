@@ -96,11 +96,9 @@ function addMicroscopeField() {
     rmButton.className = "rm-bt";
     rmButton.id = "rm-micro-" + id;
     rmButton.addEventListener('click', function(){
-        let microId = this.id.split('-')[2]; // retrieve the id of the rmButton, which is the one of the fieldset too
-        document.getElementById("micro-field-" + microId).remove();
-        this.remove()
+        this.parentElement.remove();
     });
-    microscopeFields.insertBefore(rmButton, addMicroButton);
+    microField.append(rmButton);
 
     //add listeners
     // add input listeners on micro infos inputs to fill datalists
