@@ -70,7 +70,38 @@ function isInputDatalistValid(input, datalist) {
     return datalist.querySelector("option[value='" + input.value + "']") != null;
 }
 
-/* add new fieldsets on add button click */
+/* add new contact fieldset on add button click */
+let contactFields = document.getElementById("contacts")
+let nextContactFieldId = 1;
+
+let addContactButton = document.getElementById("add-contact");
+addContactButton.onclick = addContactField;
+
+// save original fieldset innerHTML (so keywords won't be duplicated when adding new micro)
+originalContactFieldHTML = document.getElementById("contact-field-0").innerHTML;
+
+function addContactField() {
+    id = nextContactFieldId++;
+
+    // create the form fieldset
+    contactField = document.createElement("fieldset");
+    contactField.id = "contact-field-" + id;
+    contactField.innerHTML = originalContactFieldHTML.replaceAll("[0]", `[${id}]`).replaceAll("-0", `-${id}`);
+    
+    // add the form fieldset at the end of the form
+    contactFields.insertBefore(contactField, addContactButton);
+
+    // append the remove button to the fieldset
+    let rmButton = document.createElement("div")
+    rmButton.className = "rm-bt";
+    rmButton.id = "rm-contact-" + id;
+    rmButton.addEventListener('click', function(){
+        this.parentElement.remove()
+    });
+    contactField.append(rmButton);
+}
+
+/* add new microscope fieldset on add button click */
 let microscopeFields = document.getElementById("microscopes")
 let nextMicroFieldId = 1;
 

@@ -25,6 +25,27 @@
                 <label for="lab-address">Adresse postale</label>
                 <input id="lab-address" type="text" name="labAddress" required>
             </fieldset>
+            
+            <fieldset id="contacts">
+                <legend>Référent·e·s</legend>
+                <fieldset id="contact-field-0">
+                    <legend>Référent·e</legend>
+                    <label for="contact-firstname-0">Prénom</label>
+                    <input id="contact-firstname-0" type="text" name="contacts[0][firstname]" required>
+                    <label for="contact-lastname-0">Nom</label>
+                    <input id="contact-lastname-0" type="text" name="contacts[0][lastname]" required>
+                    <label for="contact-email-0">Email</label>
+                    <input id="contact-email-0" type="text" name="contacts[0][email]" required>
+                </fieldset>
+                <div id="add-contact" class="add-bt"></div>
+            </fieldset>
+            <fieldset id="coor">
+                <legend>Coordonnées</legend>
+                <label for="lat">Latitude</label>
+                <input id="lat" type="number" name="lat" min="-90" max="90" step="0.00001" required>
+                <label for="lon">Longitude</label>
+                <input id="lon" type="number" name="lon" min="-180" max="180" step="0.00001" required>
+            </fieldset>
             <fieldset id="microscopes">
                 <legend>Vos microscopes</legend>
                 <!-- Compagnies datalist -->
@@ -48,26 +69,9 @@
                             <?php endforeach; ?>
                         </datalist>
                     <?php endforeach; ?>
-                <fieldset>
-                    <legend>Référent·e</legend>
-                    <label for="contact-firstname">Prénom</label>
-                    <input id="contact-firstname" type="text" name="contactFirstname" required>
-                    <label for="contact-lastname">Nom</label>
-                    <input id="contact-lastname" type="text" name="contactLastname" required>
-                    <label for="contact-email">Email</label>
-                    <input id="contact-email" type="text" name="contactEmail" required>
-                </fieldset>
-                <fieldset id="coor">
-                    <legend>Coordonnées</legend>
-                    <label for="lat">Latitude</label>
-                    <input id="lat" type="number" name="lat" min="-90" max="90" step="0.00001" required>
-                    <label for="lon">Longitude</label>
-                    <input id="lon" type="number" name="lon" min="-180" max="180" step="0.00001" required>
-                </fieldset>
                 <fieldset id="micro-field-0">
                     <legend>Votre microscope</legend>
                     <label for="micro-compagny-0">Société</label>
-                    <!-- The datalist for compagnies is at the beginnnig of the microscopes fieldset -->
                     <input id="micro-compagny-0" list="micro-compagnies" name="microscopes[0][compagny]" required>
                     <label for="micro-brand-0">Marque</label>
                     <input id="micro-brand-0" list="micro-brands-0" name="microscopes[0][brand]" required disabled>
