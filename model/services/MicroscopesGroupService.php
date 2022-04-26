@@ -19,20 +19,33 @@
 
         // TODO: check if the lab / brand / controller / are already in db, else add them but also add them in a table "to_verify", maybe in the add/save functions of each Service
         function add(MicroscopesGroup $group) : int {
-            global $pdo; 
+            global $pdo;
 
-            // save the group and bind it to the lab and the contact
-            $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labId, :contactId)");
+            // save the lab
+            LabService::getInstance()->save($group->getLab());
+
+            // save the group and bind it to the lab
+            $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labId)");
 
             $sth->execute([
                 "lat" => $group->getCoor()->getLat(),
                 "lon" => $group->getCoor()->getLon(),
-                "labId" => LabService::getInstance()->getLabId($group->getLab()),
-                "contactId" => ContactService::getInstance()->getContactId($group->getContact())
+                "labId" => LabService::getInstance()->getLabId($group->getLab())
             ]);
 
             // get the generated group id
             $groupId = $pdo->lastInsertId(); 
+
+            // save the contact...
+            ContactService::getInstance()->save($group->getContact()); 
+
+            // ... and bind it to the group
+            $sth = $pdo->prepare("INSERT INTO manage VALUES (:groupId, :contactId)");
+
+            $sth->execute([
+                "groupId" => $groupId,
+                "contactId" => ContactService::getInstance()->getContactId($group->getContact())
+            ]);
                 
             // add the microscopes to the db
             foreach($group->getMicroscopes() as $micro)

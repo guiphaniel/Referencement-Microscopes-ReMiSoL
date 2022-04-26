@@ -19,7 +19,7 @@
     <main>
         <form action="processing/form_processing.php" method="post">
             <fieldset>
-                <legend>Votre Laboratoire</legend>
+                <legend>Votre Laboratoire / Service</legend>
                 <label for="lab-name">Nom</label>
                 <input id="lab-name" type="text" name="labName" required>
                 <label for="lab-address">Adresse postale</label>
@@ -93,9 +93,8 @@
                             foreach ($cats as $cat): 
                                 $normCat = HTMLNormalize($cat)?>
                                 <div>
-                                    <label for="cat-<?=$normCat?>"><?=$cat?></label>
-                                    <input id="cat-<?=$normCat?>" class="cat-input" list="cats-<?=$normCat?>">
-                                    <input id="micro-kw-<?=$normCat?>-0" type="hidden" name="microscopes[0][keywords][<?=$normCat?>]">
+                                    <label for="cat-<?=$normCat?>-0"><?=$cat?></label>
+                                    <input id="cat-<?=$normCat?>-0" class="cat-input" list="cats-<?=$normCat?>">
                                 </div>
                             <?php endforeach; ?>
                     </fieldset>

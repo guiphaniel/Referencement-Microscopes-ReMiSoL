@@ -3,6 +3,7 @@
     include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
     include_once(__DIR__ . "/ModelService.php");
     include_once(__DIR__ . "/ControllerService.php");
+    include_once(__DIR__ . "/KeywordService.php");
 
     class MicroscopeService {
         static private $instance;
@@ -16,7 +17,6 @@
             return self::$instance;
         }
 
-        // TODO: handle keywords
         function add(int $groupId, Microscope $micro) : int {
             global $pdo;
             
@@ -30,6 +30,18 @@
                 "groupId" => $groupId
             ]);     
 
-            return $pdo->lastInsertId();
+            $microId = $pdo->lastInsertId();
+
+            //bind keywords
+            foreach ($micro->getKeywords() as $kw) {
+                $sth = $pdo->prepare("INSERT INTO microscope_keyword VALUES (:microId, :kwId)");
+
+                $sth->execute([
+                    "microId" => $microId,
+                    "kwId" => KeywordService::getInstance()->getKeywordId($kw)
+                ]);
+            }
+
+            return $microId;
         }
     }

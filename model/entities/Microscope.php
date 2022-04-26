@@ -2,6 +2,7 @@
 include_once(__DIR__ . "/Coordinates.php");
 include_once(__DIR__ . "/Model.php");
 include_once(__DIR__ . "/Controller.php");
+include_once(__DIR__ . "/Microscope.php");
 
 class Microscope extends AbstractEntity  {
 
@@ -55,13 +56,25 @@ class Microscope extends AbstractEntity  {
         return $this;
     }
 
-    public function addKeyword(string $cat, string $tag) 
+    public function getKeywords()
     {
-        $this->keywords[$cat][] = $tag;
+        return $this->keywords;
     }
 
-    public function removeKeyword(string $cat, string $tag) 
+    public function setKeywords($keywords)
     {
-        unset($this->keywords[$cat][$tag]);
+        $this->keywords = $keywords;
+
+        return $this;
+    }
+
+    public function addKeyword(Keyword $kw) 
+    {
+        $this->keywords[] = $kw;
+    }
+
+    public function removeKeyword(Keyword $kw) 
+    {
+        unset($this->keywords[$kw]);
     }
 }

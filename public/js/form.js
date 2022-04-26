@@ -1,16 +1,16 @@
 // TODO: block submit button if fields are badly filled (disabled, bad email)
-/* fill coherent microscope infomations dataLists on focusout */
+/* fill coherent microscope infomations dataLists on input */
 
-//init focusout listeners for microscopes inputs
+//init input listeners for microscopes inputs
 {
     let compagnyInput = document.getElementById("micro-compagny-0");
-    compagnyInput.addEventListener("focusout", compagnyFocusOut);
+    compagnyInput.addEventListener("input", onCompagnyInput);
 
     let brandInput = document.getElementById("micro-brand-0");
-    brandInput.addEventListener("focusout", brandFocusOut);
+    brandInput.addEventListener("input", onBrandInput);
 }
 
-async function compagnyFocusOut() {
+async function onCompagnyInput() {
     const fieldsetId = this.id.split('-')[2];
     
     if(!isInputDatalistValid(this, document.getElementById("micro-compagnies"))) {
@@ -30,7 +30,7 @@ async function compagnyFocusOut() {
     document.getElementById(`micro-brand-` + fieldsetId).disabled = false;
 }
 
-async function brandFocusOut() {
+async function onBrandInput() {
     const fieldsetId = this.id.split('-')[2];
 
     if(!isInputDatalistValid(this, document.getElementById("micro-brands-" + fieldsetId))) {
@@ -103,26 +103,26 @@ function addMicroscopeField() {
     microscopeFields.insertBefore(rmButton, addMicroButton);
 
     //add listeners
-    // add focusout listeners on micro infos inputs to fill datalists
-    document.getElementById("micro-compagny-" + id).addEventListener("focusout", compagnyFocusOut);
-    document.getElementById("micro-brand-" + id).addEventListener("focusout", brandFocusOut);
-    // add focusout listeners on keywords input
-    initKeywordFocusout(microField)
+    // add input listeners on micro infos inputs to fill datalists
+    document.getElementById("micro-compagny-" + id).addEventListener("input", onCompagnyInput);
+    document.getElementById("micro-brand-" + id).addEventListener("input", onBrandInput);
+    // add input listeners on keywords input
+    initKeywordInput(microField)
 }
 
 /* add multiple keywords */
 //init first default fieldset
 {
     let microField = document.getElementById("micro-field-0");
-    initKeywordFocusout(microField);
+    initKeywordInput(microField);
 }
 
-/** init focusout listeners for keywords inputs */
-function initKeywordFocusout(microField) {
+/** init input listeners for keywords inputs */
+function initKeywordInput(microField) {
     let catInputs = microField.getElementsByClassName("cat-input");
 
     for (const catInput of catInputs) {
-        catInput.addEventListener('focusout', function() {
+        catInput.addEventListener('input', function() {
             let id = this.id.split('-')[1]; // retrieve the id of the input
 
             if(!isInputDatalistValid(this, document.getElementById("cats-" + id)))
@@ -132,8 +132,13 @@ function initKeywordFocusout(microField) {
         });
     }
 }
-//TODO: add keyword to hidden input
+
 function addKeyword(keyword, catInput) {
+    // retrieve hidden input
+    let infos = catInput.id.split('-');
+    let cat = infos[1];
+    let id = infos[2];
+
     // if the keyword is already selected, do nothing
     tags = catInput.parentElement.getElementsByClassName("tag");
     for (const tag of tags) {
@@ -141,15 +146,16 @@ function addKeyword(keyword, catInput) {
             return;
     }
 
+    // clear the input
     catInput.value = "";
 
+    // add tag
     const tag = document.createElement('div');
     tag.className = "tag";
 
     const rmBt = document.createElement("div");
     rmBt.className = "rm-bt"
-    rmBt.dataset.tagId = tag.id;
-    rmBt.addEventListener('click', function() {
+    rmBt.addEventListener('click', function() {        
         this.parentElement.remove();
     });
     tag.append(rmBt);
@@ -157,4 +163,12 @@ function addKeyword(keyword, catInput) {
     tag.append(keyword);
 
     catInput.parentElement.append(tag);
+
+    // add hidden input with keyword
+    let hiddenInput = document.createElement("input")
+    hiddenInput.id = (`micro-kw-${cat}-${id}`)
+    hiddenInput.setAttribute("type",  "hidden")
+    hiddenInput.setAttribute("name",  `microscopes[${id}][keywords][${catInput.parentElement.getElementsByTagName("label")[0].innerText}][]`)
+    hiddenInput.value = keyword;
+    tag.append(hiddenInput);
 }

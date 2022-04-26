@@ -4,6 +4,7 @@
     include_once("../model/entities/Contact.php");
     include_once("../model/entities/Model.php");
     include_once("../model/entities/Controller.php");
+    include_once("../model/entities/Keyword.php");
     include_once("../model/entities/MicroscopesGroup.php");
     include_once("../model/services/MicroscopesGroupService.php");
 
@@ -31,12 +32,17 @@
         $mod = new Model($micro["model"], $bra);
         $ctr = new Controller($micro["controller"], $bra);
 
-        $group->addMicroscope(new Microscope($mod, $ctr, $micro["rate"], $micro["desc"], $micro["keywords"]??[]));
+        $keywords = [];
+        foreach ($micro["keywords"]??[] as $cat => $tags) {
+            foreach ($tags as $tag) {
+                $keywords[] = new Keyword($cat, $tag);
+            }
+        }
+
+        $group->addMicroscope(new Microscope($mod, $ctr, $micro["rate"], $micro["desc"], $keywords));
     }
         
-    // ...and save the lab, contact and group into the db
-    LabService::getInstance()->save($group->getLab());
-    ContactService::getInstance()->save($group->getContact()); 
+    // ...and save the group into the db
     MicroscopesGroupService::getInstance()->add($group);
 
     header('location: /index.php');
