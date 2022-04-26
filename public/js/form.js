@@ -70,74 +70,65 @@ function isInputDatalistValid(input, datalist) {
     return datalist.querySelector("option[value='" + input.value + "']") != null;
 }
 
-/* add new contact fieldset on add button click */
-let contactFields = document.getElementById("contacts")
-let nextContactFieldId = 1;
+/* ADD FIELDSETS */
 
-let addContactButton = document.getElementById("add-contact");
-addContactButton.onclick = addContactField;
-
-// save original fieldset innerHTML (so keywords won't be duplicated when adding new micro)
-originalContactFieldHTML = document.getElementById("contact-field-0").innerHTML;
-
-function addContactField() {
-    let id = nextContactFieldId++;
+function addField(fieldType, fieldId, innerHTML) {
+    let fieldsWrapper = document.getElementById(fieldType + "s")
 
     // create the form fieldset
-    let contactField = document.createElement("fieldset");
-    contactField.id = "contact-field-" + id;
-    contactField.innerHTML = originalContactFieldHTML.replaceAll("[0]", `[${id}]`).replaceAll("-0", `-${id}`);
+    let field = document.createElement("fieldset");
+    field.id = fieldType + "-field-" + fieldId;
+    field.innerHTML = innerHTML.replaceAll("[0]", `[${fieldId}]`).replaceAll("-0", `-${fieldId}`);
     
-    // add the form fieldset at the end of the form
-    contactFields.insertBefore(contactField, addContactButton);
+    // add the form fieldset at the end of the form (before the add button)
+    let addButton = document.getElementById("add-" + fieldType);
+    fieldsWrapper.insertBefore(field, addButton);
 
     // append the remove button to the fieldset
     let rmButton = document.createElement("div")
     rmButton.className = "rm-bt";
-    rmButton.id = "rm-contact-" + id;
+    rmButton.id = "rm-" + fieldType + "-" + fieldId;
     rmButton.addEventListener('click', function(){
         this.parentElement.remove()
     });
-    contactField.append(rmButton);
+    field.append(rmButton);
+
+    return field;
 }
 
+
+/* add new contact fieldset on add button click */
+
+let nextContactFieldId = 1;
+
+// save original fieldset innerHTML
+let originalContactFieldHTML = document.getElementById("contact-field-0").innerHTML;
+
+document.getElementById("add-contact").addEventListener('click', function(){
+    addField("contact", nextContactFieldId++, originalContactFieldHTML);
+});
+
+
 /* add new microscope fieldset on add button click */
-let microscopeFields = document.getElementById("microscopes")
-let nextMicroFieldId = 1;
 
-let addMicroButton = document.getElementById("add-micro");
-addMicroButton.onclick = addMicroscopeField;
+let nextMicroscopeFieldId = 1;
 
-// save original fieldset innerHTML (so keywords won't be duplicated when adding new micro)
-originalMicroFieldHTML = document.getElementById("micro-field-0").innerHTML;
+// save original fieldset innerHTML
+let originalMicroscopeFieldHTML = document.getElementById("micro-field-0").innerHTML;
 
-function addMicroscopeField() {
-    let id = nextMicroFieldId++;
+document.getElementById("add-micro").addEventListener('click', function(){
+    let id = nextMicroscopeFieldId;
 
-    // create the form fieldset
-    let microField = document.createElement("fieldset");
-    microField.id = "micro-field-" + id;
-    microField.innerHTML = originalMicroFieldHTML.replaceAll("[0]", `[${id}]`).replaceAll("-0", `-${id}`);
-    
-    // add the form fieldset at the end of the form
-    microscopeFields.insertBefore(microField, addMicroButton);
+    microField = addField("micro", nextMicroscopeFieldId++, originalMicroscopeFieldHTML);
 
-    // append the remove button to the fieldset
-    let rmButton = document.createElement("div")
-    rmButton.className = "rm-bt";
-    rmButton.id = "rm-micro-" + id;
-    rmButton.addEventListener('click', function(){
-        this.parentElement.remove();
-    });
-    microField.append(rmButton);
-
-    //add listeners
     // add input listeners on micro infos inputs to fill datalists
     document.getElementById("micro-compagny-" + id).addEventListener("input", onCompagnyInput);
     document.getElementById("micro-brand-" + id).addEventListener("input", onBrandInput);
+
     // add input listeners on keywords input
     initKeywordCatInput(microField)
-}
+});
+
 
 /* add multiple keywords */
 //init first default fieldset

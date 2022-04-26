@@ -46,7 +46,7 @@
                 <label for="lon">Longitude</label>
                 <input id="lon" type="number" name="lon" min="-180" max="180" step="0.00001" required>
             </fieldset>
-            <fieldset id="microscopes">
+            <fieldset id="micros">
                 <legend>Vos microscopes</legend>
                 <!-- Compagnies datalist -->
                 <datalist id="micro-compagnies">
@@ -72,23 +72,23 @@
                 <fieldset id="micro-field-0">
                     <legend>Votre microscope</legend>
                     <label for="micro-compagny-0">Société</label>
-                    <input id="micro-compagny-0" list="micro-compagnies" name="microscopes[0][compagny]" required>
+                    <input id="micro-compagny-0" list="micro-compagnies" name="micros[0][compagny]" required>
                     <label for="micro-brand-0">Marque</label>
-                    <input id="micro-brand-0" list="micro-brands-0" name="microscopes[0][brand]" required disabled>
+                    <input id="micro-brand-0" list="micro-brands-0" name="micros[0][brand]" required disabled>
                     <datalist id="micro-brands-0">
                     </datalist>
                     <label for="micro-model-0">Modèle</label>
-                    <input id="micro-model-0" list="micro-models-0" name="microscopes[0][model]" required disabled>
+                    <input id="micro-model-0" list="micro-models-0" name="micros[0][model]" required disabled>
                     <datalist id="micro-models-0">
                     </datalist>
                     <label for="micro-controller-0">Électronique - contrôleur</label>
-                    <input id="micro-controller-0" list="micro-controllers-0" name="microscopes[0][controller]" required disabled>
+                    <input id="micro-controller-0" list="micro-controllers-0" name="micros[0][controller]" required disabled>
                     <datalist id="micro-controllers-0">
                     </datalist>
                     <label for="micro-rate-0">Tarification (lien)</label>
-                    <input id="micro-rate-0" type="text" name="microscopes[0][rate]" required>
+                    <input id="micro-rate-0" type="text" name="micros[0][rate]" required>
                     <label for="micro-desc-0">Description</label>
-                    <textarea id="micro-desc-0" name="microscopes[0][desc]" cols="30" rows="10" required></textarea>
+                    <textarea id="micro-desc-0" name="micros[0][desc]" cols="30" rows="10" required></textarea>
                     <fieldset id="keywords">
                         <legend>Mots-clés</legend>
                         <?php 
