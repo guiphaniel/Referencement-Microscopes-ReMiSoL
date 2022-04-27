@@ -81,14 +81,16 @@ CREATE TABLE "contact" (
 	"id"	INTEGER,
 	"firstname"	TEXT,
 	"lastname"	TEXT,
+	"role"	TEXT,
 	"email"	TEXT UNIQUE,
+	"phone"	TEXT UNIQUE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "manage" (
 	"contact_id"	INTEGER,
-	"microscope_group_id"	INTEGER,
+	"microscopes_group_id"	INTEGER,
 	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
-	FOREIGN KEY("microscope_group_id") REFERENCES "microscope_group"("id"),
-	PRIMARY KEY("contact_id","microscope_group_id")
+	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id"),
+	PRIMARY KEY("contact_id","microscopes_group_id")
 );
 COMMIT;
