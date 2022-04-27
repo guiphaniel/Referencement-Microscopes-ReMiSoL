@@ -29,7 +29,7 @@ insert into controller values(1, 'Nanoscope IIIa',1);
 insert into controller values(2, 'Nanoscope Quadrex',1);
 insert into controller values(3, 'Nanoscope V',1);
 insert into controller values(4, 'Nanoscope 6',1);
-insert into controller values(15, 'ARC2',2);
+insert into controller values(15, 'ARC2',3);
 insert into keyword values(1,'Environnement','Milieu liquide');
 insert into keyword values(2,'Environnement','Ultravide');
 insert into keyword values(3,'Environnement','Vide');
