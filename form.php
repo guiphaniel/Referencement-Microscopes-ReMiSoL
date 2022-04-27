@@ -21,9 +21,11 @@
             <fieldset>
                 <legend>Votre Laboratoire / Service</legend>
                 <label for="lab-name">Nom</label>
-                <input id="lab-name" type="text" name="labName" required>
+                <input id="lab-name" type="text" name="lab[name]" required>
                 <label for="lab-address">Adresse postale</label>
-                <input id="lab-address" type="text" name="labAddress" required>
+                <input id="lab-address" type="text" name="lab[address]" required>
+                <label for="lab-website">Site web</label>
+                <input id="lab-website" type="url" name="lab[website]" required>
             </fieldset>
             
             <fieldset id="contacts">
@@ -46,9 +48,9 @@
             <fieldset id="coor">
                 <legend>Coordonnées</legend>
                 <label for="lat">Latitude</label>
-                <input id="lat" type="number" name="lat" min="-90" max="90" step="0.00001" required>
+                <input id="lat" type="number" name="coor[lat]" min="-90" max="90" step="0.00001" required>
                 <label for="lon">Longitude</label>
-                <input id="lon" type="number" name="lon" min="-180" max="180" step="0.00001" required>
+                <input id="lon" type="number" name="coor[lon]" min="-180" max="180" step="0.00001" required>
             </fieldset>
             <fieldset id="micros">
                 <legend>Vos microscopes</legend>
@@ -90,12 +92,12 @@
                     <datalist id="micro-controllers-0">
                     </datalist>
                     <label for="micro-type-0">Type</label>
-                    <select id="micro-type-0">
+                    <select id="micro-type-0" name="micros[0][type]">
                         <option value="LAB">Laboratoire</option>
                         <option value="SERVICE">Service</option>
                     </select>
                     <label for="micro-rate-0">Tarification (lien)</label>
-                    <input id="micro-rate-0" type="text" name="micros[0][rate]" required disabled>
+                    <input id="micro-rate-0" type="url" name="micros[0][rate]" required disabled>
                     <label for="micro-access-0">Ouvert aux</label>
                     <select name="micros[0][access]" id="micro-access-0">
                         <option value="ACAD">Académiques</option>

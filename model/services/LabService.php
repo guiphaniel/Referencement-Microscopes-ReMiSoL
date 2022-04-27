@@ -37,11 +37,12 @@
             
             // if the lab isn't already in the db, add it
             if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO lab VALUES (NULL, :name, :address)");
+                $sth = $pdo->prepare("INSERT INTO lab VALUES (NULL, :name, :address, :website)");
 
                 $sth->execute([
                     "name" => $lab->getName(),
-                    "address" => $lab->getAddress()
+                    "address" => $lab->getAddress(),
+                    "website" => $lab->getWebsite()
                 ]);
 
                 $id = $pdo->lastInsertId();

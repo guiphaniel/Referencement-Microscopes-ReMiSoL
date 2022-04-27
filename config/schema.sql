@@ -68,6 +68,7 @@ CREATE TABLE "lab" (
 	"id"	INTEGER,
 	"lab_name"	TEXT UNIQUE,
 	"address"	TEXT,
+	"website"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "microscopes_group" (
