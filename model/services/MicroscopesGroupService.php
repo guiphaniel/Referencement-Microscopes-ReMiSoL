@@ -53,7 +53,6 @@
         // TODO: fetch keywords too
         function getAllMicroscopesGroup() {
             global $pdo;
-            $groupsResult = [];
 
             // get groups infos
             $sql = "
@@ -129,7 +128,7 @@
             global $pdo;
 
             $sql = "
-                select com_name as compagnyName, bra_name as brandName, mod_name as modelName, ctr_name as controllerName, rate, desc 
+                select mi.id as microId, com_name as compagnyName, bra_name as brandName, mod_name as modelName, ctr_name as controllerName, rate, desc 
                 from microscope as mi
                 join controller as ctr
                 on ctr.id = mi.controller_id
@@ -151,7 +150,10 @@
                 $bra = new Brand($microInfos["brandName"], $com);
                 $mod = new Model($microInfos["modelName"], $bra);
                 $ctr = new Controller($microInfos["controllerName"], $bra);
-                $micros[] = new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["desc"]);
+
+                $kws = MicroscopeService::getInstance()->findAllKeywords($microInfos["microId"]);
+
+                $micros[] = new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["desc"], $kws);
             }
 
             return $micros;

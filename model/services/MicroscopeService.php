@@ -44,4 +44,28 @@
 
             return $microId;
         }
+
+        function findAllKeywords($microId) {
+            global $pdo;
+
+            $sql = "
+                select cat, tag
+                from microscope as mi
+                join microscope_keyword as mk
+                on mk.microscope_id = mi.id
+                join keyword as k
+                on k.id = mk.keyword_id
+                where mk.microscope_id = $microId
+            ";
+
+            $sth = $pdo->query($sql);
+            $keywordsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
+
+            $keywords = [];
+            foreach ($keywordsInfos as $keywordInfos) {
+                $keywords[] = new Keyword($keywordInfos["cat"], $keywordInfos["tag"]);
+            }
+
+            return $keywords;
+        }
     }
