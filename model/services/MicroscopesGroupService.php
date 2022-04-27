@@ -122,40 +122,26 @@
             }
 
             return $contacts;
-        }
-
+        } 
+        
         function findAllMicroscopes($groupId) {
             global $pdo;
 
             $sql = "
-                select mi.id as microId, com_name as compagnyName, bra_name as brandName, mod_name as modelName, ctr_name as controllerName, rate, desc 
-                from microscope as mi
-                join controller as ctr
-                on ctr.id = mi.controller_id
-                join model as mod
-                on mod.id = mi.model_id
-                join brand as bra
-                on bra.id = mod.brand_id
-                join compagny as com
-                on com.id = bra.compagny_id
+                select id
+                from microscope
                 where microscopes_group_id = $groupId
             ";
 
             $sth = $pdo->query($sql);
-            $microsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
+            $microsIds = $sth->fetchAll(PDO::FETCH_COLUMN);
 
             $micros = [];
-            foreach ($microsInfos as $microInfos) {
-                $com = new Compagny($microInfos["compagnyName"]);
-                $bra = new Brand($microInfos["brandName"], $com);
-                $mod = new Model($microInfos["modelName"], $bra);
-                $ctr = new Controller($microInfos["controllerName"], $bra);
-
-                $kws = MicroscopeService::getInstance()->findAllKeywords($microInfos["microId"]);
-
-                $micros[] = new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["desc"], $kws);
+            $microscopeService = MicroscopeService::getInstance();
+            foreach ($microsIds as $microId) {
+                $micros[] = $microscopeService->findMicroscope($microId);
             }
 
             return $micros;
-        }        
+        }   
     }   

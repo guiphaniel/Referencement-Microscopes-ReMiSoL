@@ -6,7 +6,7 @@ include_once(__DIR__ . "/Microscope.php");
 
 class Microscope extends AbstractEntity  {
 
-    function __construct(private Model $model, private Controller $controller, private string $rate, private string $desc, private array $keywords = []) {}
+    function __construct(private Model $model, private Controller $controller, private string $rate, private string $desc, private string $access, private array $keywords = []) {}
     
     public function getModel() : Model
     {
@@ -52,6 +52,18 @@ class Microscope extends AbstractEntity  {
     public function setDesc(string $desc)
     {
         $this->desc = $desc;
+
+        return $this;
+    }
+
+    public function getAccess()
+    {
+        return $this->access;
+    }
+ 
+    public function setAccess($access)
+    {
+        $this->access = $access;
 
         return $this;
     }

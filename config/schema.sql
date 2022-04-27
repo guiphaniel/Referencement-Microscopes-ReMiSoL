@@ -41,6 +41,7 @@ CREATE TABLE "microscope" (
 	"id"	INTEGER,
 	"rate"	TEXT,
 	"desc"	TEXT,
+	"access"	TEXT, /* TODO: MySQL: replace by ENUM(LAB, SERVICE, BOTH)*/
 	"model_id"	INTEGER,
 	"controller_id"	INTEGER,
 	"microscopes_group_id" INTEGER,

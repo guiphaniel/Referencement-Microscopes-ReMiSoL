@@ -91,6 +91,12 @@
                     </datalist>
                     <label for="micro-rate-0">Tarification (lien)</label>
                     <input id="micro-rate-0" type="text" name="micros[0][rate]" required>
+                    <label for="micro-access-0">Ouvert aux</label>
+                    <select name="micros[0][access]" id="micro-access-0">
+                        <option value="ACAD">Académiques</option>
+                        <option value="INDU">Industriels</option>
+                        <option value="BOTH">Académiques et Industriels</option>
+                    </select>
                     <label for="micro-desc-0">Description</label>
                     <textarea id="micro-desc-0" name="micros[0][desc]" cols="30" rows="10" required></textarea>
                     <fieldset id="keywords">

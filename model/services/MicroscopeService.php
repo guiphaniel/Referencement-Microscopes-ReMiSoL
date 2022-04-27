@@ -20,11 +20,12 @@
         function add(int $groupId, Microscope $micro) : int {
             global $pdo;
             
-            $sth = $pdo->prepare("INSERT INTO microscope VALUES (NULL, :rate, :desc, :modId, :ctrId, :groupId)");
+            $sth = $pdo->prepare("INSERT INTO microscope VALUES (NULL, :rate, :desc, :access, :modId, :ctrId, :groupId)");
 
             $sth->execute([
                 "rate" => $micro->getRate(),
                 "desc" => $micro->getDesc(),
+                "access" => $micro->getAccess(),
                 "modId" => ModelService::getInstance()->getModelId($micro->getModel()),
                 "ctrId" => ControllerService::getInstance()->getControllerId($micro->getController()),
                 "groupId" => $groupId
@@ -64,5 +65,35 @@
             $keywords = $sth->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_COLUMN);
 
             return $keywords;
+        }
+
+        function findMicroscope($microId) {
+            global $pdo;
+
+            $sql = "
+                select mi.id as microId, com_name as compagnyName, bra_name as brandName, mod_name as modelName, ctr_name as controllerName, rate, desc, access
+                from microscope as mi
+                join controller as ctr
+                on ctr.id = mi.controller_id
+                join model as mod
+                on mod.id = mi.model_id
+                join brand as bra
+                on bra.id = mod.brand_id
+                join compagny as com
+                on com.id = bra.compagny_id
+                where microId = $microId
+            ";
+
+            $sth = $pdo->query($sql);
+            $microInfos = $sth->fetch(PDO::FETCH_NAMED);
+
+            $com = new Compagny($microInfos["compagnyName"]);
+            $bra = new Brand($microInfos["brandName"], $com);
+            $mod = new Model($microInfos["modelName"], $bra);
+            $ctr = new Controller($microInfos["controllerName"], $bra);
+
+            $kws = $this->findAllKeywords($microInfos["microId"]);
+
+            return new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["desc"], $microInfos["access"], $kws);
         }
     }

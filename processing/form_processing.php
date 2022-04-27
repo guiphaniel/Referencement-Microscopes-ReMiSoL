@@ -43,7 +43,7 @@
         $mod = new Model($micro["model"], $bra);
         $ctr = new Controller($micro["controller"], $bra);
 
-        $group->addMicroscope(new Microscope($mod, $ctr, $micro["rate"], $micro["desc"], $micro["keywords"]??[]));
+        $group->addMicroscope(new Microscope($mod, $ctr, $micro["rate"], $micro["desc"], $micro["access"], $micro["keywords"]??[]));
     }
         
     // ...and save the group into the db
