@@ -188,7 +188,7 @@ function addKeyword(keyword, catInput) {
     let hiddenInput = document.createElement("input")
     hiddenInput.id = (`micro-kw-${cat}-${id}`)
     hiddenInput.setAttribute("type",  "hidden")
-    hiddenInput.setAttribute("name",  `microscopes[${id}][keywords][${catInput.parentElement.getElementsByTagName("label")[0].innerText}][]`)
+    hiddenInput.setAttribute("name",  `micros[${id}][keywords][${catInput.parentElement.getElementsByTagName("label")[0].innerText}][]`)
     hiddenInput.value = keyword;
     tag.append(hiddenInput);
 }
