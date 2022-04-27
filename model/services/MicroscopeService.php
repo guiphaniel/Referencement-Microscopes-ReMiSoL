@@ -33,13 +33,15 @@
             $microId = $pdo->lastInsertId();
 
             //bind keywords
-            foreach ($micro->getKeywords() as $kw) {
-                $sth = $pdo->prepare("INSERT INTO microscope_keyword VALUES (:microId, :kwId)");
+            foreach ($micro->getKeywords() as $cat => $tags) {
+                foreach ($tags as $tag) {
+                    $sth = $pdo->prepare("INSERT INTO microscope_keyword VALUES (:microId, :kwId)");
 
-                $sth->execute([
-                    "microId" => $microId,
-                    "kwId" => KeywordService::getInstance()->getKeywordId($kw)
-                ]);
+                    $sth->execute([
+                        "microId" => $microId,
+                        "kwId" => KeywordService::getInstance()->getKeywordId($cat, $tag)
+                    ]);
+                }
             }
 
             return $microId;
@@ -59,12 +61,7 @@
             ";
 
             $sth = $pdo->query($sql);
-            $keywordsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
-
-            $keywords = [];
-            foreach ($keywordsInfos as $keywordInfos) {
-                $keywords[] = new Keyword($keywordInfos["cat"], $keywordInfos["tag"]);
-            }
+            $keywords = $sth->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_COLUMN);
 
             return $keywords;
         }

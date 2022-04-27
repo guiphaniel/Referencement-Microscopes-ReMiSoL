@@ -1,6 +1,5 @@
 <?php
     include_once(__DIR__ . "/../start_db.php");
-    include_once(__DIR__ . "/../entities/Keyword.php");
 
     class KeywordService {
         static private $instance;
@@ -14,14 +13,14 @@
             return self::$instance;
         }
 
-        function getKeywordId(Keyword $kw) {
+        function getKeywordId($cat, $tag) {
             global $pdo;
 
             $sth = $pdo->prepare("SELECT id FROM keyword where cat = :cat and tag = :tag");
 
             $sth->execute([
-                "cat" => $kw->getCat(),
-                "tag" => $kw->getTag()
+                "cat" => $cat,
+                "tag" => $tag
             ]);
 
             $row = $sth->fetch();

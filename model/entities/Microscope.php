@@ -68,13 +68,13 @@ class Microscope extends AbstractEntity  {
         return $this;
     }
 
-    public function addKeyword(Keyword $kw) 
+    public function addKeyword($cat, $tag) 
     {
-        $this->keywords[] = $kw;
+        $this->keywords[$cat][] = $tag;
     }
 
-    public function removeKeyword(Keyword $kw) 
+    public function removeKeyword($cat, $tag) 
     {
-        unset($keywords[array_search($kw, $this->keywords, true)]);
+        unset($keywords[$cat][array_search($tag, $this->keywords, true)]);
     }
 }
