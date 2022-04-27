@@ -89,8 +89,13 @@
                     <input id="micro-controller-0" list="micro-controllers-0" name="micros[0][controller]" required disabled>
                     <datalist id="micro-controllers-0">
                     </datalist>
+                    <label for="micro-type-0">Type</label>
+                    <select id="micro-type-0">
+                        <option value="LAB">Laboratoire</option>
+                        <option value="SERVICE">Service</option>
+                    </select>
                     <label for="micro-rate-0">Tarification (lien)</label>
-                    <input id="micro-rate-0" type="text" name="micros[0][rate]" required>
+                    <input id="micro-rate-0" type="text" name="micros[0][rate]" required disabled>
                     <label for="micro-access-0">Ouvert aux</label>
                     <select name="micros[0][access]" id="micro-access-0">
                         <option value="ACAD">Académiques</option>

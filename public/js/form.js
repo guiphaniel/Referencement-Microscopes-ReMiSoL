@@ -3,11 +3,16 @@
 
 //init input listeners for microscopes inputs
 {
+    // add input listeners on micro infos inputs to fill datalists
     let compagnyInput = document.getElementById("micro-compagny-0");
     compagnyInput.addEventListener("input", onCompagnyInput);
 
     let brandInput = document.getElementById("micro-brand-0");
     brandInput.addEventListener("input", onBrandInput);
+
+    // add change listener for the micro's type
+    let typeInput = document.getElementById("micro-type-0");
+    typeInput.addEventListener("change", onTypeChange);
 }
 
 async function onCompagnyInput() {
@@ -52,6 +57,12 @@ async function onBrandInput() {
 
     document.getElementById(`micro-model-` + fieldsetId).disabled = false;
     document.getElementById(`micro-controller-` + fieldsetId).disabled = false;
+}
+
+async function onTypeChange() {
+    const fieldsetId = this.id.split('-')[2];
+
+    document.getElementById(`micro-rate-` + fieldsetId).disabled = this.value == "LAB";
 }
 
 async function fillDatalist(datalist, url) {
@@ -124,6 +135,9 @@ document.getElementById("add-micro").addEventListener('click', function(){
     // add input listeners on micro infos inputs to fill datalists
     document.getElementById("micro-compagny-" + id).addEventListener("input", onCompagnyInput);
     document.getElementById("micro-brand-" + id).addEventListener("input", onBrandInput);
+
+    // add change listener for the micro's type
+    document.getElementById("micro-type-" + id).addEventListener("change", onTypeChange);
 
     // add input listeners on keywords input
     initKeywordCatInput(microField)
