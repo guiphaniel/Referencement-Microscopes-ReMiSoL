@@ -75,6 +75,6 @@ class Microscope extends AbstractEntity  {
 
     public function removeKeyword(Keyword $kw) 
     {
-        unset($this->keywords[$kw]);
+        unset($keywords[array_search($kw, $this->keywords, true)]);
     }
 }
