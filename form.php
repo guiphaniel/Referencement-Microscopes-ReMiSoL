@@ -34,8 +34,12 @@
                     <input id="contact-firstname-0" type="text" name="contacts[0][firstname]" required>
                     <label for="contact-lastname-0">Nom</label>
                     <input id="contact-lastname-0" type="text" name="contacts[0][lastname]" required>
+                    <label for="contact-role-0">Titre</label>
+                    <input id="contact-role-0" type="text" name="contacts[0][role]" required>
                     <label for="contact-email-0">Email</label>
                     <input id="contact-email-0" type="text" name="contacts[0][email]" required>
+                    <label for="contact-phone-0">Téléphone</label>
+                    <input id="contact-phone-0" type="tel" name="contacts[0][phone]">
                 </fieldset>
                 <div id="add-contact" class="add-bt"></div>
             </fieldset>

@@ -9,12 +9,19 @@
     include_once("../model/services/MicroscopesGroupService.php");
 
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form TODO: check that keywords aren't duplicated
-    if (!isset($_POST["labName"]) || !isset($_POST["labAddress"]) || !isset($_POST["contactFirstname"]) || !isset($_POST["contactLastname"]) || !isset($_POST["contactEmail"]) || !isset($_POST["lat"]) || !isset($_POST["lon"])) {
+    if (!isset($_POST["labName"]) || !isset($_POST["labAddress"]) || !isset($_POST["lat"]) || !isset($_POST["lon"])) {       
         header('location: /form.php');
         exit();
     }
 
-    foreach($_POST["microscopes"] as $micro) {
+    foreach($_POST["contacts"] as $contact) {
+        if (!isset($contact["firstname"]) || !isset($contact["lastname"]) || !isset($contact["role"]) || !isset($contact["email"])) {
+            header('location: /form.php');
+            exit();
+        }
+    }
+
+    foreach($_POST["micros"] as $micro) {
         if (!isset($micro["compagny"]) || !isset($micro["brand"]) || !isset($micro["model"]) || !isset($micro["controller"]) || !isset($micro["rate"]) || !isset($micro["desc"])) {
             header('location: /form.php');
             exit();
@@ -23,10 +30,15 @@
 
     // Convert form values into objects...
     $lab = new Lab($_POST["labName"], $_POST["labAddress"]);
-    $contact = new Contact($_POST["contactFirstname"], $_POST["contactLastname"], $_POST["contactEmail"]);
-    $group = new MicroscopesGroup(new Coordinates($_POST["lat"], $_POST["lon"]), $lab, $contact);
+    
+    $contacts = [];
+    foreach($_POST["contacts"] as $contact) {
+        $contacts[] = new Contact($contact["firstname"], $contact["lastname"], $contact["role"], $contact["email"], $contact["phone"]);
+    }
+    
+    $group = new MicroscopesGroup(new Coordinates($_POST["lat"], $_POST["lon"]), $lab, $contacts);
 
-    foreach($_POST["microscopes"] as $micro) {
+    foreach($_POST["micros"] as $micro) {
         $com = new Compagny($micro["compagny"]);
         $bra = new Brand($micro["brand"], $com);
         $mod = new Model($micro["model"], $bra);

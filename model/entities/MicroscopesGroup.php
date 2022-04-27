@@ -7,7 +7,7 @@
     class MicroscopesGroup extends AbstractEntity {
         private array $microscopes;
 
-        function __construct(private Coordinates $coor, private Lab $lab, private Contact $contact) {}
+        function __construct(private Coordinates $coor, private Lab $lab, private array $contacts) { }
 
         public function getMicroscopes() : array
         {
@@ -34,16 +34,24 @@
                 return $this;
         }
 
-        public function getContact() : Contact
+        public function getContacts() : array
         {
-            return $this->contact;
+            return $this->contacts;
         }
 
-        public function setContact(Contact $contact)
+        public function setContacts(array $contacts)
         {
-            $this->contact = $contact;
+            $this->contacts = $contacts;
 
             return $this;
+        }
+
+        function addContact(Contact $contact) {
+            $this->contacts[] = $contact;
+        }
+
+        function removeContact(Contact $microscope) {
+            unset($microscopes[array_search($microscope, $this->microscopes, true)]);
         }
 
         public function getLab() : Lab

@@ -37,20 +37,28 @@
 
             $id = $this->getContactId($contact);
 
-            // if the microscope isn't already in the db, add it
+            // if the contact isn't already in the db, add it
             if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :firstname, :lastname, :email)");
+                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :firstname, :lastname, :role, :email, :phone)");
         
                 $sth->execute([
                     "firstname" => $contact->getFirstname(),
                     "lastname" => $contact->getLastname(),
-                    "email" => $contact->getEmail()
+                    "role" => $contact->getRole(),
+                    "email" => $contact->getEmail(),
+                    "phone" => $contact->getPhone()
                 ]);
                 
                 $id = $pdo->lastInsertId();
-            }          
+            }    
 
             return $id;
         }    
+
+        function bind($contactId, $groupId) {
+            global $pdo;
+
+            $pdo->exec("INSERT INTO manage VALUES ($contactId, $groupId)");
+        }
     }
 

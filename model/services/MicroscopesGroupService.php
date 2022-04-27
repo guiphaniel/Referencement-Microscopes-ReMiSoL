@@ -36,16 +36,12 @@
             // get the generated group id
             $groupId = $pdo->lastInsertId(); 
 
-            // save the contact...
-            ContactService::getInstance()->save($group->getContact()); 
-
-            // ... and bind it to the group
-            $sth = $pdo->prepare("INSERT INTO manage VALUES (:groupId, :contactId)");
-
-            $sth->execute([
-                "groupId" => $groupId,
-                "contactId" => ContactService::getInstance()->getContactId($group->getContact())
-            ]);
+            // save the contacts and bind them to the group...
+            $contactService = ContactService::getInstance();
+            foreach ($group->getContacts() as $contact) {
+                $contactId = $contactService->save($contact); 
+                $contactService->bind($contactId, $groupId); 
+            }
                 
             // add the microscopes to the db
             foreach($group->getMicroscopes() as $micro)
@@ -59,45 +55,105 @@
             global $pdo;
             $groupsResult = [];
 
+            // get groups infos
             $sql = "
-                select g.id, lat, lon, lab_name as labName, address as labAddress, firstname as contactFirstname, lastname as contactLastname, email as contactEmail from microscopes_group as g
+                select g.id, lat, lon
+                from microscopes_group as g
                 join lab as l
                 on l.id = g.lab_id
-                join contact as con
-                on con.id = g.contact_id
             ";
             $sth = $pdo->query($sql);
-            $groups = $sth->fetchAll(PDO::FETCH_NAMED);
+            $groupsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
 
-            foreach ($groups as $group) {
-                $groupId = $group["id"];
-                $sql = "
-                    select com_name as compagnyName, bra_name as brandName, mod_name as modelName, ctr_name as controllerName, rate, desc 
-                    from microscope as mi
-                    join controller as ctr
-                    on ctr.id = mi.controller_id
-                    join model as mod
-                    on mod.id = mi.model_id
-                    join brand as bra
-                    on bra.id = mod.brand_id
-                    join compagny as com
-                    on com.id = bra.compagny_id
-                    where microscopes_group_id = $groupId
-                ";
-                $sth = $pdo->query($sql);
-                $microscopes = $sth->fetchAll(PDO::FETCH_NAMED);
+            // generate groups
+            $groups = [];
+            foreach ($groupsInfos as $groupInfo) {
+                $groupId = $groupInfo["id"];
 
-                $groupResult = new MicroscopesGroup(new Coordinates($group["lat"], $group["lon"]), new Lab($group["labName"], $group["labAddress"]), new Contact($group["contactFirstname"], $group["contactLastname"], $group["contactEmail"]));
-                foreach ($microscopes as $micro) {
-                    $com = new Compagny($micro["compagnyName"]);
-                    $bra = new Brand($micro["brandName"], $com);
-                    $mod = new Model($micro["modelName"], $bra);
-                    $ctr = new Controller($micro["controllerName"], $bra);
-                    $groupResult->addMicroscope(new Microscope($mod, $ctr, $micro["rate"], $micro["desc"]));
+                $lab = $this->findLab($groupId);
+                $contacts = $this->findAllContacts($groupId);
+                $micros = $this->findAllMicroscopes($groupId);
+
+                $group = new MicroscopesGroup(new Coordinates($groupInfo["lat"], $groupInfo["lon"]), $lab, $contacts);
+
+                foreach ($micros as $micro) {
+                    $group->addMicroscope($micro);
                 }
-                $groupsResult[] = $groupResult;
+
+                $groups[] = $group;
             }
 
-            return $groupsResult;
+            return $groups;
         }
-    }
+
+        function findLab($groupId) {
+            global $pdo;
+
+            $sql = "
+                select lab_name as name, address
+                from microscopes_group as mg
+                join lab as l
+                on mg.lab_id = l.id
+                where mg.id = $groupId
+            ";
+
+            $sth = $pdo->query($sql);
+            $labInfos = $sth->fetch(PDO::FETCH_NAMED);
+
+            return new Lab($labInfos["name"], $labInfos["address"]);
+        }
+
+        function findAllContacts($groupId) {
+            global $pdo;
+
+            $sql = "
+                select firstname, lastname, role, email, phone
+                from contact as c
+                join manage as m
+                on m.contact_id = c.id
+                where microscopes_group_id = $groupId
+            ";
+
+            $sth = $pdo->query($sql);
+            $contactsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
+
+            $contacts = [];
+            foreach ($contactsInfos as $contactInfos) {
+                $contacts[] = new Contact($contactInfos["firstname"], $contactInfos["lastname"], $contactInfos["role"], $contactInfos["email"], $contactInfos["phone"]);
+            }
+
+            return $contacts;
+        }
+
+        function findAllMicroscopes($groupId) {
+            global $pdo;
+
+            $sql = "
+                select com_name as compagnyName, bra_name as brandName, mod_name as modelName, ctr_name as controllerName, rate, desc 
+                from microscope as mi
+                join controller as ctr
+                on ctr.id = mi.controller_id
+                join model as mod
+                on mod.id = mi.model_id
+                join brand as bra
+                on bra.id = mod.brand_id
+                join compagny as com
+                on com.id = bra.compagny_id
+                where microscopes_group_id = $groupId
+            ";
+
+            $sth = $pdo->query($sql);
+            $microsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
+
+            $micros = [];
+            foreach ($microsInfos as $microInfos) {
+                $com = new Compagny($microInfos["compagnyName"]);
+                $bra = new Brand($microInfos["brandName"], $com);
+                $mod = new Model($microInfos["modelName"], $bra);
+                $ctr = new Controller($microInfos["controllerName"], $bra);
+                $micros[] = new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["desc"]);
+            }
+
+            return $micros;
+        }        
+    }   
