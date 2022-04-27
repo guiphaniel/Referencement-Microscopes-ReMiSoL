@@ -84,16 +84,20 @@ function isInputDatalistValid(input, datalist) {
 /* ADD FIELDSETS */
 
 function addField(fieldType, fieldId, innerHTML) {
-    let fieldsWrapper = document.getElementById(fieldType + "s")
+    let fieldsWrapper = document.getElementById(fieldType + "s");
 
     // create the form fieldset
-    let field = document.createElement("fieldset");
-    field.id = fieldType + "-field-" + fieldId;
-    field.innerHTML = innerHTML.replaceAll("[0]", `[${fieldId}]`).replaceAll("-0", `-${fieldId}`);
-    
+    let newField = document.createElement("fieldset");
+    newField.id = fieldType + "-field-" + fieldId;
+    newField.className = fieldType + "-field";
+    newField.innerHTML = innerHTML.replaceAll("[0]", `[${fieldId}]`).replaceAll("-0", `-${fieldId}`);
+    // update legend's index
+    let legend = newField.querySelector("legend");
+    legend.textContent = legend.textContent.substring(0, legend.textContent.lastIndexOf('°') + 1) + (document.getElementsByClassName(fieldType + "-field").length + 1);
+
     // add the form fieldset at the end of the form (before the add button)
     let addButton = document.getElementById("add-" + fieldType);
-    fieldsWrapper.insertBefore(field, addButton);
+    fieldsWrapper.insertBefore(newField, addButton);
 
     // append the remove button to the fieldset
     let rmButton = document.createElement("div")
@@ -101,10 +105,17 @@ function addField(fieldType, fieldId, innerHTML) {
     rmButton.id = "rm-" + fieldType + "-" + fieldId;
     rmButton.addEventListener('click', function(){
         this.parentElement.remove()
-    });
-    field.append(rmButton);
 
-    return field;
+        // update other fields' legend index
+        let cpt = 1;
+        for (const field of document.getElementsByClassName(fieldType + "-field")) {
+            let legend = field.querySelector("legend");
+            legend.textContent =legend.textContent.substring(0, legend.textContent.lastIndexOf('°') + 1) + cpt++;
+        }
+    });
+    newField.append(rmButton);
+
+    return newField;
 }
 
 

@@ -30,8 +30,8 @@
             
             <fieldset id="contacts">
                 <legend>Référent·e·s</legend>
-                <fieldset id="contact-field-0">
-                    <legend>Référent·e</legend>
+                <fieldset id="contact-field-0" class="contact-field">
+                    <legend>Référent·e n°1</legend>
                     <label for="contact-firstname-0">Prénom</label>
                     <input id="contact-firstname-0" type="text" name="contacts[0][firstname]" required>
                     <label for="contact-lastname-0">Nom</label>
@@ -75,8 +75,8 @@
                             <?php endforeach; ?>
                         </datalist>
                     <?php endforeach; ?>
-                <fieldset id="micro-field-0">
-                    <legend>Votre microscope</legend>
+                <fieldset id="micro-field-0" class="micro-field">
+                    <legend>Microscope n°1</legend>
                     <label for="micro-compagny-0">Société</label>
                     <input id="micro-compagny-0" list="micro-compagnies" name="micros[0][compagny]" required>
                     <label for="micro-brand-0">Marque</label>
