@@ -30,7 +30,7 @@ async function loadAndShowMicroscopes() {
 		});
 
 		marker.on('click',function(event) {
-			window.location.replace("/group-details.php?id=" + group.id);
+			window.location.href = "/group-details.php?id=" + group.id;
 		});
 		
 		marker.addTo(map);
