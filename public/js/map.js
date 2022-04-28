@@ -23,7 +23,8 @@ async function loadAndShowMicroscopes() {
 
 	for (let group of groups) {
 		let marker = L.marker(group.coor, { "alt": group.lab.name });
-		marker.bindPopup(group.lab.name);
+		
+		marker.bindPopup(getCustomPopupHTML(group), {maxHeight : 200});
 
 		marker.on('mouseover',function(event) {
 			event.target.openPopup();
@@ -40,4 +41,123 @@ async function loadAndShowMicroscopes() {
 			map.setView(group.coor, 13);
 		}
 	}
+}
+
+function createContentElement(type, textContent) {
+	let elem = document.createElement(type);
+	elem.textContent = textContent;
+	
+	return elem;
+}
+
+function createH(level, textContent) {
+	return createContentElement("h" + level, textContent);
+}
+
+function createP(textContent) {
+	return createContentElement("p", textContent);
+}
+
+function createA(href, text, target = "_self") {
+	let a = document.createElement("a");
+	a.append(document.createTextNode(text));
+	a.href = href;
+	a.target = target;
+	
+	return a;
+}
+
+// Nom du labo + Responsable (avec coordonnées) + site internet + Mots-clé
+function getCustomPopupHTML(group) {
+	let infos = document.createElement("section");
+
+	// lab
+	infos.append(createH(2, group.lab.name));
+
+	// website
+	{
+		let lab = group.lab;
+		let label = createP("Site internet : ");
+		label.append(createA(lab.website, lab.website, "_blank"));
+		infos.append(label);
+	}
+
+	// contacts
+	infos.append(createContentElement("h3", "Référents"))
+	let contactsAddress = document.createElement("address");
+	for (const contact of group.contacts) {
+		// generate contact infos
+		let contactAddress = document.createElement("address");
+
+		// role
+		contactAddress.append(createP(contact.role));
+
+		// name
+		contactAddress.append(createP([contact.firstname, contact.lastname].join(" ")));
+		
+		// email
+		{
+			let label = createP("Courriel : ");
+			label.append(createA("mailto:" + contact.email, contact.email));
+			contactAddress.append(label);
+		}
+
+		// phone
+		let phone = contact.phone
+		if(phone) {
+			let label = createP("Téléphone : ");
+			label.append(createA("tel:" + phone, phone));
+			contactAddress.append(label);
+		}
+
+		// add infos to all contacts infos
+		contactsAddress.append(contactAddress);
+	}
+	infos.append(contactsAddress);
+
+	// Microscopes
+	infos.append(createContentElement("h3", "Microscopes"));
+	let microsList = document.createElement("ul");
+	for (const micro of group.microscopes) {
+		ctr = micro.controller;
+		model = micro.model;
+		brand = model.brand;
+		compagny = brand.compagny;
+
+		microName = [compagny.name, brand.name, model.name, ctr.name].join(" - ");
+
+		microsList.appendChild(createContentElement("li", microName));
+	}
+	infos.append(microsList);
+
+	// Keywords
+	// merge all tags of all microscopes, by categories
+	let allKeywords = {};
+	for (const micro of group.microscopes) {
+		for (const cat in micro.keywords) {
+			if(!allKeywords[cat])
+				allKeywords[cat] = micro.keywords[cat];
+			else
+				allKeywords[cat] += micro.keywords[cat];
+		}
+	}
+	for (const cat in allKeywords) {
+		allKeywords[cat] = [...new Set(allKeywords[cat])]
+	}
+
+	//display the keywords
+	infos.append(createContentElement("h3", "Mots-clés"));
+	let kwList = document.createElement("ul");
+
+	let maxTags = 4;
+	for (const cat in allKeywords) {
+		if (Object.hasOwnProperty.call(allKeywords, cat)) {
+			const tags = allKeywords[cat].slice(0, maxTags);
+			catLi = createContentElement("li", cat + " : " + tags.join(", "));
+			kwList.appendChild(catLi);
+		}
+	}
+	infos.append(kwList);
+
+	return infos.innerHTML;
 }
