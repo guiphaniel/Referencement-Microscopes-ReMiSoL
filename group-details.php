@@ -44,8 +44,7 @@
             <h2>Référents</h2>
             <?php foreach ($group->getContacts() as $contact) : ?>
                 <address>
-                    <p><?= $contact->getRole() ?></p>
-                    <p><?= $contact->getFirstname() . ' ' . $contact->getLastname(); ?></p>
+                    <p><?= $contact->getFirstname() . ' ' . $contact->getLastname() . " (" . $contact->getRole() .")" ?></p>
                     <p>Email : <a href="mailto:<?= $contact->getEmail() ?>"><?= $contact->getEmail() ?></a></p>
                     <?php $phone = $contact->getPhone();
                         if(isset($phone)) : ?>
