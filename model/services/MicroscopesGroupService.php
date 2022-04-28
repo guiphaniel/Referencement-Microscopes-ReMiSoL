@@ -89,7 +89,7 @@
             global $pdo;
 
             $sql = "
-                select lab_name as name, address
+                select lab_name as name, address, website
                 from microscopes_group as mg
                 join lab as l
                 on mg.lab_id = l.id
@@ -99,7 +99,7 @@
             $sth = $pdo->query($sql);
             $labInfos = $sth->fetch(PDO::FETCH_NAMED);
 
-            return new Lab($labInfos["name"], $labInfos["address"]);
+            return new Lab($labInfos["name"], $labInfos["address"], $labInfos["website"]);
         }
 
         function findAllContacts($groupId) {
