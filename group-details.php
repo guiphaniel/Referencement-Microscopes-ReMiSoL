@@ -37,11 +37,11 @@
         <section>
             <h2><?= $group->getLab()->getName(); ?></h2>
             <p><?= $group->getLab()->getAddress(); ?></p>
-            <p>Site web : <a href="<?= $group->getLab()->getWebsite(); ?>"><?= $group->getLab()->getWebsite(); ?></a></p>
+            <p>Site internet : <a href="<?= $group->getLab()->getWebsite(); ?>"><?= $group->getLab()->getWebsite(); ?></a></p>
             <div id="map" style="height: 400px;"></div>
         </section>
         <section>
-            <h2>Contacts</h2>
+            <h2>Référents</h2>
             <?php foreach ($group->getContacts() as $contact) : ?>
                 <address>
                     <p><?= $contact->getRole() ?></p>
