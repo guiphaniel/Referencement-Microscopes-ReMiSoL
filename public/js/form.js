@@ -30,9 +30,7 @@ async function onCompagnyInput() {
     
     let brandDatalist = document.getElementById(`micro-brands-` + fieldsetId);
 
-    await fillDatalist(brandDatalist, url);
-    
-    document.getElementById(`micro-brand-` + fieldsetId).disabled = false;
+    fillDatalist(brandDatalist, url).then(document.getElementById(`micro-brand-` + fieldsetId).disabled = false);
 }
 
 async function onBrandInput() {
@@ -49,14 +47,11 @@ async function onBrandInput() {
 
 	const modelsUrl = `/api/v1/listModels.php?compagny=${compagnyInput.value}&brand=${this.value}`;
     let modelDatalist = document.getElementById(`micro-models-` + fieldsetId);
-    await fillDatalist(modelDatalist, modelsUrl);
+    fillDatalist(modelDatalist, modelsUrl).then(document.getElementById(`micro-model-` + fieldsetId).disabled = false);
 
     const controllersUrl = `/api/v1/listControllers.php?compagny=${compagnyInput.value}&brand=${this.value}`
     let controllerDatalist = document.getElementById(`micro-controllers-` + fieldsetId);
-    await fillDatalist(controllerDatalist, controllersUrl);
-
-    document.getElementById(`micro-model-` + fieldsetId).disabled = false;
-    document.getElementById(`micro-controller-` + fieldsetId).disabled = false;
+    fillDatalist(controllerDatalist, controllersUrl).then(document.getElementById(`micro-controller-` + fieldsetId).disabled = false);
 }
 
 async function onTypeChange() {
