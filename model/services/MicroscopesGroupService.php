@@ -47,6 +47,8 @@
             foreach($group->getMicroscopes() as $micro)
                 MicroscopeService::getInstance()->add($groupId, $micro);
 
+            $group->setId($groupId);
+
             return $groupId;
         }
 
@@ -66,14 +68,16 @@
 
             // generate groups
             $groups = [];
-            foreach ($groupsInfos as $groupInfo) {
-                $groupId = $groupInfo["id"];
+            foreach ($groupsInfos as $groupInfos) {
+                $groupId = $groupInfos["id"];
 
                 $lab = $this->findLab($groupId);
                 $contacts = $this->findAllContacts($groupId);
                 $micros = $this->findAllMicroscopes($groupId);
 
-                $group = new MicroscopesGroup(new Coordinates($groupInfo["lat"], $groupInfo["lon"]), $lab, $contacts);
+                $group = new MicroscopesGroup(new Coordinates($groupInfos["lat"], $groupInfos["lon"]), $lab, $contacts);
+
+                $group->setId($groupId);
 
                 foreach ($micros as $micro) {
                     $group->addMicroscope($micro);
@@ -144,4 +148,38 @@
 
             return $micros;
         }   
+
+        function findMicroscopesGroupById(int $groupId) {
+            global $pdo;
+
+            // get groups infos
+            $sql = "
+                select g.id, lat, lon
+                from microscopes_group as g
+                join lab as l
+                on l.id = g.lab_id
+                where g.id = $groupId
+            ";
+            $sth = $pdo->query($sql);
+            $groupInfos = $sth->fetch(PDO::FETCH_NAMED);
+
+            // if the group doesn't exist, return null
+            if(!$groupInfos)
+                return null;
+
+            // generate the group
+            $lab = $this->findLab($groupId);
+            $contacts = $this->findAllContacts($groupId);
+            $micros = $this->findAllMicroscopes($groupId);
+
+            $group = new MicroscopesGroup(new Coordinates($groupInfos["lat"], $groupInfos["lon"]), $lab, $contacts);
+
+            $group->setId($groupId);
+
+            foreach ($micros as $micro) {
+                $group->addMicroscope($micro);
+            }
+
+            return $group;
+        }
     }   

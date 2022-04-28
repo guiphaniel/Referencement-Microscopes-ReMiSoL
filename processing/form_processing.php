@@ -54,7 +54,7 @@
     
     $contacts = [];
     foreach($_POST["contacts"] as $contact) {
-        $contacts[] = new Contact($contact["firstname"], $contact["lastname"], $contact["role"], $contact["email"], $contact["phone"]);
+        $contacts[] = new Contact($contact["firstname"], $contact["lastname"], $contact["role"], $contact["email"], $contact["phone"]??null);
     }
     
     $group = new MicroscopesGroup(new Coordinates(...$coorInfos), $lab, $contacts);
@@ -65,7 +65,7 @@
         $mod = new Model($micro["model"], $bra);
         $ctr = new Controller($micro["controller"], $bra);
 
-        $group->addMicroscope(new Microscope($mod, $ctr, $micro["rate"]??null, $micro["desc"], $micro["access"], $micro["keywords"]??[]));
+        $group->addMicroscope(new Microscope($mod, $ctr, $micro["desc"], $micro["access"], $micro["rate"]??null, $micro["keywords"]??[]));
     }
         
     // ...and save the group into the db

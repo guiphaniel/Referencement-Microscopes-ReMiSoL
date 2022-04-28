@@ -94,6 +94,6 @@
 
             $kws = $this->findAllKeywords($microInfos["microId"]);
 
-            return new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["desc"], $microInfos["access"], $kws);
+            return new Microscope($mod, $ctr, $microInfos["desc"], $microInfos["access"], $microInfos["rate"], $kws);
         }
     }
