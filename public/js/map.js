@@ -183,7 +183,7 @@ function getCustomPopupHTML(group) {
 			if(!allKeywords[cat])
 				allKeywords[cat] = micro.keywords[cat];
 			else
-				allKeywords[cat] += micro.keywords[cat];
+				allKeywords[cat] = allKeywords[cat].concat(micro.keywords[cat]);
 		}
 	}
 	for (const cat in allKeywords) {
