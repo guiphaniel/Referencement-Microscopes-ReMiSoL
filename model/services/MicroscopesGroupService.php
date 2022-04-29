@@ -52,7 +52,6 @@
             return $groupId;
         }
 
-        // TODO: fetch keywords too
         function getAllMicroscopesGroup() {
             global $pdo;
 

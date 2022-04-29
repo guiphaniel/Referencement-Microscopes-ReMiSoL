@@ -6,7 +6,7 @@
     switch($request_method)
     {
         case 'GET':
-            //TODO: parametres (limit, offset) TODO: renvoyer la liste des groupes de microscopes (séparer les requetes SQL, et convertir en objets)
+            //TODO: parametres (limit, offset)
             
             $groups = MicroscopesGroupService::getInstance()->getAllMicroscopesGroup();
             

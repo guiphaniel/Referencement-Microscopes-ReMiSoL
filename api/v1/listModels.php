@@ -6,7 +6,7 @@
     switch($request_method)
     {
         case 'GET':
-            //TODO: parametres (limit, offset) TODO: renvoyer la liste des groupes de microscopes (séparer les requetes SQL, et convertir en objets)
+            //TODO: parametres (limit, offset)
             //TODO: if no brand is provided, return all models -> change the behavior of the ModelService::getAllModels method, with optional parameter
             if(!isset($_GET["compagny"])) {
                 echo "You must provide a compagny name : ?compagny=compagnyName";
