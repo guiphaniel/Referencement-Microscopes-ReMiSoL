@@ -3,10 +3,14 @@ include_once(__DIR__ . "/Coordinates.php");
 include_once(__DIR__ . "/Model.php");
 include_once(__DIR__ . "/Controller.php");
 include_once(__DIR__ . "/Microscope.php");
+include_once(__DIR__ . "/../services/Microscope.php");
 
 class Microscope extends AbstractEntity  {
 
-    function __construct(private Model $model, private Controller $controller, private string $desc, private string $access, private $rate = null, private array $keywords = []) {}
+    function __construct(private Model $model, private Controller $controller, private string $desc, string $access, private $rate = null, array $keywords = []) {
+        $this->setAccess($access);
+        $this->setKeywords($keywords);
+    }
     
     public function getModel() : Model
     {
@@ -51,6 +55,9 @@ class Microscope extends AbstractEntity  {
  
     public function setAccess($access)
     {
+        if($access != "ACAD" || $access != "INDU" || $access != "BOTH")
+            throw new Exception("Ce type d'accès n'existe pas.");
+
         $this->access = $access;
 
         return $this;
@@ -75,6 +82,19 @@ class Microscope extends AbstractEntity  {
 
     public function setKeywords($keywords)
     {
+        // check if some of the cats provided aren't in the database
+        $keywordService = KeywordService::getInstance();
+        $extraCats = array_diff(array_keys($keywords), $keywordService->getAllCategories());
+        if($extraCats)
+            throw new Exception("Les catégories suivantes ne sont pas prises en charge : " . implode(", ", $extraCats));
+        
+        // check if some of the tags provided aren't in the database
+        foreach ($keywords as $cat => $tags) {
+            $extraTags = array_diff($tags, $keywordService->getAllTags($cat));
+            if($extraTags)
+                throw new Exception('Les mots-clés "' . implode('", "', $extraTags) . '" ne sont pas pris en charge pour la catégorie "' . $cat . '"');
+        }
+
         $this->keywords = $keywords;
 
         return $this;
