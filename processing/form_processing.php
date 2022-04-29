@@ -48,7 +48,7 @@
         $contacts = [];
         foreach($_POST["contacts"] as $contact) {
             // retrieve phone number
-            $contact["phone"] = $contact["phoneCode"] . substr($contact["phone"], -9);
+            $contact["phone"] = $contact["phoneCode"] . " " . substr($contact["phone"], -9);
             unset($contact["phoneCode"]);
 
             $contacts[] = new Contact(...$contact);

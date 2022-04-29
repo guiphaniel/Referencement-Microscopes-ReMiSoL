@@ -27,7 +27,7 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
-    <title>Accueil</title>
+    <title>Détails</title>
 </head>
 <body>
     <?php 
@@ -63,8 +63,8 @@
                 $brand = $model->getBrand();
                 $compagny = $brand->getCompagny();
                 $type = match ($micro->getType()) {
-                    "LABO" => "Laboratoire",
-                    "PLAT" => "Plateforme"
+                    "LABO" => "laboratoire",
+                    "PLAT" => "plateforme"
                 };
                 ?>
                 <section>
