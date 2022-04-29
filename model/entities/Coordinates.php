@@ -14,7 +14,7 @@
 
         public function setLat($lat) {
             if ($lat < 42 || $lat > 52)
-                throw new ErrorException("La latitude renseignée dépasse les valeurs acceptables");
+                throw new ErrorException("La latitude renseignée dépasse les valeurs acceptables.");
             
                 $this->lat = $lat;
 
@@ -26,7 +26,7 @@
         public function setLon($lon)
         {
             if ($lon < 6 || $lon > 11)
-                throw new ErrorException("La longitude renseignée dépasse les valeurs acceptables");
+                throw new ErrorException("La longitude renseignée dépasse les valeurs acceptables.");
 
             $this->lon = $lon;
 
