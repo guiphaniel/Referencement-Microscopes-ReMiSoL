@@ -20,7 +20,7 @@
     }
 
     $coorInfos = $_POST["coor"];
-    if(!isset($coorInfos["lat"]) || !isset($coorInfos["lon"])) {       
+    if(!isset($coorInfos["lat"]) || !isset($coorInfos["lon"]) || $coorInfos["lat"] < 42 || $coorInfos["lat"] > 52 || $coorInfos["lon"] < 6 || $coorInfos["lon"] > 11) {       
         header('location: /form.php');
         exit();
     }    
