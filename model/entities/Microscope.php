@@ -3,7 +3,7 @@ include_once(__DIR__ . "/Coordinates.php");
 include_once(__DIR__ . "/Model.php");
 include_once(__DIR__ . "/Controller.php");
 include_once(__DIR__ . "/Microscope.php");
-include_once(__DIR__ . "/../services/Microscope.php");
+include_once(__DIR__ . "/../services/KeywordService.php");
 
 class Microscope extends AbstractEntity  {
 
