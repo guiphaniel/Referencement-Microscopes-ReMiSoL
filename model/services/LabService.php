@@ -30,6 +30,21 @@
             return $row ? $row[0] : -1;
         }
 
+        function findLabById($id) : Lab {
+            global $pdo;
+
+            $sql = "
+                select lab_name as name, address, website
+                from lab
+                where id = $id
+            ";
+
+            $sth = $pdo->query($sql);
+            $labInfos = $sth->fetch(PDO::FETCH_NAMED);
+
+            return new Lab($labInfos["name"], $labInfos["address"], $labInfos["website"]);
+        }
+
         /** Saves the lab if it doesn't exist yet, and returns its id */
         function save(Lab $lab) : int {
             global $pdo;

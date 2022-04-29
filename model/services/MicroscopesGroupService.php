@@ -57,10 +57,8 @@
 
             // get groups infos
             $sql = "
-                select g.id, lat, lon
+                select id, lat, lon, lab_id
                 from microscopes_group as g
-                join lab as l
-                on l.id = g.lab_id
             ";
             $sth = $pdo->query($sql);
             $groupsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
@@ -70,7 +68,7 @@
             foreach ($groupsInfos as $groupInfos) {
                 $groupId = $groupInfos["id"];
 
-                $lab = $this->findLab($groupId);
+                $lab = LabService::getInstance()->findLabById($groupInfos["lab_id"]);
                 $contacts = $this->findAllContacts($groupId);
                 $micros = $this->findAllMicroscopes($groupId);
 
@@ -86,23 +84,6 @@
             }
 
             return $groups;
-        }
-
-        function findLab($groupId) {
-            global $pdo;
-
-            $sql = "
-                select lab_name as name, address, website
-                from microscopes_group as mg
-                join lab as l
-                on mg.lab_id = l.id
-                where mg.id = $groupId
-            ";
-
-            $sth = $pdo->query($sql);
-            $labInfos = $sth->fetch(PDO::FETCH_NAMED);
-
-            return new Lab($labInfos["name"], $labInfos["address"], $labInfos["website"]);
         }
 
         function findAllContacts($groupId) {
@@ -153,10 +134,8 @@
 
             // get groups infos
             $sql = "
-                select g.id, lat, lon
+                select g.id, lat, lon, lab_id
                 from microscopes_group as g
-                join lab as l
-                on l.id = g.lab_id
                 where g.id = $groupId
             ";
             $sth = $pdo->query($sql);
@@ -167,7 +146,7 @@
                 return null;
 
             // generate the group
-            $lab = $this->findLab($groupId);
+            $lab = LabService::getInstance()->findLabById($groupInfos["lab_id"]);
             $contacts = $this->findAllContacts($groupId);
             $micros = $this->findAllMicroscopes($groupId);
 
