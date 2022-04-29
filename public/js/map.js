@@ -1,3 +1,7 @@
+// get page name
+let path = window.location.pathname;
+let page = path.split("/").pop();
+
 // initialize Leaflet
 var map = L.map('map').setView([46.606111, 1.875278], 5);
 
@@ -14,11 +18,191 @@ L.control.scale({imperial: true, metric: true}).addTo(map);
 loadAndShowMicroscopes();
 
 async function loadAndShowMicroscopes() {
-	const response = await fetch("/api/v1/microscopes.php");
-	const microscopes = await response.json();
+	const response = await fetch("/api/v1/listMicroscopesGroups.php");
+	const groups = await response.json();
 
-	for (let microscope of microscopes) {
-		let coor = microscope.coor;
-		L.marker([coor.lat, coor.lon]).bindPopup(microscope.ref).addTo(map);
+	for (let group of groups) {
+		let marker = L.marker(group.coor, { "alt": group.lab.name });
+		
+		marker.bindPopup(getCustomPopupHTML(group), {maxHeight : 200});
+
+		marker.on('mouseover',function(event) {
+			event.target.openPopup();
+		});
+
+		marker.on('click',function(event) {
+			window.location.href = "/group-details.php?id=" + group.id;
+		});
+		
+		marker.addTo(map);
+
+		// zoom on the marker if wer're on it's group-details page
+		if(page == "group-details.php" && group.id == window.location.search.split("=").pop()) {
+			map.setView(group.coor, 13);
+		}
 	}
+}
+
+
+function normalizeLatLng(LatLng, nbDecimals) {
+	return new L.LatLng(normalizeLat(LatLng.lat, nbDecimals), normalizeLng(LatLng.lng, nbDecimals));
+}
+
+function normalizeCoor(coor, min, max, nbDecimals) {
+	// keep in range
+	if(coor < min)
+		coor = max - ((min - coor)%(max - min));
+	else if (coor > max)
+		coor = min + (coor - max)%(max - min);
+	
+	// retrieve good number of decimals
+	pow = 10 ** nbDecimals
+	return Math.round(coor * pow) / pow;
+}
+
+function normalizeLat(lat, nbDecimals) {
+	return normalizeCoor(lat, -90, 90, nbDecimals);
+}
+
+function normalizeLng(lng, nbDecimals) {
+	return normalizeCoor(lng, -180, 180, nbDecimals);
+}
+
+
+// show coordinates on map click
+let popup = L.popup();
+
+function showCoordinates(e) {
+	normalizedLatLng = normalizeLatLng(e.latlng, 5);
+    popup
+        .setLatLng(e.latlng)
+        .setContent("lat : " +  normalizedLatLng.lat + ", lon : " + normalizedLatLng.lng)
+        .openOn(map);
+}
+
+map.on('click', showCoordinates);
+
+
+function createContentElement(type, textContent) {
+	let elem = document.createElement(type);
+	elem.textContent = textContent;
+	
+	return elem;
+}
+
+function createH(level, textContent) {
+	return createContentElement("h" + level, textContent);
+}
+
+function createP(textContent) {
+	return createContentElement("p", textContent);
+}
+
+function createA(href, text, target = "_self") {
+	let a = document.createElement("a");
+	a.append(document.createTextNode(text));
+	a.href = href;
+	a.target = target;
+	
+	return a;
+}
+
+function getCustomPopupHTML(group) {
+	let infos = document.createElement("section");
+
+	// lab
+	infos.append(createH(2, group.lab.name));
+
+	// website
+	{
+		let lab = group.lab;
+		let label = createP("Site internet : ");
+		label.append(createA(lab.website, lab.website, "_blank"));
+		infos.append(label);
+	}
+
+	// contacts
+	infos.append(createContentElement("h3", "Référents"))
+	let contactsAddress = document.createElement("address");
+	for (const contact of group.contacts) {
+		// generate contact infos
+		let contactAddress = document.createElement("address");
+
+		// role
+		contactAddress.append(createP(contact.role));
+
+		// name
+		contactAddress.append(createP([contact.firstname, contact.lastname].join(" ")));
+		
+		// email
+		{
+			let label = createP("Courriel : ");
+			label.append(createA("mailto:" + contact.email, contact.email));
+			contactAddress.append(label);
+		}
+
+		// phone
+		let phone = contact.phone
+		if(phone) {
+			let label = createP("Téléphone : ");
+			label.append(createA("tel:" + phone, phone));
+			contactAddress.append(label);
+		}
+
+		// add infos to all contacts infos
+		contactsAddress.append(contactAddress);
+	}
+	infos.append(contactsAddress);
+
+	// Microscopes
+	infos.append(createContentElement("h3", "Microscopes"));
+	let microsList = document.createElement("ul");
+	for (const micro of group.microscopes) {
+		ctr = micro.controller;
+		model = micro.model;
+		brand = model.brand;
+		compagny = brand.compagny;
+
+		microName = [compagny.name, brand.name, model.name, ctr.name].join(" - ");
+		microType = ""
+
+		if (micro.type == "LABO")
+			microType = "laboratoire"
+		else if (micro.type == "PLAT")
+			microType = "plateforme"
+
+		microsList.appendChild(createContentElement("li", microName + " (" + microType + ")"));
+	}
+	infos.append(microsList);
+
+	// Keywords
+	// merge all tags of all microscopes, by categories
+	let allKeywords = {};
+	for (const micro of group.microscopes) {
+		for (const cat in micro.keywords) {
+			if(!allKeywords[cat])
+				allKeywords[cat] = micro.keywords[cat];
+			else
+				allKeywords[cat] = allKeywords[cat].concat(micro.keywords[cat]);
+		}
+	}
+	for (const cat in allKeywords) {
+		allKeywords[cat] = [...new Set(allKeywords[cat])]
+	}
+
+	//display the keywords
+	infos.append(createContentElement("h3", "Mots-clés"));
+	let kwList = document.createElement("ul");
+
+	let maxTags = 4;
+	for (const cat in allKeywords) {
+		if (Object.hasOwnProperty.call(allKeywords, cat)) {
+			const tags = allKeywords[cat].slice(0, maxTags);
+			catLi = createContentElement("li", cat + " : " + tags.join(", "));
+			kwList.appendChild(catLi);
+		}
+	}
+	infos.append(kwList);
+
+	return infos.innerHTML;
 }

@@ -1,26 +1,77 @@
 <?php
     include_once("../model/start_db.php");
-    include_once("../model/Microscope.php");
-    include_once("../model/Coordinates.php");
+    include_once("../model/entities/Lab.php");
+    include_once("../model/entities/Contact.php");
+    include_once("../model/entities/Model.php");
+    include_once("../model/entities/Controller.php");
+    include_once("../model/entities/MicroscopesGroup.php");
+    include_once("../model/services/MicroscopesGroupService.php");
+    
+    session_start();
 
-    //verify that all fields were sent by the form
-    if (!isset($_POST["labName"]) || !isset($_POST["microRef"]) || !isset($_POST["desc"]) || !isset($_POST["lat"]) || !isset($_POST["lon"])) {
+    //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
+    if (!isset($_POST["lab"]) || !isset($_POST["coor"]) || !isset($_POST["contacts"]) || !isset($_POST["micros"])) {       
         header('location: /form.php');
         exit();
     }
 
-    $microscope = new Microscope();
-    $microscope
-        ->setLabName($_POST["labName"])
-        ->setRef($_POST["microRef"])
-        ->setDesc($_POST["desc"])
-        ->setCoor(new Coordinates($_POST["lat"], $_POST["lon"]));
+    $labInfos = $_POST["lab"];
+    if(!isset($labInfos) || !isset($labInfos["name"]) || !isset($labInfos["address"]) || !isset($labInfos["website"])) {     
+        header('location: /form.php');
+        exit();
+    }
 
-    $sql = $pdo->prepare("INSERT INTO microscopes VALUES (NULL, :serialized)");
+    $coorInfos = $_POST["coor"];
+    if(!isset($coorInfos) || !isset($coorInfos["lat"]) || !isset($coorInfos["lon"])) {     
+        header('location: /form.php');
+        exit();
+    }    
 
-    $sql->execute([
-        'serialized' => serialize($microscope)
-    ]);
+    foreach($_POST["contacts"] as $contact) {
+        if (!isset($contact["firstname"]) || !isset($contact["lastname"]) || !isset($contact["role"]) || !isset($contact["email"]) || !isset($contact["phoneCode"]) || !isset($contact["phone"])) {
+            header('location: /form.php');
+            exit();
+        }
+    }
 
+    foreach($_POST["micros"] as $micro) {
+        if (!isset($micro["compagny"]) || !isset($micro["brand"]) || !isset($micro["model"]) || !isset($micro["controller"]) || !isset($micro["desc"]) || !isset($micro["type"]) || !isset($micro["access"])) {
+            header('location: /form.php');
+            exit();
+        }
+    }
+
+    try {
+        // Convert form values into objects...
+        $lab = new Lab(...$labInfos);
+    
+        $contacts = [];
+        foreach($_POST["contacts"] as $contact) {
+            // retrieve phone number
+            $contact["phone"] = $contact["phoneCode"] . " " . substr($contact["phone"], -9);
+            unset($contact["phoneCode"]);
+
+            $contacts[] = new Contact(...$contact);
+        }
+        
+        $group = new MicroscopesGroup(new Coordinates(...$coorInfos), $lab, $contacts);
+
+        foreach($_POST["micros"] as $micro) {
+            $com = new Compagny($micro["compagny"]);
+            $bra = new Brand($micro["brand"], $com);
+            $mod = new Model($micro["model"], $bra);
+            $ctr = new Controller($micro["controller"], $bra);
+
+            $group->addMicroscope(new Microscope($mod, $ctr, $micro["rate"]??null, $micro["desc"], $micro["type"], $micro["access"], $micro["keywords"]??[]));
+        }
+            
+        // ...and save the group into the db
+        MicroscopesGroupService::getInstance()->add($group);
+    } catch (\Throwable $th) {
+        $_SESSION["microForm"]["errorMsg"]=$th->getMessage();
+        header('location: /form.php');
+        exit();
+    }
+    
     header('location: /index.php');
 
