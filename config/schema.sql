@@ -41,7 +41,7 @@ CREATE TABLE "microscope" (
 	"id"	INTEGER,
 	"rate"	TEXT,
 	"desc"	TEXT,
-	"access"	TEXT, /* TODO: MySQL: replace by ENUM(LAB, SERVICE, BOTH)*/
+	"access"	TEXT, /* TODO: MySQL: replace by ENUM(ACAD, INDU, BOTH)*/
 	"model_id"	INTEGER,
 	"controller_id"	INTEGER,
 	"microscopes_group_id" INTEGER,
@@ -66,6 +66,7 @@ CREATE TABLE "microscope_keyword" (
 );
 CREATE TABLE "lab" (
 	"id"	INTEGER,
+	"type"	TEXT, /* TODO: MySQL: replace by ENUM(LABO, SERV)*/
 	"lab_name"	TEXT UNIQUE,
 	"address"	TEXT,
 	"website"	TEXT,
