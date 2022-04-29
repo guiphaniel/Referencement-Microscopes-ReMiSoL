@@ -28,7 +28,7 @@
     }    
 
     foreach($_POST["contacts"] as $contact) {
-        if (!isset($contact["firstname"]) || !isset($contact["lastname"]) || !isset($contact["role"]) || !isset($contact["email"]) || !isset($contact["phone"])) {
+        if (!isset($contact["firstname"]) || !isset($contact["lastname"]) || !isset($contact["role"]) || !isset($contact["email"]) || !isset($contact["phoneCode"]) || !isset($contact["phone"])) {
             header('location: /form.php');
             exit();
         }
@@ -47,6 +47,10 @@
     
         $contacts = [];
         foreach($_POST["contacts"] as $contact) {
+            // retrieve phone number
+            $contact["phone"] = $contact["phoneCode"] . substr($contact["phone"], -9);
+            unset($contact["phoneCode"]);
+
             $contacts[] = new Contact(...$contact);
         }
         

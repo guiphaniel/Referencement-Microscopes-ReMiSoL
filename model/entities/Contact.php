@@ -30,14 +30,14 @@
 
         public function getRole()
         {
-                return $this->role;
+            return $this->role;
         }
 
         public function setRole($role)
         {
-                $this->role = $role;
+            $this->role = $role;
 
-                return $this;
+            return $this;
         }
 
         public function getEmail() : string
@@ -54,13 +54,26 @@
  
         public function getPhone()
         {
-                return $this->phone;
+            return $this->phone;
         }
 
         public function setPhone($phone)
         {
-                $this->phone = $phone;
+            // check validity
+            $phoneCodes = ["+32", "+33", "+41"]; // Belgium, France, Switzerland
 
-                return $this;
+            $valid = false;
+            foreach ($phoneCodes as $code) {
+                if(strpos($phone, $code)) {
+                    $valid = true;
+                    break;
+                }
+            }
+            if(!$valid)
+                throw new Exception("L'index téléphonique fourni n'est pas supporté : ");
+
+            $this->phone = $phone;
+
+            return $this;
         }
     }
