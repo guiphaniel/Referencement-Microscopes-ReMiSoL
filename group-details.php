@@ -70,7 +70,7 @@
                 <section>
                     <h3><?= implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]) . " (" . $type . ")"; ?></h3>
                     <p>Description : <?= $micro->getDesc(); ?></p>
-                    <?php if($micro->getRate() !== null) : ?>
+                    <?php if(!empty($micro->getRate())) : ?>
                         <p>Tarification : <a href="<?= $micro->getRate(); ?>"><?= $micro->getRate(); ?></a></p>
                     <?php endif; ?>
                     <?php 
@@ -86,7 +86,7 @@
                         <thead>
                             <tr>
                                 <th scope="colgroup">Catégories</th>
-                                <th scope="colgroup">Mots-clés</th>
+                                <th scope="colgroup">Étiquettes</th>
                             </tr>
                         </thead>
                         <tbody>
