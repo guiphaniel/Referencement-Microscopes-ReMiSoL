@@ -48,9 +48,9 @@
             <fieldset id="coor">
                 <legend>Coordonnées</legend>
                 <label for="lat">Latitude</label>
-                <input id="lat" type="number" name="coor[lat]" min="-90" max="90" step="0.00001" required>
+                <input id="lat" type="number" name="coor[lat]" min="42" max="52" step="0.00001" required>
                 <label for="lon">Longitude</label>
-                <input id="lon" type="number" name="coor[lon]" min="-180" max="180" step="0.00001" required>
+                <input id="lon" type="number" name="coor[lon]" min="6" max="11" step="0.00001" required>
             </fieldset>
             <fieldset id="micros">
                 <legend>Vos microscopes</legend>
