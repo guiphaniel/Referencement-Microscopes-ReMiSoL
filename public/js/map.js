@@ -43,7 +43,45 @@ async function loadAndShowMicroscopes() {
 	}
 }
 
+
+function normalizeLatLng(LatLng, nbDecimals) {
+	return new L.LatLng(normalizeLat(LatLng.lat, nbDecimals), normalizeLng(LatLng.lng, nbDecimals));
+}
+
+function normalizeCoor(coor, min, max, nbDecimals) {
+	// keep in range
+	if(coor < min)
+		coor = max - ((min - coor)%(max - min));
+	else if (coor > max)
+		coor = min + (coor - max)%(max - min);
+	
+	// retrieve good number of decimals
+	pow = 10 ** nbDecimals
+	return Math.round(coor * pow) / pow;
+}
+
+function normalizeLat(lat, nbDecimals) {
+	return normalizeCoor(lat, -90, 90, nbDecimals);
+}
+
+function normalizeLng(lng, nbDecimals) {
+	return normalizeCoor(lng, -180, 180, nbDecimals);
+}
+
+
 // show coordinates on map click
+let popup = L.popup();
+
+function showCoordinates(e) {
+	normalizedLatLng = normalizeLatLng(e.latlng, 5);
+    popup
+        .setLatLng(e.latlng)
+        .setContent("lat : " +  normalizedLatLng.lat + ", lon : " + normalizedLatLng.lng)
+        .openOn(map);
+}
+
+map.on('click', showCoordinates);
+
 
 function createContentElement(type, textContent) {
 	let elem = document.createElement(type);
