@@ -82,6 +82,9 @@ class Microscope extends AbstractEntity  {
 
     public function setKeywords($keywords)
     {
+        //remove duplicated cats
+        $keywords = array_unique($keywords);
+
         // check if some of the cats provided aren't in the database
         $keywordService = KeywordService::getInstance();
         $extraCats = array_diff(array_keys($keywords), $keywordService->getAllCategories());
@@ -90,6 +93,9 @@ class Microscope extends AbstractEntity  {
         
         // check if some of the tags provided aren't in the database
         foreach ($keywords as $cat => $tags) {
+            //remove duplicated tags
+            $keywords[$cat] = array_unique($tags);
+
             $extraTags = array_diff($tags, $keywordService->getAllTags($cat));
             if($extraTags)
                 throw new Exception('Les mots-clés "' . implode('", "', $extraTags) . '" ne sont pas pris en charge pour la catégorie "' . $cat . '"');

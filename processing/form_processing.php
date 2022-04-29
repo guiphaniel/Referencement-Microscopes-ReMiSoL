@@ -9,7 +9,7 @@
 
     session_start();
 
-    //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form TODO: check that keywords aren't duplicated
+    //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
     if (!isset($_POST["lab"]) || !isset($_POST["coor"])) {       
         header('location: /form.php');
         exit();
