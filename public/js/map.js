@@ -43,6 +43,8 @@ async function loadAndShowMicroscopes() {
 	}
 }
 
+// show coordinates on map click
+
 function createContentElement(type, textContent) {
 	let elem = document.createElement(type);
 	elem.textContent = textContent;
@@ -67,7 +69,6 @@ function createA(href, text, target = "_self") {
 	return a;
 }
 
-// Nom du labo + Responsable (avec coordonnées) + site internet + Mots-clé
 function getCustomPopupHTML(group) {
 	let infos = document.createElement("section");
 
@@ -125,8 +126,14 @@ function getCustomPopupHTML(group) {
 		compagny = brand.compagny;
 
 		microName = [compagny.name, brand.name, model.name, ctr.name].join(" - ");
+		microType = ""
 
-		microsList.appendChild(createContentElement("li", microName));
+		if (micro.type == "LABO")
+			microType = "laboratoire"
+		else if (micro.type == "PLAT")
+			microType = "plateforme"
+
+		microsList.appendChild(createContentElement("li", microName + " (" + microType + ")"));
 	}
 	infos.append(microsList);
 
