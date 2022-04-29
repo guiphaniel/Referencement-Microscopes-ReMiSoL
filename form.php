@@ -4,7 +4,7 @@
     include_once("model/services/CompagnyService.php");
     include_once("utils/normalize_utf8_string.php");
 
-    $phoneCodes = ["+32 (France)", "+33 (Belgique)", "+41 (Suisse)"]; // Belgium, France, Switzerland
+    $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
 
     session_start();
 
@@ -27,12 +27,7 @@
                 <p id="error-msg"><?= $_SESSION["microForm"]["errorMsg"] ?></p>
             <?php endif; unset($_SESSION["microForm"]["errorMsg"]); ?>
             <fieldset>
-                <legend>Votre structure</legend>
-                <label for="micro-type-0">Type</label>
-                <select id="micro-type-0" name="micros[0][type]">
-                    <option value="LABO">Laboratoire</option>
-                    <option value="SERV">Service</option>
-                </select>
+                <legend>Votre laboratoire / service</legend>
                 <label for="lab-name">Nom</label>
                 <input id="lab-name" type="text" name="lab[name]" required>
                 <label for="lab-address">Adresse postale</label>
@@ -109,8 +104,13 @@
                     <input id="micro-controller-0" list="micro-controllers-0" name="micros[0][controller]" required disabled>
                     <datalist id="micro-controllers-0">
                     </datalist>
+                    <label for="micro-type-0">Type</label>
+                    <select id="micro-type-0" name="micros[0][type]">
+                        <option value="LABO">Laboratoire</option>
+                        <option value="PLAT">Plateforme</option>
+                    </select>
                     <label for="micro-rate-0">Tarification (le cas échéant. Lien internet)</label>
-                    <input id="micro-rate-0" type="url" name="micros[0][rate]" required>
+                    <input id="micro-rate-0" type="url" name="micros[0][rate]">
                     <label for="micro-access-0">Ouvert aux</label>
                     <select name="micros[0][access]" id="micro-access-0">
                         <option value="ACAD">Académiques</option>

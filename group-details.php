@@ -62,15 +62,14 @@
                 $model = $micro->getModel();
                 $brand = $model->getBrand();
                 $compagny = $brand->getCompagny();
+                $type = match ($micro->getType()) {
+                    "LABO" => "Laboratoire",
+                    "PLAT" => "Plateforme"
+                };
                 ?>
                 <section>
-                    <h3><?= implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]); ?></h3>
-                    <?php $type = match ($micro->getRate()) {
-                        null => 'laboratoire',
-                        default => 'service'
-                    }; ?>
-                    <p>Microscope de <?= $type; ?></p>
-                    <p><?= $micro->getDesc(); ?></p>
+                    <h3><?= implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]) . " (" . $type . ")"; ?></h3>
+                    <p>Description : <?= $micro->getDesc(); ?></p>
                     <?php if($micro->getRate() !== null) : ?>
                         <p>Tarification : <a href="<?= $micro->getRate(); ?>"><?= $micro->getRate(); ?></a></p>
                     <?php endif; ?>

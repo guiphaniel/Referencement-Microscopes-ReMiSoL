@@ -2,24 +2,7 @@
     include_once(__DIR__ . "/AbstractEntity.php");
     
     class Lab extends AbstractEntity {
-        function __construct(string $type, private string $name, private string $address, private string $website) {
-            $this->setType($type);
-        }
-
-        public function getType()
-        {
-            return $this->type;
-        }
-
-        public function setType($type)
-        {
-            if($type != "LABO" || $type != "SERV")
-                throw new Exception("Ce type de structure n'est pas pris en charge.");
-    
-            $this->type = $type;
-    
-            return $this;
-        }
+        function __construct(private string $name, private string $address, private string $website) {}
 
         public function getName()
         {

@@ -6,23 +6,23 @@
     include_once("../model/entities/Controller.php");
     include_once("../model/entities/MicroscopesGroup.php");
     include_once("../model/services/MicroscopesGroupService.php");
-
+    
     session_start();
 
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
-    if (!isset($_POST["lab"]) || !isset($_POST["coor"])) {       
+    if (!isset($_POST["lab"]) || !isset($_POST["coor"]) || !isset($_POST["contacts"]) || !isset($_POST["micros"])) {       
         header('location: /form.php');
         exit();
     }
 
     $labInfos = $_POST["lab"];
-    if(!isset($labInfos)|| !isset($labInfos["type"]) || !isset($labInfos["name"]) || !isset($labInfos["address"]) || !isset($labInfos["website"])) {       
+    if(!isset($labInfos) || !isset($labInfos["name"]) || !isset($labInfos["address"]) || !isset($labInfos["website"])) {     
         header('location: /form.php');
         exit();
     }
 
     $coorInfos = $_POST["coor"];
-    if(!isset($coorInfos["lat"]) || !isset($coorInfos["lon"])) {       
+    if(!isset($coorInfos) || !isset($coorInfos["lat"]) || !isset($coorInfos["lon"])) {     
         header('location: /form.php');
         exit();
     }    
@@ -35,7 +35,7 @@
     }
 
     foreach($_POST["micros"] as $micro) {
-        if (!isset($micro["compagny"]) || !isset($micro["brand"]) || !isset($micro["model"]) || !isset($micro["controller"]) || !isset($micro["type"]) || !isset($micro["desc"])) {
+        if (!isset($micro["compagny"]) || !isset($micro["brand"]) || !isset($micro["model"]) || !isset($micro["controller"]) || !isset($micro["desc"]) || !isset($micro["type"]) || !isset($micro["access"])) {
             header('location: /form.php');
             exit();
         }
@@ -62,13 +62,13 @@
             $mod = new Model($micro["model"], $bra);
             $ctr = new Controller($micro["controller"], $bra);
 
-            $group->addMicroscope(new Microscope($mod, $ctr, $micro["desc"], $micro["access"], $micro["rate"]??null, $micro["keywords"]??[]));
+            $group->addMicroscope(new Microscope($mod, $ctr, $micro["rate"]??null, $micro["desc"], $micro["type"], $micro["access"], $micro["keywords"]??[]));
         }
             
         // ...and save the group into the db
         MicroscopesGroupService::getInstance()->add($group);
     } catch (\Throwable $th) {
-        $_SESSION["micro_form"]["error_msg"]=$th->getMessage();
+        $_SESSION["microForm"]["errorMsg"]=$th->getMessage();
         header('location: /form.php');
         exit();
     }

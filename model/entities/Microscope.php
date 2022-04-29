@@ -7,7 +7,8 @@ include_once(__DIR__ . "/../services/KeywordService.php");
 
 class Microscope extends AbstractEntity  {
 
-    function __construct(private Model $model, private Controller $controller, private string $desc, string $access, private $rate = null, array $keywords = []) {
+    function __construct(private Model $model, private Controller $controller, private string $rate, private string $desc, string $type, string $access, array $keywords) {
+        $this->setType($type);
         $this->setAccess($access);
         $this->setKeywords($keywords);
     }
@@ -36,6 +37,33 @@ class Microscope extends AbstractEntity  {
         return $this;
     }
 
+    public function getRate()
+    {
+        return $this->rate;
+    }
+
+    public function setRate($rate)
+    {       
+        $this->rate = $rate;
+
+        return $this;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($type)
+    {
+        if($type != "LABO" && $type != "PLAT")
+            throw new Exception('Ce type de microscope n\'est pas pris en charge. Valeurs possibles : "Laboratoire", "Plateforme"');
+
+        $this->type = $type;
+
+        return $this;
+    }
+
     public function getDesc() : string
     {
         return $this->desc;
@@ -55,22 +83,10 @@ class Microscope extends AbstractEntity  {
  
     public function setAccess($access)
     {
-        if($access != "ACAD" || $access != "INDU" || $access != "BOTH")
+        if($access != "ACAD" && $access != "INDU" && $access != "BOTH")
             throw new Exception("Ce type d'accès n'existe pas.");
 
         $this->access = $access;
-
-        return $this;
-    }
-
-    public function getRate()
-    {
-        return $this->rate;
-    }
-
-    public function setRate($rate)
-    {       
-        $this->rate = $rate;
 
         return $this;
     }
@@ -82,9 +98,6 @@ class Microscope extends AbstractEntity  {
 
     public function setKeywords($keywords)
     {
-        //remove duplicated cats
-        $keywords = array_unique($keywords);
-
         // check if some of the cats provided aren't in the database
         $keywordService = KeywordService::getInstance();
         $extraCats = array_diff(array_keys($keywords), $keywordService->getAllCategories());
