@@ -16,7 +16,7 @@
     }
 
     $labInfos = $_POST["lab"];
-    if(!isset($labInfos["name"]) || !isset($labInfos["address"]) || !isset($labInfos["website"])) {       
+    if(!isset($labInfos)|| !isset($labInfos["type"]) || !isset($labInfos["name"]) || !isset($labInfos["address"]) || !isset($labInfos["website"])) {       
         header('location: /form.php');
         exit();
     }
@@ -28,7 +28,7 @@
     }    
 
     foreach($_POST["contacts"] as $contact) {
-        if (!isset($contact["firstname"]) || !isset($contact["lastname"]) || !isset($contact["role"]) || !isset($contact["email"])) {
+        if (!isset($contact["firstname"]) || !isset($contact["lastname"]) || !isset($contact["role"]) || !isset($contact["email"]) || !isset($contact["phone"])) {
             header('location: /form.php');
             exit();
         }
@@ -36,16 +36,6 @@
 
     foreach($_POST["micros"] as $micro) {
         if (!isset($micro["compagny"]) || !isset($micro["brand"]) || !isset($micro["model"]) || !isset($micro["controller"]) || !isset($micro["type"]) || !isset($micro["desc"])) {
-            header('location: /form.php');
-            exit();
-        }
-
-        if($micro["type"] == "SERVICE" && !isset($micro["rate"])) {
-            header('location: /form.php');
-            exit();
-        }
-
-        if($micro["type"] != "SERVICE" && isset($micro["rate"])) {
             header('location: /form.php');
             exit();
         }
@@ -57,7 +47,7 @@
     
         $contacts = [];
         foreach($_POST["contacts"] as $contact) {
-            $contacts[] = new Contact($contact["firstname"], $contact["lastname"], $contact["role"], $contact["email"], $contact["phone"]??null);
+            $contacts[] = new Contact(...$contact);
         }
         
         $group = new MicroscopesGroup(new Coordinates(...$coorInfos), $lab, $contacts);
