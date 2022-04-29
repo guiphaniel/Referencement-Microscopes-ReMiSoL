@@ -17,6 +17,7 @@
         function getLabId(Lab $lab) {
             global $pdo;
 
+            // lab_name is unique
             $sth = $pdo->prepare("SELECT id FROM lab where lab_name = :name");
 
             $sth->execute([
