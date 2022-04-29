@@ -6,14 +6,17 @@
         private $lon;
 
         function __construct(float $lat, float $lon) {
-            $this->lat = $lat;
-            $this->lon = $lon;
+            $this->setLat($lat);
+            $this->setLon($lon);
         }
 
         public function getLat() { return $this->lat; }
 
         public function setLat($lat) {
-            $this->lat = $lat;
+            if ($lat < 42 || $lat > 52)
+                throw new ErrorException("La latitude renseignée dépasse les valeurs acceptables");
+            
+                $this->lat = $lat;
 
             return $this;
         }   
@@ -22,6 +25,9 @@
 
         public function setLon($lon)
         {
+            if ($lon < 6 || $lon > 11)
+                throw new ErrorException("La longitude renseignée dépasse les valeurs acceptables");
+
             $this->lon = $lon;
 
             return $this;

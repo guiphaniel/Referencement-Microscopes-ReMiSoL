@@ -3,6 +3,9 @@
     include_once("model/services/KeywordService.php");
     include_once("model/services/CompagnyService.php");
     include_once("utils/normalize_utf8_string.php");
+
+    session_start();
+
     $header = new HeaderCreator("Formulaire"); 
 ?>
 <!DOCTYPE html>
@@ -18,6 +21,9 @@
     <?php $header->create() ?>
     <main>
         <form action="processing/form_processing.php" method="post">
+            <?php if(isset($_SESSION["microForm"]["errorMsg"])) : ?>
+                <p id="error-msg"><?= $_SESSION["microForm"]["errorMsg"] ?></p>
+            <?php endif; unset($_SESSION["microForm"]["errorMsg"]); ?>
             <fieldset>
                 <legend>Votre Laboratoire / Service</legend>
                 <label for="lab-name">Nom</label>
