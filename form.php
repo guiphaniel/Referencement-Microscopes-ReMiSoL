@@ -22,10 +22,10 @@
 <body>
     <?php $header->create() ?>
     <main>
+        <?php if(isset($_SESSION["microForm"]["errorMsg"])) : ?>
+            <p id="error-msg"><?= $_SESSION["microForm"]["errorMsg"] ?></p>
+        <?php endif; unset($_SESSION["microForm"]["errorMsg"]); ?>
         <form action="processing/form_processing.php" method="post">
-            <?php if(isset($_SESSION["microForm"]["errorMsg"])) : ?>
-                <p id="error-msg"><?= $_SESSION["microForm"]["errorMsg"] ?></p>
-            <?php endif; unset($_SESSION["microForm"]["errorMsg"]); ?>
             <fieldset>
                 <legend>Votre laboratoire / service</legend>
                 <label for="lab-name">Nom</label>
@@ -50,9 +50,10 @@
                     <input id="contact-email-0" type="text" name="contacts[0][email]" required>
                     <label for="contact-phone-0">Téléphone</label>
                     <select name="contacts[0][phoneCode]" id="contact-phone-code-0">
-                        <?php foreach ($phoneCodes as $code) : ?>
-                            <option value=<?=substr($code, 0, strpos($code, ' '));?>><?=$code?></option>
-                        <?php endforeach; ?>
+                    <?php foreach ($phoneCodes as $code) : 
+                        $value = substr($code, 0, strpos($code, ' '));?>
+                        <option value=<?=$value;?> <?= $value == "+33" ? "selected" : "";?>><?=$code?></option>
+                    <?php endforeach; ?>
                     </select>
                     <input id="contact-phone-0" type="tel" name="contacts[0][phone]">
                 </fieldset>
