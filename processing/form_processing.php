@@ -1,5 +1,4 @@
 <?php
-    include_once("../model/start_db.php");
     include_once("../model/entities/Lab.php");
     include_once("../model/entities/Contact.php");
     include_once("../model/entities/Model.php");
@@ -16,13 +15,13 @@
     }
 
     $labInfos = $_POST["lab"];
-    if(!isset($labInfos) || !isset($labInfos["name"]) || !isset($labInfos["address"]) || !isset($labInfos["website"])) {     
+    if(!isset($labInfos["name"]) || !isset($labInfos["address"]) || !isset($labInfos["website"])) {     
         header('location: /form.php');
         exit();
     }
 
     $coorInfos = $_POST["coor"];
-    if(!isset($coorInfos) || !isset($coorInfos["lat"]) || !isset($coorInfos["lon"])) {     
+    if(!isset($coorInfos["lat"]) || !isset($coorInfos["lon"])) {     
         header('location: /form.php');
         exit();
     }    
@@ -43,18 +42,17 @@
 
     try {
         // Convert form values into objects...
-        $lab = new Lab(...$labInfos);
+        $lab = new Lab($labInfos["name"], $labInfos["address"], $labInfos["website"]);
     
         $contacts = [];
         foreach($_POST["contacts"] as $contact) {
             // retrieve phone number
             $contact["phone"] = $contact["phoneCode"] . " " . substr($contact["phone"], -9);
-            unset($contact["phoneCode"]);
 
-            $contacts[] = new Contact(...$contact);
+            $contacts[] = new Contact($contact["firstname"], $contact["lastname"], $contact["role"], $contact["email"], $contact["phone"]);
         }
         
-        $group = new MicroscopesGroup(new Coordinates(...$coorInfos), $lab, $contacts);
+        $group = new MicroscopesGroup(new Coordinates($coorInfos["lat"], $coorInfos["lon"]), $lab, $contacts);
 
         foreach($_POST["micros"] as $micro) {
             $com = new Compagny($micro["compagny"]);
