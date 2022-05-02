@@ -18,7 +18,7 @@
 </head>
 <body>
     <?php 
-        $header->create()
+        $header->create();
     ?>
     <main>
         <p>Bienvenue sur notre site !</p>

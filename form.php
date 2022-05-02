@@ -1,12 +1,17 @@
 <?php 
+    include_once("include/config.php");
     include_once("view/generators/HeaderCreator.php");
     include_once("model/services/KeywordService.php");
     include_once("model/services/CompagnyService.php");
     include_once("utils/normalize_utf8_string.php");
 
+    $countries = ["Belgique", "France", "Suisse"]; // Belgium, France, Switzerland
     $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
 
     session_start();
+
+    if(!isUserSessionValid()) 
+        redirect("/index.php");
 
     $header = new HeaderCreator("Formulaire"); 
 ?>
@@ -22,39 +27,53 @@
 <body>
     <?php $header->create() ?>
     <main>
+        <?php if(isset($_SESSION["microForm"]["errorMsg"])) : ?>
+            <p id="error-msg"><?= $_SESSION["microForm"]["errorMsg"] ?></p>
+        <?php endif; unset($_SESSION["microForm"]["errorMsg"]); ?>
         <form action="processing/form_processing.php" method="post">
-            <?php if(isset($_SESSION["microForm"]["errorMsg"])) : ?>
-                <p id="error-msg"><?= $_SESSION["microForm"]["errorMsg"] ?></p>
-            <?php endif; unset($_SESSION["microForm"]["errorMsg"]); ?>
             <fieldset>
                 <legend>Votre laboratoire / service</legend>
-                <label for="lab-name">Nom</label>
-                <input id="lab-name" type="text" name="lab[name]" required>
-                <label for="lab-address">Adresse postale</label>
-                <input id="lab-address" type="text" name="lab[address]" required>
-                <label for="lab-website">Site web</label>
-                <input id="lab-website" type="url" name="lab[website]" required>
-            </fieldset>
-            
+                <address>
+                    <label for="lab-name">Nom</label>
+                    <input id="lab-name" type="text" name="lab[name]" autocomplete="organization" required>
+                    <label for="lab-address-street">Adresse postale</label>
+                    <input id="lab-address-street" type="text" name="lab[address][street]" autocomplete="address-line1" required>
+                    <label for="lab-address-zip">Code postal</label>
+                    <input id="lab-address-zip" type="text" name="lab[address][zipCode]" autocomplete="postal-code" required>
+                    <label for="lab-address-city">Ville</label>
+                    <input id="lab-address-city" type="text" name="lab[address][city]" autocomplete="address-level2" required>
+                    <label for="lab-address-country">Pays</label>
+                    <select name="lab[address][country]" id="lab-address-country" autocomplete="country">
+                    <?php foreach ($countries as $country) : ?>
+                        <option value=<?=$country;?> <?= $country == "France" ? "selected" : "";?>><?=$country?></option>
+                    <?php endforeach; ?>
+                    </select>
+                    <label for="lab-website">Site web</label>
+                    <input id="lab-website" type="url" name="lab[website]" autocomplete="url" required>
+                </address>
+            </fieldset>   
             <fieldset id="contacts">
                 <legend>Référent·e·s</legend>
                 <fieldset id="contact-field-0" class="contact-field">
                     <legend>Référent·e n°1</legend>
-                    <label for="contact-firstname-0">Prénom</label>
-                    <input id="contact-firstname-0" type="text" name="contacts[0][firstname]" required>
-                    <label for="contact-lastname-0">Nom</label>
-                    <input id="contact-lastname-0" type="text" name="contacts[0][lastname]" required>
-                    <label for="contact-role-0">Titre</label>
-                    <input id="contact-role-0" type="text" name="contacts[0][role]" required>
-                    <label for="contact-email-0">Email</label>
-                    <input id="contact-email-0" type="text" name="contacts[0][email]" required>
-                    <label for="contact-phone-0">Téléphone</label>
-                    <select name="contacts[0][phoneCode]" id="contact-phone-code-0">
-                        <?php foreach ($phoneCodes as $code) : ?>
-                            <option value=<?=substr($code, 0, strpos($code, ' '));?>><?=$code?></option>
+                    <address>
+                        <label for="contact-firstname-0">Prénom</label>
+                        <input id="contact-firstname-0" type="text" name="contacts[0][firstname]" autocomplete="given-name" required>
+                        <label for="contact-lastname-0">Nom</label>
+                        <input id="contact-lastname-0" type="text" name="contacts[0][lastname]" autocomplete="family-name" required>
+                        <label for="contact-role-0">Titre</label>
+                        <input id="contact-role-0" type="text" name="contacts[0][role]" autocomplete="organization-title" required>
+                        <label for="contact-email-0">Email</label>
+                        <input id="contact-email-0" type="text" name="contacts[0][email]" autocomplete="email" required>
+                        <label for="contact-phone-0">Téléphone</label>
+                        <select name="contacts[0][phoneCode]" id="contact-phone-code-0" autocomplete="tel-country-code">
+                        <?php foreach ($phoneCodes as $code) : 
+                            $value = substr($code, 0, strpos($code, ' '));?>
+                            <option value=<?=$value;?> <?= $value == "+33" ? "selected" : "";?>><?=$code?></option>
                         <?php endforeach; ?>
-                    </select>
-                    <input id="contact-phone-0" type="tel" name="contacts[0][phone]">
+                        </select>
+                        <input id="contact-phone-0" type="text" name="contacts[0][phone]" autocomplete="tel-national">
+                    </address>
                 </fieldset>
                 <div id="add-contact" class="add-bt"></div>
             </fieldset>
@@ -110,7 +129,7 @@
                         <option value="PLAT">Plateforme</option>
                     </select>
                     <label for="micro-rate-0">Tarification (le cas échéant. Lien internet)</label>
-                    <input id="micro-rate-0" type="url" name="micros[0][rate]">
+                    <input id="micro-rate-0" type="url" name="micros[0][rate]" autocomplete="url">
                     <label for="micro-access-0">Ouvert aux</label>
                     <select name="micros[0][access]" id="micro-access-0">
                         <option value="ACAD">Académiques</option>
@@ -143,6 +162,6 @@
             <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
         </address>
     </footer>
+    <script src="public/js/form.js"></script>
 </body>
-<script src="public/js/form.js"></script>
 </html>
