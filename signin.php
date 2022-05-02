@@ -30,13 +30,13 @@
             <label for="email">Courriel</label>
             <input id="email" type="email" autocomplete="email" name="email" required>
             <label for="phone">Télephone</label>
-            <select id="phone-code" name="phoneCode" >
+            <select id="phone-code" name="phoneCode" autocomplete="tel-country-code">
                 <?php foreach ($phoneCodes as $code) : 
                     $value = substr($code, 0, strpos($code, ' '));?>
                     <option value=<?=$value;?> <?= $value == "+33" ? "selected" : "";?>><?=$code?></option>
                 <?php endforeach; ?>
             </select>
-            <input id="phone" type="tel" autocomplete="tel" name="phone" required>
+            <input id="phone" type="text" name="phone" autocomplete="tel-national" required>
             <label for="password1">Mot de passe</label>
             <input id="password1" type="password" autocomplete="new-password" name="password1">
             <label for="password2">Vérification du mot de passe</label>
