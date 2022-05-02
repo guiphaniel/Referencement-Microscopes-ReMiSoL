@@ -1,4 +1,5 @@
 <?php 
+    include_once("include/config.php");
     include_once("view/generators/HeaderCreator.php");
     include_once("model/services/KeywordService.php");
     include_once("model/services/CompagnyService.php");
@@ -7,6 +8,9 @@
     $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
 
     session_start();
+
+    if(!isUserSessionValid()) 
+        redirect("/index.php");
 
     $header = new HeaderCreator("Formulaire"); 
 ?>

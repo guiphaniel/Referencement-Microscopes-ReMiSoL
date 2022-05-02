@@ -1,4 +1,5 @@
 BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "user";
 DROP TABLE IF EXISTS "manage";
 DROP TABLE IF EXISTS "contact";
 DROP TABLE IF EXISTS "microscope_keyword";
@@ -96,5 +97,14 @@ CREATE TABLE "manage" (
 	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
 	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id"),
 	PRIMARY KEY("contact_id","microscopes_group_id")
+);
+CREATE TABLE "user" (
+	"id"	INTEGER,
+	"firstname"	TEXT,
+	"lastname"	TEXT,
+	"email"	TEXT UNIQUE,
+	"phone"	TEXT UNIQUE,
+	"password"	TEXT, /* TODO: MySQL: replace by VARCHAR(255)*/
+	PRIMARY KEY("id" AUTOINCREMENT)
 );
 COMMIT;
