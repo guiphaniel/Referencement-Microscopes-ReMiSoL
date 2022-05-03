@@ -25,7 +25,7 @@
 
         public function setLon($lon)
         {
-            if ($lon < 6 || $lon > 11)
+            if ($lon < -6 || $lon > 11)
                 throw new ErrorException("La longitude renseignée dépasse les valeurs acceptables.");
 
             $this->lon = $lon;
