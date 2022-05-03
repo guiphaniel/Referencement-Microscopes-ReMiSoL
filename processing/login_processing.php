@@ -11,10 +11,15 @@
         // Convert form values into objects...
 
         // retrieve corresponding user
-        $user = UserService::getInstance()->findUserByEmail($_POST["email"]);
+        $userService = UserService::getInstance();
+        $user = $userService->findUserByEmail($_POST["email"]);
         
         if (!$user)
             throw new Exception("Informations erronées");
+
+        // TODO: add link to resend email
+        if ($userService->isLocked($user))
+            throw new Exception("Vous devez valider votre compte. Merci de vérifier vos mails. (Pensez à regarder dans vos courriers indésirables)");
 
         //check password validity
         if(!password_verify($_POST["password"], $user->getPassword()))

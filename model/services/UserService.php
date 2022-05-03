@@ -30,7 +30,7 @@
             return $row ? $row[0] : -1;
         }
 
-        function findUserById($id) : User {
+        function findUserById($id) {
             global $pdo;
 
             $sql = "
@@ -41,6 +41,10 @@
 
             $sth = $pdo->query($sql);
             $userInfos = $sth->fetch(PDO::FETCH_NAMED);
+
+            // if the user doesn't exist return null
+            if(!$userInfos)
+                return null;
 
             return new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone"], $userInfos["password"]);
         }
@@ -66,27 +70,104 @@
                 return null;
         }
 
+        function isLocked(User $user) {
+            global $pdo;
+
+            $sth = $pdo->prepare("
+                SELECT id
+                from user
+                where email = :email AND id IN (
+                    SELECT user_id FROM locked_user
+                )
+            ");
+
+            $sth->execute([
+                "email" => $user->getEmail()
+            ]);
+
+            $locked = $sth->fetch();
+
+            return !empty($locked);
+        }
+
         /** Saves the user if it doesn't exist yet, and returns its id */
         function save(User $user) : int {
             global $pdo;
             
             $id = $this->getUserId($user);
             
-            // if the lab isn't already in the db, add it
-            if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO user VALUES (NULL, :firstname, :lastname, :email, :phone, :password)");
+            // if the user is already in the db, return its id
+            if ($id != -1) 
+                return $id;
 
-                $sth->execute([
-                    "firstname" => $user->getFirstname(),
-                    "lastname" => $user->getLastname(),
-                    "email" => $user->getEmail(), 
-                    "phone" => $user->getPhone(),
-                    "password" => $user->getPassword()
-                ]);
+            // else, add it to the db
+            $sth = $pdo->prepare("INSERT INTO user VALUES (NULL, :firstname, :lastname, :email, :phone, :password)");
 
-                $id = $pdo->lastInsertId();
-            }          
+            $sth->execute([
+                "firstname" => $user->getFirstname(),
+                "lastname" => $user->getLastname(),
+                "email" => $user->getEmail(), 
+                "phone" => $user->getPhone(),
+                "password" => $user->getPassword()
+            ]);
+
+            $id = $pdo->lastInsertId();
 
             return $id;
+        }
+
+        function lockUser(User $user) {
+            global $pdo;
+
+            $id = $this->getUserId($user);
+
+            // if the user doesn't exist, return
+            if($id == -1)
+                return;
+            
+            // lock the user
+            if(!$this->isLocked($user)) {
+                $token = bin2hex(random_bytes(64));
+                $sth = $pdo->prepare("INSERT INTO locked_user VALUES (:id, :token)");
+
+                $sth->execute([
+                    "id" => $id,
+                    "token" => $token
+                ]);
+
+                return $token;
+            }            
+        }
+
+        function unlockUser(User $user) {
+            global $pdo;
+
+            $id = $this->getUserId($user);
+
+            // if the user doesn't exist, return
+            if($id == -1)
+                return;
+            
+            // unlock the user
+            if($this->isLocked($user))
+                $pdo->exec("DELETE FROM locked_user where user_id = $id");
+        }
+
+        function getLockedUserToken($user) {
+            global $pdo;
+
+            $id = $this->getUserId($user);
+
+            // if the user doesn't exist, return
+            if($id == -1)
+                return;
+
+            $token = $pdo->query("
+                SELECT token
+                FROM locked_user
+                WHERE user_id = $id
+            ")->fetch(PDO::FETCH_COLUMN, PDO::FETCH_NAMED);
+
+            return $token;
         }
     }            
