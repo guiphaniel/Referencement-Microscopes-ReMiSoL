@@ -3,7 +3,7 @@
     include_once(__DIR__ . "/../model/services/UserService.php");
 
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
-    if (!isset($_POST["email"]) || !isset($_POST["password"])) {       
+    if (empty($_POST["email"]) || empty($_POST["password"])) {       
         redirect("/login.php");
     }
 

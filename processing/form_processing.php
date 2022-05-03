@@ -10,34 +10,34 @@
     session_start();
 
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
-    if (!isset($_POST["lab"]) || !isset($_POST["coor"]) || !isset($_POST["contacts"]) || !isset($_POST["micros"])) {       
+    if (empty($_POST["lab"]) || empty($_POST["coor"]) || empty($_POST["contacts"]) || empty($_POST["micros"])) {       
         redirect("/form.php");
     }
 
     $labInfos = $_POST["lab"];
-    if(!isset($labInfos["name"]) || !isset($labInfos["address"]) || !isset($labInfos["website"])) {     
+    if(empty($labInfos["name"]) || empty($labInfos["address"]) || empty($labInfos["website"])) {     
         redirect("/form.php");
     }
 
     $labAddress = $labInfos["address"];
-    if (!isset($labAddress["street"]) || !isset($labAddress["zipCode"]) || !isset($labAddress["city"]) || !isset($labAddress["country"])) {
+    if (empty($labAddress["street"]) || empty($labAddress["zipCode"]) || empty($labAddress["city"]) || empty($labAddress["country"])) {
         redirect("/form.php");
     }
 
 
     $coorInfos = $_POST["coor"];
-    if(!isset($coorInfos["lat"]) || !isset($coorInfos["lon"])) {     
+    if(empty($coorInfos["lat"]) || empty($coorInfos["lon"])) {     
         redirect("/form.php");
     }    
 
     foreach($_POST["contacts"] as $contact) {
-        if (!isset($contact["firstname"]) || !isset($contact["lastname"]) || !isset($contact["role"]) || !isset($contact["email"]) || !isset($contact["phoneCode"]) || !isset($contact["phone"])) {
+        if (empty($contact["firstname"]) || empty($contact["lastname"]) || empty($contact["role"]) || empty($contact["email"]) || empty($contact["phoneCode"]) || empty($contact["phone"])) {
             redirect("/form.php");
         }
     }
 
     foreach($_POST["micros"] as $micro) {
-        if (!isset($micro["compagny"]) || !isset($micro["brand"]) || !isset($micro["model"]) || !isset($micro["controller"]) || !isset($micro["desc"]) || !isset($micro["type"]) || !isset($micro["access"])) {
+        if (empty($micro["compagny"]) || empty($micro["brand"]) || empty($micro["model"]) || empty($micro["controller"]) || empty($micro["desc"]) || empty($micro["type"]) || empty($micro["access"])) {
             redirect("/form.php");
         }
     }

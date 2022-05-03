@@ -2,7 +2,7 @@
     include_once("include/config.php");
     include_once("model/services/UserService.php");
 
-    if(!isset($_GET["id"]) || !isset($_GET["token"]))
+    if(empty($_GET["id"]) || empty($_GET["token"]))
         redirect("/index.php");
 
     $userService = UserService::getInstance();
