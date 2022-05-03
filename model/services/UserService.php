@@ -127,7 +127,7 @@
             
             // lock the user
             if(!$this->isLocked($user)) {
-                $token = bin2hex(random_bytes(64));
+                $token = bin2hex(random_bytes(64)); // the token lenght will be 128 (64*2, as hex = 4 bits and 1 byte = 8 bits)
                 $sth = $pdo->prepare("INSERT INTO locked_user VALUES (:id, :token)");
 
                 $sth->execute([
