@@ -21,7 +21,7 @@
         
         // save the user into the db
         $userService = UserService::getInstance();
-        $userService->save($user);
+        $id = $userService->save($user);
         $token = $userService->lockUser($user);
 
         // send verification mail
