@@ -2,8 +2,6 @@
     include_once(__DIR__ . "/../include/config.php");
     include_once(__DIR__ . "/../model/services/UserService.php");
 
-    session_start();
-
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
     if (!isset($_POST["email"]) || !isset($_POST["password"])) {       
         redirect("/login.php");

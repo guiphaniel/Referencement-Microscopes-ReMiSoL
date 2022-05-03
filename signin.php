@@ -1,7 +1,6 @@
 <?php 
     include_once("view/generators/HeaderCreator.php");
 
-    session_start();
     $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
 
     $header = new HeaderCreator("Inscription"); 

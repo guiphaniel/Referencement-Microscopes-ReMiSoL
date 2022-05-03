@@ -1,4 +1,6 @@
 <?php
+    session_start();
+    
     function isUserSessionValid() {
         return isset($_SESSION["user"]);
     }

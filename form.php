@@ -8,8 +8,6 @@
     $countries = ["Belgique", "France", "Suisse"]; // Belgium, France, Switzerland
     $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
 
-    session_start();
-
     if(!isUserSessionValid()) 
         redirect("/index.php");
 
