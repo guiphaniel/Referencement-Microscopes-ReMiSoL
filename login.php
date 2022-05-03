@@ -1,8 +1,9 @@
 <?php 
+    include_once("include/config.php");
+    if(isUserSessionValid())
+        redirect("/form.php");
+
     include_once("view/generators/HeaderCreator.php");
-
-    session_start();
-
     $header = new HeaderCreator("Connexion"); 
 ?>
 <!DOCTYPE html>

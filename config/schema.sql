@@ -1,4 +1,5 @@
 BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "locked_user";
 DROP TABLE IF EXISTS "user";
 DROP TABLE IF EXISTS "manage";
 DROP TABLE IF EXISTS "contact";
@@ -106,5 +107,11 @@ CREATE TABLE "user" (
 	"phone"	TEXT UNIQUE,
 	"password"	TEXT, /* TODO: MySQL: replace by VARCHAR(255)*/
 	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE "locked_user" (
+	"user_id"	INTEGER,
+	"token"	TEXT,
+	FOREIGN KEY("user_id") REFERENCES "user"("id"),
+	PRIMARY KEY("user_id" AUTOINCREMENT)
 );
 COMMIT;

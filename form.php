@@ -8,8 +8,6 @@
     $countries = ["Belgique", "France", "Suisse"]; // Belgium, France, Switzerland
     $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
 
-    session_start();
-
     if(!isUserSessionValid()) 
         redirect("/index.php");
 
@@ -82,7 +80,7 @@
                 <label for="lat">Latitude</label>
                 <input id="lat" type="number" name="coor[lat]" min="42" max="52" step="0.00001" required>
                 <label for="lon">Longitude</label>
-                <input id="lon" type="number" name="coor[lon]" min="6" max="11" step="0.00001" required>
+                <input id="lon" type="number" name="coor[lon]" min="-6" max="11" step="0.00001" required>
             </fieldset>
             <fieldset id="micros">
                 <legend>Vos microscopes</legend>
