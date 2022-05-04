@@ -202,7 +202,7 @@
         }
 
         function lockUser(User $user) {
-            if($user->isLocked())
+            if($this->isLocked($user))
                 return;
 
             global $pdo;
@@ -222,12 +222,13 @@
                 "token" => $token
             ]);
 
+            $user->setLocked(true);
+
             return $token;
-         
         }
 
         function unlockUser(User $user) {
-            if(!$user->isLocked())
+            if(!$this->isLocked($user))
                 return;
 
             global $pdo;
@@ -240,6 +241,8 @@
             
             // unlock the user
             $pdo->exec("DELETE FROM locked_user where user_id = $id");
+
+            $user->setLocked(false);
         }
 
         function getLockedUserToken($user) {
