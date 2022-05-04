@@ -111,7 +111,12 @@ CREATE TABLE "user" (
 CREATE TABLE "locked_user" (
 	"user_id"	INTEGER,
 	"token"	TEXT,
-	FOREIGN KEY("user_id") REFERENCES "user"("id"),
+	FOREIGN KEY("user_id") REFERENCES "user"("id") ON DELETE CASCADE,
+	PRIMARY KEY("user_id" AUTOINCREMENT)
+);
+CREATE TABLE "admin" (
+	"user_id"	INTEGER,
+	FOREIGN KEY("user_id") REFERENCES "user"("id") ON DELETE CASCADE,
 	PRIMARY KEY("user_id" AUTOINCREMENT)
 );
 COMMIT;

@@ -30,6 +30,24 @@
             return $row ? $row[0] : -1;
         }
 
+        function findAllUsers() {
+            global $pdo;
+
+            $sql = "
+                select firstname, lastname, email, phone, password
+                from user
+            ";
+
+            $users = [];
+            foreach($pdo->query($sql, PDO::FETCH_NAMED) as $userInfos) {
+                $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone"], $userInfos["password"]);
+                $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
+                $users[] = $user;
+            }
+
+            return $users;
+        }
+
         function findUserById($id) {
             global $pdo;
 
@@ -46,7 +64,9 @@
             if(!$userInfos)
                 return null;
 
-            return new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone"], $userInfos["password"]);
+            $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone"], $userInfos["password"]);
+        
+            return $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
         }
 
         function findUserByEmail($email) {
@@ -64,10 +84,13 @@
 
             $userInfos = $sth->fetch(PDO::FETCH_NAMED);
 
-            if($userInfos)
-                return new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone"], $userInfos["password"]);
-            else
+            // if the user doesn't exist return null
+            if(!$userInfos)
                 return null;
+
+            $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone"], $userInfos["password"]);
+            
+            return $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
         }
 
         function isLocked(User $user) {
@@ -88,6 +111,26 @@
             $locked = $sth->fetch();
 
             return !empty($locked);
+        }
+
+        function isAdmin(User $user) {
+            global $pdo;
+
+            $sth = $pdo->prepare("
+                SELECT id
+                from user
+                where email = :email AND id IN (
+                    SELECT user_id FROM admin
+                )
+            ");
+
+            $sth->execute([
+                "email" => $user->getEmail()
+            ]);
+
+            $admin = $sth->fetch();
+
+            return !empty($admin);
         }
 
         /** Saves the user if it doesn't exist yet, and returns its id */
@@ -113,10 +156,55 @@
 
             $id = $pdo->lastInsertId();
 
+            // if the user is admin, but not yet admin in db, add it as admin in db
+            if($user->isAdmin() && !$this->isAdmin($user)) {
+                $sth = $pdo->prepare("INSERT INTO admin VALUES (:id)");
+
+                $sth->execute([
+                    "id" => $id
+                ]);
+            }
+
             return $id;
         }
 
+        function updateUser($id, $user) {
+            global $pdo;
+
+            $sth = $pdo->prepare("
+                UPDATE user
+                SET firstname = :firstname, lastname = :lastname, email = :email, phone = :phone, password = :password
+                WHERE id = $id");
+
+            $sth->execute([
+                "firstname" => $user->getFirstname(),
+                "lastname" => $user->getLastname(),
+                "email" => $user->getEmail(), 
+                "phone" => $user->getPhone(),
+                "password" => $user->getPassword()
+            ]);
+
+            // if the user is admin, but not yet admin in db, add it as admin in db
+            if($user->isAdmin() && !$this->isAdmin($user)) {
+                $sth = $pdo->prepare("INSERT INTO admin VALUES (:id)");
+
+                $sth->execute([
+                    "id" => $id
+                ]);
+            } else if (!$user->isAdmin() && $this->isAdmin($user))
+                $pdo->exec("DELETE FROM admin where user_id = $id");
+        }
+
+        function deleteUser($id) {
+            global $pdo;
+
+            $pdo->exec("DELETE FROM user where id = $id");
+        }
+
         function lockUser(User $user) {
+            if($user->isLocked())
+                return;
+
             global $pdo;
 
             $id = $this->getUserId($user);
@@ -126,20 +214,22 @@
                 return;
             
             // lock the user
-            if(!$this->isLocked($user)) {
-                $token = bin2hex(random_bytes(64)); // the token lenght will be 128 (64*2, as hex = 4 bits and 1 byte = 8 bits)
-                $sth = $pdo->prepare("INSERT INTO locked_user VALUES (:id, :token)");
+            $token = bin2hex(random_bytes(64)); // the token lenght will be 128 (64*2, as hex = 4 bits and 1 byte = 8 bits)
+            $sth = $pdo->prepare("INSERT INTO locked_user VALUES (:id, :token)");
 
-                $sth->execute([
-                    "id" => $id,
-                    "token" => $token
-                ]);
+            $sth->execute([
+                "id" => $id,
+                "token" => $token
+            ]);
 
-                return $token;
-            }            
+            return $token;
+         
         }
 
         function unlockUser(User $user) {
+            if(!$user->isLocked())
+                return;
+
             global $pdo;
 
             $id = $this->getUserId($user);
@@ -149,8 +239,7 @@
                 return;
             
             // unlock the user
-            if($this->isLocked($user))
-                $pdo->exec("DELETE FROM locked_user where user_id = $id");
+            $pdo->exec("DELETE FROM locked_user where user_id = $id");
         }
 
         function getLockedUserToken($user) {

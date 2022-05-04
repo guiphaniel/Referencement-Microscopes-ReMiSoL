@@ -2,7 +2,7 @@
     include_once(__DIR__ . "/AbstractEntity.php");
 
     class User extends AbstractEntity  {
-        function __construct(private string $firstname, private string $lastname, private string $email, private string $phone, private string $password) {}
+        function __construct(private string $firstname, private string $lastname, private string $email, private string $phone, private string $password, private bool $locked = true, private bool $admin = false) {}
 
         public function getFirstname() : string
         {
@@ -60,6 +60,30 @@
         public function setPassword(string $password)
         {
                 $this->password = $password;
+
+                return $this;
+        }
+
+        public function isLocked()
+        {
+                return $this->locked;
+        }
+
+        public function setLocked($locked)
+        {
+                $this->locked = $locked;
+
+                return $this;
+        }
+
+        public function isAdmin()
+        {
+                return $this->admin;
+        }
+
+        public function setAdmin($admin)
+        {
+                $this->admin = $admin;
 
                 return $this;
         }

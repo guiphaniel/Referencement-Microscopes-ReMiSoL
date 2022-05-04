@@ -41,9 +41,9 @@
             </select>
             <input id="phone" type="text" name="phone" autocomplete="tel-national" required>
             <label for="password1">Mot de passe</label>
-            <input id="password1" type="password" autocomplete="new-password" name="password1">
+            <input id="password1" type="password" autocomplete="new-password" name="password1" required>
             <label for="password2">Vérification du mot de passe</label>
-            <input id="password2" type="password" name="password2">
+            <input id="password2" type="password" name="password2" required>
             <input type="submit">
         </form>
     </main>

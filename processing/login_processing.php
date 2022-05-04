@@ -7,18 +7,18 @@
         redirect("/login.php");
     }
 
+    $userService = UserService::getInstance();
     try {
         // Convert form values into objects...
 
         // retrieve corresponding user
-        $userService = UserService::getInstance();
         $user = $userService->findUserByEmail($_POST["email"]);
         
         if (!$user)
             throw new Exception("Informations erronées");
 
         // TODO: add link to resend email
-        if ($userService->isLocked($user))
+        if ($user->isLocked())
             throw new Exception("Vous devez valider votre compte. Merci de vérifier vos mails. (Pensez à regarder dans vos courriers indésirables)");
 
         //check password validity
@@ -33,6 +33,7 @@
     $reflector = new ReflectionClass("User");
     $properties = $reflector->getProperties();
     
+    $_SESSION["user"]["id"] = $userService->getUserId($user);
     foreach($properties as $property) {
         $_SESSION["user"][$property->getName()] = $property->getValue($user);
     }
