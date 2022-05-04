@@ -34,10 +34,10 @@
                 <label for="password2">Vérification du mot de passe</label>
                 <input id="password2" type="password" name="password2">
                 <?php if($this->adminView): ?>
-                    <input type="checkbox" id="locked" name="locked" <?= $this->user->isLocked() ? "checked" : "";?>>
                     <label for="locked">Verrouillé</label>
-                    <input type="checkbox" id="admin" name="admin" <?= $this->user->isAdmin() ? "checked" : "";?>>
+                    <input type="checkbox" id="locked" name="locked" <?= $this->user->isLocked() ? "checked" : "";?>>
                     <label for="admin">Administrateur</label>
+                    <input type="checkbox" id="admin" name="admin" <?= $this->user->isAdmin() ? "checked" : "";?>>
                 <?php endif; ?>
                 <input type="submit">
             <?php
