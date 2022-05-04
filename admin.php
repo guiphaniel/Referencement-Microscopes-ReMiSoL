@@ -21,14 +21,21 @@
 <body>
     <?php $header->create() ?>
     <main>
-        <?php foreach(UserService::getInstance()->findAllUsers() as $user)
-            (new UserFormCreator("processing/user_processing.php", "post", "", $user, true))->create();
-        ?>
+        <h2>Utilisateurs</h2>
+        <div id="user-forms">
+            <?php foreach(UserService::getInstance()->findAllUsers() as $user)
+                (new UserFormCreator("processing/user_processing.php", "post", "", $user, true))->create();
+            ?>
+        </div>
+        <h2>Fiches</h2>
+        <h2>Mots-clés</h2>
+        <h2>Microscopes</h2>
     </main>
     <footer>
         <address>
             <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
         </address>
     </footer>
+    <script src="public/js/user_form.js"></script>
 </body>
 </html>

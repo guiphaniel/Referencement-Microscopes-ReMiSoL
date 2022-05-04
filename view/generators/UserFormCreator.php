@@ -40,6 +40,7 @@
                     <input type="checkbox" id="admin" name="admin" <?= $this->user->isAdmin() ? "checked" : "";?>>
                 <?php endif; ?>
                 <input type="submit">
+                <div class="rm-bt"></div>
             <?php
         }
     }
