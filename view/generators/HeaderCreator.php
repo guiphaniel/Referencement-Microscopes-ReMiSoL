@@ -13,8 +13,8 @@
                         <li><a href="index.php">Accueil</a></li>
                         <?php if(isUserSessionValid()): ?>
                             <li><a href="form.php">Formulaire</a></li>
-                        <?php endif ?>
-                        <?php if(!isUserSessionValid()): ?>
+                            <li><a href="processing/logout.php">Déconnexion</a></li>
+                        <?php else: ?>
                             <li><a href="signin.php">Inscription</a></li>
                             <li><a href="login.php">Connexion</a></li>
                         <?php endif; ?>
