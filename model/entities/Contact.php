@@ -2,7 +2,7 @@
     include_once(__DIR__ . "/AbstractEntity.php");
 
     class Contact extends AbstractEntity  {
-        function __construct(private $firstname, private $lastname, private $role, private $email, private $phone = null) {}
+        function __construct(private $firstname, private $lastname, private $role, private $email, private $phone) {}
 
         public function getFirstname()
         {

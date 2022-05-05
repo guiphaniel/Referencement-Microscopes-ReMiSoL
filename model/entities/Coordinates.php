@@ -13,7 +13,7 @@
         public function getLat() { return $this->lat; }
 
         public function setLat($lat) {
-            if ($lat < 42 || $lat > 52)
+            if ($lat < 41 || $lat > 52)
                 throw new ErrorException("La latitude renseignée dépasse les valeurs acceptables.");
             
                 $this->lat = $lat;

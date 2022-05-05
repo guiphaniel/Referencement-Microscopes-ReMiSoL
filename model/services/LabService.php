@@ -17,11 +17,11 @@
         function getLabId(Lab $lab) {
             global $pdo;
 
-            // lab_name is unique
-            $sth = $pdo->prepare("SELECT id FROM lab where lab_name = :name");
+            // code is unique
+            $sth = $pdo->prepare("SELECT id FROM lab where code = :code");
 
             $sth->execute([
-                "name" => $lab->getName()
+                "code" => $lab->getCode()
             ]);
 
             $row = $sth->fetch();
@@ -34,7 +34,7 @@
             global $pdo;
 
             $sql = "
-                select lab_name as name, address, website
+                select lab_name as name, code, address, website
                 from lab
                 where id = $id
             ";
@@ -42,7 +42,7 @@
             $sth = $pdo->query($sql);
             $labInfos = $sth->fetch(PDO::FETCH_NAMED);
 
-            return new Lab($labInfos["name"], $labInfos["address"], $labInfos["website"]);
+            return new Lab($labInfos["name"], $labInfos["code"], $labInfos["address"], $labInfos["website"]);
         }
 
         /** Saves the lab if it doesn't exist yet, and returns its id */
@@ -53,10 +53,11 @@
             
             // if the lab isn't already in the db, add it
             if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO lab VALUES (NULL, :name, :address, :website)");
+                $sth = $pdo->prepare("INSERT INTO lab VALUES (NULL, :name, :code, :address, :website)");
 
                 $sth->execute([
                     "name" => $lab->getName(),
+                    "code" => $lab->getCode(),
                     "address" => $lab->getAddress(),
                     "website" => $lab->getWebsite()
                 ]);

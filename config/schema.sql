@@ -70,7 +70,8 @@ CREATE TABLE "microscope_keyword" (
 );
 CREATE TABLE "lab" (
 	"id"	INTEGER,
-	"lab_name"	TEXT UNIQUE,
+	"lab_name"	TEXT,
+	"code"	TEXT UNIQUE,
 	"address"	TEXT,
 	"website"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
@@ -89,8 +90,8 @@ CREATE TABLE "contact" (
 	"firstname"	TEXT,
 	"lastname"	TEXT,
 	"role"	TEXT,
-	"email"	TEXT UNIQUE,
-	"phone"	TEXT UNIQUE,
+	"email"	TEXT,
+	"phone"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "manage" (

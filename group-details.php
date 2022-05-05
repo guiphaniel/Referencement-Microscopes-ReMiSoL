@@ -35,7 +35,7 @@
     ?>
     <main>
         <section>
-            <h2><?= $group->getLab()->getName(); ?></h2>
+            <h2><?= $group->getLab()->getName() . " (" . $group->getLab()->getCode() . ")"; ?></h2>
             <p><?= nl2br($group->getLab()->getAddress()); ?></p>
             <p>Site internet : <a href="<?= $group->getLab()->getWebsite(); ?>"><?= $group->getLab()->getWebsite(); ?></a></p>
             <div id="map" style="height: 400px;"></div>
