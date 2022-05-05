@@ -17,12 +17,13 @@
         function getContactId(Contact $contact) {
             global $pdo;
     
-            $sth = $pdo->prepare("SELECT id FROM contact where firstname = :firstname and lastname = :lastname and email = :email");
+            $sth = $pdo->prepare("SELECT id FROM contact where firstname = :firstname and lastname = :lastname and email = :email and phone = :phone");
     
             $sth->execute([
                 "firstname" => $contact->getFirstname(),
                 "lastname" => $contact->getLastname(),
-                "email" => $contact->getEmail()
+                "email" => $contact->getEmail(),
+                "phone" => $contact->getPhone(),
             ]);
     
             $row = $sth->fetch();
