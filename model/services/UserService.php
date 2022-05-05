@@ -17,11 +17,12 @@
         function getUserId(User $user) {
             global $pdo;
 
-            // email is unique
-            $sth = $pdo->prepare("SELECT id FROM user where email = :email");
+            // email and phone are unique
+            $sth = $pdo->prepare("SELECT id FROM user where email = :email or phone = :phone");
 
             $sth->execute([
-                "email" => $user->getEmail()
+                "email" => $user->getEmail(),
+                "phone" => $user->getPhone()
             ]);
 
             $row = $sth->fetch();
@@ -93,6 +94,30 @@
             return $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
         }
 
+        function findUserByPhone($phone) {
+            global $pdo;
+
+            $sth = $pdo->prepare("
+                select firstname, lastname, email, phone, password
+                from user
+                where phone = :phone
+            ");
+
+            $sth->execute([
+                "phone" => $phone
+            ]);
+
+            $userInfos = $sth->fetch(PDO::FETCH_NAMED);
+
+            // if the user doesn't exist return null
+            if(!$userInfos)
+                return null;
+
+            $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone"], $userInfos["password"]);
+            
+            return $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
+        }
+
         function isLocked(User $user) {
             global $pdo;
 
@@ -139,9 +164,9 @@
             
             $id = $this->getUserId($user);
             
-            // if the user is already in the db, return its id
+            // if the user is already in the db (i.e. has the same email or phone), throw
             if ($id != -1) 
-                return $id;
+                throw new Exception("Un compte existe déjà avec ces informations");
 
             // else, add it to the db
             $sth = $pdo->prepare("INSERT INTO user VALUES (NULL, :firstname, :lastname, :email, :phone, :password)");
@@ -171,6 +196,8 @@
         function updateUser($id, $user) {
             global $pdo;
 
+            $this->checkUserInfosUniqueness($id, $user);
+
             $sth = $pdo->prepare("
                 UPDATE user
                 SET firstname = :firstname, lastname = :lastname, email = :email, phone = :phone, password = :password
@@ -193,6 +220,49 @@
                 ]);
             } else if (!$user->isAdmin() && $this->isAdmin($user))
                 $pdo->exec("DELETE FROM admin where user_id = $id");
+        }
+
+        function checkUserInfosUniqueness($id, $user) {
+            $this->chechUserEmailUniqueness($id, $user);
+            $this->chechUserPhoneUniqueness($id, $user);
+        }
+
+        function chechUserEmailUniqueness($id, $user) {
+            global $pdo;
+            
+            $sth = $pdo->prepare("
+                select id
+                from user
+                where id != $id and email = :email
+            ");
+
+            $sth->execute([
+                "email" => $user->getEmail()
+            ]);
+
+            $row = $sth->fetch();
+
+            if($row ? $row[0] : $id != $id)
+                throw new Exception("Ce courriel est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
+        }
+
+        function chechUserPhoneUniqueness($id, $user) {
+            global $pdo;
+            
+            $sth = $pdo->prepare("
+                select id
+                from user
+                where id != $id and phone = :phone
+            ");
+
+            $sth->execute([
+                "phone" => $user->getPhone()
+            ]);
+
+            $row = $sth->fetch();
+
+            if($row ? $row[0] : $id != $id)
+                throw new Exception("Ce numéro de téléphone est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
         }
 
         function deleteUser($id) {
