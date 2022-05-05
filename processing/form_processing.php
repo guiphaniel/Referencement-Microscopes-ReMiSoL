@@ -7,15 +7,13 @@
     include_once("../model/entities/MicroscopesGroup.php");
     include_once("../model/services/MicroscopesGroupService.php");
     
-    session_start();
-
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
     if (empty($_POST["lab"]) || empty($_POST["coor"]) || empty($_POST["contacts"]) || empty($_POST["micros"])) {       
         redirect("/form.php");
     }
 
     $labInfos = $_POST["lab"];
-    if(empty($labInfos["name"]) || empty($labInfos["address"]) || empty($labInfos["website"])) {     
+    if(empty($labInfos["name"]) || empty($labInfos["type"]) || empty($labInfos["code"]) || empty($labInfos["address"]) || empty($labInfos["website"])) {     
         redirect("/form.php");
     }
 
@@ -44,8 +42,9 @@
 
     try {
         // Convert form values into objects...
+        $labCode = $labInfos["type"] . $labInfos["code"];
         $address = $labAddress["street"] . "\n" . $labAddress["zipCode"] . " " . $labAddress["city"] . "\n" . $labAddress["country"];
-        $lab = new Lab($labInfos["name"], $address, $labInfos["website"]);
+        $lab = new Lab($labInfos["name"], $labCode, $address, $labInfos["website"]);
     
         $contacts = [];
         foreach($_POST["contacts"] as $contact) {

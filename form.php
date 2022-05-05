@@ -5,6 +5,7 @@
     include_once("model/services/CompagnyService.php");
     include_once("utils/normalize_utf8_string.php");
 
+    $labTypes = ["UPR", "UMR", "IRL", "UAR", "FR", "EMR"];
     $countries = ["Belgique", "France", "Suisse"]; // Belgium, France, Switzerland
     $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
 
@@ -34,6 +35,12 @@
                 <address>
                     <label for="lab-name">Nom</label>
                     <input id="lab-name" type="text" name="lab[name]" autocomplete="organization" required>
+                    <label for="lab-code">Code</label>
+                    <select name="lab[type]" id="lab-type">
+                    <?php foreach ($labTypes as $labType) : ?>
+                        <option value=<?=$labType;?>><?=$labType?></option>
+                    <?php endforeach; ?>
+                    <input id="lab-code" type="number" name="lab[code]" min="10" max="9999" required>
                     <label for="lab-address-street">Adresse postale</label>
                     <input id="lab-address-street" type="text" name="lab[address][street]" autocomplete="address-line1" required>
                     <label for="lab-address-zip">Code postal</label>
@@ -70,7 +77,7 @@
                             <option value=<?=$value;?> <?= $value == "+33" ? "selected" : "";?>><?=$code?></option>
                         <?php endforeach; ?>
                         </select>
-                        <input id="contact-phone-0" type="text" name="contacts[0][phone]" autocomplete="tel-national">
+                        <input id="contact-phone-0" type="text" name="contacts[0][phone]" autocomplete="tel-national" required>
                     </address>
                 </fieldset>
                 <div id="add-contact" class="add-bt"></div>
@@ -78,7 +85,7 @@
             <fieldset id="coor">
                 <legend>Coordonnées</legend>
                 <label for="lat">Latitude</label>
-                <input id="lat" type="number" name="coor[lat]" min="42" max="52" step="0.00001" required>
+                <input id="lat" type="number" name="coor[lat]" min="41" max="52" step="0.00001" required>
                 <label for="lon">Longitude</label>
                 <input id="lon" type="number" name="coor[lon]" min="-6" max="11" step="0.00001" required>
             </fieldset>
