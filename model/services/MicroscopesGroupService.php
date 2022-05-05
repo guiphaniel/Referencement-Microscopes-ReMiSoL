@@ -45,7 +45,7 @@
                 
             // add the microscopes to the db
             foreach($group->getMicroscopes() as $micro)
-                MicroscopeService::getInstance()->add($groupId, $micro);
+                $micro->setId(MicroscopeService::getInstance()->save($groupId, $micro));
 
             $group->setId($groupId);
 
@@ -123,7 +123,7 @@
             $micros = [];
             $microscopeService = MicroscopeService::getInstance();
             foreach ($microsIds as $microId) {
-                $micros[] = $microscopeService->findMicroscope($microId);
+                $micros[] = $microscopeService->findMicroscopeById($microId);
             }
 
             return $micros;

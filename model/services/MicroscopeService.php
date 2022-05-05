@@ -17,7 +17,7 @@
             return self::$instance;
         }
 
-        function add(int $groupId, Microscope $micro) : int {
+        function save(int $groupId, Microscope $micro) : int {
             global $pdo;
             
             $sth = $pdo->prepare("INSERT INTO microscope VALUES (NULL, :rate, :desc, :type, :access, :modId, :ctrId, :groupId)");
@@ -68,7 +68,7 @@
             return $keywords;
         }
 
-        function findMicroscope($microId) {
+        function findMicroscopeById($microId) {
             global $pdo;
 
             $sql = "
@@ -95,6 +95,7 @@
 
             $kws = $this->findAllKeywords($microInfos["microId"]);
 
-            return new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["desc"], $microInfos["type"], $microInfos["access"], $kws);
+            $micro = new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["desc"], $microInfos["type"], $microInfos["access"], $kws);
+            return $micro->setId($microId);
         }
     }
