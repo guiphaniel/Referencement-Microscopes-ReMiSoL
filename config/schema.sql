@@ -90,8 +90,8 @@ CREATE TABLE "contact" (
 	"firstname"	TEXT,
 	"lastname"	TEXT,
 	"role"	TEXT,
-	"email"	TEXT UNIQUE,
-	"phone"	TEXT UNIQUE,
+	"email"	TEXT,
+	"phone"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "manage" (
