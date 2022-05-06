@@ -16,10 +16,14 @@
     text-decoration: underline;
 }
 
-.snapshot {
+.micro-snapshot {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    width: 100px;
-    height: 100px;
+    max-width: 300px;
+    max-height: 150px;
+}
+
+.micro-img {
+    max-height: 400px;
 }
