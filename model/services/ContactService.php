@@ -7,7 +7,7 @@
 
         private function __construct() {}
 
-        static function getInstance() {
+        static function getInstance() : ContactService {
             if(!isset(self::$instance))
             self::$instance = new ContactService();
            

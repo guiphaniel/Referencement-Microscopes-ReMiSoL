@@ -8,7 +8,7 @@
 
         private function __construct() {}
 
-        static function getInstance() {
+        static function getInstance() : BrandService {
             if(!isset(self::$instance))
                 self::$instance = new BrandService();
            

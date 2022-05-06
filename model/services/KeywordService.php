@@ -6,7 +6,7 @@
 
         private function __construct() {}
 
-        static function getInstance() {
+        static function getInstance() : KeywordService{
             if(!isset(self::$instance))
                 self::$instance = new KeywordService();
            

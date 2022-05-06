@@ -8,7 +8,7 @@
 
         private function __construct() {}
 
-        static function getInstance() {
+        static function getInstance() : ModelService {
             if(!isset(self::$instance))
                 self::$instance = new ModelService();
            
