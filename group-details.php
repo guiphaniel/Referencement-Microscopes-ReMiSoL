@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
     crossorigin=""/>
+    <link rel="stylesheet" href="public/css/style.css">
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
@@ -69,6 +70,15 @@
                 ?>
                 <section>
                     <h3><?= implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]) . " (" . $type . ")"; ?></h3>
+                    <?php 
+                        $microId = $micro->getId();
+                        $path = glob(__DIR__ . "/public/img/micros/" . "$microId.*")[0]??false;
+
+                        if($path):
+                            $fileName = substr($path, strrpos($path, "/") + 1); 
+                    ?>
+                        <div class="snapshot" style="background-image: url(/public/img/micros/<?=$fileName?>)"></div>
+                    <?php endif; ?>
                     <p>Description : <?= $micro->getDesc(); ?></p>
                     <?php if(!empty($micro->getRate())) : ?>
                         <p>Tarification : <a href="<?= $micro->getRate(); ?>"><?= $micro->getRate(); ?></a></p>
