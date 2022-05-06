@@ -19,6 +19,8 @@
 
         function setId(int $id) {
             $this->id = $id;
+
+            return $this;
         }
 
         public function getMicroscopes() : array

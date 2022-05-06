@@ -24,6 +24,8 @@ class Microscope extends AbstractEntity  {
 
     function setId(int $id) {
         $this->id = $id;
+
+        return $this;
     }
     
     public function getModel() : Model
