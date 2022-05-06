@@ -67,6 +67,24 @@
             
         // ...and save the group into the db
         MicroscopesGroupService::getInstance()->add($group);
+
+        //save the micros' imgs
+        $nbImgs = count($_FILES['imgs']['name']);
+        if($nbImgs > count($_POST["micros"]))
+            throw new Exception("Vous ne pouvez envoyer qu'une seule image par microscope au maximum.");
+
+        for ($i=0; $i < $nbImgs; $i++) { 
+            $microId = $group->getMicroscopes()[$i]->getId();
+            $imgs = $_FILES["imgs"];
+            // retrieve the file extension
+            $fileType = $imgs['type'][$i];
+            $fileType = substr($fileType, strpos($fileType, "/") + 1);  
+            // save the image
+            move_uploaded_file(
+                $imgs['tmp_name'][$i],
+                __DIR__ . '/../public/img/micros/' . $microId . '.' . $fileType
+            );  
+        }
     } catch (\Throwable $th) {
         $_SESSION["microForm"]["errorMsg"]=$th->getMessage();
         redirect("/form.php");

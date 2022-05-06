@@ -15,3 +15,11 @@
 .undo-bt {
     text-decoration: underline;
 }
+
+.snapshot {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100px;
+    height: 100px;
+}

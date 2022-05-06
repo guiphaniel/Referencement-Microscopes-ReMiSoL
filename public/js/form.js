@@ -199,3 +199,44 @@ function addKeyword(keyword, catInput) {
     hiddenInput.value = keyword;
     tag.append(hiddenInput);
 }
+
+/* IMG FILE INPUT */
+
+document.addEventListener("change", function(event) {
+    let imgInput = event.target;
+
+    // check if the input is a file input
+    if (imgInput.type != "file")
+        return;
+
+    // check if the input isn't empty
+    if (imgInput.files.length == 0)
+        return;
+
+    // check if the file is an img
+    let imageType = /^image\//;
+
+    let file = imgInput.files[0];
+    if (!imageType.test(file.type))
+        return;
+
+    // display the snapshot
+    // if a previous snapshot already existed, replace its url, else, create a new snapshot
+    let snapshot;
+    if(imgInput.nextSibling.className == "snapshot") 
+        snapshot = imgInput.nextSibling;
+    else {
+        snapshot = document.createElement("div");
+        snapshot.className = "snapshot";
+    }
+    
+    imgInput.insertAdjacentElement("afterend", snapshot)
+
+    let reader = new FileReader();
+    reader.onload = (function(snapshot) { return function(e) { snapshot.style.backgroundImage = "url(" + e.target.result + ")"; }; })(snapshot);
+    reader.readAsDataURL(file);
+})
+
+
+
+

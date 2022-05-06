@@ -29,7 +29,7 @@
         <?php if(isset($_SESSION["microForm"]["errorMsg"])) : ?>
             <p id="error-msg"><?= $_SESSION["microForm"]["errorMsg"] ?></p>
         <?php endif; unset($_SESSION["microForm"]["errorMsg"]); ?>
-        <form action="processing/form_processing.php" method="post">
+        <form action="processing/form_processing.php" method="post" enctype='multipart/form-data'>
             <fieldset>
                 <legend>Votre laboratoire / service</legend>
                 <address>
@@ -143,6 +143,8 @@
                     </select>
                     <label for="micro-desc-0">Description</label>
                     <textarea id="micro-desc-0" name="micros[0][desc]" cols="30" rows="10" required></textarea>
+                    <label for="micro-img-0">Photo</label>
+                    <input id="micro-img-0" name="imgs[]" type="file" accept="image/png, image/jpeg, image/webp">
                     <fieldset id="keywords">
                         <legend>Mots-clés</legend>
                         <?php 
