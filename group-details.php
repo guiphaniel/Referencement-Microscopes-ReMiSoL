@@ -67,9 +67,10 @@
                     "LABO" => "laboratoire",
                     "PLAT" => "plateforme"
                 };
+                $name = implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]);
                 ?>
                 <section>
-                    <h3><?= implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]) . " (" . $type . ")"; ?></h3>
+                    <h3><?= $name . " (" . $type . ")"; ?></h3>
                     <?php 
                         $microId = $micro->getId();
                         $path = glob(__DIR__ . "/public/img/micros/" . "$microId.*")[0]??false;
@@ -77,7 +78,7 @@
                         if($path):
                             $fileName = substr($path, strrpos($path, "/") + 1); 
                     ?>
-                        <div class="snapshot" style="background-image: url(/public/img/micros/<?=$fileName?>)"></div>
+                        <img class="micro-img" src="/public/img/micros/<?=$fileName?>" alt="Microscope <?=$name?>">
                     <?php endif; ?>
                     <p>Description : <?= $micro->getDesc(); ?></p>
                     <?php if(!empty($micro->getRate())) : ?>

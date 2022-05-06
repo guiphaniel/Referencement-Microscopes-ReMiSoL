@@ -223,17 +223,17 @@ document.addEventListener("change", function(event) {
     // display the snapshot
     // if a previous snapshot already existed, replace its url, else, create a new snapshot
     let snapshot;
-    if(imgInput.nextSibling.className == "snapshot") 
+    if(imgInput.nextSibling.className == "micro-snapshot") 
         snapshot = imgInput.nextSibling;
     else {
-        snapshot = document.createElement("div");
-        snapshot.className = "snapshot";
+        snapshot = document.createElement("img");
+        snapshot.className = "micro-snapshot";
     }
     
     imgInput.insertAdjacentElement("afterend", snapshot)
 
     let reader = new FileReader();
-    reader.onload = (function(snapshot) { return function(e) { snapshot.style.backgroundImage = "url(" + e.target.result + ")"; }; })(snapshot);
+    reader.onload = (function(snapshot) { return function(e) { snapshot.src = e.target.result; }; })(snapshot);
     reader.readAsDataURL(file);
 })
 
