@@ -78,7 +78,7 @@
             $imgs = $_FILES["imgs"];
             // retrieve the file extension
             $fileType = $imgs['type'][$i];
-            $fileType = substr($fileType, strpos($fileType, "/") + 1);  
+            $fileType = substr($fileType, strrpos($fileType, "/") + 1);  
             // save the image
             move_uploaded_file(
                 $imgs['tmp_name'][$i],
