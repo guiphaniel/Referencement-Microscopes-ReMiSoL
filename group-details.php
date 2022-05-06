@@ -42,7 +42,7 @@
             <div id="map" style="height: 400px;"></div>
         </section>
         <section>
-            <h2>Référents</h2>
+            <h2>Référent·e·s</h2>
             <?php foreach ($group->getContacts() as $contact) : ?>
                 <address>
                     <p><?= $contact->getFirstname() . ' ' . $contact->getLastname() . " (" . $contact->getRole() .")" ?></p>

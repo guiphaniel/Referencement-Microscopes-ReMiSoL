@@ -122,7 +122,7 @@ function getCustomPopupHTML(group) {
 	}
 
 	// contacts
-	infos.append(createContentElement("h3", "Référents"))
+	infos.append(createContentElement("h3", "Référent·e·s"))
 	let contactsAddress = document.createElement("address");
 	for (const contact of group.contacts) {
 		// generate contact infos
