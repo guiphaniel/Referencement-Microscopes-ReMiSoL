@@ -22,7 +22,23 @@ async function loadAndShowMicroscopes() {
 	const groups = await response.json();
 
 	for (let group of groups) {
-		let marker = L.marker(group.coor, { "alt": group.lab.name });
+		// set custom icon color
+		let color = group.microscopes[0].type == "LABO" ? "green" : "red";
+
+		for (let i = 1; i < group.microscopes.length; i++)
+			color = color == (group.microscopes[i].type == "LABO" ? "green" : "red") ? color : "orange";
+
+		let customIcon = new L.Icon({
+			iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
+			shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+			iconSize: [25, 41],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34],
+			shadowSize: [41, 41]
+		  });
+
+
+		let marker = L.marker(group.coor, {alt: group.lab.name, icon: customIcon});
 		
 		marker.bindPopup(getCustomPopupHTML(group), {maxHeight : 200});
 
@@ -122,7 +138,7 @@ function getCustomPopupHTML(group) {
 	}
 
 	// contacts
-	infos.append(createContentElement("h3", "Référent·e·s"))
+	infos.append(createContentElement("h3", "Référents"))
 	let contactsAddress = document.createElement("address");
 	for (const contact of group.contacts) {
 		// generate contact infos
