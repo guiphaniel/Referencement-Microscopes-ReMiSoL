@@ -23,10 +23,10 @@ async function loadAndShowMicroscopes() {
 
 	for (let group of groups) {
 		// set custom icon color
-		let color = group.microscopes[0].type == "LABO" ? "green" : "red";
+		let color = group.microscopes[0].type == "LABO" ? "blue" : "red";
 
 		for (let i = 1; i < group.microscopes.length; i++)
-			color = color == (group.microscopes[i].type == "LABO" ? "green" : "red") ? color : "orange";
+			color = color == (group.microscopes[i].type == "LABO" ? "blue" : "red") ? color : "orange";
 
 		let customIcon = new L.Icon({
 			iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
