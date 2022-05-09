@@ -35,7 +35,7 @@
             global $pdo;
 
             $sql = "
-                select lab_name as name, code, website, school, street, zipCode, city, country
+                select lab_name as name, type, code, website, school, street, zipCode, city, country
                 from lab
                 join address as a
                 on address_id = a.id
@@ -46,7 +46,7 @@
             $labInfos = $sth->fetch(PDO::FETCH_NAMED);
 
             $address = new Address($labInfos["school"], $labInfos["street"], $labInfos["zipCode"], $labInfos["city"], $labInfos["country"]);
-            return new Lab($labInfos["name"], $labInfos["code"], $labInfos["website"], $address);
+            return new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"], $labInfos["website"], $address);
         }
 
         /** Saves the lab if it doesn't exist yet, and returns its id */
@@ -57,10 +57,11 @@
             
             // if the lab isn't already in the db, add it
             if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO lab VALUES (NULL, :name, :code, :website, :addressId)");
+                $sth = $pdo->prepare("INSERT INTO lab VALUES (NULL, :name, :type, :code, :website, :addressId)");
 
                 $sth->execute([
                     "name" => $lab->getName(),
+                    "type" => $lab->getType(),
                     "code" => $lab->getCode(),
                     "website" => $lab->getWebsite(),
                     "addressId" => AddressService::getInstance()->save($lab->getAddress())

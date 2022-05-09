@@ -39,7 +39,7 @@
                     <option value=<?=$value;?> <?= $value == "+33" ? "selected" : "";?>><?=$code?></option>
                 <?php endforeach; ?>
             </select>
-            <input id="phone" type="text" name="phone" autocomplete="tel-national" required>
+            <input id="phone" type="text" name="phoneNum" autocomplete="tel-national" required>
             <label for="password1">Mot de passe</label>
             <input id="password1" type="password" autocomplete="new-password" name="password1" required>
             <label for="password2">Vérification du mot de passe</label>

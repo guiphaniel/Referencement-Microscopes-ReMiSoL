@@ -45,8 +45,7 @@
             $hash = UserService::getInstance()->findUserById($id)->getPassword();
 
         //update user
-        $phone = $_POST["phoneCode"] . " " . substr($_POST["phone"], -9);
-        $user = new User($_POST["firstname"], $_POST["lastname"], $_POST["email"], $phone, $hash, $_POST["locked"]??false, $_POST["admin"]??false);
+        $user = new User($_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["phoneCode"], $_POST["phoneNum"], $hash, $_POST["locked"]??false, $_POST["admin"]??false);
 
         UserService::getInstance()->updateUser($id, $user);
     } catch (\Throwable $th) {

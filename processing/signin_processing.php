@@ -4,7 +4,7 @@
     session_start();
 
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
-    if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"]) || empty($_POST["phone"]) || empty($_POST["phoneCode"]) || empty($_POST["password1"]) || empty($_POST["password2"])) {       
+    if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"]) || empty($_POST["phoneCode"]) || empty($_POST["phoneNum"]) || empty($_POST["password1"]) || empty($_POST["password2"])) {       
         header('location: /signin.php');
         exit();
     }
@@ -16,8 +16,7 @@
         if($_POST["password1"] !== $_POST["password2"])
             throw new Exception("Les mots de passe fournis ne correspondent pas");
 
-        $_POST["phone"] = $_POST["phoneCode"] . " " . substr($_POST["phone"], -9);
-        $user = new User($_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["phone"], password_hash($_POST["password1"], PASSWORD_DEFAULT));
+        $user = new User($_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["phoneCode"], substr($_POST["phoneNum"], -9), password_hash($_POST["password1"], PASSWORD_DEFAULT));
         
         // save the user into the db
         $userService = UserService::getInstance();

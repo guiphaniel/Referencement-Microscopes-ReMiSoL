@@ -27,11 +27,19 @@
             // save the group and bind it to the lab
             $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labId)");
 
-            $sth->execute([
-                "lat" => $group->getCoor()->getLat(),
-                "lon" => $group->getCoor()->getLon(),
-                "labId" => LabService::getInstance()->getLabId($group->getLab())
-            ]);
+            try {
+                $sth->execute([
+                    "lat" => $group->getCoor()->getLat(),
+                    "lon" => $group->getCoor()->getLon(),
+                    "labId" => LabService::getInstance()->getLabId($group->getLab())
+                ]);
+            } catch (\Throwable $th) {
+                if(str_contains($th->getMessage() ,"UNIQUE constraint failed"))
+                    throw new Exception("Un groupe de microscopes existe déjà à cet emplacement");
+                else
+                    throw $th;
+            }
+            
 
             // get the generated group id
             $groupId = $pdo->lastInsertId(); 
@@ -90,7 +98,7 @@
             global $pdo;
 
             $sql = "
-                select firstname, lastname, role, email, phone
+                select firstname, lastname, role, email, phone_code, phone_num
                 from contact as c
                 join manage as m
                 on m.contact_id = c.id
@@ -102,7 +110,7 @@
 
             $contacts = [];
             foreach ($contactsInfos as $contactInfos) {
-                $contacts[] = new Contact($contactInfos["firstname"], $contactInfos["lastname"], $contactInfos["role"], $contactInfos["email"], $contactInfos["phone"]);
+                $contacts[] = new Contact($contactInfos["firstname"], $contactInfos["lastname"], $contactInfos["role"], $contactInfos["email"], $contactInfos["phone_code"], $contactInfos["phone_num"]);
             }
 
             return $contacts;

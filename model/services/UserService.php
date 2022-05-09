@@ -18,11 +18,12 @@
             global $pdo;
 
             // email and phone are unique
-            $sth = $pdo->prepare("SELECT id FROM user where email = :email or phone = :phone");
+            $sth = $pdo->prepare("SELECT id FROM user where email = :email or (phone_code = :phoneCode and phone_num = :phoneNum)");
 
             $sth->execute([
                 "email" => $user->getEmail(),
-                "phone" => $user->getPhone()
+                "phoneCode" => $user->getPhoneCode(),
+                "phoneNum" => $user->getPhoneNum()
             ]);
 
             $row = $sth->fetch();
@@ -35,13 +36,13 @@
             global $pdo;
 
             $sql = "
-                select firstname, lastname, email, phone, password
+                select firstname, lastname, email, phone_code, phone_num, password
                 from user
             ";
 
             $users = [];
             foreach($pdo->query($sql, PDO::FETCH_NAMED) as $userInfos) {
-                $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone"], $userInfos["password"]);
+                $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone_code"], $userInfos["phone_num"], $userInfos["password"]);
                 $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
                 $users[] = $user;
             }
@@ -53,7 +54,7 @@
             global $pdo;
 
             $sql = "
-                select firstname, lastname, email, phone, password
+                select firstname, lastname, email, phone_code, phone_num, password
                 from user
                 where id = $id
             ";
@@ -65,7 +66,7 @@
             if(!$userInfos)
                 return null;
 
-            $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone"], $userInfos["password"]);
+            $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone_code"], $userInfos["phone_num"], $userInfos["password"]);
         
             return $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
         }
@@ -74,7 +75,7 @@
             global $pdo;
 
             $sth = $pdo->prepare("
-                select firstname, lastname, email, phone, password
+                select firstname, lastname, email, phone_code, phone_num, password
                 from user
                 where email = :email
             ");
@@ -89,22 +90,23 @@
             if(!$userInfos)
                 return null;
 
-            $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone"], $userInfos["password"]);
+            $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone_code"], $userInfos["phone_num"], $userInfos["password"]);
             
             return $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
         }
 
-        function findUserByPhone($phone) {
+        function findUserByPhone($phoneCode, $phoneNum) {
             global $pdo;
 
             $sth = $pdo->prepare("
-                select firstname, lastname, email, phone, password
+                select firstname, lastname, email, phone_code, phone_num, password
                 from user
-                where phone = :phone
+                where phone_code = :phoneCode and phone_num = :phoneNum
             ");
 
             $sth->execute([
-                "phone" => $phone
+                "phoneCode" => $phoneCode, 
+                "phoneNum" => $phoneNum
             ]);
 
             $userInfos = $sth->fetch(PDO::FETCH_NAMED);
@@ -113,7 +115,7 @@
             if(!$userInfos)
                 return null;
 
-            $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone"], $userInfos["password"]);
+            $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone_code"], $userInfos["phone_num"], $userInfos["password"]);
             
             return $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
         }
@@ -169,13 +171,14 @@
                 throw new Exception("Un compte existe déjà avec ces informations");
 
             // else, add it to the db
-            $sth = $pdo->prepare("INSERT INTO user VALUES (NULL, :firstname, :lastname, :email, :phone, :password)");
+            $sth = $pdo->prepare("INSERT INTO user VALUES (NULL, :firstname, :lastname, :email, :phoneCode, :phoneNum, :password)");
 
             $sth->execute([
                 "firstname" => $user->getFirstname(),
                 "lastname" => $user->getLastname(),
                 "email" => $user->getEmail(), 
-                "phone" => $user->getPhone(),
+                "phoneCode" => $user->getPhoneCode(),
+                "phoneNum" => $user->getPhoneNum(),
                 "password" => $user->getPassword()
             ]);
 
@@ -200,14 +203,15 @@
 
             $sth = $pdo->prepare("
                 UPDATE user
-                SET firstname = :firstname, lastname = :lastname, email = :email, phone = :phone, password = :password
+                SET firstname = :firstname, lastname = :lastname, email = :email, phone_code = :phoneCode, phone_num = :phoneNum, password = :password
                 WHERE id = $id");
 
             $sth->execute([
                 "firstname" => $user->getFirstname(),
                 "lastname" => $user->getLastname(),
                 "email" => $user->getEmail(), 
-                "phone" => $user->getPhone(),
+                "phoneCode" => $user->getPhoneCode(),
+                "phoneNum" => $user->getPhoneNum(),
                 "password" => $user->getPassword()
             ]);
 
@@ -246,17 +250,18 @@
                 throw new Exception("Ce courriel est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
         }
 
-        function checkUserPhoneUniqueness($id, $user) {
+        function checkUserPhoneUniqueness($id, User $user) {
             global $pdo;
             
             $sth = $pdo->prepare("
                 select id
                 from user
-                where id != $id and phone = :phone
+                where id != $id and phone_code = :phoneCode and phone_num = phoneNum
             ");
 
             $sth->execute([
-                "phone" => $user->getPhone()
+                "phoneCode" => $user->getPhoneCode(),
+                "phoneNum" => $user->getPhoneNum()
             ]);
 
             $row = $sth->fetch();

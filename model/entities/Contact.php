@@ -2,7 +2,7 @@
     include_once(__DIR__ . "/AbstractEntity.php");
 
     class Contact extends AbstractEntity  {
-        function __construct(private $firstname, private $lastname, private $role, private $email, private $phone) {}
+        function __construct(private $firstname, private $lastname, private $role, private $email, private $phoneCode, private $phoneNum) {}
 
         public function getFirstname()
         {
@@ -52,28 +52,39 @@
             return $this;
         }
  
-        public function getPhone()
+        public function getPhoneCode()
         {
-            return $this->phone;
+                return $this->phoneCode;
         }
 
-        public function setPhone($phone)
+        public function setPhoneCode($phoneCode)
         {
-            // check validity
-            $phoneCodes = ["+32", "+33", "+41"]; // Belgium, France, Switzerland
+            $codes = ["+32", "+33", "+41"]; // Belgium, France, Switzerland
 
             $valid = false;
-            foreach ($phoneCodes as $code) {
-                if(strpos($phone, $code)) {
+            foreach ($codes as $code) {
+                if(strpos($phoneCode, $code)) {
                     $valid = true;
                     break;
                 }
             }
             if(!$valid)
-                throw new Exception("L'index téléphonique fourni n'est pas supporté : ");
+                throw new Exception("L'index téléphonique fourni n'est pas supporté");
 
-            $this->phone = $phone;
+            $this->phoneCode = $phoneCode;
 
             return $this;
+        }
+
+        public function getPhoneNum()
+        {
+                return $this->phoneNum;
+        }
+
+        public function setPhoneNum($phoneNum)
+        {
+                $this->phoneNum = $phoneNum;
+
+                return $this;
         }
     }

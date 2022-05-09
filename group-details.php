@@ -47,10 +47,8 @@
                 <address>
                     <p><?= $contact->getFirstname() . ' ' . $contact->getLastname() . " (" . $contact->getRole() .")" ?></p>
                     <p>Email : <a href="mailto:<?= $contact->getEmail() ?>"><?= $contact->getEmail() ?></a></p>
-                    <?php $phone = $contact->getPhone();
-                        if(isset($phone)) : ?>
-                            <p>Téléphone : <a href="tel:<?= $phone ?>"><?= $phone ?></a></p>
-                    <?php endif; ?>
+                    <?php $phone = $contact->getPhoneCode() . $contact->getPhoneNum(); ?>
+                    <p>Téléphone : <a href="tel:<?= $phone ?>"><?= $phone ?></a></p>
                 </address>
             <?php endforeach ?>
         </section>

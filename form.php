@@ -80,7 +80,7 @@
                             <option value=<?=$value;?> <?= $value == "+33" ? "selected" : "";?>><?=$code?></option>
                         <?php endforeach; ?>
                         </select>
-                        <input id="contact-phone-0" type="text" name="contacts[0][phone]" autocomplete="tel-national" required>
+                        <input id="contact-phone-0" type="text" name="contacts[0][phoneNum]" autocomplete="tel-national" required>
                     </address>
                 </fieldset>
                 <div id="add-contact" class="add-bt"></div>

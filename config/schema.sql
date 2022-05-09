@@ -81,9 +81,11 @@ CREATE TABLE "address" (
 CREATE TABLE "lab" (
 	"id"	INTEGER,
 	"lab_name"	TEXT,
-	"code"	TEXT UNIQUE,
+	"type"	TEXT,
+	"code"	TEXT,
 	"website"	TEXT,
 	"address_id"	INTEGER,
+	UNIQUE("type","code"),
 	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("address_id") REFERENCES "address"("id")
 );
@@ -102,7 +104,8 @@ CREATE TABLE "contact" (
 	"lastname"	TEXT,
 	"role"	TEXT,
 	"email"	TEXT,
-	"phone"	TEXT,
+	"phone_code"	TEXT,
+	"phone_num"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "manage" (
@@ -117,7 +120,8 @@ CREATE TABLE "user" (
 	"firstname"	TEXT,
 	"lastname"	TEXT,
 	"email"	TEXT UNIQUE,
-	"phone"	TEXT UNIQUE,
+	"phone_code"	TEXT,
+	"phone_num"	TEXT,
 	"password"	TEXT, /* TODO: MySQL: replace by VARCHAR(255)*/
 	PRIMARY KEY("id" AUTOINCREMENT)
 );

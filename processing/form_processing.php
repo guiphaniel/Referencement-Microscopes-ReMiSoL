@@ -29,7 +29,7 @@
     }    
 
     foreach($_POST["contacts"] as $contact) {
-        if (empty($contact["firstname"]) || empty($contact["lastname"]) || empty($contact["role"]) || empty($contact["email"]) || empty($contact["phoneCode"]) || empty($contact["phone"])) {
+        if (empty($contact["firstname"]) || empty($contact["lastname"]) || empty($contact["role"]) || empty($contact["email"]) || empty($contact["phoneCode"]) || empty($contact["phoneNum"])) {
             redirect("/form.php");
         }
     }
@@ -40,17 +40,14 @@
         }
     }
 
+    try {
         // Convert form values into objects...
-        $labCode = $labInfos["type"] . $labInfos["code"];
         $address = new Address($labAddress["school"], $labAddress["street"], $labAddress["zipCode"], $labAddress["city"], $labAddress["country"]);
-        $lab = new Lab($labInfos["name"], $labCode, $labInfos["website"], $address);
+        $lab = new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"], $labInfos["website"], $address);
     
         $contacts = [];
         foreach($_POST["contacts"] as $contact) {
-            // retrieve phone number
-            $contact["phone"] = $contact["phoneCode"] . " " . substr($contact["phone"], -9);
-
-            $contacts[] = new Contact($contact["firstname"], strtoupper($contact["lastname"]),  ucfirst($contact["role"]), $contact["email"], $contact["phone"]);
+            $contacts[] = new Contact($contact["firstname"], strtoupper($contact["lastname"]),  ucfirst($contact["role"]), $contact["email"], $contact["phoneCode"], substr($contact["phoneNum"], -9));
         }
         
         $group = new MicroscopesGroup(new Coordinates($coorInfos["lat"], $coorInfos["lon"]), $lab, $contacts);
@@ -84,6 +81,9 @@
                 __DIR__ . '/../public/img/micros/' . $microId . '.' . $fileType
             );  
         }
-
+    } catch (\Throwable $th) {
+        $_SESSION["microForm"]["errorMsg"]=$th->getMessage();
+        redirect("/form.php");
+    }
     
     redirect("/index.php");

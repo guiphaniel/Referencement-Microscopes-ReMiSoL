@@ -158,12 +158,12 @@ function getCustomPopupHTML(group) {
 		}
 
 		// phone
-		let phone = contact.phone
-		if(phone) {
-			let label = createP("Téléphone : ");
-			label.append(createA("tel:" + phone, phone));
-			contactAddress.append(label);
-		}
+		let phone = contact.phoneCode + contact.phoneNum 
+		
+		let label = createP("Téléphone : ");
+		label.append(createA("tel:" + phone, phone));
+		contactAddress.append(label);
+
 
 		// add infos to all contacts infos
 		contactsAddress.append(contactAddress);

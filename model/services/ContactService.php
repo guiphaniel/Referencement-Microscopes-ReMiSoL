@@ -17,14 +17,15 @@
         function getContactId(Contact $contact) {
             global $pdo;
     
-            $sth = $pdo->prepare("SELECT id FROM contact where firstname = :firstname and lastname = :lastname and role = :role and email = :email and phone = :phone");
+            $sth = $pdo->prepare("SELECT id FROM contact where firstname = :firstname and lastname = :lastname and role = :role and email = :email and phone_code = :phoneCode and phone_num = :phoneNum");
     
             $sth->execute([
                 "firstname" => $contact->getFirstname(),
                 "lastname" => $contact->getLastname(),
                 "role" => $contact->getRole(),
                 "email" => $contact->getEmail(),
-                "phone" => $contact->getPhone(),
+                "phoneCode" => $contact->getPhoneCode(),
+                "phoneNum" => $contact->getPhoneNum()
             ]);
     
             $row = $sth->fetch();
@@ -41,14 +42,15 @@
 
             // if the contact isn't already in the db, add it
             if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :firstname, :lastname, :role, :email, :phone)");
+                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :firstname, :lastname, :role, :email, :phoneCode, :phoneNum)");
         
                 $sth->execute([
                     "firstname" => $contact->getFirstname(),
                     "lastname" => $contact->getLastname(),
                     "role" => $contact->getRole(),
                     "email" => $contact->getEmail(),
-                    "phone" => $contact->getPhone()
+                    "phoneCode" => $contact->getPhoneCode(),
+                    "phoneNum" => $contact->getPhoneNum()
                 ]);
                 
                 $id = $pdo->lastInsertId();
