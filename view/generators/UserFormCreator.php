@@ -6,8 +6,8 @@
     Class UserFormCreator extends FormCreator {
         private $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
 
-        function __construct(string $action, string $method, string $enctype, private User $user, private bool $adminView) {
-            parent::__construct($action, $method, $enctype);
+        function __construct(private User $user, private bool $adminView) {
+            parent::__construct("processing/user_processing.php", "post", "");
         }
 
         public function createBody() {
@@ -25,7 +25,7 @@
                 <?php 
                     $userCode = strtok($this->user->getPhone(), " ");
                     foreach ($this->phoneCodes as $phoneCode) : ?>
-                        <option value=<?=$phoneCode;?> <?= str_contains($phoneCode, $userCode) ? "selected" : "";?>><?=$phoneCode?></option>
+                        <option value="<?=$phoneCode;?>"<?= str_contains($phoneCode, $userCode) ? " selected" : "";?>><?=$phoneCode?></option>
                 <?php endforeach; ?>
                 </select>
                 <input id="phone" type="text" name="phone" autocomplete="tel-national" value="<?=substr($this->user->getPhone(), -9)?>" required>
