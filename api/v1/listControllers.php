@@ -7,18 +7,21 @@
     {
         case 'GET':
             //TODO: parametres (limit, offset)
-            //TODO: if no controller is provided, return all controllers -> change the behavior of the ControllerService::getAllControllers method, with optional parameter
-            if(!isset($_GET["compagny"])) {
+            //TODO: if no controller is provided, return all controllers -> change the behavior of the ControllerService::getAllControllers method, with optional parameter            
+            if(!isset($_GET["compagny"]) && isset($_GET["brand"])) {
                 echo "You must provide a compagny name : ?compagny=compagnyName";
                 die();
             }
             
-            if(!isset($_GET["brand"])) {
+            if(isset($_GET["compagny"]) && !isset($_GET["brand"])) {
                 echo "You must provide a brand name : &brand=brandName";
                 die();
             }
 
-            $controllers = ControllerService::getInstance()->getAllControllers(new Brand($_GET["brand"], new Compagny($_GET["compagny"])));
+            if(isset($_GET["compagny"]) && isset($_GET["brand"]))
+                $controllers = ControllerService::getInstance()->findAllControllersByBrand(new Brand($_GET["brand"], new Compagny($_GET["compagny"])));
+            else
+                $controllers = ControllerService::getInstance()->findAllControllers();
             
             header('Content-Type: application/json');
             echo json_encode($controllers, JSON_PRETTY_PRINT);

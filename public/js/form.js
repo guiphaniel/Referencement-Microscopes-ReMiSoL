@@ -14,6 +14,24 @@
 async function onCompagnyInput() {
     const fieldsetId = this.id.split('-')[2];
     
+    // check homemade case
+    if(this.value == "Homemade") {
+        let brandInput = document.getElementById(`micro-brand-` + fieldsetId);
+        let modelInput = document.getElementById(`micro-model-` + fieldsetId);
+
+        brandInput.value = "Homemade";
+        brandInput.disabled = false;
+        modelInput.value = "Homemade";
+        modelInput.disabled = false;
+
+        let url = "/api/v1/listControllers.php";
+        let controllerDatalist = document.getElementById(`micro-controllers-` + fieldsetId);
+        fillDatalist(controllerDatalist, url).then(() => document.getElementById(`micro-controller-` + fieldsetId).disabled = false);
+
+        return;
+    }
+
+    // check regular case
     if(!isInputDatalistValid(this, document.getElementById("micro-compagnies"))) {
         document.getElementById(`micro-brand-` + fieldsetId).disabled = true;
         document.getElementById(`micro-model-` + fieldsetId).disabled = true;

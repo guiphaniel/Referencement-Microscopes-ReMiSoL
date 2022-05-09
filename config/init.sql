@@ -1,6 +1,7 @@
 BEGIN TRANSACTION;
 insert into compagny values(1, 'Bruker');
 insert into compagny values(2, 'Oxford Instrument');
+insert into compagny values(3, 'Homemade');
 insert into brand values(1, 'Bruker',1);
 insert into brand values(2, 'JPK',1);
 insert into brand values(3, 'Asylum Research',2);

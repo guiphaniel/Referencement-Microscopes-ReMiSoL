@@ -30,7 +30,26 @@
             return $row ? $row[0] : -1;
         }
 
-        function getAllControllers(Brand $brand) : array {
+        function findAllControllers() : array {
+            global $pdo;
+            $controllers = [];
+            
+            $sth = $pdo->query("
+                SELECT ctr_name, bra_name, com_name FROM controller
+                JOIN brand as b
+                on brand_id = b.id
+                JOIN compagny as c
+                on b.compagny_id = c.id
+            ");
+
+            foreach ($sth->fetchAll() as $row) {
+                $controllers[] = new Controller($row["ctr_name"], new Brand($row["bra_name"], new Compagny($row["com_name"])));
+            }
+
+            return $controllers;
+        }
+
+        function findAllControllersByBrand(Brand $brand) : array {
             global $pdo;
             $controllers = [];
             
