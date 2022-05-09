@@ -18,11 +18,17 @@
         function getBrandId(Brand $brand) {
             global $pdo;
 
-            // there is no need to check for the compagny, as bra_name is unique
-            $sth = $pdo->prepare("SELECT id FROM brand where bra_name = :name");
+            $sth = $pdo->prepare("
+                SELECT b.id
+                FROM brand as b
+                Join compagny as c
+                on compagny_id = c.id
+                where bra_name = :brandName and com_name = :compName
+            ");
 
             $sth->execute([
-                "name" => $brand->getName()
+                "brandName" => $brand->getName(), 
+                "compName" => $brand->getCompagny()->getName()
             ]);
 
             $row = $sth->fetch();
