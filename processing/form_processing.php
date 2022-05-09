@@ -43,7 +43,10 @@
     try {
         // Convert form values into objects...
         $labCode = $labInfos["type"] . $labInfos["code"];
-        $address = $labAddress["street"] . "\n" . $labAddress["zipCode"] . " " . $labAddress["city"] . "\n" . $labAddress["country"];
+        $address = "";
+        if(!empty($labAddress["school"]))
+            $address .= $labAddress["school"] . "\n";
+        $address .= $labAddress["street"] . "\n" . $labAddress["zipCode"] . " " . $labAddress["city"] . "\n" . $labAddress["country"];
         $lab = new Lab($labInfos["name"], $labCode, $address, $labInfos["website"]);
     
         $contacts = [];

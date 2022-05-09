@@ -33,7 +33,7 @@
             <fieldset>
                 <legend>Votre laboratoire / service</legend>
                 <address>
-                    <label for="lab-name">Nom</label>
+                    <label for="lab-name">Nom du laboratoire</label>
                     <input id="lab-name" type="text" name="lab[name]" autocomplete="organization" required>
                     <label for="lab-code">Code</label>
                     <select name="lab[type]" id="lab-type">
@@ -41,7 +41,9 @@
                         <option value=<?=$labType;?>><?=$labType?></option>
                     <?php endforeach; ?>
                     <input id="lab-code" type="number" name="lab[code]" min="10" max="9999" required>
-                    <label for="lab-address-street">Adresse postale</label>
+                    <label for="lab-address-school">Université / École</label>
+                    <input id="lab-address-school" type="text" name="lab[address][school]">
+                    <label for="lab-address-street">Adresse</label>
                     <input id="lab-address-street" type="text" name="lab[address][street]" autocomplete="address-line1" required>
                     <label for="lab-address-zip">Code postal</label>
                     <input id="lab-address-zip" type="text" name="lab[address][zipCode]" autocomplete="postal-code" required>
