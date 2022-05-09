@@ -223,11 +223,11 @@
         }
 
         function checkUserInfosUniqueness($id, $user) {
-            $this->chechUserEmailUniqueness($id, $user);
-            $this->chechUserPhoneUniqueness($id, $user);
+            $this->checkUserEmailUniqueness($id, $user);
+            $this->checkUserPhoneUniqueness($id, $user);
         }
 
-        function chechUserEmailUniqueness($id, $user) {
+        function checkUserEmailUniqueness($id, $user) {
             global $pdo;
             
             $sth = $pdo->prepare("
@@ -246,7 +246,7 @@
                 throw new Exception("Ce courriel est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
         }
 
-        function chechUserPhoneUniqueness($id, $user) {
+        function checkUserPhoneUniqueness($id, $user) {
             global $pdo;
             
             $sth = $pdo->prepare("

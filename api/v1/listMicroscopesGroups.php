@@ -8,7 +8,7 @@
         case 'GET':
             //TODO: parametres (limit, offset)
             
-            $groups = MicroscopesGroupService::getInstance()->getAllMicroscopesGroup();
+            $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroup();
             
             header('Content-Type: application/json');
             echo json_encode($groups, JSON_PRETTY_PRINT);

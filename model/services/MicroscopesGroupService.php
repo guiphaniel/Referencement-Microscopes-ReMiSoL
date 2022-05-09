@@ -18,7 +18,7 @@
         }
 
         // TODO: check if the lab / brand / controller / are already in db, else add them but also add them in a table "to_verify", maybe in the add/save functions of each Service
-        function add(MicroscopesGroup $group) : int {
+        function save(MicroscopesGroup $group) : int {
             global $pdo;
 
             // save the lab
@@ -52,7 +52,7 @@
             return $groupId;
         }
 
-        function getAllMicroscopesGroup() {
+        function findAllMicroscopesGroup() {
             global $pdo;
 
             // get groups infos
