@@ -5,7 +5,7 @@
         function __construct(private string $school, private string $street, private string $zipCode, private string $city, private string $country) {}
 
         public function toString() {
-            return implode("\n", [$this->school, $this->address, $this->zipCode, $this->city, $this->country]);
+            return implode("\n", array_filter([$this->school, $this->street, $this->zipCode, $this->city, $this->country]));
         }
 
         public function getSchool()

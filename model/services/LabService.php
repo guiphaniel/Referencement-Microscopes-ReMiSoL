@@ -35,7 +35,7 @@
             global $pdo;
 
             $sql = "
-                select lab_name as name, code, website, school, address, zipCode, city, country
+                select lab_name as name, code, website, school, street, zipCode, city, country
                 from lab
                 join address as a
                 on address_id = a.id
@@ -45,7 +45,7 @@
             $sth = $pdo->query($sql);
             $labInfos = $sth->fetch(PDO::FETCH_NAMED);
 
-            $address = new Address($labInfos["school"], $labInfos["address"], $labInfos["zipCode"], $labInfos["city"], $labInfos["country"]);
+            $address = new Address($labInfos["school"], $labInfos["street"], $labInfos["zipCode"], $labInfos["city"], $labInfos["country"]);
             return new Lab($labInfos["name"], $labInfos["code"], $labInfos["website"], $address);
         }
 
