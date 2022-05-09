@@ -1,10 +1,11 @@
 <?php
     include_once(__DIR__ . "/AbstractEntity.php");
+    include_once(__DIR__ . "/Address.php");
     
     class Lab extends AbstractEntity {
         private string $code;
 
-        function __construct(private string $name, string $code, private string $address, private string $website) {
+        function __construct(private string $name, string $code, private string $website, private Address $address) {
             $this->setCode($code);
         }
 
@@ -45,18 +46,6 @@
             return $this;
         }
 
-        public function getAddress()
-        {
-            return $this->address;
-        }
-
-        public function setAddress(string $address)
-        {
-            $this->address = $address;
-
-            return $this;
-        }
-
         public function getWebsite()
         {
                 return $this->website;
@@ -67,5 +56,17 @@
                 $this->website = $website;
 
                 return $this;
+        }
+
+        public function getAddress() : Address
+        {
+            return $this->address;
+        }
+
+        public function setAddress(Address $address)
+        {
+            $this->address = $address;
+
+            return $this;
         }
     }

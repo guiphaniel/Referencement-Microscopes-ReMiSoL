@@ -40,14 +40,10 @@
         }
     }
 
-    try {
         // Convert form values into objects...
         $labCode = $labInfos["type"] . $labInfos["code"];
-        $address = "";
-        if(!empty($labAddress["school"]))
-            $address .= $labAddress["school"] . "\n";
-        $address .= $labAddress["street"] . "\n" . $labAddress["zipCode"] . " " . $labAddress["city"] . "\n" . $labAddress["country"];
-        $lab = new Lab($labInfos["name"], $labCode, $address, $labInfos["website"]);
+        $address = new Address($labAddress["school"], $labAddress["street"], $labAddress["zipCode"], $labAddress["city"], $labAddress["country"]);
+        $lab = new Lab($labInfos["name"], $labCode, $labInfos["website"], $address);
     
         $contacts = [];
         foreach($_POST["contacts"] as $contact) {
@@ -69,7 +65,7 @@
         }
             
         // ...and save the group into the db
-        MicroscopesGroupService::getInstance()->add($group);
+        MicroscopesGroupService::getInstance()->save($group);
 
         //save the micros' imgs
         $nbImgs = count($_FILES['imgs']['name']);
@@ -88,9 +84,6 @@
                 __DIR__ . '/../public/img/micros/' . $microId . '.' . $fileType
             );  
         }
-    } catch (\Throwable $th) {
-        $_SESSION["microForm"]["errorMsg"]=$th->getMessage();
-        redirect("/form.php");
-    }
+
     
     redirect("/index.php");

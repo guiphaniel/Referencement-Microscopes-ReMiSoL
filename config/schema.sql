@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS "microscope_keyword";
 DROP TABLE IF EXISTS "keyword";
 DROP TABLE IF EXISTS "microscope";
 DROP TABLE IF EXISTS "microscopes_group";
+DROP TABLE IF EXISTS "address";
 DROP TABLE IF EXISTS "lab";
 DROP TABLE IF EXISTS "controller";
 DROP TABLE IF EXISTS "model";
@@ -72,8 +73,18 @@ CREATE TABLE "lab" (
 	"id"	INTEGER,
 	"lab_name"	TEXT,
 	"code"	TEXT UNIQUE,
-	"address"	TEXT,
 	"website"	TEXT,
+	"address_id"	INTEGER,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("address_id") REFERENCES "address"("id")
+);
+CREATE TABLE "address" (
+	"id"	INTEGER,
+	"school"	TEXT,
+	"address"	TEXT,
+	"zipCode"	TEXT,
+	"city"	TEXT,
+	"country"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "microscopes_group" (

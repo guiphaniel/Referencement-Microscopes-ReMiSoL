@@ -1,6 +1,7 @@
 <?php
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/Lab.php");
+    include_once(__DIR__ . "/../services/AddressService.php");
 
     class LabService {
         static private $instance;
@@ -34,15 +35,18 @@
             global $pdo;
 
             $sql = "
-                select lab_name as name, code, address, website
+                select lab_name as name, code, website, school, address, zipCode, city, country
                 from lab
-                where id = $id
+                join address as a
+                on address_id = a.id
+                where lab.id = $id
             ";
 
             $sth = $pdo->query($sql);
             $labInfos = $sth->fetch(PDO::FETCH_NAMED);
 
-            return new Lab($labInfos["name"], $labInfos["code"], $labInfos["address"], $labInfos["website"]);
+            $address = new Address($labInfos["school"], $labInfos["address"], $labInfos["zipCode"], $labInfos["city"], $labInfos["country"]);
+            return new Lab($labInfos["name"], $labInfos["code"], $labInfos["website"], $address);
         }
 
         /** Saves the lab if it doesn't exist yet, and returns its id */
@@ -53,15 +57,14 @@
             
             // if the lab isn't already in the db, add it
             if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO lab VALUES (NULL, :name, :code, :address, :website)");
+                $sth = $pdo->prepare("INSERT INTO lab VALUES (NULL, :name, :code, :website, :addressId)");
 
                 $sth->execute([
                     "name" => $lab->getName(),
                     "code" => $lab->getCode(),
-                    "address" => $lab->getAddress(),
-                    "website" => $lab->getWebsite()
+                    "website" => $lab->getWebsite(),
+                    "addressId" => AddressService::getInstance()->save($lab->getAddress())
                 ]);
-
                 $id = $pdo->lastInsertId();
             }          
 
