@@ -40,6 +40,7 @@
                     <?php foreach ($labTypes as $labType) : ?>
                         <option value=<?=$labType;?>><?=$labType?></option>
                     <?php endforeach; ?>
+                    </select>
                     <input id="lab-code" type="number" name="lab[code]" min="10" max="9999" required>
                     <label for="lab-address-school">Université / École</label>
                     <input id="lab-address-school" type="text" name="lab[address][school]">
