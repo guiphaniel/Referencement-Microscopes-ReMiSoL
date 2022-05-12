@@ -2,15 +2,13 @@
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
     include_once(__DIR__ . "/../entities/User.php");
-    include_once(__DIR__ . "/MicroscopeService.php");
-    include_once(__DIR__ . "/LabService.php");
-    include_once(__DIR__ . "/ContactService.php");
-    include_once(__DIR__ . "/UserService.php");
+    
+    spl_autoload_register(function ($class_name) {
+        include $class_name . '.php';
+    });
 
-    class MicroscopesGroupService {
+    class MicroscopesGroupService extends AbstractService {
         static private $instance;
-
-        private function __construct() {}
 
         static function getInstance() : MicroscopesGroupService {
             if(!isset(self::$instance))
@@ -66,7 +64,7 @@
             global $pdo;
 
             $groupId = $group->getId();
-            $sth = $pdo->query("SELECT u.id FROM own join user as u on u.id = own.user_id where microscopes_group_id = $groupId");
+            $sth = $pdo->query("SELECT user_id FROM microscopes_group WHERE id = $groupId");
 
             $row = $sth->fetch();
 

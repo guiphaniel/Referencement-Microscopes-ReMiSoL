@@ -2,17 +2,8 @@
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/Address.php");
 
-    class AddressService {
+    class AddressService extends AbstractService {
         static private $instance;
-
-        private function __construct() {}
-
-        static function getInstance() : AddressService{
-            if(!isset(self::$instance))
-                self::$instance = new AddressService();
-           
-            return self::$instance;
-        }
 
         function getAddressId(Address $address) {
             global $pdo;

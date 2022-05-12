@@ -1,14 +1,13 @@
 <?php
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
-    include_once(__DIR__ . "/ModelService.php");
-    include_once(__DIR__ . "/ControllerService.php");
-    include_once(__DIR__ . "/KeywordService.php");
+    
+    spl_autoload_register(function ($class_name) {
+        include $class_name . '.php';
+    });
 
-    class MicroscopeService {
+    class MicroscopeService extends AbstractService {
         static private $instance;
-
-        private function __construct() {}
 
         static function getInstance() : MicroscopeService{
             if(!isset(self::$instance))

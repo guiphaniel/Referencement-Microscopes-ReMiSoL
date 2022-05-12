@@ -1,12 +1,13 @@
 <?php
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/Lab.php");
-    include_once(__DIR__ . "/../services/AddressService.php");
+    
+    spl_autoload_register(function ($class_name) {
+        include $class_name . '.php';
+    });
 
-    class LabService {
+    class LabService extends AbstractService {
         static private $instance;
-
-        private function __construct() {}
 
         static function getInstance() : LabService{
             if(!isset(self::$instance))

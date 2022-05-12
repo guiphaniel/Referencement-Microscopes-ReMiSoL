@@ -65,8 +65,14 @@
             $group->addMicroscope(new Microscope($mod, $ctr, $micro["rate"]??null, $micro["desc"], $micro["type"], $micro["access"], $micro["keywords"]??[]));
         }
             
-        // ...and save the group into the db
-        MicroscopesGroupService::getInstance()->save($group);
+        // ...and save/update the group into the db
+        if(isset($_POST["id"])) {
+            $microscopesGroupService = MicroscopesGroupService::getInstance();
+            $oldGroup = $microscopesGroupService->findMicroscopesGroupById($_POST["id"]);
+            $microscopesGroupService->update($oldGroup, $group);
+        }
+        else
+            MicroscopesGroupService::getInstance()->save($group);
 
         //save the micros' imgs
         $nbImgs = count($_FILES['imgs']['name']);
@@ -116,7 +122,13 @@
         }
     } catch (\Throwable $th) {
         $_SESSION["form"]["errorMsg"]=$th->getMessage();
-        redirect("/form.php");
+        
+        if(isset($_POST["id"])) {
+            $url = "/edit_micros_group.php?id=" . $_POST["id"];
+        } else
+            $url = "/form.php";
+        throw $th;
+        redirect($url);
     }
     
     redirect("/index.php");

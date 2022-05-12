@@ -2,10 +2,12 @@
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/Contact.php");
 
-    class ContactService {
-        static private $instance;
+    spl_autoload_register(function ($class_name) {
+        include $class_name . '.php';
+    });
 
-        private function __construct() {}
+    class ContactService extends AbstractService {
+        static private $instance;
 
         static function getInstance() : ContactService {
             if(!isset(self::$instance))

@@ -1,10 +1,12 @@
 <?php
     include_once(__DIR__ . "/../start_db.php");
 
-    class KeywordService {
-        static private $instance;
+    spl_autoload_register(function ($class_name) {
+        include $class_name . '.php';
+    });
 
-        private function __construct() {}
+    class KeywordService extends AbstractService {
+        static private $instance;
 
         static function getInstance() : KeywordService{
             if(!isset(self::$instance))
