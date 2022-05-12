@@ -65,8 +65,8 @@ CREATE TABLE "keyword" (
 CREATE TABLE "microscope_keyword" (
 	"microscope_id"	INTEGER,
 	"keyword_id"	INTEGER,
-	FOREIGN KEY("keyword_id") REFERENCES "keyword"("id"),
-	FOREIGN KEY("microscope_id") REFERENCES "microscope"("id"),
+	FOREIGN KEY("keyword_id") REFERENCES "keyword"("id") ON DELETE CASCADE,
+	FOREIGN KEY("microscope_id") REFERENCES "microscope"("id") ON DELETE CASCADE,
 	PRIMARY KEY("microscope_id","keyword_id")
 );
 CREATE TABLE "address" (
@@ -113,8 +113,8 @@ CREATE TABLE "contact" (
 CREATE TABLE "manage" (
 	"contact_id"	INTEGER,
 	"microscopes_group_id"	INTEGER,
-	FOREIGN KEY("contact_id") REFERENCES "contact"("id"),
-	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id"),
+	FOREIGN KEY("contact_id") REFERENCES "contact"("id") ON DELETE CASCADE,
+	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id") ON DELETE CASCADE,
 	PRIMARY KEY("contact_id","microscopes_group_id")
 );
 CREATE TABLE "user" (
