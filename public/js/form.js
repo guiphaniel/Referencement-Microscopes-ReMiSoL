@@ -2,20 +2,40 @@
 /* fill coherent microscope infomations dataLists on input */
 
 //init input listeners for microscopes inputs
-{
-    // add input listeners on micro infos inputs to fill datalists
-    let compagnyInput = document.getElementById("micro-compagny-0");
-    compagnyInput.addEventListener("input", onCompagnyInput);
+document.addEventListener("input", onInput);
 
-    let brandInput = document.getElementById("micro-brand-0");
-    brandInput.addEventListener("input", onBrandInput);
+function onInput(event) {
+    let input = event.target;
+
+    if(input.className == "micro-compagy")
+        onCompagnyInput(input);
+    else if(input.className == "micro-brand")
+        onBrandInput(input);
 }
 
-async function onCompagnyInput() {
-    const fieldsetId = this.id.split('-')[2];
+//init listeners for bt clicks
+document.addEventListener("click", onClick);
+
+function onClick(event) {
+    let bt = event.target;
+
+    if(bt.className == "rm-bt") {
+        bt.parentElement.remove()
+        if(bt.dataset.type == "ol") {
+            // update other fields' legend index
+            let cpt = 1;
+            for (const field of document.getElementsByClassName(bt.id.split("-")[1] + "-field")) {
+                let legend = field.querySelector("legend");
+                legend.textContent =legend.textContent.substring(0, legend.textContent.lastIndexOf('°') + 1) + cpt++;
+            }
+        }
+    }
+}
+
+async function onCompagnyInput(input) {
+    const fieldsetId = input.id.split('-')[2];
     
-    // check homemade case
-    if(this.value == "Homemade") {
+    if(input.value == "Homemade") {
         let brandInput = document.getElementById(`micro-brand-` + fieldsetId);
         let modelInput = document.getElementById(`micro-model-` + fieldsetId);
 
@@ -27,30 +47,27 @@ async function onCompagnyInput() {
         let url = "/api/v1/listControllers.php";
         let controllerDatalist = document.getElementById(`micro-controllers-` + fieldsetId);
         fillDatalist(controllerDatalist, url).then(() => document.getElementById(`micro-controller-` + fieldsetId).disabled = false);
-
-        return;
-    }
-
-    // check regular case
-    if(!isInputDatalistValid(this, document.getElementById("micro-compagnies"))) {
-        document.getElementById(`micro-brand-` + fieldsetId).disabled = true;
-        document.getElementById(`micro-model-` + fieldsetId).disabled = true;
-        document.getElementById(`micro-controller-` + fieldsetId).disabled = true;
-
-        return;
-    }
+    } else {
+        if(!isInputDatalistValid(input, document.getElementById("micro-compagnies"))) {
+            document.getElementById(`micro-brand-` + fieldsetId).disabled = true;
+            document.getElementById(`micro-model-` + fieldsetId).disabled = true;
+            document.getElementById(`micro-controller-` + fieldsetId).disabled = true;
     
-    const url = `/api/v1/listBrands.php?compagny=${this.value}`;
+            return;
+        }
+    }
+
+    const url = `/api/v1/listBrands.php?compagny=${input.value}`;
     
     let brandDatalist = document.getElementById(`micro-brands-` + fieldsetId);
 
     fillDatalist(brandDatalist, url).then(() => document.getElementById(`micro-brand-` + fieldsetId).disabled = false);
 }
 
-async function onBrandInput() {
-    const fieldsetId = this.id.split('-')[2];
+async function onBrandInput(input) {
+    const fieldsetId = input.id.split('-')[2];
 
-    if(!isInputDatalistValid(this, document.getElementById("micro-brands-" + fieldsetId))) {
+    if(!isInputDatalistValid(input, document.getElementById("micro-brands-" + fieldsetId))) {
         document.getElementById(`micro-model-` + fieldsetId).disabled = true;
         document.getElementById(`micro-controller-` + fieldsetId).disabled = true;
 
@@ -59,11 +76,11 @@ async function onBrandInput() {
 
     let compagnyInput = document.getElementById("micro-compagny-" + fieldsetId);
 
-	const modelsUrl = `/api/v1/listModels.php?compagny=${compagnyInput.value}&brand=${this.value}`;
+	const modelsUrl = `/api/v1/listModels.php?compagny=${compagnyInput.value}&brand=${input.value}`;
     let modelDatalist = document.getElementById(`micro-models-` + fieldsetId);
     fillDatalist(modelDatalist, modelsUrl).then(() => document.getElementById(`micro-model-` + fieldsetId).disabled = false);
 
-    const controllersUrl = `/api/v1/listControllers.php?compagny=${compagnyInput.value}&brand=${this.value}`
+    const controllersUrl = `/api/v1/listControllers.php?compagny=${compagnyInput.value}&brand=${input.value}`
     let controllerDatalist = document.getElementById(`micro-controllers-` + fieldsetId);
     fillDatalist(controllerDatalist, controllersUrl).then(() => document.getElementById(`micro-controller-` + fieldsetId).disabled = false);
 }
@@ -86,14 +103,15 @@ function isInputDatalistValid(input, datalist) {
 
 /* ADD FIELDSETS */
 
-function addField(fieldType, fieldId, innerHTML) {
+function addField(fieldType, fieldId, firstField) {
+    let firstFieldId = firstField.id.split('-')[2];
     let fieldsWrapper = document.getElementById(fieldType + "s");
 
     // create the form fieldset
     let newField = document.createElement("fieldset");
     newField.id = fieldType + "-field-" + fieldId;
     newField.className = fieldType + "-field";
-    newField.innerHTML = innerHTML.replaceAll("[0]", `[${fieldId}]`).replaceAll("-0", `-${fieldId}`);
+    newField.innerHTML = firstField.innerHTML.replaceAll(`[${firstFieldId}]`, `[${fieldId}]`).replaceAll(`-${firstFieldId}`, `-${fieldId}`);
     // update legend's index
     let legend = newField.querySelector("legend");
     legend.textContent = legend.textContent.substring(0, legend.textContent.lastIndexOf('°') + 1) + (document.getElementsByClassName(fieldType + "-field").length + 1);
@@ -105,17 +123,9 @@ function addField(fieldType, fieldId, innerHTML) {
     // append the remove button to the fieldset
     let rmButton = document.createElement("div")
     rmButton.className = "rm-bt";
+    rmButton.dataset.type = "ol"; // ordered list, so other elements get their index updated
     rmButton.id = "rm-" + fieldType + "-" + fieldId;
-    rmButton.addEventListener('click', function(){
-        this.parentElement.remove()
 
-        // update other fields' legend index
-        let cpt = 1;
-        for (const field of document.getElementsByClassName(fieldType + "-field")) {
-            let legend = field.querySelector("legend");
-            legend.textContent =legend.textContent.substring(0, legend.textContent.lastIndexOf('°') + 1) + cpt++;
-        }
-    });
     newField.append(rmButton);
 
     return newField;
@@ -124,59 +134,78 @@ function addField(fieldType, fieldId, innerHTML) {
 
 /* add new contact fieldset on add button click */
 
-let nextContactFieldId = 1;
+let firstContactField = document.getElementsByClassName("contact-field")[0];
 
-// save original fieldset innerHTML
-let originalContactFieldHTML = document.getElementById("contact-field-0").innerHTML;
+let nextContactFieldId = parseInt(firstContactField.id.split('-')[2]) + 1;
 
 document.getElementById("add-contact").addEventListener('click', function(){
-    addField("contact", nextContactFieldId++, originalContactFieldHTML);
+    let newField = addField("contact", nextContactFieldId++, firstContactField);
+    // reset the inputs
+    let inputs = newField.getElementsByTagName("input");
+    for(input of inputs) {
+        input.value = "";
+    };
+    let phoneCodeSelect = newField.getElementsByTagName("select")[0];
+    phoneCodeSelect.value = "+33";
 });
 
 
 /* add new microscope fieldset on add button click */
 
-let nextMicroscopeFieldId = 1;
+let firstMicroscopeField = document.getElementsByClassName("micro-field")[0];
 
-// save original fieldset innerHTML
-let originalMicroscopeFieldHTML = document.getElementById("micro-field-0").innerHTML;
+let nextMicroscopeFieldId = parseInt(firstMicroscopeField.id.split('-')[2]) + 1;
 
 document.getElementById("add-micro").addEventListener('click', function(){
     let id = nextMicroscopeFieldId;
 
-    microField = addField("micro", nextMicroscopeFieldId++, originalMicroscopeFieldHTML);
+    let newField = addField("micro", nextMicroscopeFieldId++, firstMicroscopeField);
 
-    // add input listeners on micro infos inputs to fill datalists
-    document.getElementById("micro-compagny-" + id).addEventListener("input", onCompagnyInput);
-    document.getElementById("micro-brand-" + id).addEventListener("input", onBrandInput);
+    resetField(newField);
 
-    // add input listeners on keywords input
-    initKeywordCatInput(microField)
+    let tags = newField.getElementsByClassName("tag");
+    while (tags.length > 0)
+        tags[0].remove()
+
+    document.getElementById(`micro-brand-` + id).disabled = true;
+    document.getElementById(`micro-model-` + id).disabled = true;
+    document.getElementById(`micro-controller-` + id).disabled = true;
 });
 
+function resetField(field) {
+    let inputs = field.getElementsByTagName("input");
+    for (input of inputs) {
+        input.value = null;
+    };
+
+    let selects = field.getElementsByTagName("select");
+    for (select of selects) {
+        select.selectedIndex = 0;
+    };
+
+    let textareas = field.getElementsByTagName("textarea");
+    for (textarea of textareas) {
+        textarea.innerText = null;
+    };
+
+    let images = field.getElementsByClassName("micro-snapshot");
+    while(images.length > 0)
+        images[0].remove();
+}
 
 /* add multiple keywords */
-//init first default fieldset
-{
-    let microField = document.getElementById("micro-field-0");
-    initKeywordCatInput(microField);
-}
+document.addEventListener('input', function(event) {
+    let input = event.target;
+    if(input.className != "cat-input")
+        return;
 
-/** init input listeners for keywords inputs */
-function initKeywordCatInput(microField) {
-    let catInputs = microField.getElementsByClassName("cat-input");
+    let cat = input.id.split('-')[1]; // retrieve the cat of the input
 
-    for (const catInput of catInputs) {
-        catInput.addEventListener('input', function() {
-            let id = this.id.split('-')[1]; // retrieve the id of the input
+    if(!isInputDatalistValid(input, document.getElementById("cats-" + cat)))
+        return;
 
-            if(!isInputDatalistValid(this, document.getElementById("cats-" + id)))
-                return;
-
-            addKeyword(this.value, this)
-        });
-    }
-}
+    addKeyword(input.value, input)
+});
 
 function addKeyword(keyword, catInput) {
     // retrieve hidden input
@@ -200,9 +229,8 @@ function addKeyword(keyword, catInput) {
 
     const rmBt = document.createElement("div");
     rmBt.className = "rm-bt"
-    rmBt.addEventListener('click', function() {        
-        this.parentElement.remove();
-    });
+    rmBt.dataset.type = "ul";
+
     tag.append(rmBt);
 
     tag.append(keyword);
@@ -227,9 +255,14 @@ document.addEventListener("change", function(event) {
     if (imgInput.type != "file")
         return;
 
-    // check if the input isn't empty
-    if (imgInput.files.length == 0)
+    // if the input is empty, remove the last displayed snapshot
+    if (imgInput.files.length == 0) {
+        let snapshot = imgInput.nextElementSibling;
+        if(snapshot.className == "micro-snapshot")
+            snapshot.remove();
         return;
+    }
+        
 
     // check if the file is an img
     let imageType = /^image\//;
@@ -240,10 +273,8 @@ document.addEventListener("change", function(event) {
 
     // display the snapshot
     // if a previous snapshot already existed, replace its url, else, create a new snapshot
-    let snapshot;
-    if(imgInput.nextSibling.className == "micro-snapshot") 
-        snapshot = imgInput.nextSibling;
-    else {
+    let snapshot = imgInput.nextElementSibling;
+    if(snapshot.className != "micro-snapshot") {// check the nextElementSibling was indeed the snapshot (meaning it already existed). If not, create it.
         snapshot = document.createElement("img");
         snapshot.className = "micro-snapshot";
     }
