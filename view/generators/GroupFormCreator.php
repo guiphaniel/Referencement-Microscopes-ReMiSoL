@@ -14,8 +14,8 @@
             parent::__construct("processing/group_form_processing.php", "post", "multipart/form-data");
         }
 
-        //TODO: mettre un input avec l'id du group en hidden, et verifier s'il existe lors du processing, pour savoir s'il faut update ou insert
         public function createBody() {
+            $this->createMicroGroupIdHiddenInput($this->group?->getId());
             $this->createLabField($this->group?->getLab());
             ?>
             <fieldset id="contacts">
@@ -107,7 +107,16 @@
         return "";
     }
 
-    public function createLabField($lab) {
+    private function createMicroGroupIdHiddenInput($groupId) {
+        if(!isset($groupId)) 
+            return;
+
+        ?>
+            <input type="hidden" name="id" value="<?=$groupId?>">
+        <?php
+    }
+
+    private function createLabField($lab) {
         ?>
             <fieldset>
                 <legend>Laboratoire / service</legend>
@@ -142,7 +151,7 @@
         <?php
     }
 
-    public function createContactField($fieldId, $contact, bool $removable) {
+    private function createContactField($fieldId, $contact, bool $removable) {
         $id = $contact?->getId()??0;
         ?>
             <fieldset id="contact-field-<?=$id?>" class="contact-field">
@@ -172,7 +181,7 @@
         <?php
     }
 
-    public function createCoorField($coor) {
+    private function createCoorField($coor) {
         ?>
             <fieldset id="coor">
                 <legend>Coordonnées</legend>
@@ -184,7 +193,7 @@
         <?php
     }
 
-    public function createMicroField($fieldId, $micro, bool $removable) {
+    private function createMicroField($fieldId, $micro, bool $removable) {
         $id = $micro?->getId()??0;
 
         $model = $micro?->getModel();
