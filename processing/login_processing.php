@@ -26,7 +26,7 @@
             throw new Exception("Informations erronées");
 
     } catch (\Throwable $th) {
-        $_SESSION["login"]["errorMsg"]=$th->getMessage();
+        $_SESSION["form"]["errorMsg"]=$th->getMessage();
         redirect("/login.php");
     }
     

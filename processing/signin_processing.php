@@ -36,7 +36,7 @@
 
         mail($user->getEmail(), "Activation de votre compte", "Bonjour,\n\nAfin d'activer votre compte, veuillez suivre le lien suivant : https://guilhem.davidalbertini.fr/processing/unlock_user.php?id=$id&token=$token\n\nA bientôt.\n\n\n Ce mail est un mail automatique, merci de ne pas y répondre.", $headers);
     } catch (\Throwable $th) {
-        $_SESSION["signin"]["errorMsg"]=$th->getMessage();
+        $_SESSION["form"]["errorMsg"]=$th->getMessage();
         header('location: /signin.php');
         exit();
     }

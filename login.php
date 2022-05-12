@@ -19,9 +19,9 @@
         $header->create();
     ?>
     <main>
-        <?php if(isset($_SESSION["login"]["errorMsg"])) : ?>
-            <p id="error-msg"><?= $_SESSION["login"]["errorMsg"] ?></p>
-        <?php endif; unset($_SESSION["login"]["errorMsg"]); ?>
+        <?php if(isset($_SESSION["form"]["errorMsg"])) : ?>
+            <p id="error-msg"><?= $_SESSION["form"]["errorMsg"] ?></p>
+        <?php endif; unset($_SESSION["form"]["errorMsg"]); ?>
         <form action="processing/login_processing.php" method="post">
             <label for="email">Courriel</label>
             <input id="email" type="email" autocomplete="email" name="email" required>

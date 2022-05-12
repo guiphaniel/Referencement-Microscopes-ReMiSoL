@@ -22,9 +22,9 @@
         $header->create();
     ?>
     <main>
-        <?php if(isset($_SESSION["signin"]["errorMsg"])) : ?>
-            <p id="error-msg"><?= $_SESSION["signin"]["errorMsg"] ?></p>
-        <?php endif; unset($_SESSION["signin"]["errorMsg"]); ?>
+        <?php if(isset($_SESSION["form"]["errorMsg"])) : ?>
+            <p id="error-msg"><?= $_SESSION["form"]["errorMsg"] ?></p>
+        <?php endif; unset($_SESSION["form"]["errorMsg"]); ?>
         <form action="processing/signin_processing.php" method="post">
             <label for="firstname">Prénom</label>
             <input id="firstname" type="text" autocomplete="given-name" name="firstname" required>
