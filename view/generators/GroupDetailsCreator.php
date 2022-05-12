@@ -53,7 +53,10 @@
                             "LABO" => "laboratoire",
                             "PLAT" => "plateforme"
                         };
-                        $name = implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]);
+                        if($compagny->getName() == "Homemade")
+                            $name = "Homemade - " . $ctr->getName();
+                        else
+                            $name = implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]);
                         ?>
                         <section>
                             <h3><?= $name . " (" . $type . ")"; ?></h3>

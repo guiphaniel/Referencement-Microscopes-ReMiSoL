@@ -179,8 +179,10 @@ function getCustomPopupHTML(group) {
 		brand = model.brand;
 		compagny = brand.compagny;
 
-		microName = [compagny.name, brand.name, model.name, ctr.name].join(" - ");
-		microType = ""
+		if(compagny.name == "Homemade")
+			microName = "Homemade - " + ctr.name;
+		else
+			microName = [compagny.name, brand.name, model.name, ctr.name].join(" - ");
 
 		if (micro.type == "LABO")
 			microType = "laboratoire"
