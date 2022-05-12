@@ -10,7 +10,7 @@
             $this->setLon($lon);
         }
 
-        public function getLat() { return $this->lat; }
+        public function getLat() { return number_format($this->lat, 5); }
 
         public function setLat($lat) {
             if ($lat < 41 || $lat > 52)
@@ -21,7 +21,7 @@
             return $this;
         }   
 
-        public function getLon() { return $this->lon; }
+        public function getLon() { return number_format($this->lon, 5); }
 
         public function setLon($lon)
         {
