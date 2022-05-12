@@ -11,7 +11,7 @@
             if(isset($_SESSION["form"]["errorMsg"])) : ?>
                 <p id="error-msg"><?= $_SESSION["form"]["errorMsg"] ?></p>
             <?php endif; unset($_SESSION["form"]["errorMsg"]); ?>
-            <form action=<?=$this->action?> method=<?=$this->method?> <?php if(!empty($this->enctype)) echo "method=$this->enctype"; ?>>
+            <form action=<?=$this->action?> method=<?=$this->method?> <?php if(!empty($this->enctype)) echo "enctype=$this->enctype"; ?>>
             <?php
         }
 
