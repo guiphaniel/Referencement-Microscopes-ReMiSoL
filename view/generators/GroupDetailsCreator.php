@@ -29,7 +29,7 @@
                         <p>Coordonnées : <?= $this->group->getCoor()->getLat() . ", " . $this->group->getCoor()->getLon(); ?></p>
                     <?php endif; ?>
                     <p><?= nl2br($this->group->getLab()->getAddress()->toString()); ?></p>
-                    <p>Site internet : <a href="<?= $this->group->getLab()->getWebsite(); ?>"><?= $this->group->getLab()->getWebsite(); ?></a></p>
+                    <p>Site internet : <a href="<?= $this->group->getLab()->getWebsite(); ?>" target="_blank"><?= $this->group->getLab()->getWebsite(); ?></a></p>
                 </section>
                 <section>
                     <h2>Référent·e·s</h2>
@@ -75,7 +75,7 @@
                             <?php endif; ?>
                             <p>Description : <?= $micro->getDesc(); ?></p>
                             <?php if(!empty($micro->getRate())) : ?>
-                                <p>Tarification : <a href="<?= $micro->getRate(); ?>"><?= $micro->getRate(); ?></a></p>
+                                <p>Tarification : <a href="<?= $micro->getRate(); ?>" target="_blank"><?= $micro->getRate(); ?></a></p>
                             <?php endif; ?>
                             <?php 
                             $access = $micro->getAccess();
