@@ -76,6 +76,11 @@
         for ($i=0; $i < $nbImgs; $i++) { 
             $microId = $group->getMicroscopes()[$i]->getId();
             $imgs = $_FILES["imgs"];
+
+            // if no image has been sent, continue
+            if($imgs['size'][$i] == 0)
+                continue;
+
             // retrieve the file extension
             $fileType = $imgs['type'][$i];
             $fileType = substr($fileType, strrpos($fileType, "/") + 1);
@@ -93,7 +98,7 @@
                     $image = imagecreatefromwebp($tmpName);
                     break;
                 default:
-                    throw("Le format d'image fourni n'est pas supporté");
+                    throw new Exception("Le format d'image fourni n'est pas supporté. Votre fiche a été soumise sans image.");
             }
 
             $image = resizeImageProportionnaly($image, 1280, 720);
