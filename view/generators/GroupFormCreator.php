@@ -17,17 +17,23 @@
         //TODO: mettre un input avec l'id du group en hidden, et verifier s'il existe lors du processing, pour savoir s'il faut update ou insert
         public function createBody() {
             $this->createLabField($this->group?->getLab());
+            ?>
+            <fieldset id="contacts">
+                <legend>Référent·e·s</legend>
+                <?php
+                //create the first, not removable contact field
+                $this->createContactField(0, $this->group?->getContacts()[0], false);
+                //create all others, removable contact fields
+                foreach ($this->group?->getContacts()??[] as $key => $contact) {
+                    if($key == 0)
+                        continue;
 
-            //create the first, not removable contact field
-            $this->createContactField(0, $this->group?->getContacts()[0], false);
-            //create all others, removable contact fields
-            foreach ($this->group?->getContacts()??[] as $key => $contact) {
-                if($key == 0)
-                    continue;
-
-                $this->createContactField($key, $contact, true);
-            }
-            
+                    $this->createContactField($key, $contact, true);
+                } 
+                ?>
+                <div id="add-contact" class="add-bt"></div>
+            </fieldset>
+            <?php
             $this->createCoorField($this->group?->getCoor());
             ?>
 
@@ -139,33 +145,29 @@
     public function createContactField($fieldId, $contact, bool $removable) {
         $id = $contact?->getId()??0;
         ?>
-        <fieldset id="contacts">
-                <legend>Référent·e·s</legend>
-                <fieldset id="contact-field-<?=$id?>" class="contact-field">
-                    <legend>Référent·e n°<?=$fieldId + 1?></legend>
-                    <address>
-                        <label for="contact-firstname-<?=$id?>">Prénom</label>
-                        <input id="contact-firstname-<?=$id?>" type="text" name="contacts[<?=$id?>][firstname]" autocomplete="given-name" <?=$this->valueOf($contact?->getFirstname())?> required>
-                        <label for="contact-lastname-<?=$id?>">Nom</label>
-                        <input id="contact-lastname-<?=$id?>" type="text" name="contacts[<?=$id?>][lastname]" autocomplete="family-name" <?=$this->valueOf($contact?->getLastname())?> required>
-                        <label for="contact-role-<?=$id?>">Titre</label>
-                        <input id="contact-role-<?=$id?>" type="text" name="contacts[<?=$id?>][role]" autocomplete="organization-title" <?=$this->valueOf($contact?->getRole())?> required>
-                        <label for="contact-email-<?=$id?>">Email</label>
-                        <input id="contact-email-<?=$id?>" type="text" name="contacts[<?=$id?>][email]" autocomplete="email" <?=$this->valueOf($contact?->getEmail())?> required>
-                        <label for="contact-phone-<?=$id?>">Téléphone</label>
-                        <select name="contacts[<?=$id?>][phoneCode]" id="contact-phone-code-<?=$id?>" autocomplete="tel-country-code">
-                        <?php foreach ($this->phoneCodes as $codeCountry) : 
-                            $code = substr($codeCountry, 0, strpos($codeCountry, ' '));?>
-                            <option value="<?=$code;?>"<?=$this->selectPhoneCode($contact, $code)?>><?=$codeCountry?></option>
-                        <?php endforeach; ?>
-                        </select>
-                        <input id="contact-phone-<?=$id?>" type="text" name="contacts[<?=$id?>][phoneNum]" autocomplete="tel-national" <?=$this->valueOf($contact?->getPhoneNum())?> required>
-                    </address>
-                    <?php if($removable) : ?>
-                        <div id="rm-contact-<?=$id?>" class="rm-bt" data-type="ol"></div>
-                    <?php endif; ?>
-                </fieldset>
-                <div id="add-contact" class="add-bt"></div>
+            <fieldset id="contact-field-<?=$id?>" class="contact-field">
+                <legend>Référent·e n°<?=$fieldId + 1?></legend>
+                <address>
+                    <label for="contact-firstname-<?=$id?>">Prénom</label>
+                    <input id="contact-firstname-<?=$id?>" type="text" name="contacts[<?=$id?>][firstname]" autocomplete="given-name" <?=$this->valueOf($contact?->getFirstname())?> required>
+                    <label for="contact-lastname-<?=$id?>">Nom</label>
+                    <input id="contact-lastname-<?=$id?>" type="text" name="contacts[<?=$id?>][lastname]" autocomplete="family-name" <?=$this->valueOf($contact?->getLastname())?> required>
+                    <label for="contact-role-<?=$id?>">Titre</label>
+                    <input id="contact-role-<?=$id?>" type="text" name="contacts[<?=$id?>][role]" autocomplete="organization-title" <?=$this->valueOf($contact?->getRole())?> required>
+                    <label for="contact-email-<?=$id?>">Email</label>
+                    <input id="contact-email-<?=$id?>" type="text" name="contacts[<?=$id?>][email]" autocomplete="email" <?=$this->valueOf($contact?->getEmail())?> required>
+                    <label for="contact-phone-<?=$id?>">Téléphone</label>
+                    <select name="contacts[<?=$id?>][phoneCode]" id="contact-phone-code-<?=$id?>" autocomplete="tel-country-code">
+                    <?php foreach ($this->phoneCodes as $codeCountry) : 
+                        $code = substr($codeCountry, 0, strpos($codeCountry, ' '));?>
+                        <option value="<?=$code;?>"<?=$this->selectPhoneCode($contact, $code)?>><?=$codeCountry?></option>
+                    <?php endforeach; ?>
+                    </select>
+                    <input id="contact-phone-<?=$id?>" type="text" name="contacts[<?=$id?>][phoneNum]" autocomplete="tel-national" <?=$this->valueOf($contact?->getPhoneNum())?> required>
+                </address>
+                <?php if($removable) : ?>
+                    <div id="rm-contact-<?=$id?>" class="rm-bt" data-type="ol"></div>
+                <?php endif; ?>
             </fieldset>
         <?php
     }
