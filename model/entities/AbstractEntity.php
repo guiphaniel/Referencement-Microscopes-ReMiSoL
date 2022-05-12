@@ -1,7 +1,7 @@
 <?php
     abstract class AbstractEntity implements JsonSerializable
     {
-        private int $id;
+        protected int $id;
 
         function __construct()
         {
