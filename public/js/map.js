@@ -3,7 +3,7 @@ let path = window.location.pathname;
 let page = path.split("/").pop();
 
 // initialize Leaflet
-var map = L.map('map').setView([46.606111, 1.875278], 5);
+let map = L.map('map').setView([46.606111, 1.875278], 5);
 
 // add the OpenStreetMap tile and display the license attribution
 L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
