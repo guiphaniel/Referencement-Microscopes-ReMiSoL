@@ -2,7 +2,9 @@
     include_once("include/config.php");
     include_once("view/generators/HeaderCreator.php");
     include_once("view/generators/UserFormCreator.php");
+    include_once("view/generators/GroupDetailsCreator.php");
     include_once("model/services/UserService.php");
+    include_once("model/services/MicroscopesGroupService.php");
 
     if(!isUserSessionValid() || !$_SESSION["user"]["admin"]) 
         redirect("/index.php");
@@ -24,10 +26,16 @@
         <h2>Utilisateurs</h2>
         <div id="user-forms">
             <?php foreach(UserService::getInstance()->findAllUsers() as $user)
-                (new UserFormCreator("processing/user_processing.php", "post", "", $user, true))->create();
+                (new UserFormCreator($user, true))->create();
             ?>
         </div>
         <h2>Fiches</h2>
+        <div id="micro-group-forms">
+            <?php 
+                foreach(MicroscopesGroupService::getInstance()->findAllMicroscopesGroup() as $group)
+                    (new GroupDetailsCreator($group, false))->create();
+            ?>
+        </div>
         <h2>Mots-clés</h2>
         <h2>Microscopes</h2>
     </main>
