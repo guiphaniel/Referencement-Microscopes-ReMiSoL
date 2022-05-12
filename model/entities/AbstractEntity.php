@@ -18,6 +18,7 @@
 
             return $this;
         }
+        
         // must override this method to serialize the private attributes too
         public function jsonSerialize() : mixed {
             $reflector = new ReflectionClass(static::class);
