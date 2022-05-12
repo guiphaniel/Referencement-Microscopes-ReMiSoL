@@ -23,12 +23,11 @@
                 <label for="phone">Télephone</label>
                 <select id="phone-code" name="phoneCode" autocomplete="tel-country-code">
                 <?php 
-                    $userCode = strtok($this->user->getPhone(), " ");
                     foreach ($this->phoneCodes as $phoneCode) : ?>
-                        <option value="<?=$phoneCode;?>"<?= str_contains($phoneCode, $userCode) ? " selected" : "";?>><?=$phoneCode?></option>
+                        <option value="<?=$phoneCode;?>"<?= str_contains($phoneCode, $this->user->getPhoneCode()) ? " selected" : "";?>><?=$phoneCode?></option>
                 <?php endforeach; ?>
                 </select>
-                <input id="phone" type="text" name="phone" autocomplete="tel-national" value="<?=substr($this->user->getPhone(), -9)?>" required>
+                <input id="phone" type="text" name="phoneNum" autocomplete="tel-national" value="<?=$this->user->getPhoneNum()?>" required>
                 <label for="password1">Mot de passe</label>
                 <input id="password1" type="password" autocomplete="new-password" name="password1">
                 <label for="password2">Vérification du mot de passe</label>
