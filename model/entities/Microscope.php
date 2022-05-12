@@ -6,26 +6,15 @@ include_once(__DIR__ . "/Microscope.php");
 include_once(__DIR__ . "/../services/KeywordService.php");
 
 class Microscope extends AbstractEntity  {
-    private int $id;
     private string $type;
     private string $access;
     private array $keywords;
 
     function __construct(private Model $model, private Controller $controller, private string $rate, private string $desc, string $type, string $access, array $keywords) {
+        parent::__construct();
         $this->setType($type);
         $this->setAccess($access);
         $this->setKeywords($keywords);
-    }
-
-    public function getId() : int
-    {
-        return $this->id;
-    }
-
-    function setId(int $id) {
-        $this->id = $id;
-
-        return $this;
     }
     
     public function getModel() : Model

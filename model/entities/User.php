@@ -2,7 +2,9 @@
     include_once(__DIR__ . "/AbstractEntity.php");
 
     class User extends AbstractEntity  {
-        function __construct(private string $firstname, private string $lastname, private string $email, private $phoneCode, private $phoneNum, private string $password, private bool $locked = true, private bool $admin = false) {}
+        function __construct(private string $firstname, private string $lastname, private string $email, private $phoneCode, private $phoneNum, private string $password, private bool $locked = true, private bool $admin = false) {
+                parent::__construct();
+        }
 
         public function getFirstname() : string
         {

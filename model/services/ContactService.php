@@ -30,8 +30,13 @@
     
             $row = $sth->fetch();
 
-            // if this contact exists, reutrn its id, else reutrn -1
-            return $row ? $row[0] : -1;
+            // if this contact exists, return its id, else return -1
+            $id = -1;
+            if($row) {
+                $id = $row[0];
+                $contact->setId($id);
+            }
+            return $id;
         }
     
         /** Saves the contact if it doesn't exist yet, and returns its id */
@@ -55,6 +60,8 @@
                 
                 $id = $pdo->lastInsertId();
             }    
+
+            $contact->setId($id);
 
             return $id;
         }    

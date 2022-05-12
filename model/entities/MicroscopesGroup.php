@@ -5,22 +5,10 @@
     include_once(__DIR__ . "/Lab.php");
 
     class MicroscopesGroup extends AbstractEntity {
-        private int $id;
         private array $microscopes;
 
         function __construct(private Coordinates $coor, private Lab $lab, private array $contacts) {
-            $id = -1;
-        }
-
-        public function getId() : int
-        {
-            return $this->id;
-        }
-
-        function setId(int $id) {
-            $this->id = $id;
-
-            return $this;
+            parent::__construct();
         }
 
         public function getMicroscopes() : array

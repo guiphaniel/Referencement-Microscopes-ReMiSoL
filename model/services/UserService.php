@@ -28,7 +28,7 @@
 
             $row = $sth->fetch();
 
-            // if this user exists, reutrn its id, else return -1
+            // if this user exists, return its id, else return -1
             return $row ? $row[0] : -1;
         }
 
@@ -36,14 +36,14 @@
             global $pdo;
 
             $sql = "
-                select firstname, lastname, email, phone_code, phone_num, password
+                select id, firstname, lastname, email, phone_code, phone_num, password
                 from user
             ";
 
             $users = [];
             foreach($pdo->query($sql, PDO::FETCH_NAMED) as $userInfos) {
                 $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone_code"], $userInfos["phone_num"], $userInfos["password"]);
-                $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
+                $user->setId($userInfos["id"])->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
                 $users[] = $user;
             }
 
@@ -54,7 +54,7 @@
             global $pdo;
 
             $sql = "
-                select firstname, lastname, email, phone_code, phone_num, password
+                select id, firstname, lastname, email, phone_code, phone_num, password
                 from user
                 where id = $id
             ";
@@ -68,14 +68,14 @@
 
             $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone_code"], $userInfos["phone_num"], $userInfos["password"]);
         
-            return $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
+            return $user->setId($userInfos["id"])->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
         }
 
         function findUserByEmail($email) {
             global $pdo;
 
             $sth = $pdo->prepare("
-                select firstname, lastname, email, phone_code, phone_num, password
+                select id, firstname, lastname, email, phone_code, phone_num, password
                 from user
                 where email = :email
             ");
@@ -92,14 +92,14 @@
 
             $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone_code"], $userInfos["phone_num"], $userInfos["password"]);
             
-            return $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
+            return $user->setId($userInfos["id"])->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
         }
 
         function findUserByPhone($phoneCode, $phoneNum) {
             global $pdo;
 
             $sth = $pdo->prepare("
-                select firstname, lastname, email, phone_code, phone_num, password
+                select id, firstname, lastname, email, phone_code, phone_num, password
                 from user
                 where phone_code = :phoneCode and phone_num = :phoneNum
             ");
@@ -117,7 +117,7 @@
 
             $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone_code"], $userInfos["phone_num"], $userInfos["password"]);
             
-            return $user->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
+            return $user->setId($userInfos["id"])->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
         }
 
         function isLocked(User $user) {
@@ -256,7 +256,7 @@
             $sth = $pdo->prepare("
                 select id
                 from user
-                where id != $id and phone_code = :phoneCode and phone_num = phoneNum
+                where id != $id and phone_code = :phoneCode and phone_num = :phoneNum
             ");
 
             $sth->execute([
