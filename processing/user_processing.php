@@ -2,6 +2,9 @@
     include_once("../include/config.php");
     include_once("../model/services/UserService.php");
 
+    if(!isUserSessionValid()) 
+        redirect("/index.php");
+
     function userRedirect() {
         if($_SESSION["user"]["admin"])
             redirect("/admin.php");
@@ -20,7 +23,7 @@
     if($_POST["action"] != "update")
         userRedirect();
 
-    if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"]) || empty($_POST["phoneCode"]) || empty($_POST["phone"]))     
+    if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"]) || empty($_POST["phoneCode"]) || empty($_POST["phoneNum"]))     
         userRedirect();
 
     if(!$_SESSION["user"]["admin"] && $_POST["id"] != $_SESSION["user"]["id"])
@@ -45,7 +48,7 @@
             $hash = UserService::getInstance()->findUserById($id)->getPassword();
 
         //update user
-        $user = new User($_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["phoneCode"], $_POST["phoneNum"], $hash, $_POST["locked"]??false, $_POST["admin"]??false);
+        $user = new User($_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["phoneCode"], substr($_POST["phoneNum"], -9), $hash, $_POST["locked"]??false, $_POST["admin"]??false);
 
         UserService::getInstance()->updateUser($id, $user);
     } catch (\Throwable $th) {
