@@ -12,6 +12,12 @@
     background-color: red;
 }
 
+.edit-bt {
+    width: 20px;
+    height: 20px;
+    background-color: orange;
+}
+
 .undo-bt {
     text-decoration: underline;
 }
