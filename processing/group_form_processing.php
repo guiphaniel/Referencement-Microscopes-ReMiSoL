@@ -1,5 +1,6 @@
 <?php
     include_once("../include/config.php");
+    include_once("../utils/resize_image_proportionnaly.php");
     include_once("../model/entities/Lab.php");
     include_once("../model/entities/Contact.php");
     include_once("../model/entities/Model.php");
@@ -7,6 +8,9 @@
     include_once("../model/entities/MicroscopesGroup.php");
     include_once("../model/services/MicroscopesGroupService.php");
     
+    if(!isUserSessionValid()) 
+        redirect("/index.php");
+
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form TODO: check that the two contacts aren't the same ones
     if (empty($_POST["lab"]) || empty($_POST["coor"]) || empty($_POST["contacts"]) || empty($_POST["micros"])) {       
         redirect("/form.php");
@@ -74,15 +78,39 @@
             $imgs = $_FILES["imgs"];
             // retrieve the file extension
             $fileType = $imgs['type'][$i];
-            $fileType = substr($fileType, strrpos($fileType, "/") + 1);  
+            $fileType = substr($fileType, strrpos($fileType, "/") + 1);
+            $tmpName = $imgs['tmp_name'][$i];
+            $image;
+            switch ($fileType) {
+                case "png":
+                    $image = imagecreatefrompng($tmpName);
+                    break;
+                case "jpg":
+                case "jpeg":
+                    $image = imagecreatefromjpeg($tmpName);
+                    break;
+                case "webp":
+                    $image = imagecreatefromwebp($tmpName);
+                    break;
+                default:
+                    throw("Le format d'image fourni n'est pas supporté");
+            }
+
+            $image = resizeImageProportionnaly($image, 1280, 720);
+
             // save the image
-            move_uploaded_file(
-                $imgs['tmp_name'][$i],
-                __DIR__ . '/../public/img/micros/' . $microId . '.' . $fileType
+            imagejpeg(
+                $image,
+                __DIR__ . '/../public/img/micros/' . $microId . '.jpg'
             );  
+
+            imagewebp(
+                $image,
+                __DIR__ . '/../public/img/micros/' . $microId . '.webp'
+            ); 
         }
     } catch (\Throwable $th) {
-        $_SESSION["microForm"]["errorMsg"]=$th->getMessage();
+        $_SESSION["form"]["errorMsg"]=$th->getMessage();
         redirect("/form.php");
     }
     
