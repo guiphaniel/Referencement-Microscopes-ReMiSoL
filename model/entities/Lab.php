@@ -6,6 +6,7 @@
         private string $code;
 
         function __construct(private string $name, private string $type, string $code, private string $website, private Address $address) {
+            parent::__construct();
             $this->setCode($code);
         }
 

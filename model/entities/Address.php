@@ -2,7 +2,9 @@
     include_once(__DIR__ . "/AbstractEntity.php");
 
     class Address extends AbstractEntity  {
-        function __construct(private string $school, private string $street, private string $zipCode, private string $city, private string $country) {}
+        function __construct(private string $school, private string $street, private string $zipCode, private string $city, private string $country) {
+            parent::__construct();
+        }
 
         public function toString() {
             return implode("\n", array_filter([$this->school, $this->street, $this->zipCode, $this->city, $this->country]));

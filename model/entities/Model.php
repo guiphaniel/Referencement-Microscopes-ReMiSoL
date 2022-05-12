@@ -2,7 +2,9 @@
     include_once(__DIR__ . "/Brand.php");
 
     class Model extends AbstractEntity {
-        function __construct(private string $name, private Brand $brand) {}
+        function __construct(private string $name, private Brand $brand) {
+            parent::__construct();
+        }
         
         public function getName() : string
         {

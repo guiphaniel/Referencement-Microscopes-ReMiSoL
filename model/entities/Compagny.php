@@ -2,7 +2,9 @@
     include_once(__DIR__ . "/AbstractEntity.php");
 
     class Compagny extends AbstractEntity  {
-        function __construct(private string $name) {}
+        function __construct(private string $name) {
+            parent::__construct();
+        }
 
         public function getName() : string
         {

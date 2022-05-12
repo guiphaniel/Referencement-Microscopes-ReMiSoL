@@ -6,6 +6,7 @@
         private $lon;
 
         function __construct(float $lat, float $lon) {
+            parent::__construct();
             $this->setLat($lat);
             $this->setLon($lon);
         }
