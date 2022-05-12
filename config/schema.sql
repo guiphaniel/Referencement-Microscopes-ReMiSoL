@@ -94,8 +94,10 @@ CREATE TABLE "microscopes_group" (
 	"lat"	REAL,
 	"lon"	REAL,
 	"lab_id"	INTEGER,
+	"user_id"	INTEGER,
 	UNIQUE("lat","lon"),
 	FOREIGN KEY("lab_id") REFERENCES "lab"("id") ON DELETE CASCADE,
+	FOREIGN KEY("user_id") REFERENCES "user"("id") ON DELETE CASCADE,
 	CONSTRAINT "pk_microscope_group" PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "contact" (
