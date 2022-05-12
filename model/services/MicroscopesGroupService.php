@@ -1,9 +1,11 @@
 <?php
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
+    include_once(__DIR__ . "/../entities/User.php");
     include_once(__DIR__ . "/MicroscopeService.php");
     include_once(__DIR__ . "/LabService.php");
     include_once(__DIR__ . "/ContactService.php");
+    include_once(__DIR__ . "/UserService.php");
 
     class MicroscopesGroupService {
         static private $instance;
@@ -24,14 +26,15 @@
             // save the lab
             LabService::getInstance()->save($group->getLab());
 
-            // save the group and bind it to the lab
-            $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labId)");
+            // save the group and bind it to the lab and it's user (owner)
+            $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labId, :userId)");
 
             try {
                 $sth->execute([
                     "lat" => $group->getCoor()->getLat(),
                     "lon" => $group->getCoor()->getLon(),
-                    "labId" => LabService::getInstance()->getLabId($group->getLab())
+                    "labId" => LabService::getInstance()->getLabId($group->getLab()),
+                    "userId" => $_SESSION["user"]["id"]
                 ]);
             } catch (\Throwable $th) {
                 if(str_contains($th->getMessage() ,"UNIQUE constraint failed"))
@@ -40,7 +43,6 @@
                     throw $th;
             }
             
-
             // get the generated group id
             $groupId = $pdo->lastInsertId(); 
 
@@ -58,6 +60,18 @@
             $group->setId($groupId);
 
             return $groupId;
+        }
+
+        public function findGroupOwner(MicroscopesGroup $group) {
+            global $pdo;
+
+            $groupId = $group->getId();
+            $sth = $pdo->query("SELECT u.id FROM own join user as u on u.id = own.user_id where microscopes_group_id = $groupId");
+
+            $row = $sth->fetch();
+
+            // if this user exists, return it, else return null
+            return $row ? UserService::getInstance()->findUserById($row[0]) : null;
         }
 
         function findAllMicroscopesGroup() {
@@ -98,7 +112,7 @@
             global $pdo;
 
             $sql = "
-                select firstname, lastname, role, email, phone_code, phone_num
+                select c.id, firstname, lastname, role, email, phone_code, phone_num
                 from contact as c
                 join manage as m
                 on m.contact_id = c.id
@@ -110,7 +124,8 @@
 
             $contacts = [];
             foreach ($contactsInfos as $contactInfos) {
-                $contacts[] = new Contact($contactInfos["firstname"], $contactInfos["lastname"], $contactInfos["role"], $contactInfos["email"], $contactInfos["phone_code"], $contactInfos["phone_num"]);
+                $contacts[] = (new Contact($contactInfos["firstname"], $contactInfos["lastname"], $contactInfos["role"], $contactInfos["email"], $contactInfos["phone_code"], $contactInfos["phone_num"]))
+                    ->setId($contactInfos["id"]);
             }
 
             return $contacts;
