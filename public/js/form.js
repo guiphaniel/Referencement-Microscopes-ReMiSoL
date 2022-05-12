@@ -133,10 +133,10 @@ function addField(fieldType, fieldId, firstField) {
 
 
 /* add new contact fieldset on add button click */
+let contactFields = document.getElementsByClassName("contact-field");
+let firstContactField = contactFields[0];
 
-let firstContactField = document.getElementsByClassName("contact-field")[0];
-
-let nextContactFieldId = parseInt(firstContactField.id.split('-')[2]) + 1;
+let nextContactFieldId = parseInt(contactFields[contactFields.length - 1].id.split('-')[2]) + 1;
 
 document.getElementById("add-contact").addEventListener('click', function(){
     let newField = addField("contact", nextContactFieldId++, firstContactField);
@@ -151,10 +151,10 @@ document.getElementById("add-contact").addEventListener('click', function(){
 
 
 /* add new microscope fieldset on add button click */
+let microcopesFields = document.getElementsByClassName("micro-field");
+let firstMicroscopeField = microcopesFields[0];
 
-let firstMicroscopeField = document.getElementsByClassName("micro-field")[0];
-
-let nextMicroscopeFieldId = parseInt(firstMicroscopeField.id.split('-')[2]) + 1;
+let nextMicroscopeFieldId = parseInt(microcopesFields[microcopesFields.length - 1].id.split('-')[2]) + 1;
 
 document.getElementById("add-micro").addEventListener('click', function(){
     let id = nextMicroscopeFieldId;
