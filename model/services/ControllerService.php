@@ -16,10 +16,38 @@
             return self::$instance;
         }
 
+         /** Saves the controller if it doesn't exist yet, and returns its id */
+         function save(Controller $ctr) {
+            global $pdo;
+
+            $id = $this->getControllerId($ctr);
+
+            // if the controller isn't already in the db, add it
+            if ($id == -1)  {
+                $sth = $pdo->prepare("INSERT INTO controller VALUES (NULL, :name, :brandId)");
+        
+                $sth->execute([
+                    "name" => $ctr->getName(),
+                    "brandId" => BrandService::getInstance()->getBrandId($ctr->getBrand())
+                ]);
+                
+                $id = $pdo->lastInsertId();
+                $ctr->setId($id);
+            }          
+
+            return $id;
+        }   
+
+        //override : only admin can update controllers
+        public function update(AbstractEntity $old, AbstractEntity $new) {
+            if($_SESSION["user"]["admin"])
+                parent::update($old, $new);
+        }
+
         function getControllerId(Controller $controller) {
             global $pdo;
 
-            $sth = $pdo->prepare("SELECT id FROM controller where ctr_name = :name");
+            $sth = $pdo->prepare("SELECT id FROM controller where name = :name");
 
             $sth->execute([
                 "name" => $controller->getName()
@@ -36,7 +64,7 @@
             $controllers = [];
             
             $sth = $pdo->query("
-                SELECT ctr_name, bra_name, com_name FROM controller
+                SELECT c.id, c.name as ctrName, b.name as braName, c.name as comName FROM controller
                 JOIN brand as b
                 on brand_id = b.id
                 JOIN compagny as c
@@ -44,7 +72,8 @@
             ");
 
             foreach ($sth->fetchAll() as $row) {
-                $controllers[] = new Controller($row["ctr_name"], new Brand($row["bra_name"], new Compagny($row["com_name"])));
+                $controllers[] = (new Controller($row["ctrName"], new Brand($row["braName"], new Compagny($row["comName"]))))
+                    ->setId($row["id"]);
             }
 
             return $controllers;
@@ -54,16 +83,17 @@
             global $pdo;
             $controllers = [];
             
-            $sth = $pdo->prepare("SELECT ctr_name FROM controller where brand_id = :brandId");
+            $sth = $pdo->prepare("SELECT id, name FROM controller where brand_id = :brandId");
 
             $sth->execute([
                 "brandId" => BrandService::getInstance()->getBrandId($brand)
             ]);
 
-            $names = $sth->fetchAll(PDO::FETCH_COLUMN);
+            $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
-            foreach ($names as $name) {
-                $controllers[] = new Controller($name, $brand);
+            foreach ($infos as $info) {
+                $controllers[] = (new Controller($info["name"], $brand))
+                    ->setId($info["id"]);
             }
 
             return $controllers;
