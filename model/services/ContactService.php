@@ -61,6 +61,7 @@
                 ]);
                 
                 $id = $pdo->lastInsertId();
+                $contact->setId($id);
             }    
 
             $contact->setId($id);
@@ -72,6 +73,12 @@
             global $pdo;
 
             $pdo->exec("INSERT INTO manage VALUES ($contactId, $groupId)");
+        }
+
+        function unbind($contactId, $groupId) {
+            global $pdo;
+
+            $pdo->exec("DELETE FROM manage WHERE contact_id = $contactId and microscopes_group_id = $groupId");
         }
     }
 
