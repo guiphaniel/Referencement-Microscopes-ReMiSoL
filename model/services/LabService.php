@@ -36,7 +36,7 @@
             global $pdo;
 
             $sql = "
-                select lab_name as name, type, code, website, school, street, zipCode, city, country
+                select lab.id as labId, a.id as addrId, name, type, code, website, school, street, zipCode, city, country
                 from lab
                 join address as a
                 on address_id = a.id
@@ -46,8 +46,10 @@
             $sth = $pdo->query($sql);
             $labInfos = $sth->fetch(PDO::FETCH_NAMED);
 
-            $address = new Address($labInfos["school"], $labInfos["street"], $labInfos["zipCode"], $labInfos["city"], $labInfos["country"]);
-            return new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"], $labInfos["website"], $address);
+            $address = (new Address($labInfos["school"], $labInfos["street"], $labInfos["zipCode"], $labInfos["city"], $labInfos["country"]))
+                ->setId($labInfos["addrId"]);
+            return (new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"], $labInfos["website"], $address))
+                ->setId($labInfos["labId"]);
         }
 
         /** Saves the lab if it doesn't exist yet, and returns its id */
@@ -68,6 +70,7 @@
                     "addressId" => AddressService::getInstance()->save($lab->getAddress())
                 ]);
                 $id = $pdo->lastInsertId();
+                $lab->setId($id);
             }          
 
             return $id;
