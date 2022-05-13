@@ -185,6 +185,7 @@
             ]);
 
             $id = $pdo->lastInsertId();
+            $user->setId($id);
 
             // if the user is admin, but not yet admin in db, add it as admin in db
             if($user->isAdmin() && !$this->isAdmin($user)) {
