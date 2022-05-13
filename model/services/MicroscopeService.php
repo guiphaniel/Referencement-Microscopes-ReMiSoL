@@ -1,7 +1,8 @@
 <?php
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
-    
+    include_once(__DIR__ . "/../entities/Keyword.php");
+
     spl_autoload_register(function ($class_name) {
         include $class_name . '.php';
     });
@@ -16,10 +17,10 @@
             return self::$instance;
         }
 
-        function save(int $groupId, Microscope $micro) : int {
+        function save(Microscope $micro) : int {
             global $pdo;
             
-            $sth = $pdo->prepare("INSERT INTO microscope VALUES (NULL, :rate, :desc, :type, :access, :modId, :ctrId, :groupId)");
+            $sth = $pdo->prepare("INSERT INTO microscope VALUES (NULL, :rate, :desc, :type, :access, :modId, :ctrId, NULL)");
 
             $sth->execute([
                 "rate" => $micro->getRate(),
@@ -27,32 +28,32 @@
                 "type" => $micro->getType(),
                 "access" => $micro->getAccess(),
                 "modId" => ModelService::getInstance()->getModelId($micro->getModel()),
-                "ctrId" => ControllerService::getInstance()->getControllerId($micro->getController()),
-                "groupId" => $groupId
+                "ctrId" => ControllerService::getInstance()->getControllerId($micro->getController())
             ]);     
 
             $microId = $pdo->lastInsertId();
+            $micro->setId($microId);
 
             //bind keywords
-            foreach ($micro->getKeywords() as $cat => $tags) {
-                foreach ($tags as $tag) {
-                    $sth = $pdo->prepare("INSERT INTO microscope_keyword VALUES (:microId, :kwId)");
-
-                    $sth->execute([
-                        "microId" => $microId,
-                        "kwId" => KeywordService::getInstance()->getKeywordId($cat, $tag)
-                    ]);
-                }
+            $keywordService = KeywordService::getInstance();
+            foreach ($micro->getKeywords() as $kw) {
+                $keywordService->bind($kw->getId(), $microId);
             }
 
             return $microId;
+        }
+
+        function bind($microId, $groupId) {
+            global $pdo;
+
+            $pdo->exec("UPDATE microscope SET microscopes_group_id = $groupId WHERE id = $microId");
         }
 
         function findAllKeywords($microId) {
             global $pdo;
 
             $sql = "
-                select cat, tag
+                select cat, k.id, tag
                 from microscope as mi
                 join microscope_keyword as mk
                 on mk.microscope_id = mi.id
@@ -62,16 +63,24 @@
             ";
 
             $sth = $pdo->query($sql);
-            $keywords = $sth->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_COLUMN);
+            $keywords = $sth->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_NAMED);
 
-            return $keywords;
+            $kws = [];
+
+            foreach($keywords as $cat => $infos) {
+                foreach ($infos as $info) {
+                    $kws[] = (new Keyword($cat, $info["tag"]))->setId($info["id"]);
+                }
+            }
+
+            return $kws;
         }
 
         function findMicroscopeById($microId) {
             global $pdo;
 
             $sql = "
-                select mi.id as microId, com_name as compagnyName, bra_name as brandName, mod_name as modelName, ctr_name as controllerName, rate, desc, type, access
+                select mi.id as microId, com.id as comId, com.name as compagnyName, bra.id as braId, bra.name as brandName, mod.id as modId, mod.name as modelName, ctr.id as ctrId, ctr.name as controllerName, rate, desc, type, access
                 from microscope as mi
                 join controller as ctr
                 on ctr.id = mi.controller_id
@@ -87,10 +96,14 @@
             $sth = $pdo->query($sql);
             $microInfos = $sth->fetch(PDO::FETCH_NAMED);
 
-            $com = new Compagny($microInfos["compagnyName"]);
-            $bra = new Brand($microInfos["brandName"], $com);
-            $mod = new Model($microInfos["modelName"], $bra);
-            $ctr = new Controller($microInfos["controllerName"], $bra);
+            $com = (new Compagny($microInfos["compagnyName"]))
+                ->setId($microInfos["comId"]);
+            $bra = (new Brand($microInfos["brandName"], $com))
+                ->setId($microInfos["braId"]);;
+            $mod = (new Model($microInfos["modelName"], $bra))
+                ->setId($microInfos["modId"]);;
+            $ctr = (new Controller($microInfos["controllerName"], $bra))
+                ->setId($microInfos["ctrId"]);;
 
             $kws = $this->findAllKeywords($microInfos["microId"]);
 
