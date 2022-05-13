@@ -2,6 +2,10 @@
     function resizeImageProportionnaly($src, $newW, $newH) {
         $w = imagesx($src);
         $h = imagesy($src);
+
+        if($w <= $newW && $h <= $newH)
+            return;
+
         $wRatio = $w/$newW;
         $hRatio = $h/$newH;
         
