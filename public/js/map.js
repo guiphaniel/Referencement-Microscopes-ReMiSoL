@@ -205,6 +205,10 @@ function getCustomPopupHTML(group) {
 		}
 	}
 
+	for (const cat in allKeywords) {
+		allKeywords[cat] = [...new Set(allKeywords[cat])]
+	}
+
 	//display the keywords
 	infos.append(createContentElement("h3", "Mots-clés"));
 	let kwList = document.createElement("ul");
