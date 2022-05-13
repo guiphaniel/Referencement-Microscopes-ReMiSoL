@@ -262,11 +262,11 @@
                         <div>
                             <label for="cat-<?=$normCat?>-<?=$id?>"><?=$cat?></label>
                             <input id="cat-<?=$normCat?>-<?=$id?>" class="cat-input" list="cats-<?=$normCat?>">
-                            <?php foreach (array_key_exists($cat, $micro?->getKeywords()??[]) ? $micro?->getKeywords()[$cat] : [] as $kw): ?>
+                            <?php foreach (array_filter($micro?->getKeywords()??[], function ($kw) use (&$cat) {return $kw->getCat() == $cat;}) as $kw): ?>
                                 <div class="tag">
                                     <div class="rm-bt" data-type="ul"></div>
-                                    <?=$kw?>
-                                    <input id="micro-kw-<?=HTMLNormalize($cat)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$cat?>][]" value="<?=$kw?>">
+                                    <?=$kw->getTag()?>
+                                    <input id="micro-kw-<?=HTMLNormalize($cat)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$cat?>][]" value="<?=$kw->getTag()?>">
                                 </div>
                             <?php endforeach; ?>
                         </div>

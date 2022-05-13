@@ -127,7 +127,7 @@ function getCustomPopupHTML(group) {
 	let infos = document.createElement("section");
 
 	// lab
-	infos.append(createH(2, group.lab.name + " (" + group.lab.code + ")"));
+	infos.append(createH(2, group.lab.name + " (" + group.lab.type + group.lab.code + ")"));
 
 	// website
 	{
@@ -197,15 +197,12 @@ function getCustomPopupHTML(group) {
 	// merge all tags of all microscopes, by categories
 	let allKeywords = {};
 	for (const micro of group.microscopes) {
-		for (const cat in micro.keywords) {
-			if(!allKeywords[cat])
-				allKeywords[cat] = micro.keywords[cat];
+		for (const kw of micro.keywords) {
+			if(!allKeywords[kw.cat])
+				allKeywords[kw.cat] = [kw.tag];
 			else
-				allKeywords[cat] = allKeywords[cat].concat(micro.keywords[cat]);
+				allKeywords[kw.cat].push(kw.tag);
 		}
-	}
-	for (const cat in allKeywords) {
-		allKeywords[cat] = [...new Set(allKeywords[cat])]
 	}
 
 	//display the keywords
