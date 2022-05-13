@@ -4,7 +4,7 @@
         $h = imagesy($src);
 
         if($w <= $newW && $h <= $newH)
-            return;
+            return $src;
 
         $wRatio = $w/$newW;
         $hRatio = $h/$newH;
