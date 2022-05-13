@@ -2,8 +2,19 @@
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/Address.php");
 
+    spl_autoload_register(function ($class_name) {
+        include $class_name . '.php';
+    });
+
     class AddressService extends AbstractService {
         static private $instance;
+
+        static function getInstance() : AddressService {
+            if(!isset(self::$instance))
+                self::$instance = new AddressService();
+           
+            return self::$instance;
+        }
 
         function getAddressId(Address $address) {
             global $pdo;
@@ -36,7 +47,7 @@
             $sth = $pdo->query($sql);
             $addressInfos = $sth->fetch(PDO::FETCH_NAMED);
 
-            return new Address($addressInfos["school"], $addressInfos["street"], $addressInfos["zipCode"], $addressInfos["city"], $addressInfos["country"]);
+            return (new Address($addressInfos["school"], $addressInfos["street"], $addressInfos["zipCode"], $addressInfos["city"], $addressInfos["country"]))->setId($id);
         }
 
         /** Saves the address if it doesn't exist yet, and returns its id */
@@ -58,6 +69,7 @@
                 ]);
 
                 $id = $pdo->lastInsertId();
+                $address->setId($id);
             }          
 
             return $id;
