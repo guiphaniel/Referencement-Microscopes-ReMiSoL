@@ -149,7 +149,7 @@
             }
 
             foreach ($toUpdate as $entity) {
-                $oldEntity = array_filter($oldEntities, function ($old) use (&$entity) {return $old->getId() == $entity->getId();})[0];
+                $oldEntity = array_values(array_filter($oldEntities, function ($old) use (&$entity) {return $old->getId() == $entity->getId();}))[0];
 
                 $this->update($oldEntity, $entity);
             }
