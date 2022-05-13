@@ -9,11 +9,12 @@
 
         private function createEditBts() {
             $groupId = $this->group->getId();
-            if($_SESSION["user"]["id"] == MicroscopesGroupService::getInstance()->findGroupOwner($this->group)?->getId() || $_SESSION["user"]["admin"])
+            if(isUserSessionValid() && ($_SESSION["user"]["id"] == MicroscopesGroupService::getInstance()->findGroupOwner($this->group)?->getId() || $_SESSION["user"]["admin"])):
             ?>
                 <div class="rm-bt"></div>
                 <a href="/edit_micros_group.php?id=<?=$groupId?>"><div class="edit-bt"></div></a>
             <?php
+            endif;
         }
 
         public function create() {
@@ -94,7 +95,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($micro->getKeywords() as $cat => $tags) : ?>
+                                    <?php 
+                                    foreach ($micro->getKeywords() as $kw)
+                                        $cats[$kw->getCat()][] = $kw->getTag();
+                                    
+                                    foreach($cats as $cat => $tags):
+                                    ?>
                                         <tr>
                                             <th scope="rowgroup"><?= $cat; ?></th>
                                             <td><?= implode(", ", $tags); ?></td>
