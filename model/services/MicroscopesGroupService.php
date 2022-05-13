@@ -21,17 +21,19 @@
         function save(MicroscopesGroup $group) : int {
             global $pdo;
 
+            //save the coordinates
+            $coorId = CoordinatesService::getInstance()->save($group->getCoor());
+
             // save the lab
-            LabService::getInstance()->save($group->getLab());
+            $labId = LabService::getInstance()->save($group->getLab());
 
             // save the group and bind it to the lab and it's user (owner)
-            $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :lat, :lon, :labId, :userId)");
+            $sth = $pdo->prepare("INSERT INTO microscopes_group VALUES (NULL, :coorId, :labId, :userId)");
 
             try {
                 $sth->execute([
-                    "lat" => $group->getCoor()->getLat(),
-                    "lon" => $group->getCoor()->getLon(),
-                    "labId" => LabService::getInstance()->getLabId($group->getLab()),
+                    "coorId" => $coorId,
+                    "labId" => $labId,
                     "userId" => $_SESSION["user"]["id"]
                 ]);
             } catch (\Throwable $th) {
@@ -52,8 +54,11 @@
             }
                 
             // add the microscopes to the db
-            foreach($group->getMicroscopes() as $micro)
-                $micro->setId(MicroscopeService::getInstance()->save($groupId, $micro));
+            foreach($group->getMicroscopes() as $micro) {
+                $microscopeService = MicroscopeService::getInstance();
+                $micro->setId($microscopeService->save($micro));
+                $microscopeService->bind($micro->getId(), $groupId);
+            }
 
             $group->setId($groupId);
 
@@ -77,7 +82,7 @@
 
             // get groups infos
             $sql = "
-                select id, lat, lon, lab_id
+                select id, coordinates_id, lab_id
                 from microscopes_group as g
             ";
             $sth = $pdo->query($sql);
@@ -88,11 +93,12 @@
             foreach ($groupsInfos as $groupInfos) {
                 $groupId = $groupInfos["id"];
 
+                $coor = CoordinatesService::getInstance()->findCoordinatesById($groupInfos["coordinates_id"]);
                 $lab = LabService::getInstance()->findLabById($groupInfos["lab_id"]);
                 $contacts = $this->findAllContacts($groupId);
                 $micros = $this->findAllMicroscopes($groupId);
 
-                $group = new MicroscopesGroup(new Coordinates($groupInfos["lat"], $groupInfos["lon"]), $lab, $contacts);
+                $group = new MicroscopesGroup($coor, $lab, $contacts);
 
                 $group->setId($groupId);
 
@@ -155,7 +161,7 @@
 
             // get groups infos
             $sql = "
-                select g.id, lat, lon, lab_id
+                select g.id, coordinates_id, lab_id
                 from microscopes_group as g
                 where g.id = $groupId
             ";
@@ -167,11 +173,12 @@
                 return null;
 
             // generate the group
+            $coor = CoordinatesService::getInstance()->findCoordinatesById($groupInfos["coordinates_id"]);
             $lab = LabService::getInstance()->findLabById($groupInfos["lab_id"]);
             $contacts = $this->findAllContacts($groupId);
             $micros = $this->findAllMicroscopes($groupId);
 
-            $group = new MicroscopesGroup(new Coordinates($groupInfos["lat"], $groupInfos["lon"]), $lab, $contacts);
+            $group = new MicroscopesGroup($coor, $lab, $contacts);
 
             $group->setId($groupId);
 
@@ -179,6 +186,6 @@
                 $group->addMicroscope($micro);
             }
 
-            return $group;
+            return $group->setId($groupId);
         }
     }   
