@@ -7,6 +7,7 @@
     include_once("../model/entities/Controller.php");
     include_once("../model/entities/MicroscopesGroup.php");
     include_once("../model/services/MicroscopesGroupService.php");
+    include_once("../model/services/KeywordService.php");
     
     if(!isUserSessionValid()) 
         redirect("/index.php");
@@ -50,19 +51,33 @@
         $lab = new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"], $labInfos["website"], $address);
     
         $contacts = [];
-        foreach($_POST["contacts"] as $contact) {
-            $contacts[] = new Contact($contact["firstname"], strtoupper($contact["lastname"]),  ucfirst($contact["role"]), $contact["email"], $contact["phoneCode"], substr($contact["phoneNum"], -9));
+        foreach($_POST["contacts"] as $id => $contact) {
+            $contacts[] = (new Contact($contact["firstname"], strtoupper($contact["lastname"]),  ucfirst($contact["role"]), $contact["email"], $contact["phoneCode"], substr($contact["phoneNum"], -9)))
+                ->setId($id);
         }
         
         $group = new MicroscopesGroup(new Coordinates($coorInfos["lat"], $coorInfos["lon"]), $lab, $contacts);
 
-        foreach($_POST["micros"] as $micro) {
+        foreach($_POST["micros"] as $id => $micro) {
             $com = new Compagny($micro["compagny"]);
             $bra = new Brand($micro["brand"], $com);
             $mod = new Model($micro["model"], $bra);
             $ctr = new Controller($micro["controller"], $bra);
 
-            $group->addMicroscope(new Microscope($mod, $ctr, $micro["rate"]??null, $micro["desc"], $micro["type"], $micro["access"], $micro["keywords"]??[]));
+            $kws = [];
+            foreach($micro["keywords"]??[] as $cat => $tags) {
+                foreach($tags as $tag) {
+                    $kw = new Keyword($cat, $tag);
+                    $kwId = KeywordService::getInstance()->getKeywordId($kw);
+
+                    if($kwId == -1)
+                        throw new Exception("Le mot clé suivant n'est pas pris en charge : catégorie ($cat), étiquette ($tag)");
+
+                    $kws[] = $kw->setId($kwId);
+                }
+            }
+
+            $group->addMicroscope((new Microscope($mod, $ctr, $micro["rate"]??null, $micro["desc"], $micro["type"], $micro["access"], $kws))->setId($id));
         }
             
         // ...and save/update the group into the db
@@ -70,9 +85,10 @@
             $microscopesGroupService = MicroscopesGroupService::getInstance();
             $oldGroup = $microscopesGroupService->findMicroscopesGroupById($_POST["id"]);
             $microscopesGroupService->update($oldGroup, $group);
+            $groupId = $_POST["id"];
         }
         else
-            MicroscopesGroupService::getInstance()->save($group);
+            $groupId = MicroscopesGroupService::getInstance()->save($group);
 
         //save the micros' imgs
         $nbImgs = count($_FILES['imgs']['name']);
@@ -131,4 +147,4 @@
         redirect($url);
     }
     
-    redirect("/index.php");
+    redirect("/group-details.php?id=$groupId");
