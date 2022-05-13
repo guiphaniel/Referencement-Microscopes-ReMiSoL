@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS "microscope_keyword";
 DROP TABLE IF EXISTS "keyword";
 DROP TABLE IF EXISTS "microscope";
 DROP TABLE IF EXISTS "microscopes_group";
+DROP TABLE IF EXISTS "coordinates";
 DROP TABLE IF EXISTS "lab";
 DROP TABLE IF EXISTS "address";
 DROP TABLE IF EXISTS "controller";
@@ -17,26 +18,26 @@ DROP TABLE IF EXISTS "compagny";
 
 CREATE TABLE "compagny" (
 	"id"	INTEGER,
-	"com_name"	TEXT UNIQUE,
+	"name"	TEXT UNIQUE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "brand" (
 	"id"	INTEGER,
-	"bra_name"	TEXT UNIQUE,
+	"name"	TEXT UNIQUE,
 	"compagny_id"	INTEGER,
 	FOREIGN KEY("compagny_id") REFERENCES "compagny"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "model" (
 	"id"	INTEGER,
-	"mod_name"	TEXT UNIQUE,
+	"name"	TEXT UNIQUE,
 	"brand_id"	INTEGER,
 	FOREIGN KEY("brand_id") REFERENCES "brand"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "controller" (
 	"id"	INTEGER,
-	"ctr_name"	TEXT UNIQUE,
+	"name"	TEXT UNIQUE,
 	"brand_id"	INTEGER,
 	FOREIGN KEY("brand_id") REFERENCES "brand"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
@@ -80,7 +81,7 @@ CREATE TABLE "address" (
 );
 CREATE TABLE "lab" (
 	"id"	INTEGER,
-	"lab_name"	TEXT,
+	"name"	TEXT,
 	"type"	TEXT,
 	"code"	TEXT,
 	"website"	TEXT,
@@ -89,13 +90,19 @@ CREATE TABLE "lab" (
 	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("address_id") REFERENCES "address"("id")
 );
-CREATE TABLE "microscopes_group" (
+CREATE TABLE "coordinates" (
 	"id"	INTEGER,
 	"lat"	REAL,
 	"lon"	REAL,
+	UNIQUE("lat","lon"),
+	CONSTRAINT "pk_coordinates" PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE "microscopes_group" (
+	"id"	INTEGER,
+	"coordinates_id"	INTEGER,
 	"lab_id"	INTEGER,
 	"user_id"	INTEGER,
-	UNIQUE("lat","lon"),
+	FOREIGN KEY("coordinates_id") REFERENCES "coordinates"("id") ON DELETE CASCADE,
 	FOREIGN KEY("lab_id") REFERENCES "lab"("id") ON DELETE CASCADE,
 	FOREIGN KEY("user_id") REFERENCES "user"("id") ON DELETE CASCADE,
 	CONSTRAINT "pk_microscope_group" PRIMARY KEY("id" AUTOINCREMENT)
