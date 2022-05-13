@@ -105,7 +105,7 @@
                                             <th scope="rowgroup"><?= $cat; ?></th>
                                             <td><?= implode(", ", $tags); ?></td>
                                         </tr>
-                                    <?php endforeach; ?>
+                                    <?php endforeach; unset($cats);?>
                                 </tbody>
                             </table>
                         </section>
