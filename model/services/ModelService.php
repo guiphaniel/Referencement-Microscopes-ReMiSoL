@@ -19,8 +19,8 @@
         function getModelId(Model $model) {
             global $pdo;
 
-            // there is no need to check for the brand and compagny, as mod_name is unique
-            $sth = $pdo->prepare("SELECT id FROM model where mod_name = :name");
+            // there is no need to check for the brand and compagny, as name is unique
+            $sth = $pdo->prepare("SELECT id FROM model where name = :name");
 
             $sth->execute([
                 "name" => $model->getName()
@@ -48,25 +48,33 @@
                 ]);
                 
                 $id = $pdo->lastInsertId();
+                $model->setId($id);
             }          
 
             return $id;
         }   
 
+        //override : only admin can update models
+        public function update(AbstractEntity $old, AbstractEntity $new) {
+            if($_SESSION["user"]["admin"])
+                parent::update($old, $new);
+        }
+
         function getAllModels(Brand $brand) : array {
             global $pdo;
             $models = [];
             
-            $sth = $pdo->prepare("SELECT mod_name FROM model where brand_id = :brandId");
+            $sth = $pdo->prepare("SELECT id, name FROM model where brand_id = :brandId");
 
             $sth->execute([
                 "brandId" => BrandService::getInstance()->getBrandId($brand)
             ]);
 
-            $names = $sth->fetchAll(PDO::FETCH_COLUMN);
+            $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
-            foreach ($names as $name) {
-                $models[] = new Model($name, $brand);
+            foreach ($infos as $info) {
+                $models[] = (new Model($info["name"], $brand))
+                    ->setId($info["id"]);
             }
 
             return $models;

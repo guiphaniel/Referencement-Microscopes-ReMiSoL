@@ -19,7 +19,7 @@
         function getCompagnyId(Compagny $compagny) {
             global $pdo;
 
-            $sth = $pdo->prepare("SELECT id FROM compagny where com_name = :name");
+            $sth = $pdo->prepare("SELECT id FROM compagny where name = :name");
 
             $sth->execute([
                 "name" => $compagny->getName()
@@ -46,21 +46,28 @@
                 ]);
                 
                 $id = $pdo->lastInsertId();
+                $compagny->setId($id);
             }          
 
             return $id;
         }  
 
+        //override : only admin can update compagnies
+        public function update(AbstractEntity $old, AbstractEntity $new) {
+            if($_SESSION["user"]["admin"])
+                parent::update($old, $new);
+        }
+
         function getAllCompagnies() : array {
             global $pdo;
             $compagnies = [];
             
-            $sth = $pdo->query("SELECT com_name FROM compagny");
+            $sth = $pdo->query("SELECT id, name FROM compagny");
 
-            $names = $sth->fetchAll(PDO::FETCH_COLUMN);
+            $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
-            foreach ($names as $name) {
-                $compagnies[] = new Compagny($name);
+            foreach ($infos as $info) {
+                $compagnies[] = (new Compagny($info["name"]))->setId($info["id"]);
             }
 
             return $compagnies;

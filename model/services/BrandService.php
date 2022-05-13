@@ -24,7 +24,7 @@
                 FROM brand as b
                 Join compagny as c
                 on compagny_id = c.id
-                where bra_name = :brandName and com_name = :compName
+                where b.name = :brandName and c.name = :compName
             ");
 
             $sth->execute([
@@ -54,25 +54,32 @@
                 ]);
                 
                 $id = $pdo->lastInsertId();
+                $brand->setId($id);
             }          
 
             return $id;
         }  
 
+        //override : only admin can update brands
+        public function update(AbstractEntity $old, AbstractEntity $new) {
+            if($_SESSION["user"]["admin"])
+                parent::update($old, $new);
+        }
+
         function getAllBrands(Compagny $compagny) : array {
             global $pdo;
             $brands = [];
             
-            $sth = $pdo->prepare("SELECT bra_name FROM brand where compagny_id = :compagnyId");
+            $sth = $pdo->prepare("SELECT id, name FROM brand where compagny_id = :compagnyId");
 
             $sth->execute([
                 "compagnyId" => CompagnyService::getInstance()->getCompagnyId($compagny)
             ]);
 
-            $names = $sth->fetchAll(PDO::FETCH_COLUMN);
+            $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
-            foreach ($names as $name) {
-                $brands[] = new Brand($name, $compagny);
+            foreach ($infos as $info) {
+                $brands[] = (new Brand($info["name"], $compagny))->setId($info["id"]);
             }
 
             return $brands;
