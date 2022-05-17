@@ -44,7 +44,7 @@
                     $this->updateEntities($old->getId(), $oldProperties[$name], $property);
                 } elseif (is_object($property)) {
                     $class = get_class($property);
-                    if($class == "Model" || $class == "Controller") // those classes are aggregations of micros
+                    if($class == "Model" || $class == "Controller") // those classes are aggregations of micros (*-1)
                         $this->saveAndBind($old->getId(), $property);
                     else
                         $this->update($oldProperties[$name], $property);
@@ -128,7 +128,7 @@
 
             foreach ($toInsert as $entity) {
                 $class = get_class($entity);
-                if($class == "Contact" || $class == "Keyword") { // those classes are aggregations
+                if($class == "Contact" || $class == "Keyword") { // those classes are aggregations (*-*)
                     $this->saveAndBind($parentId, $entity);
                 }
 
