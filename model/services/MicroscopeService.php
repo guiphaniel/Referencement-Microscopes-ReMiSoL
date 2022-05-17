@@ -110,4 +110,16 @@
             $micro = new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["desc"], $microInfos["type"], $microInfos["access"], $kws);
             return $micro->setId($microId);
         }
+
+        protected function delete($entity) {
+            $id = $entity->getId();
+
+            $existingImgs = glob(__DIR__ . "/../../public/img/micros/" . "$id.*");
+            if($existingImgs) {
+                foreach ($existingImgs as $img)
+                    unlink($img);
+            }
+
+            parent::delete($entity);
+        }
     }
