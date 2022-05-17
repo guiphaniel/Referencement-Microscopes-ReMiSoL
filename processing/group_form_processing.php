@@ -143,7 +143,6 @@
             $url = "/edit_micros_group.php?id=" . $_POST["id"];
         } else
             $url = "/form.php";
-        throw $th;
         redirect($url);
     }
     
