@@ -18,6 +18,9 @@
 
         /** Saves the keyword if it doesn't exist yet, and returns its id */
         function save(Keyword $kw) {
+            if(!$_SESSION["user"]["admin"])
+                return -1;
+
             global $pdo;
 
             $id = $this->getKeywordId($kw);

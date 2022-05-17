@@ -130,6 +130,7 @@
                 $class = get_class($entity);
                 if($class == "Contact" || $class == "Keyword") { // those classes are aggregations (*-*)
                     $this->saveAndBind($parentId, $entity);
+                    continue;
                 }
 
                 $service = (get_class($entity) . "Service")::getInstance();
@@ -170,6 +171,7 @@
                 return;
             } else {
                 $id = $service->save($entity);
+                if($id == -1) return;
                 $service->bind($id, $parentId);
                 return;
             }
