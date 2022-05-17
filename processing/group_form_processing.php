@@ -99,9 +99,15 @@
             $microId = $group->getMicroscopes()[$i]->getId();
             $imgs = $_FILES["imgs"];
 
-            // if no image has been sent, continue
-            if($imgs['size'][$i] == 0)
+            // if no image has been sent, try to remove it if it is on the server, else continue.
+            if($imgs['size'][$i] == 0) {
+                $existingImgs = glob(__DIR__ . "/../public/img/micros/" . "$microId.*");
+                if($existingImgs) {
+                    foreach ($existingImgs as $img)
+                        unlink($img);
+                }
                 continue;
+            }
 
             // retrieve the file extension
             $fileType = $imgs['type'][$i];

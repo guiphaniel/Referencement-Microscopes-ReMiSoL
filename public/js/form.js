@@ -230,7 +230,7 @@ function addKeyword(keyword, catInput) {
     tag.className = "tag";
 
     const rmBt = document.createElement("div");
-    rmBt.className = "rm-bt"
+    rmBt.className = "rm-bt";
     rmBt.dataset.type = "ul";
 
     tag.append(rmBt);
@@ -260,7 +260,7 @@ document.addEventListener("change", function(event) {
     // if the input is empty, remove the last displayed snapshot
     if (imgInput.files.length == 0) {
         let snapshot = imgInput.nextElementSibling;
-        if(snapshot.className == "micro-snapshot")
+        if(snapshot != undefined)
             snapshot.remove();
         return;
     }
@@ -275,14 +275,24 @@ document.addEventListener("change", function(event) {
 
     // display the snapshot
     // if a previous snapshot already existed, replace its url, else, create a new snapshot
-    let snapshot = imgInput.nextElementSibling;
-    if(snapshot.className != "micro-snapshot") {// check the nextElementSibling was indeed the snapshot (meaning it already existed). If not, create it.
-        snapshot = document.createElement("img");
-        snapshot.className = "micro-snapshot";
-    }
-    
-    imgInput.insertAdjacentElement("afterend", snapshot)
+    let snapshotWrapper = imgInput.nextElementSibling;
+    if(snapshotWrapper == undefined) {// check a snapshot wrapper already existed. If not, create one.
+        snapshotWrapper =  document.createElement("div");
 
+        let snapshot = document.createElement("img");
+        snapshot.className = "micro-snapshot";
+
+        const rmBt = document.createElement("div");
+        rmBt.className = "rm-bt";
+        rmBt.addEventListener("click", function(e) {e.target.parentElement.previousSibling.value = null}) // set input value to null
+        
+        snapshotWrapper.append(snapshot);
+        snapshotWrapper.append(rmBt);
+
+        imgInput.insertAdjacentElement("afterend", snapshotWrapper);
+    }
+
+    let snapshot = snapshotWrapper.firstChild;
     let reader = new FileReader();
     reader.onload = (function(snapshot) { return function(e) { snapshot.src = e.target.result; }; })(snapshot);
     reader.readAsDataURL(file);

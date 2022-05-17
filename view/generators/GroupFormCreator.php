@@ -232,26 +232,32 @@
             </select>
             <label for="micro-desc-<?=$id?>">Description</label>
             <textarea id="micro-desc-<?=$id?>" name="micros[<?=$id?>][desc]" cols="30" rows="10" required><?=$micro?->getDesc()?></textarea>
-            <label for="micro-img-<?=$id?>">Photo</label>
-                <input id="micro-img-<?=$id?>" name="imgs[]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
-            <?php 
-                if(isset($micro)) :
-                    $microId = $micro->getId();
-                    $name = implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $controller->getName()]);
+            <div>
+                <label for="micro-img-<?=$id?>">Photo</label>
+                    <input id="micro-img-<?=$id?>" name="imgs[]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
+                <?php 
+                    if(isset($micro)) :
+                        $microId = $micro->getId();
+                        $name = implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $controller->getName()]);
 
-                    $path = glob(__DIR__ . "/../../public/img/micros/" . "$microId.*");
+                        $path = glob(__DIR__ . "/../../public/img/micros/" . "$microId.*");
 
-                    if($path) :
-                        if(browserSupportsWebp())
-                            $extension = ".webp"; 
-                        else
-                            $extension = ".jpeg"; 
-            ?>
-                <img class="micro-snapshot" src="/public/img/micros/<?=$microId . $extension?>" alt="Microscope <?=$name?>">
-            <?php
-                    endif; 
-                endif;
-            ?>
+                        if($path) :
+                            if(browserSupportsWebp())
+                                $extension = ".webp"; 
+                            else
+                                $extension = ".jpeg"; 
+                ?>
+                <div>
+                    <img class="micro-snapshot" src="/public/img/micros/<?=$microId . $extension?>" alt="Microscope <?=$name?>">
+                    <div class="rm-bt"></div>
+                </div>
+                <?php
+                        endif; 
+                    endif;
+                ?>
+            </div>
+                
             <fieldset id="keywords">
                 <legend>Mots-clés</legend>
                 <?php 
