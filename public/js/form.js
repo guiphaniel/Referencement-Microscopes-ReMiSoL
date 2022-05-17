@@ -40,8 +40,10 @@ async function onCompagnyInput(input) {
         let modelInput = document.getElementById(`micro-model-` + fieldsetId);
 
         brandInput.value = "Homemade";
+        document.getElementById(`micro-brands-` + fieldsetId).innerHTML = "<option value='Homemade'>";
         brandInput.disabled = false;
         modelInput.value = "Homemade";
+        document.getElementById(`micro-models-` + fieldsetId).innerHTML = "<option value='Homemade'>";
         modelInput.disabled = false;
 
         let url = "/api/v1/listControllers.php";
