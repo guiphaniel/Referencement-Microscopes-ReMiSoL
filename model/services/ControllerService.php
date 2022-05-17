@@ -98,4 +98,16 @@
 
             return $controllers;
         }
+
+        function bind($controllerId, $microId) {
+            global $pdo;
+
+            $pdo->exec("UPDATE microscope SET controller_id = $controllerId where id = $microId");
+        }
+
+        function unbind($controllerId, $microId) {
+            global $pdo;
+
+            $pdo->exec("UPDATE microscope SET controller_id = NULL where id = $microId");
+        }
     }            

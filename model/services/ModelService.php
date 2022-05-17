@@ -79,4 +79,16 @@
 
             return $models;
         }
+
+        function bind($modelId, $microId) {
+            global $pdo;
+
+            $pdo->exec("UPDATE microscope SET model_id = $modelId where id = $microId");
+        }
+
+        function unbind($modelId, $microId) {
+            global $pdo;
+
+            $pdo->exec("UPDATE microscope SET model_id = NULL where id = $microId");
+        }
     }            

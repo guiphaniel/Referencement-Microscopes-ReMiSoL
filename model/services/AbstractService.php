@@ -29,7 +29,6 @@
             return false;
         }
 
-        //TODO: faire en sorte que les attributs des classes correspondent à ceux de la base de données (name...)
         public function update(AbstractEntity $old, AbstractEntity $new) {
             global $pdo;
 
@@ -38,14 +37,17 @@
             
             $toUpdate = $this->propArrayDiff($newProperties, $oldProperties);
 
-            $updateSql = "UPDATE " . camelCaseToSnakeCase(get_class($old)) . " SET ";
             $toUpdateSqlFields = [];
 
             foreach ($toUpdate as $name => $property) {
                 if(is_array($property)) { // assume that arrays will always be arrays of entities
                     $this->updateEntities($old->getId(), $oldProperties[$name], $property);
                 } elseif (is_object($property)) {
-                    $this->update($oldProperties[$name], $property);
+                    $class = get_class($property);
+                    if($class == "Model" || $class == "Controller") // those classes are aggregations of micros
+                        $this->saveAndBind($old->getId(), $property);
+                    else
+                        $this->update($oldProperties[$name], $property);
                 } else { // primitive type
                     $name = camelCaseToSnakeCase($name);
                     $value = $pdo->quote($property);
@@ -56,6 +58,7 @@
             if(empty($toUpdateSqlFields))
                 return;
 
+            $updateSql = "UPDATE " . camelCaseToSnakeCase(get_class($old)) . " SET ";
             $updateSql .= implode(", ", $toUpdateSqlFields);
             $id = $old->getId();
             $updateSql .= " WHERE id = $id";
@@ -125,20 +128,8 @@
 
             foreach ($toInsert as $entity) {
                 $class = get_class($entity);
-                if($class == "Contact" || $class == "Keyword" || $class == "Model" || $class == "Controller") { // those classes are aggregations, so we have to check if they already existed in the db to bind them if necessary
-                    $service = (get_class($entity) . "Service")::getInstance();
-                    $method = "get" . $class . "Id";
-                    $id = call_user_func_array(array($service, $method), array($entity));
-
-                    // if the entity is already in the database, bind the parent entity to it (as it is aggregation). Else, create it.
-                    if($id != -1) {
-                        $service->bind($id, $parentId);
-                        return;
-                    } else {
-                        $id = $service->save($entity);
-                        $service->bind($id, $parentId);
-                        return;
-                    }
+                if($class == "Contact" || $class == "Keyword") { // those classes are aggregations
+                    $this->saveAndBind($parentId, $entity);
                 }
 
                 $service = (get_class($entity) . "Service")::getInstance();
@@ -163,6 +154,24 @@
                 }
                 $service = get_class($entity) . "Service";
                 $service::getInstance()->delete($entity);
+            }
+        }
+
+        /** Use this function for aggregations. Save the entity in database if it doesn't exist yet, then bind the parent to it. */
+        protected function saveAndBind($parentId, $entity) {
+            $class = get_class($entity);
+            $service = (get_class($entity) . "Service")::getInstance();
+            $method = "get" . $class . "Id";
+            $id = call_user_func_array(array($service, $method), array($entity));
+
+            // if the entity is already in the database, bind the parent entity to it (as it is aggregation). Else, create it.
+            if($id != -1) {
+                $service->bind($id, $parentId);
+                return;
+            } else {
+                $id = $service->save($entity);
+                $service->bind($id, $parentId);
+                return;
             }
         }
     
