@@ -151,10 +151,10 @@
                 if($class == "Contact" || $class == "Keyword" || $class == "Model" || $class == "Controller") { // those classes are aggregations...
                     $service = (get_class($entity) . "Service")::getInstance();
                     $service->unbind($entity->getId(), $parentId);
-                    return;
+                } else {
+                    $service = get_class($entity) . "Service";
+                    $service::getInstance()->delete($entity);
                 }
-                $service = get_class($entity) . "Service";
-                $service::getInstance()->delete($entity);
             }
         }
 
