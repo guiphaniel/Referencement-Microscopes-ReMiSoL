@@ -67,7 +67,8 @@
             $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
             foreach ($infos as $info) {
-                $compagnies[] = (new Compagny($info["name"]))->setId($info["id"]);
+                $id = $info["id"];
+                $compagnies[$id] = (new Compagny($info["name"]))->setId($id);
             }
 
             return $compagnies;

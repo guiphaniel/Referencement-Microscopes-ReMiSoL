@@ -72,8 +72,9 @@
             ");
 
             foreach ($sth->fetchAll() as $row) {
-                $controllers[] = (new Controller($row["ctrName"], new Brand($row["braName"], new Compagny($row["comName"]))))
-                    ->setId($row["id"]);
+                $id = $row["id"];
+                $controllers[$id] = (new Controller($row["ctrName"], new Brand($row["braName"], new Compagny($row["comName"]))))
+                    ->setId($id);
             }
 
             return $controllers;
@@ -92,8 +93,9 @@
             $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
             foreach ($infos as $info) {
-                $controllers[] = (new Controller($info["name"], $brand))
-                    ->setId($info["id"]);
+                $id = $info["id"];
+                $controllers[$id] = (new Controller($info["name"], $brand))
+                    ->setId($id);
             }
 
             return $controllers;

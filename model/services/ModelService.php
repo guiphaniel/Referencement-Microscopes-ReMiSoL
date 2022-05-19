@@ -73,8 +73,9 @@
             $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
             foreach ($infos as $info) {
-                $models[] = (new Model($info["name"], $brand))
-                    ->setId($info["id"]);
+                $id = $info["id"];
+                $models[$id] = (new Model($info["name"], $brand))
+                    ->setId($id);
             }
 
             return $models;
