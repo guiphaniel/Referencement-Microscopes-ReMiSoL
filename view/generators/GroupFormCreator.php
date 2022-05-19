@@ -214,7 +214,7 @@
             <input id="micro-model-<?=$id?>" list="micro-models-<?=$id?>" name="micros[<?=$id?>][model]" <?=$this->valueOf($model?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
             <datalist id="micro-models-<?=$id?>">
             </datalist>
-            <label for="micro-controller-<?=$id?>">Électronique - contrôleur</label>
+            <label for="micro-controller-<?=$id?>">Électronique / Contrôleur</label>
             <input id="micro-controller-<?=$id?>" list="micro-controllers-<?=$id?>" name="micros[<?=$id?>][controller]" <?=$this->valueOf($controller?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
             <datalist id="micro-controllers-<?=$id?>">
             </datalist>
