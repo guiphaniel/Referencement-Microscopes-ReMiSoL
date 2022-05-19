@@ -3,8 +3,6 @@
     include_once(__DIR__ . "/FormCreator.php");
 
     Class KeywordsFormCreator extends FormCreator {
-        private $kws;
-
         function __construct() {
             parent::__construct("/processing/keywords_form_processing.php", "POST");
         }
