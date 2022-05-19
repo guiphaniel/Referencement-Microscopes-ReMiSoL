@@ -198,10 +198,11 @@ function getCustomPopupHTML(group) {
 	let allKeywords = {};
 	for (const micro of group.microscopes) {
 		for (const kw of micro.keywords) {
-			if(!allKeywords[kw.cat])
-				allKeywords[kw.cat] = [kw.tag];
+			let catName = kw.cat.name;
+			if(!allKeywords[catName])
+				allKeywords[catName] = [kw.tag];
 			else
-				allKeywords[kw.cat].push(kw.tag);
+				allKeywords[catName].push(kw.tag);
 		}
 	}
 

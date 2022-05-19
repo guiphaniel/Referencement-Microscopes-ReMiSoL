@@ -51,8 +51,9 @@
                     $keyWordService = KeywordService::getInstance();
                     $cats = $keyWordService->getAllCategories();
                     foreach ($cats as $cat): 
-                        echo "<!-- $cat datalist -->" ?>
-                        <datalist id="cats-<?=HTMLNormalize($cat)?>">
+                        $catName = $cat->getName();
+                        echo "<!-- $catName datalist -->" ?>
+                        <datalist id="cats-<?=HTMLNormalize($catName)?>">
                         <?php 
                             $tags = $keyWordService->getAllTags($cat);
                             foreach ($tags as $tag): ?>
@@ -264,15 +265,18 @@
                     $keyWordService = KeywordService::getInstance();
                     $cats = $keyWordService->getAllCategories();
                     foreach ($cats as $cat): 
-                        $normCat = HTMLNormalize($cat)?>
+                        $catName =$cat->getName();
+                        $normCat = HTMLNormalize($catName)?>
                         <div>
-                            <label for="cat-<?=$normCat?>-<?=$id?>"><?=$cat?></label>
+                            <label for="cat-<?=$normCat?>-<?=$id?>"><?=$catName?></label>
                             <input id="cat-<?=$normCat?>-<?=$id?>" class="cat-input" list="cats-<?=$normCat?>">
-                            <?php foreach (array_filter($micro?->getKeywords()??[], function ($kw) use (&$cat) {return $kw->getCat() == $cat;}) as $kw): ?>
+                            <?php foreach (array_filter($micro?->getKeywords()??[], function ($kw) use ($catName) {
+                                return $kw->getCat()->getName() == $catName;
+                                }) as $kw): ?>
                                 <div class="tag">
                                     <div class="rm-bt" data-type="ul"></div>
                                     <?=$kw->getTag()?>
-                                    <input id="micro-kw-<?=HTMLNormalize($cat)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$cat?>][]" value="<?=$kw->getTag()?>">
+                                    <input id="micro-kw-<?=HTMLNormalize($catName)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$catName?>][]" value="<?=$kw->getTag()?>">
                                 </div>
                             <?php endforeach; ?>
                         </div>

@@ -181,7 +181,7 @@
             return $a->getId() - $b->getId();   
         }
 
-        protected function delete($entity) {
+        public function delete($entity) {
             global $pdo;
             $table = strtolower(get_class($entity));
             $id = $entity->getId();

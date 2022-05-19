@@ -67,7 +67,7 @@
             $kws = [];
             foreach($micro["keywords"]??[] as $cat => $tags) {
                 foreach($tags as $tag) {
-                    $kw = new Keyword($cat, $tag);
+                    $kw = new Keyword(new Category($cat), $tag);
                     $kwId = KeywordService::getInstance()->getKeywordId($kw);
 
                     if($kwId == -1)

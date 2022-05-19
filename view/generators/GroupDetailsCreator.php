@@ -97,9 +97,9 @@
                                 <tbody>
                                     <?php 
                                     foreach ($micro->getKeywords() as $kw)
-                                        $cats[$kw->getCat()][] = $kw->getTag();
+                                        $cats[$kw->getCat()->getName()][] = $kw->getTag();
                                     
-                                    foreach($cats as $cat => $tags):
+                                    foreach($cats??[] as $cat => $tags):
                                     ?>
                                         <tr>
                                             <th scope="rowgroup"><?= $cat; ?></th>
