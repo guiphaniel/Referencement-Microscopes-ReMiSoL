@@ -3,6 +3,7 @@
     include_once("view/generators/HeaderCreator.php");
     include_once("view/generators/UserFormCreator.php");
     include_once("view/generators/KeywordsFormCreator.php");
+    include_once("view/generators/MicrosFormCreator.php");
     include_once("view/generators/GroupDetailsCreator.php");
     include_once("model/services/UserService.php");
     include_once("model/services/MicroscopesGroupService.php");
@@ -14,17 +15,19 @@
 
     function getMapping($action) {
         switch ($action) {
+            case 'keywords':
+                echo "<h2>Mots-clés</h2>";
+                    (new KeywordsFormCreator())->create();
+                break;
+            case 'micros':
+                echo "<h2>Matériel</h2>";
+                    (new MicrosFormCreator())->create();
+                break;
             case 'users':
                 echo "<h2>Utilisateurs</h2>";
                 echo "<div id='user-forms'>";
                 foreach(UserService::getInstance()->findAllUsers() as $user)
                     (new UserFormCreator($user, true))->create();
-                echo "</div>";
-                break;
-            case 'keywords':
-                echo "<h2>Mots-clés</h2>";
-                echo "<div id='kws-forms'>";
-                    (new KeywordsFormCreator())->create();
                 echo "</div>";
                 break;
             default:
@@ -41,6 +44,12 @@
         switch ($action) {
             case 'keywords':
                 echo '<script src="/public/js/keywords_form.js" defer></script>';
+                break;
+            case 'micros':
+                echo '<script src="/public/js/micros_form.js" defer></script>';
+                break;
+            case 'users':
+                echo '<script src="/public/js/user_form.js" defer></script>';
                 break;
         }
     }
