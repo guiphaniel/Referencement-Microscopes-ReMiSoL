@@ -113,9 +113,7 @@
 
                 $group->setId($groupId);
 
-                foreach ($micros as $micro) {
-                    $group->addMicroscope($micro);
-                }
+                $group->setMicroscopes($micros);
 
                 $groups[$groupId] = $group;
             }
@@ -191,12 +189,21 @@
 
             $group = new MicroscopesGroup($coor, $lab, $contacts);
 
+            $group->setMicroscopes($micros);
+
             $group->setId($groupId);
 
-            foreach ($micros as $micro) {
-                $group->addMicroscope($micro);
-            }
-
             return $group->setId($groupId);
+        }
+
+        //override so images and coordinates (1-1) are deleted too
+        function delete($group) {
+            $microService = MicroscopeService::getInstance();
+            foreach($group->getMicroscopes() as $micro)
+                $microService->delete($micro);
+
+            CoordinatesService::getInstance()->delete($group->getCoor());
+
+            parent::delete($group);
         }
     }   
