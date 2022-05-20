@@ -23,10 +23,19 @@ async function loadAndShowMicroscopes() {
 
 	for (let group of groups) {
 		// set custom icon color
-		let color = group.microscopes[0].type == "LABO" ? "blue" : "red";
-
-		for (let i = 1; i < group.microscopes.length; i++)
-			color = color == (group.microscopes[i].type == "LABO" ? "blue" : "red") ? color : "orange";
+		let color;
+		let first = true;
+		for (let micro of Object.values(group.microscopes)) {
+			if(first) {
+				color = micro.type == "LABO" ? "blue" : "red";
+				first = false;
+			} else {
+				if(micro.type == "LABO" ? "blue" : "red" != color) {
+					color = "orange";
+					break;
+				}
+			}
+		}
 
 		let customIcon = new L.Icon({
 			iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
@@ -173,7 +182,7 @@ function getCustomPopupHTML(group) {
 	// Microscopes
 	infos.append(createContentElement("h3", "Microscopes"));
 	let microsList = document.createElement("ul");
-	for (const micro of group.microscopes) {
+	for (const micro of Object.values(group.microscopes)) {
 		ctr = micro.controller;
 		model = micro.model;
 		brand = model.brand;
@@ -196,7 +205,7 @@ function getCustomPopupHTML(group) {
 	// Keywords
 	// merge all tags of all microscopes, by categories
 	let allKeywords = {};
-	for (const micro of group.microscopes) {
+	for (const micro of Object.values(group.microscopes)) {
 		for (const kw of micro.keywords) {
 			let catName = kw.cat.name;
 			if(!allKeywords[catName])

@@ -257,12 +257,17 @@ document.addEventListener("change", function(event) {
     if (imgInput.type != "file")
         return;
 
-    // if the input is empty, remove the last displayed snapshot
-    if (imgInput.files.length == 0) {
-        let snapshot = imgInput.nextElementSibling;
-        if(snapshot != undefined)
-            snapshot.remove();
-        return;
+    // set keepImg to false
+    let snapshotWrapper = imgInput.nextElementSibling;
+    if(snapshotWrapper != undefined) {
+        // if the input is empty, remove the last displayed snapshot
+        if (imgInput.files.length == 0) {
+            snapshotWrapper.remove();
+            return;
+        }
+
+        let keepImg = snapshotWrapper.lastElementChild;
+        keepImg.value = false
     }
         
 
@@ -275,7 +280,6 @@ document.addEventListener("change", function(event) {
 
     // display the snapshot
     // if a previous snapshot already existed, replace its url, else, create a new snapshot
-    let snapshotWrapper = imgInput.nextElementSibling;
     if(snapshotWrapper == undefined) {// check a snapshot wrapper already existed. If not, create one.
         snapshotWrapper =  document.createElement("div");
 
@@ -292,7 +296,7 @@ document.addEventListener("change", function(event) {
         imgInput.insertAdjacentElement("afterend", snapshotWrapper);
     }
 
-    let snapshot = snapshotWrapper.firstChild;
+    let snapshot = snapshotWrapper.firstElementChild;
     let reader = new FileReader();
     reader.onload = (function(snapshot) { return function(e) { snapshot.src = e.target.result; }; })(snapshot);
     reader.readAsDataURL(file);

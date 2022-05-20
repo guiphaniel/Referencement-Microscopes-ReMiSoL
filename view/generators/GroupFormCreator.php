@@ -62,14 +62,13 @@
                         </datalist>
                     <?php endforeach; 
                     
-                    //create the first, not removable micro field
-                    $this->createMicroField(0, $this->group?->getMicroscopes()[0], false);
-                    //create all others, removable micro fields
-                    foreach ($this->group?->getMicroscopes()??[] as $key => $micro) {
-                        if($key == 0)
-                            continue;
+                    //create all micro fields (only the first one isn't removable)
+                    $first = true;  
+                    foreach ($this->group?->getMicroscopes()??[] as $microId => $micro) {
+                        $this->createMicroField($microId, $micro, !$first);
 
-                        $this->createMicroField($key, $micro, true);
+                        if($first)
+                            $first = false;
                     }  
                 ?>
                 <div id="add-micro" class="add-bt"></div>
@@ -235,7 +234,7 @@
             <textarea id="micro-desc-<?=$id?>" name="micros[<?=$id?>][desc]" cols="30" rows="10" required><?=$micro?->getDesc()?></textarea>
             <div>
                 <label for="micro-img-<?=$id?>">Photo</label>
-                    <input id="micro-img-<?=$id?>" name="imgs[]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
+                    <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
                 <?php 
                     if(isset($micro)) :
                         $microId = $micro->getId();
@@ -249,10 +248,11 @@
                             else
                                 $extension = ".jpeg"; 
                 ?>
-                <div>
-                    <img class="micro-snapshot" src="/public/img/micros/<?=$microId . $extension?>" alt="Microscope <?=$name?>">
-                    <div class="rm-bt"></div>
-                </div>
+                            <div>
+                                <img class="micro-snapshot" src="/public/img/micros/<?=$microId . $extension?>" alt="Microscope <?=$name?>">
+                                <div class="rm-bt"></div>
+                                <input type="hidden" name="keepImg[<?=$microId?>]" value="true">
+                            </div>
                 <?php
                         endif; 
                     endif;

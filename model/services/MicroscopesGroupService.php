@@ -159,7 +159,7 @@
             $micros = [];
             $microscopeService = MicroscopeService::getInstance();
             foreach ($microsIds as $microId) {
-                $micros[] = $microscopeService->findMicroscopeById($microId);
+                $micros[$microId] = $microscopeService->findMicroscopeById($microId);
             }
 
             return $micros;

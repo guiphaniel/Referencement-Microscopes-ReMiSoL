@@ -24,7 +24,7 @@
         }
 
         function addMicroscope(Microscope $microscope) {
-            $this->microscopes[] = $microscope;
+            $this->microscopes[$microscope->getId()] = $microscope;
         }
 
         function removeMicroscope(Microscope $microscope) {

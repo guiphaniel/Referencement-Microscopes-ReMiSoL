@@ -100,16 +100,14 @@
             $groupId = MicroscopesGroupService::getInstance()->save($group);
 
         //save the micros' imgs
-        $nbImgs = count($_FILES['imgs']['name']);
-        if($nbImgs > count($_POST["micros"]))
-            throw new Exception("Vous ne pouvez envoyer qu'une seule image par microscope au maximum.");
-
-        for ($i=0; $i < $nbImgs; $i++) { 
-            $microId = $group->getMicroscopes()[$i]->getId();
+        foreach (array_keys($group->getMicroscopes()) as $microId) { 
             $imgs = $_FILES["imgs"];
 
-            // if no image has been sent, try to remove it if it is on the server, else continue.
-            if($imgs['size'][$i] == 0) {
+            // if no image has been sent, keep it if it hasn't change, or remove it if it exists on the server
+            if($imgs['size'][$microId] == 0) {
+                if(isset($_POST["keepImg"]) && $_POST["keepImg"][$microId])
+                    continue;
+
                 $existingImgs = glob(__DIR__ . "/../public/img/micros/" . "$microId.*");
                 if($existingImgs) {
                     foreach ($existingImgs as $img)
@@ -119,9 +117,9 @@
             }
 
             // retrieve the file extension
-            $fileType = $imgs['type'][$i];
+            $fileType = $imgs['type'][$microId];
             $fileType = substr($fileType, strrpos($fileType, "/") + 1);
-            $tmpName = $imgs['tmp_name'][$i];
+            $tmpName = $imgs['tmp_name'][$microId];
             $image;
             switch ($fileType) {
                 case "png":
