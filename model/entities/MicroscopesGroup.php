@@ -15,6 +15,13 @@
         {
             return $this->microscopes;
         }
+        
+        public function setMicroscopes($microscopes)
+        {
+            $this->microscopes = $microscopes;
+
+            return $this;
+        }
 
         function addMicroscope(Microscope $microscope) {
             $this->microscopes[] = $microscope;
