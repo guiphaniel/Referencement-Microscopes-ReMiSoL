@@ -7,7 +7,7 @@
 
     function userRedirect() {
         if($_SESSION["user"]["admin"])
-            redirect("/admin.php");
+            redirect("/admin.php?action=users");
         else
             redirect("/index.php"); // TODO: replace by account
     }
