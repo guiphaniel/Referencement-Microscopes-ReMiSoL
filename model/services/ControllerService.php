@@ -64,11 +64,12 @@
             $controllers = [];
             
             $sth = $pdo->query("
-                SELECT c.id, c.name as ctrName, b.name as braName, c.name as comName FROM controller
+                SELECT ctr.id, ctr.name as ctrName, b.name as braName, cmp.name as comName 
+                FROM controller as ctr
                 JOIN brand as b
                 on brand_id = b.id
-                JOIN compagny as c
-                on b.compagny_id = c.id
+                JOIN compagny as cmp
+                on b.compagny_id = cmp.id
             ");
 
             foreach ($sth->fetchAll() as $row) {
