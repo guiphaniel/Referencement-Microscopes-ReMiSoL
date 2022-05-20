@@ -227,6 +227,12 @@
                 ]);
             } else if (!$user->isAdmin() && $this->isAdmin($user))
                 $pdo->exec("DELETE FROM admin where user_id = $id");
+
+            // lock / unlock the user
+            if($user->isLocked())
+                $this->lockUser($user);
+            else if (!$user->isLocked() && $this->isLocked($user))
+                $this->unlockUser($user);
         }
 
         function checkUserInfosUniqueness($id, $user) {
