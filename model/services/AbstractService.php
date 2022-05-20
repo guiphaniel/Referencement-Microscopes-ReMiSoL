@@ -183,7 +183,7 @@
 
         public function delete($entity) {
             global $pdo;
-            $table = strtolower(get_class($entity));
+            $table = camelCaseToSnakeCase(get_class($entity));
             $id = $entity->getId();
 
             $pdo->exec("DELETE FROM $table WHERE id = $id");
