@@ -59,9 +59,10 @@ function createBrandWrapper(parentWrapper) {
     let wrapper = document.createElement("div");
     wrapper.className = "brand-wrapper";
 
+    cmpId = parentWrapper.dataset.parentId;
     nextBrandId = parentWrapper.dataset.nextBrandId++;
 
-    let inputName = `brands[${nextBrandId}]`;
+    let inputName = `brands[${cmpId}][${nextBrandId}]`;
     let input = createInput(inputName);
     let rmBt = createRmBt();
 
