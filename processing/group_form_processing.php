@@ -45,6 +45,15 @@
         }
     }
 
+    //if the user is modify an existing group, check he's indeed the owner of it
+    if(isset($_POST["id"])) {
+        $user = MicroscopesGroupService::getInstance()->findGroupOwnerByGroupId($_POST["id"]);
+        if(!isset($user) || !($user->getId() == $_SESSION["user"]["id"] || $user->isAdmin())) {
+            $_SESSION["form"]["errorMsg"] = "Vous n'êtes pas autorisé à modifier ce groupe";
+            redirect("/form.php");
+        }
+    }
+
     try {
         // Convert form values into objects...
         $address = new Address($labAddress["school"], $labAddress["street"], $labAddress["zipCode"], $labAddress["city"], $labAddress["country"]);

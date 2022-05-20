@@ -77,6 +77,17 @@
             return $row ? UserService::getInstance()->findUserById($row[0]) : null;
         }
 
+        public function findGroupOwnerByGroupId(int $groupId) {
+            global $pdo;
+
+            $sth = $pdo->query("SELECT user_id FROM microscopes_group WHERE id = $groupId");
+
+            $row = $sth->fetch();
+
+            // if this user exists, return it, else return null
+            return $row ? UserService::getInstance()->findUserById($row[0]) : null;
+        }
+
         function findAllMicroscopesGroup() {
             global $pdo;
 
