@@ -117,7 +117,7 @@
                     $group->addMicroscope($micro);
                 }
 
-                $groups[] = $group;
+                $groups[$groupId] = $group;
             }
 
             return $groups;

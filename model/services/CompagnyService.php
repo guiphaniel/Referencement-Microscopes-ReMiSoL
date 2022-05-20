@@ -50,6 +50,30 @@
                 ->setId($id);
         }
 
+        function findCompagnyByName($name) {
+            global $pdo;
+
+            $sql = "
+                select *
+                from compagny
+                where name = :name
+            ";
+
+            $sth = $pdo->prepare($sql);
+
+            $sth->execute([
+                "name" => $name
+            ]);
+
+            $infos = $sth->fetch(PDO::FETCH_NAMED);
+
+            if(empty($infos))
+                return null;
+
+            return (new Compagny($name))
+                ->setId($infos["id"]);
+        }
+
         /** Saves the compagny if it doesn't exist yet, and returns its id */
         function save(Compagny $compagny) {
             global $pdo;

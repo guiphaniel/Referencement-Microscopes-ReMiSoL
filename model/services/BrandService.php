@@ -57,6 +57,30 @@
                 ->setId($id);
         }
 
+        function findBrandByName($name) {
+            global $pdo;
+
+            $sql = "
+                select *
+                from brand
+                where name = :name
+            ";
+
+            $sth = $pdo->prepare($sql);
+
+            $sth->execute([
+                "name" => $name
+            ]);
+
+            $infos = $sth->fetch(PDO::FETCH_NAMED);
+
+            if(empty($infos))
+                return null;
+
+            return (new Brand($name, CompagnyService::getInstance()->findCompagnyById($infos["compagny_id"])))
+                ->setId($infos["id"]);
+        }
+
         /** Saves the brand if it doesn't exist yet, and returns its id */
         function save(Brand $brand) {
             global $pdo;

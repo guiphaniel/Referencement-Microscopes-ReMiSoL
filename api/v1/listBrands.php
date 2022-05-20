@@ -13,10 +13,12 @@
                 die();
             }
 
-            $brands = BrandService::getInstance()->getAllBrands(new Compagny($_GET["compagny"]));
+            $cmp = CompagnyService::getInstance()->findCompagnyByName($_GET["compagny"]);
+
+            $brands = BrandService::getInstance()->getAllBrands($cmp);
             
             header('Content-Type: application/json');
-            echo json_encode($brands, JSON_PRETTY_PRINT);
+            echo json_encode(array_values($brands), JSON_PRETTY_PRINT); // we need to get rid of the keys (which are the ids), else, the json won't be an array but an object
             break;
         default:
             // Requête invalide

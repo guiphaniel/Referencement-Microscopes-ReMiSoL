@@ -78,11 +78,11 @@ async function onBrandInput(input) {
 
     let compagnyInput = document.getElementById("micro-compagny-" + fieldsetId);
 
-	const modelsUrl = `/api/v1/listModels.php?compagny=${compagnyInput.value}&brand=${input.value}`;
+	const modelsUrl = `/api/v1/listModels.php?brand=${input.value}`;
     let modelDatalist = document.getElementById(`micro-models-` + fieldsetId);
     fillDatalist(modelDatalist, modelsUrl).then(() => document.getElementById(`micro-model-` + fieldsetId).disabled = false);
 
-    const controllersUrl = `/api/v1/listControllers.php?compagny=${compagnyInput.value}&brand=${input.value}`
+    const controllersUrl = `/api/v1/listControllers.php?brand=${input.value}`
     let controllerDatalist = document.getElementById(`micro-controllers-` + fieldsetId);
     fillDatalist(controllerDatalist, controllersUrl).then(() => document.getElementById(`micro-controller-` + fieldsetId).disabled = false);
 }
