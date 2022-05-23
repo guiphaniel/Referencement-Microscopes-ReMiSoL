@@ -2,8 +2,6 @@
     include_once(__DIR__ . "/../model/services/UserService.php");
     include_once(__DIR__ . "/../utils/send_email.php");
 
-    session_start();
-
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
     if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"]) || empty($_POST["phoneCode"]) || empty($_POST["phoneNum"]) || empty($_POST["password1"]) || empty($_POST["password2"])) {       
         header('location: /signin.php');
