@@ -21,6 +21,8 @@ async function loadAndShowMicroscopes() {
 	const response = await fetch("/api/v1/listMicroscopesGroups.php");
 	const groups = await response.json();
 
+	let markersClusters = L.markerClusterGroup();
+
 	for (let group of groups) {
 		// set custom icon color
 		let color;
@@ -59,13 +61,15 @@ async function loadAndShowMicroscopes() {
 			window.location.href = "/group-details.php?id=" + group.id;
 		});
 		
-		marker.addTo(map);
+		markersClusters.addLayer(marker);
 
 		// zoom on the marker if wer're on it's group-details page
 		if(page == "group-details.php" && group.id == window.location.search.split("=").pop()) {
 			map.setView(group.coor, 13);
 		}
 	}
+
+	map.addLayer(markersClusters);
 }
 
 
