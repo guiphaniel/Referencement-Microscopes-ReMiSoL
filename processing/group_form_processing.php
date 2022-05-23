@@ -105,7 +105,7 @@
 
             // if no image has been sent, keep it if it hasn't change, or remove it if it exists on the server
             if($imgs['size'][$microId] == 0) {
-                if(isset($_POST["keepImg"]) && $_POST["keepImg"][$microId])
+                if(isset($_POST["keepImg"]) && isset($_POST["keepImg"][$microId]) && $_POST["keepImg"][$microId])
                     continue;
 
                 $existingImgs = glob(__DIR__ . "/../public/img/micros/" . "$microId.*");
