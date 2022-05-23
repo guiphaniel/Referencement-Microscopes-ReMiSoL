@@ -1,7 +1,6 @@
 <?php
     include_once(__DIR__ . "/../model/services/UserService.php");
-
-    session_start();
+    include_once(__DIR__ . "/../utils/send_email.php");
 
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
     if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"]) || empty($_POST["phoneCode"]) || empty($_POST["phoneNum"]) || empty($_POST["password1"]) || empty($_POST["password2"])) {       
@@ -24,17 +23,9 @@
         $token = $userService->lockUser($user);
 
         // send verification mail
-        $headers = "";
-        $headers .= "Reply-To: David Albertini <noreply@guilhem.davidalbertini.fr>\r\n"; 
-        $headers .= "Return-Path: David Albertini <noreply@guilhem.davidalbertini.fr>\r\n"; 
-        $headers .= "From: David Albertini <noreply@guilhem.davidalbertini.fr>\r\n";  
-        $headers .= "Organization: David Albertini\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-type: text/plain; charset=utf-8\r\n";
-        $headers .= "X-Priority: 3\r\n";
-        $headers .= "X-Mailer: PHP". phpversion() ."\r\n" ;
-
-        mail($user->getEmail(), "Activation de votre compte", "Bonjour,\n\nAfin d'activer votre compte, veuillez suivre le lien suivant : https://guilhem.davidalbertini.fr/processing/unlock_user.php?id=$id&token=$token\n\nA bientôt.\n\n\n Ce mail est un mail automatique, merci de ne pas y répondre.", $headers);
+        $object = "[RéMiSoL] Activation de votre compte";
+        $content = "Bonjour,\n\nAfin d'activer votre compte, veuillez suivre le lien suivant : https://" . WEBSITE_URL . "/processing/unlock_user.php?id=$id&token=$token\n\nA bientôt.\n\n\n Ce mail est un mail automatique, merci de ne pas y répondre.";
+        sendEmail($user->getEmail(), $object, $content);
     } catch (\Throwable $th) {
         $_SESSION["form"]["errorMsg"]=$th->getMessage();
         header('location: /signin.php');

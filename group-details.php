@@ -14,6 +14,11 @@
         exit();
     }
 
+    if($group->isLocked() == true && !$_SESSION["user"]["admin"]) {
+        header('location: /index.php');
+        exit();
+    }
+
     $header = new HeaderCreator("Détails"); 
 ?>
 <!DOCTYPE html>

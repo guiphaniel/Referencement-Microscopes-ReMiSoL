@@ -1,6 +1,8 @@
 <?php
     session_start();
     
+    const WEBSITE_URL = "guilhem.davidalbertini.fr";
+
     function isUserSessionValid() {
         return isset($_SESSION["user"]);
     }

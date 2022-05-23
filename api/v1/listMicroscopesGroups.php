@@ -8,7 +8,7 @@
         case 'GET':
             //TODO: parametres (limit, offset)
             
-            $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroup();
+            $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroup(false);
             
             header('Content-Type: application/json');
             echo json_encode(array_values($groups), JSON_PRETTY_PRINT); // we need to get rid of the keys (which are the ids), else, the json won't be an array but an object
