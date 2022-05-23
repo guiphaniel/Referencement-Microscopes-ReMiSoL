@@ -59,8 +59,8 @@
             $this->contacts[] = $contact;
         }
 
-        function removeContact(Contact $microscope) {
-            unset($microscopes[array_search($microscope, $this->microscopes, true)]);
+        function removeContact(Contact $contact) {
+            unset($this->contacts[array_search($contact, $this->contacts, true)]);
         }
 
         public function getLab() : Lab
