@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS "microscope_keyword";
 DROP TABLE IF EXISTS "keyword";
 DROP TABLE IF EXISTS "category";
 DROP TABLE IF EXISTS "microscope";
+DROP TABLE IF EXISTS "locked_microscopes_group";
 DROP TABLE IF EXISTS "microscopes_group";
 DROP TABLE IF EXISTS "coordinates";
 DROP TABLE IF EXISTS "lab";
@@ -114,6 +115,11 @@ CREATE TABLE "microscopes_group" (
 	FOREIGN KEY("user_id") REFERENCES "user"("id") ON DELETE CASCADE,
 	CONSTRAINT "pk_microscope_group" PRIMARY KEY("id" AUTOINCREMENT)
 );
+CREATE TABLE "locked_microscopes_group" (
+	"microscopes_group_id"	INTEGER,
+	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id") ON DELETE CASCADE,
+	PRIMARY KEY("microscopes_group_id")
+);
 CREATE TABLE "contact" (
 	"id"	INTEGER,
 	"firstname"	TEXT,
@@ -145,7 +151,7 @@ CREATE TABLE "locked_user" (
 	"user_id"	INTEGER,
 	"token"	TEXT,
 	FOREIGN KEY("user_id") REFERENCES "user"("id") ON DELETE CASCADE,
-	PRIMARY KEY("user_id" AUTOINCREMENT)
+	PRIMARY KEY("user_id")
 );
 CREATE TABLE "admin" (
 	"user_id"	INTEGER,

@@ -49,6 +49,12 @@
                     else
                         $this->update($oldProperties[$name], $property);
                 } else { // primitive type
+                    if($name == "locked") { // reversed reference
+                        $service = (get_class($old) . "Service")::getInstance();
+                        $method = $property ? "un" : "" . "lock";
+                        $service->$method($old);
+                        continue;
+                    }
                     $name = camelCaseToSnakeCase($name);
                     $value = $pdo->quote($property);
                     $toUpdateSqlFields[] = "$name = $value";

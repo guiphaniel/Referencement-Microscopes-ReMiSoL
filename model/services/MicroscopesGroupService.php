@@ -62,6 +62,10 @@
 
             $group->setId($groupId);
 
+            // lock / unlock the group
+            $method = $group->isLocked() ? "" : "un" . "lock";
+            $this->$method($group);
+
             return $groupId;
         }
 
@@ -88,7 +92,7 @@
             return $row ? UserService::getInstance()->findUserById($row[0]) : null;
         }
 
-        function findAllMicroscopesGroup() {
+        function findAllMicroscopesGroup($includeLocked = true) {
             global $pdo;
 
             // get groups infos
@@ -96,6 +100,8 @@
                 select id, coordinates_id, lab_id
                 from microscopes_group as g
             ";
+            if(!$includeLocked)
+                $sql .= "where id not in (select microscopes_group_id from locked_microscopes_group)";
             $sth = $pdo->query($sql);
             $groupsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
 
@@ -114,6 +120,8 @@
                 $group->setId($groupId);
 
                 $group->setMicroscopes($micros);
+
+                $group->setLocked($this->isLocked($group));
 
                 $groups[$groupId] = $group;
             }
@@ -193,7 +201,46 @@
 
             $group->setId($groupId);
 
+            $group->setLocked($this->isLocked($group));
+
             return $group->setId($groupId);
+        }
+
+        private function groupToId(int | MicroscopesGroup $group) {
+            if(is_int($group))
+                return $group;
+            
+            return $group->getId();
+        }
+
+        function isLocked(int | MicroscopesGroup $group) {
+            global $pdo;
+
+            $id = $this->groupToId($group);
+
+            $sth = $pdo->query("SELECT COUNT(microscopes_group_id) as is_locked FROM locked_microscopes_group WHERE microscopes_group_id = $id");
+
+            return $sth->fetch()["is_locked"] ? true : false;
+        }
+
+        function lock(int | MicroscopesGroup $group) {
+            if($this->isLocked($group))
+                return;
+
+            global $pdo;
+
+            $id = $this->groupToId($group);
+            $pdo->exec("INSERT INTO locked_microscopes_group VALUES($id)");
+        }
+
+        function unlock(int | MicroscopesGroup $group) {
+            if(!$this->isLocked($group))
+                return;
+
+            global $pdo;
+
+            $id = $this->groupToId($group);
+            $pdo->exec("DELETE FROM locked_microscopes_group WHERE microscopes_group_id = $id");
         }
 
         //override so images and coordinates (1-1) are deleted too

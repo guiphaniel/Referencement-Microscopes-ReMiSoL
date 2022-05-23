@@ -52,6 +52,26 @@
             return $users;
         }
 
+        function findAllAdmins() {
+            global $pdo;
+
+            $sql = "
+                select id, firstname, lastname, email, phone_code, phone_num, password
+                from user
+                join admin as a
+                on a.user_id = id
+            ";
+
+            $admins = [];
+            foreach($pdo->query($sql, PDO::FETCH_NAMED) as $adminInfos) {
+                $admin = new User($adminInfos["firstname"], $adminInfos["lastname"], $adminInfos["email"], $adminInfos["phone_code"], $adminInfos["phone_num"], $adminInfos["password"]);
+                $admin->setId($adminInfos["id"])->setLocked($this->isLocked($admin))->setAdmin(true);
+                $admins[] = $admin;
+            }
+
+            return $admins;
+        }
+
         function findUserById($id) {
             global $pdo;
 
