@@ -1,116 +1,44 @@
 <?php
-    include_once(__DIR__ . "/AbstractEntity.php");
+    include_once(__DIR__ . "/Person.php");
 
-    class User extends AbstractEntity  {
-        function __construct(private string $firstname, private string $lastname, private string $email, private $phoneCode, private $phoneNum, private string $password, private bool $locked = true, private bool $admin = false) {
-                parent::__construct();
-        }
-
-        public function getFirstname() : string
-        {
-            return $this->firstname;
-        }
-
-        public function setFirstname(string $firstname)
-        {
-            $this->firstname = $firstname;
-
-            return $this;
-        }
-
-        public function getLastname() : string
-        {
-                return $this->lastname;
-        }
-
-        public function setLastname(string $lastname)
-        {
-                $this->lastname = $lastname;
-
-                return $this;
-        }
-
-        public function getEmail() : string
-        {
-                return $this->email;
-        }
-
-        public function setEmail(string $email)
-        {
-                $this->email = $email;
-
-                return $this;
-        }
-
-        public function getPhoneCode()
-        {
-                return $this->phoneCode;
-        }
-
-        public function setPhoneCode($phoneCode)
-        {
-            $codes = ["+32", "+33", "+41"]; // Belgium, France, Switzerland
-
-            $valid = false;
-            foreach ($codes as $code) {
-                if(strpos($phoneCode, $code)) {
-                    $valid = true;
-                    break;
-                }
-            }
-            if(!$valid)
-                throw new Exception("L'index téléphonique fourni n'est pas supporté");
-
-            $this->phoneCode = $phoneCode;
-
-            return $this;
-        }
-
-        public function getPhoneNum()
-        {
-                return $this->phoneNum;
-        }
-
-        public function setPhoneNum($phoneNum)
-        {
-                $this->phoneNum = $phoneNum;
-
-                return $this;
+    class User extends Person  {
+        function __construct(string $firstname, string $lastname, string $email, string $phoneCode, string $phoneNum, private string $password, private bool $locked = true, private bool $admin = false) {
+            parent::__construct($firstname, $lastname, $email, $phoneCode, $phoneNum);
         }
 
         public function getPassword() : string
         {
-                return $this->password;
+            return $this->password;
         }
 
         public function setPassword(string $password)
         {
-                $this->password = $password;
+            $this->password = $password;
 
-                return $this;
+            return $this;
         }
 
         public function isLocked()
         {
-                return $this->locked;
+            return $this->locked;
         }
 
         public function setLocked($locked)
         {
-                $this->locked = $locked;
+            $this->locked = $locked;
 
-                return $this;
+            return $this;
         }
 
         public function isAdmin()
         {
-                return $this->admin;
+            return $this->admin;
         }
 
         public function setAdmin($admin)
         {
-                $this->admin = $admin;
+            $this->admin = $admin;
 
-                return $this;
+            return $this;
         }
     }

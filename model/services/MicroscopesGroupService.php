@@ -137,7 +137,7 @@
 
             $contacts = [];
             foreach ($contactsInfos as $contactInfos) {
-                $contacts[] = (new Contact($contactInfos["firstname"], $contactInfos["lastname"], $contactInfos["role"], $contactInfos["email"], $contactInfos["phone_code"], $contactInfos["phone_num"]))
+                $contacts[] = (new Contact($contactInfos["firstname"], $contactInfos["lastname"], $contactInfos["email"], $contactInfos["phone_code"], $contactInfos["phone_num"], $contactInfos["role"]))
                     ->setId($contactInfos["id"]);
             }
 

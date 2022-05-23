@@ -61,7 +61,7 @@
     
         $contacts = [];
         foreach($_POST["contacts"] as $id => $contact) {
-            $contacts[] = (new Contact($contact["firstname"], strtoupper($contact["lastname"]),  ucfirst($contact["role"]), $contact["email"], $contact["phoneCode"], substr($contact["phoneNum"], -9)))
+            $contacts[] = (new Contact($contact["firstname"], strtoupper($contact["lastname"]), $contact["email"], $contact["phoneCode"], substr($contact["phoneNum"], -9),  ucfirst($contact["role"])))
                 ->setId($id);
         }
         

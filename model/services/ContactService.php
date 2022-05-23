@@ -19,15 +19,15 @@
         function getContactId(Contact $contact) {
             global $pdo;
     
-            $sth = $pdo->prepare("SELECT id FROM contact where firstname = :firstname and lastname = :lastname and role = :role and email = :email and phone_code = :phoneCode and phone_num = :phoneNum");
+            $sth = $pdo->prepare("SELECT id FROM contact where firstname = :firstname and lastname = :lastname and email = :email and phone_code = :phoneCode and phone_num = :phoneNum and role = :role");
     
             $sth->execute([
                 "firstname" => $contact->getFirstname(),
                 "lastname" => $contact->getLastname(),
-                "role" => $contact->getRole(),
                 "email" => $contact->getEmail(),
                 "phoneCode" => $contact->getPhoneCode(),
-                "phoneNum" => $contact->getPhoneNum()
+                "phoneNum" => $contact->getPhoneNum(),
+                "role" => $contact->getRole()
             ]);
     
             $row = $sth->fetch();
@@ -49,15 +49,15 @@
 
             // if the contact isn't already in the db, add it
             if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :firstname, :lastname, :role, :email, :phoneCode, :phoneNum)");
+                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :firstname, :lastname, :email, :phoneCode, :phoneNum, :role)");
         
                 $sth->execute([
                     "firstname" => $contact->getFirstname(),
                     "lastname" => $contact->getLastname(),
-                    "role" => $contact->getRole(),
                     "email" => $contact->getEmail(),
                     "phoneCode" => $contact->getPhoneCode(),
-                    "phoneNum" => $contact->getPhoneNum()
+                    "phoneNum" => $contact->getPhoneNum(),
+                    "role" => $contact->getRole()
                 ]);
                 
                 $id = $pdo->lastInsertId();

@@ -118,10 +118,10 @@ CREATE TABLE "contact" (
 	"id"	INTEGER,
 	"firstname"	TEXT,
 	"lastname"	TEXT,
-	"role"	TEXT,
 	"email"	TEXT,
 	"phone_code"	TEXT,
 	"phone_num"	TEXT,
+	"role"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "manage" (
