@@ -53,12 +53,14 @@
             global $pdo;
 
             $sql = "
-                select cat, k.id, tag
+                select c.name, k.id, tag
                 from microscope as mi
                 join microscope_keyword as mk
                 on mk.microscope_id = mi.id
                 join keyword as k
                 on k.id = mk.keyword_id
+                join category as c
+                on k.category_id = c.id
                 where mk.microscope_id = $microId
             ";
 
@@ -69,7 +71,7 @@
 
             foreach($keywords as $cat => $infos) {
                 foreach ($infos as $info) {
-                    $kws[] = (new Keyword($cat, $info["tag"]))->setId($info["id"]);
+                    $kws[] = (new Keyword(new Category($cat), $info["tag"]))->setId($info["id"]);
                 }
             }
 
@@ -109,5 +111,17 @@
 
             $micro = new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["desc"], $microInfos["type"], $microInfos["access"], $kws);
             return $micro->setId($microId);
+        }
+
+        public function delete($entity) {
+            $id = $entity->getId();
+
+            $existingImgs = glob(__DIR__ . "/../../public/img/micros/" . "$id.*");
+            if($existingImgs) {
+                foreach ($existingImgs as $img)
+                    unlink($img);
+            }
+
+            parent::delete($entity);
         }
     }

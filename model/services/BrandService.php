@@ -38,6 +38,49 @@
             return $row ? $row[0] : -1;
         }
 
+        function findBrandById($id) {
+            global $pdo;
+
+            $sql = "
+                select *
+                from brand
+                where id = $id
+            ";
+
+            $sth = $pdo->query($sql);
+            $infos = $sth->fetch(PDO::FETCH_NAMED);
+
+            if(empty($infos))
+                return null;
+
+            return (new Brand($infos["name"], CompagnyService::getInstance()->findCompagnyById($infos["compagny_id"])))
+                ->setId($id);
+        }
+
+        function findBrandByName($name) {
+            global $pdo;
+
+            $sql = "
+                select *
+                from brand
+                where name = :name
+            ";
+
+            $sth = $pdo->prepare($sql);
+
+            $sth->execute([
+                "name" => $name
+            ]);
+
+            $infos = $sth->fetch(PDO::FETCH_NAMED);
+
+            if(empty($infos))
+                return null;
+
+            return (new Brand($name, CompagnyService::getInstance()->findCompagnyById($infos["compagny_id"])))
+                ->setId($infos["id"]);
+        }
+
         /** Saves the brand if it doesn't exist yet, and returns its id */
         function save(Brand $brand) {
             global $pdo;
@@ -66,20 +109,23 @@
                 parent::update($old, $new);
         }
 
-        function getAllBrands(Compagny $compagny) : array {
+        function getAllBrands($compagny = null) : array {
             global $pdo;
             $brands = [];
             
-            $sth = $pdo->prepare("SELECT id, name FROM brand where compagny_id = :compagnyId");
+            $sql = "SELECT * FROM brand";
+            if (isset($compagny)) {
+                $compagnyId = $compagny->getId();
+                $sql .= " where compagny_id = $compagnyId";
+            }
 
-            $sth->execute([
-                "compagnyId" => CompagnyService::getInstance()->getCompagnyId($compagny)
-            ]);
+            $sth = $pdo->query($sql);
 
             $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
             foreach ($infos as $info) {
-                $brands[] = (new Brand($info["name"], $compagny))->setId($info["id"]);
+                $id = $info["id"];
+                $brands[$id] = (new Brand($info["name"], $compagny??CompagnyService::getInstance()->findCompagnyById($info["compagny_id"])))->setId($id);
             }
 
             return $brands;

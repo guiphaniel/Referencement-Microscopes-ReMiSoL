@@ -47,24 +47,27 @@
             return (new Coordinates($coorInfos["lat"], $coorInfos["lon"]))->setId($id);
         }
 
-        /** Saves the coordinates if they don't exist yet, and returns their id */
+        /** Saves the coordinates if they don't exist yet, else throws */
         function save(Coordinates $coor) : int {
             global $pdo;
-            
-            $id = $this->getCoordinatesId($coor);
-            
-            // if the coordinates isn't already in the db, add it
-            if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO coordinates VALUES (NULL, :lat, :lon)");
 
+            $sth = $pdo->prepare("INSERT INTO coordinates VALUES (NULL, :lat, :lon)");
+
+            try {
                 $sth->execute([
                     "lat" => $coor->getLat(), 
                     "lon" => $coor->getLon(),
                 ]);
+            } catch (\Throwable $th) {
+                if(str_contains($th->getMessage(), "UNIQUE constraint failed"))
+                    throw new Exception("Un groupe de microscopes existe déjà à cet emplacement");
+                else
+                    throw new Exception("Une erreur s'est produite");
+            }
+            
 
-                $id = $pdo->lastInsertId();
-                $coor->setId($id);
-            }          
+            $id = $pdo->lastInsertId();
+            $coor->setId($id);  
 
             return $id;
         }

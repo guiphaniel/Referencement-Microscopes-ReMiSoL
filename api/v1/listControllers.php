@@ -6,25 +6,16 @@
     switch($request_method)
     {
         case 'GET':
-            //TODO: parametres (limit, offset)
-            //TODO: if no controller is provided, return all controllers -> change the behavior of the ControllerService::getAllControllers method, with optional parameter            
-            if(!isset($_GET["compagny"]) && isset($_GET["brand"])) {
-                echo "You must provide a compagny name : ?compagny=compagnyName";
-                die();
+            //TODO: parametres (limit, offset)            
+            if(isset($_GET["brand"])) {
+                $brand = BrandService::getInstance()->findBrandByName($_GET["brand"]);
+                $controllers = ControllerService::getInstance()->findAllControllersByBrand($brand);
             }
-            
-            if(isset($_GET["compagny"]) && !isset($_GET["brand"])) {
-                echo "You must provide a brand name : &brand=brandName";
-                die();
-            }
-
-            if(isset($_GET["compagny"]) && isset($_GET["brand"]))
-                $controllers = ControllerService::getInstance()->findAllControllersByBrand(new Brand($_GET["brand"], new Compagny($_GET["compagny"])));
             else
                 $controllers = ControllerService::getInstance()->findAllControllers();
             
             header('Content-Type: application/json');
-            echo json_encode($controllers, JSON_PRETTY_PRINT);
+            echo json_encode(array_values($controllers), JSON_PRETTY_PRINT); // we need to get rid of the keys (which are the ids), else, the json won't be an array but an object
             break;
         default:
             // Requête invalide

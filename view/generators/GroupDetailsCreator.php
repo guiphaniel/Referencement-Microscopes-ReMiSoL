@@ -11,7 +11,11 @@
             $groupId = $this->group->getId();
             if(isUserSessionValid() && ($_SESSION["user"]["id"] == MicroscopesGroupService::getInstance()->findGroupOwner($this->group)?->getId() || $_SESSION["user"]["admin"])):
             ?>
-                <div class="rm-bt"></div>
+                <script src="/public/js/delete_group.js" defer></script>
+                <form action="/processing/delete_group_processing.php" method="POST">
+                    <input type="hidden" name="groupId" value="<?=$groupId?>">
+                    <div class="rm-bt"></div>
+                </form>
                 <a href="/edit_micros_group.php?id=<?=$groupId?>"><div class="edit-bt"></div></a>
             <?php
             endif;
@@ -97,9 +101,9 @@
                                 <tbody>
                                     <?php 
                                     foreach ($micro->getKeywords() as $kw)
-                                        $cats[$kw->getCat()][] = $kw->getTag();
+                                        $cats[$kw->getCat()->getName()][] = $kw->getTag();
                                     
-                                    foreach($cats as $cat => $tags):
+                                    foreach($cats??[] as $cat => $tags):
                                     ?>
                                         <tr>
                                             <th scope="rowgroup"><?= $cat; ?></th>

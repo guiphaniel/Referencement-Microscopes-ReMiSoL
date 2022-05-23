@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS "manage";
 DROP TABLE IF EXISTS "contact";
 DROP TABLE IF EXISTS "microscope_keyword";
 DROP TABLE IF EXISTS "keyword";
+DROP TABLE IF EXISTS "category";
 DROP TABLE IF EXISTS "microscope";
 DROP TABLE IF EXISTS "microscopes_group";
 DROP TABLE IF EXISTS "coordinates";
@@ -56,11 +57,17 @@ CREATE TABLE "microscope" (
 	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
+CREATE TABLE "category" (
+	"id"	INTEGER,
+	"name"	TEXT UNIQUE,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
 CREATE TABLE "keyword" (
 	"id"	INTEGER,
-	"cat"	TEXT,
+	"category_id"	INTEGER,
 	"tag"	TEXT,
-	UNIQUE("cat","tag"),
+	UNIQUE("category_id","tag"),
+	FOREIGN KEY("category_id") REFERENCES "category"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "microscope_keyword" (

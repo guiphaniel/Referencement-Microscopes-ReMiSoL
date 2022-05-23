@@ -33,3 +33,10 @@
 .micro-img {
     max-height: 400px;
 }
+
+.kw-cat {
+    display: block;
+    font-size: larger;
+    margin-top: 2em;
+    margin-bottom: 1em;
+}

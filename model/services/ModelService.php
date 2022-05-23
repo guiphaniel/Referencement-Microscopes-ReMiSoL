@@ -60,21 +60,24 @@
                 parent::update($old, $new);
         }
 
-        function getAllModels(Brand $brand) : array {
+        function getAllModels($brand = null) : array {
             global $pdo;
             $models = [];
             
-            $sth = $pdo->prepare("SELECT id, name FROM model where brand_id = :brandId");
+            $sql = "SELECT * FROM model";
+            if (isset($brand)) {
+                $brandId = $brand->getId();
+                $sql .= " where brand_id = $brandId";
+            }
 
-            $sth->execute([
-                "brandId" => BrandService::getInstance()->getBrandId($brand)
-            ]);
+            $sth = $pdo->query($sql);
 
             $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
             foreach ($infos as $info) {
-                $models[] = (new Model($info["name"], $brand))
-                    ->setId($info["id"]);
+                $id = $info["id"];
+                $models[$id] = (new Model($info["name"], $brand??BrandService::getInstance()->findBrandById($info["brand_id"])))
+                    ->setId($id);
             }
 
             return $models;

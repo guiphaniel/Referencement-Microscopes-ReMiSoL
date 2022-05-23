@@ -107,7 +107,7 @@ class Microscope extends AbstractEntity  {
 
         // check if some of the cats provided aren't in the database
         $keywordService = KeywordService::getInstance();
-        $extraCats = array_diff(array_map(function($kw) {return $kw->getCat();}, $keywords), $keywordService->getAllCategories());
+        $extraCats = array_udiff(array_map(function($kw) {return $kw->getCat();}, $keywords), $keywordService->getAllCategories(), function ($a, $b) { return strcmp($a->getName(), $b->getName()); });
         if($extraCats)
             throw new Exception("Les catégories suivantes ne sont pas prises en charge : " . implode(", ", $extraCats));
         

@@ -18,16 +18,26 @@
 
         /** Saves the keyword if it doesn't exist yet, and returns its id */
         function save(Keyword $kw) {
+            if(!$_SESSION["user"]["admin"])
+                return -1;
+
             global $pdo;
 
             $id = $this->getKeywordId($kw);
 
             // if the keyword isn't already in the db, add it
             if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO keyword VALUES (NULL, :cat, :tag)");
+                // if the category isn't already in the db, add it
+                $categoryService = CategoryService::getInstance();
+                $cat = $kw->getCat();
+                $catId = $categoryService->getCategoryId($cat);
+                if($catId == -1) $catId = $categoryService->save($cat);
+
+                // insert the keyword
+                $sth = $pdo->prepare("INSERT INTO keyword VALUES (NULL, :catId, :tag)");
         
                 $sth->execute([
-                    "cat" => $kw->getCat(),
+                    "catId" => $catId,
                     "tag" => $kw->getTag()
                 ]);
                 
@@ -47,10 +57,10 @@
         function getKeywordId(Keyword $kw) {
             global $pdo;
 
-            $sth = $pdo->prepare("SELECT id FROM keyword where cat = :cat and tag = :tag");
+            $sth = $pdo->prepare("SELECT k.id FROM keyword as k JOIN category as c on k.category_id = c.id where c.name = :cat and tag = :tag");
 
             $sth->execute([
-                "cat" => $kw->getCat(),
+                "cat" => $kw->getCat()->getName(),
                 "tag" => $kw->getTag()
             ]);
 
@@ -60,30 +70,47 @@
             return $row ? $row[0] : -1;
         }
 
-        function getAllCategories(){
-            global $pdo;
-
-            $sth = $pdo->query("SELECT DISTINCT cat FROM keyword");
-
-            $row = $sth->fetchAll(PDO::FETCH_COLUMN);
-
-            // if this keyword exists, return its id, else return -1
-            return $row ? $row : [];
+        function getAllCategories() {
+            return CategoryService::getInstance()->getAllCategories();
         }
 
         function getAllTags($cat) {
             global $pdo;
 
-            $sth = $pdo->prepare("SELECT tag FROM keyword where cat = :cat");
+            $sth = $pdo->prepare("SELECT k.id, tag FROM keyword as k JOIN category as c on k.category_id = c.id where c.name = :cat");
 
             $sth->execute([
-                "cat" => $cat
+                "cat" => $cat->getName()
             ]);
 
-            $row = $sth->fetchAll(PDO::FETCH_COLUMN);
+            $rows = $sth->fetchAll(PDO::FETCH_NAMED);
 
-            // if this keyword exists, return its id, else return -1
-            return $row ? $row : [];
+            $tags = [];
+            foreach($rows as $row)
+                $tags[$row["id"]] = $row["tag"];
+
+            return $tags;
+        }
+
+        function getAllKeywords($cat = null) {
+            global $pdo;
+
+            $sql = "SELECT k.id, c.name, tag FROM keyword as k JOIN category as c on k.category_id = c.id";
+            if(isset($cat)) {
+                $catName = $pdo->quote($cat->getName());
+                $sql .= " WHERE c.name = $catName";
+            }
+
+            $sth = $pdo->query($sql);
+
+            $rows = $sth->fetchAll(PDO::FETCH_NAMED);
+
+            $kws = [];
+
+            foreach($rows as $row)
+                $kws[$row["id"]] = (new Keyword(new Category($row["name"]), $row["tag"]))->setId($row["id"]);
+
+            return $kws;
         }
 
         function bind($kwId, $microId) {

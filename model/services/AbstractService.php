@@ -44,7 +44,7 @@
                     $this->updateEntities($old->getId(), $oldProperties[$name], $property);
                 } elseif (is_object($property)) {
                     $class = get_class($property);
-                    if($class == "Model" || $class == "Controller") // those classes are aggregations of micros
+                    if($class == "Model" || $class == "Controller") // those classes are aggregations of micros (*-1)
                         $this->saveAndBind($old->getId(), $property);
                     else
                         $this->update($oldProperties[$name], $property);
@@ -128,8 +128,9 @@
 
             foreach ($toInsert as $entity) {
                 $class = get_class($entity);
-                if($class == "Contact" || $class == "Keyword") { // those classes are aggregations
+                if($class == "Contact" || $class == "Keyword") { // those classes are aggregations (*-*)
                     $this->saveAndBind($parentId, $entity);
+                    continue;
                 }
 
                 $service = (get_class($entity) . "Service")::getInstance();
@@ -150,10 +151,10 @@
                 if($class == "Contact" || $class == "Keyword" || $class == "Model" || $class == "Controller") { // those classes are aggregations...
                     $service = (get_class($entity) . "Service")::getInstance();
                     $service->unbind($entity->getId(), $parentId);
-                    return;
+                } else {
+                    $service = get_class($entity) . "Service";
+                    $service::getInstance()->delete($entity);
                 }
-                $service = get_class($entity) . "Service";
-                $service::getInstance()->delete($entity);
             }
         }
 
@@ -170,6 +171,7 @@
                 return;
             } else {
                 $id = $service->save($entity);
+                if($id == -1) return;
                 $service->bind($id, $parentId);
                 return;
             }
@@ -179,9 +181,9 @@
             return $a->getId() - $b->getId();   
         }
 
-        protected function delete($entity) {
+        public function delete($entity) {
             global $pdo;
-            $table = strtolower(get_class($entity));
+            $table = camelCaseToSnakeCase(get_class($entity));
             $id = $entity->getId();
 
             $pdo->exec("DELETE FROM $table WHERE id = $id");

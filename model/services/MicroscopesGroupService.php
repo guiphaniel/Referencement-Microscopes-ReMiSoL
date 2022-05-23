@@ -77,6 +77,17 @@
             return $row ? UserService::getInstance()->findUserById($row[0]) : null;
         }
 
+        public function findGroupOwnerByGroupId(int $groupId) {
+            global $pdo;
+
+            $sth = $pdo->query("SELECT user_id FROM microscopes_group WHERE id = $groupId");
+
+            $row = $sth->fetch();
+
+            // if this user exists, return it, else return null
+            return $row ? UserService::getInstance()->findUserById($row[0]) : null;
+        }
+
         function findAllMicroscopesGroup() {
             global $pdo;
 
@@ -102,11 +113,9 @@
 
                 $group->setId($groupId);
 
-                foreach ($micros as $micro) {
-                    $group->addMicroscope($micro);
-                }
+                $group->setMicroscopes($micros);
 
-                $groups[] = $group;
+                $groups[$groupId] = $group;
             }
 
             return $groups;
@@ -150,7 +159,7 @@
             $micros = [];
             $microscopeService = MicroscopeService::getInstance();
             foreach ($microsIds as $microId) {
-                $micros[] = $microscopeService->findMicroscopeById($microId);
+                $micros[$microId] = $microscopeService->findMicroscopeById($microId);
             }
 
             return $micros;
@@ -180,12 +189,21 @@
 
             $group = new MicroscopesGroup($coor, $lab, $contacts);
 
+            $group->setMicroscopes($micros);
+
             $group->setId($groupId);
 
-            foreach ($micros as $micro) {
-                $group->addMicroscope($micro);
-            }
-
             return $group->setId($groupId);
+        }
+
+        //override so images and coordinates (1-1) are deleted too
+        function delete($group) {
+            $microService = MicroscopeService::getInstance();
+            foreach($group->getMicroscopes() as $micro)
+                $microService->delete($micro);
+
+            CoordinatesService::getInstance()->delete($group->getCoor());
+
+            parent::delete($group);
         }
     }   

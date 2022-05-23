@@ -51,8 +51,9 @@
                     $keyWordService = KeywordService::getInstance();
                     $cats = $keyWordService->getAllCategories();
                     foreach ($cats as $cat): 
-                        echo "<!-- $cat datalist -->" ?>
-                        <datalist id="cats-<?=HTMLNormalize($cat)?>">
+                        $catName = $cat->getName();
+                        echo "<!-- $catName datalist -->" ?>
+                        <datalist id="cats-<?=HTMLNormalize($catName)?>">
                         <?php 
                             $tags = $keyWordService->getAllTags($cat);
                             foreach ($tags as $tag): ?>
@@ -61,14 +62,13 @@
                         </datalist>
                     <?php endforeach; 
                     
-                    //create the first, not removable micro field
-                    $this->createMicroField(0, $this->group?->getMicroscopes()[0], false);
-                    //create all others, removable micro fields
-                    foreach ($this->group?->getMicroscopes()??[] as $key => $micro) {
-                        if($key == 0)
-                            continue;
+                    //create all micro fields (only the first one isn't removable)
+                    $first = true;  
+                    foreach ($this->group?->getMicroscopes()??[1 => null] as $microId => $micro) {
+                        $this->createMicroField($microId, $micro, !$first);
 
-                        $this->createMicroField($key, $micro, true);
+                        if($first)
+                            $first = false;
                     }  
                 ?>
                 <div id="add-micro" class="add-bt"></div>
@@ -213,7 +213,7 @@
             <input id="micro-model-<?=$id?>" list="micro-models-<?=$id?>" name="micros[<?=$id?>][model]" <?=$this->valueOf($model?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
             <datalist id="micro-models-<?=$id?>">
             </datalist>
-            <label for="micro-controller-<?=$id?>">Électronique - contrôleur</label>
+            <label for="micro-controller-<?=$id?>">Électronique / Contrôleur</label>
             <input id="micro-controller-<?=$id?>" list="micro-controllers-<?=$id?>" name="micros[<?=$id?>][controller]" <?=$this->valueOf($controller?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
             <datalist id="micro-controllers-<?=$id?>">
             </datalist>
@@ -234,7 +234,7 @@
             <textarea id="micro-desc-<?=$id?>" name="micros[<?=$id?>][desc]" cols="30" rows="10" required><?=$micro?->getDesc()?></textarea>
             <div>
                 <label for="micro-img-<?=$id?>">Photo</label>
-                    <input id="micro-img-<?=$id?>" name="imgs[]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
+                    <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
                 <?php 
                     if(isset($micro)) :
                         $microId = $micro->getId();
@@ -248,10 +248,11 @@
                             else
                                 $extension = ".jpeg"; 
                 ?>
-                <div>
-                    <img class="micro-snapshot" src="/public/img/micros/<?=$microId . $extension?>" alt="Microscope <?=$name?>">
-                    <div class="rm-bt"></div>
-                </div>
+                            <div>
+                                <img class="micro-snapshot" src="/public/img/micros/<?=$microId . $extension?>" alt="Microscope <?=$name?>">
+                                <div class="rm-bt"></div>
+                                <input type="hidden" name="keepImg[<?=$microId?>]" value="true">
+                            </div>
                 <?php
                         endif; 
                     endif;
@@ -264,15 +265,18 @@
                     $keyWordService = KeywordService::getInstance();
                     $cats = $keyWordService->getAllCategories();
                     foreach ($cats as $cat): 
-                        $normCat = HTMLNormalize($cat)?>
+                        $catName =$cat->getName();
+                        $normCat = HTMLNormalize($catName)?>
                         <div>
-                            <label for="cat-<?=$normCat?>-<?=$id?>"><?=$cat?></label>
+                            <label for="cat-<?=$normCat?>-<?=$id?>"><?=$catName?></label>
                             <input id="cat-<?=$normCat?>-<?=$id?>" class="cat-input" list="cats-<?=$normCat?>">
-                            <?php foreach (array_filter($micro?->getKeywords()??[], function ($kw) use (&$cat) {return $kw->getCat() == $cat;}) as $kw): ?>
+                            <?php foreach (array_filter($micro?->getKeywords()??[], function ($kw) use ($catName) {
+                                return $kw->getCat()->getName() == $catName;
+                                }) as $kw): ?>
                                 <div class="tag">
                                     <div class="rm-bt" data-type="ul"></div>
                                     <?=$kw->getTag()?>
-                                    <input id="micro-kw-<?=HTMLNormalize($cat)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$cat?>][]" value="<?=$kw->getTag()?>">
+                                    <input id="micro-kw-<?=HTMLNormalize($catName)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$catName?>][]" value="<?=$kw->getTag()?>">
                                 </div>
                             <?php endforeach; ?>
                         </div>

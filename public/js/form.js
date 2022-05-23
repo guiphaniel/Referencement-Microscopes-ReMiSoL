@@ -78,11 +78,11 @@ async function onBrandInput(input) {
 
     let compagnyInput = document.getElementById("micro-compagny-" + fieldsetId);
 
-	const modelsUrl = `/api/v1/listModels.php?compagny=${compagnyInput.value}&brand=${input.value}`;
+	const modelsUrl = `/api/v1/listModels.php?brand=${input.value}`;
     let modelDatalist = document.getElementById(`micro-models-` + fieldsetId);
     fillDatalist(modelDatalist, modelsUrl).then(() => document.getElementById(`micro-model-` + fieldsetId).disabled = false);
 
-    const controllersUrl = `/api/v1/listControllers.php?compagny=${compagnyInput.value}&brand=${input.value}`
+    const controllersUrl = `/api/v1/listControllers.php?brand=${input.value}`
     let controllerDatalist = document.getElementById(`micro-controllers-` + fieldsetId);
     fillDatalist(controllerDatalist, controllersUrl).then(() => document.getElementById(`micro-controller-` + fieldsetId).disabled = false);
 }
@@ -257,12 +257,17 @@ document.addEventListener("change", function(event) {
     if (imgInput.type != "file")
         return;
 
-    // if the input is empty, remove the last displayed snapshot
-    if (imgInput.files.length == 0) {
-        let snapshot = imgInput.nextElementSibling;
-        if(snapshot != undefined)
-            snapshot.remove();
-        return;
+    // set keepImg to false
+    let snapshotWrapper = imgInput.nextElementSibling;
+    if(snapshotWrapper != undefined) {
+        // if the input is empty, remove the last displayed snapshot
+        if (imgInput.files.length == 0) {
+            snapshotWrapper.remove();
+            return;
+        }
+
+        let keepImg = snapshotWrapper.lastElementChild;
+        keepImg.value = false
     }
         
 
@@ -275,7 +280,6 @@ document.addEventListener("change", function(event) {
 
     // display the snapshot
     // if a previous snapshot already existed, replace its url, else, create a new snapshot
-    let snapshotWrapper = imgInput.nextElementSibling;
     if(snapshotWrapper == undefined) {// check a snapshot wrapper already existed. If not, create one.
         snapshotWrapper =  document.createElement("div");
 
@@ -292,7 +296,7 @@ document.addEventListener("change", function(event) {
         imgInput.insertAdjacentElement("afterend", snapshotWrapper);
     }
 
-    let snapshot = snapshotWrapper.firstChild;
+    let snapshot = snapshotWrapper.firstElementChild;
     let reader = new FileReader();
     reader.onload = (function(snapshot) { return function(e) { snapshot.src = e.target.result; }; })(snapshot);
     reader.readAsDataURL(file);

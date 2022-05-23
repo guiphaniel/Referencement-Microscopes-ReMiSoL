@@ -31,6 +31,49 @@
             return $row ? $row[0] : -1;
         }
 
+        function findCompagnyById($id) {
+            global $pdo;
+
+            $sql = "
+                select name
+                from compagny
+                where id = $id
+            ";
+
+            $sth = $pdo->query($sql);
+            $infos = $sth->fetch(PDO::FETCH_NAMED);
+
+            if(empty($infos))
+                return null;
+
+            return (new Compagny($infos["name"]))
+                ->setId($id);
+        }
+
+        function findCompagnyByName($name) {
+            global $pdo;
+
+            $sql = "
+                select *
+                from compagny
+                where name = :name
+            ";
+
+            $sth = $pdo->prepare($sql);
+
+            $sth->execute([
+                "name" => $name
+            ]);
+
+            $infos = $sth->fetch(PDO::FETCH_NAMED);
+
+            if(empty($infos))
+                return null;
+
+            return (new Compagny($name))
+                ->setId($infos["id"]);
+        }
+
         /** Saves the compagny if it doesn't exist yet, and returns its id */
         function save(Compagny $compagny) {
             global $pdo;
@@ -67,7 +110,8 @@
             $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
             foreach ($infos as $info) {
-                $compagnies[] = (new Compagny($info["name"]))->setId($info["id"]);
+                $id = $info["id"];
+                $compagnies[$id] = (new Compagny($info["name"]))->setId($id);
             }
 
             return $compagnies;

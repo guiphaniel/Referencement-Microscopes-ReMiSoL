@@ -64,16 +64,18 @@
             $controllers = [];
             
             $sth = $pdo->query("
-                SELECT c.id, c.name as ctrName, b.name as braName, c.name as comName FROM controller
+                SELECT ctr.id, ctr.name as ctrName, b.name as braName, cmp.name as comName 
+                FROM controller as ctr
                 JOIN brand as b
                 on brand_id = b.id
-                JOIN compagny as c
-                on b.compagny_id = c.id
+                JOIN compagny as cmp
+                on b.compagny_id = cmp.id
             ");
 
             foreach ($sth->fetchAll() as $row) {
-                $controllers[] = (new Controller($row["ctrName"], new Brand($row["braName"], new Compagny($row["comName"]))))
-                    ->setId($row["id"]);
+                $id = $row["id"];
+                $controllers[$id] = (new Controller($row["ctrName"], new Brand($row["braName"], new Compagny($row["comName"]))))
+                    ->setId($id);
             }
 
             return $controllers;
@@ -92,8 +94,9 @@
             $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
             foreach ($infos as $info) {
-                $controllers[] = (new Controller($info["name"], $brand))
-                    ->setId($info["id"]);
+                $id = $info["id"];
+                $controllers[$id] = (new Controller($info["name"], $brand))
+                    ->setId($id);
             }
 
             return $controllers;
