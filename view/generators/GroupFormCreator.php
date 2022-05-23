@@ -64,7 +64,7 @@
                     
                     //create all micro fields (only the first one isn't removable)
                     $first = true;  
-                    foreach ($this->group?->getMicroscopes()??[] as $microId => $micro) {
+                    foreach ($this->group?->getMicroscopes()??[1 => null] as $microId => $micro) {
                         $this->createMicroField($microId, $micro, !$first);
 
                         if($first)
