@@ -11,15 +11,14 @@ L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
 	attribution: '&copy; OpenStreetMap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-// show the scale bar on the lower left corner
-L.control.scale({imperial: true, metric: true}).addTo(map);
-
 // show microscopes' markers on the map
 loadAndShowMicroscopes();
 
 async function loadAndShowMicroscopes() {
 	const response = await fetch("/api/v1/listMicroscopesGroups.php");
 	const groups = await response.json();
+
+	let markersClusters = L.markerClusterGroup();
 
 	for (let group of groups) {
 		// set custom icon color
@@ -59,13 +58,15 @@ async function loadAndShowMicroscopes() {
 			window.location.href = "/group-details.php?id=" + group.id;
 		});
 		
-		marker.addTo(map);
+		markersClusters.addLayer(marker);
 
 		// zoom on the marker if wer're on it's group-details page
 		if(page == "group-details.php" && group.id == window.location.search.split("=").pop()) {
 			map.setView(group.coor, 13);
 		}
 	}
+
+	map.addLayer(markersClusters);
 }
 
 
@@ -235,3 +236,23 @@ function getCustomPopupHTML(group) {
 
 	return infos.innerHTML;
 }
+
+/*Legend specific*/
+let legend = L.control({ position: "bottomleft" });
+
+legend.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h2>Légende</h2>";
+  div.innerHTML += '<div class="legend-item"><img class="legend-icon" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png" alt="Marqueur mixte"></img><span>Laboratoire</span><br></div>';
+  div.innerHTML += '<div class="legend-item"><img class="legend-icon" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png" alt="Marqueur mixte"></img><span>Plateforme</span><br></div>';
+  div.innerHTML += '<div class="legend-item"><img class="legend-icon" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png" alt="Marqueur mixte"></img><span>Mixte</span><br></div>';
+  
+  
+
+  return div;
+};
+
+legend.addTo(map);
+
+// show the scale bar on the lower left corner
+L.control.scale({imperial: true, metric: true}).addTo(map);

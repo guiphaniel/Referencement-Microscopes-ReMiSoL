@@ -14,6 +14,10 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/MarkerCluster.css">
+    <link rel="stylesheet" href="/public/css/MarkerCluster.Default.css">
+    <script src="/public/js/leaflet.markercluster.js"></script>
     <title>Accueil</title>
 </head>
 <body>

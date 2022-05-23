@@ -40,3 +40,30 @@
     margin-top: 2em;
     margin-bottom: 1em;
 }
+
+/*Legend specific*/
+.legend {
+    padding: 6px 8px;
+    background: white;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    color: #555;
+  }
+  
+  .legend h4 {
+    text-align: center;
+  }
+  
+  .legend-icon {
+    display: inline-block;
+    max-height: 3em;
+    max-height: 3em;
+    margin-right: 1em;
+    margin-bottom: 1em;
+  }
+
+  .legend-item {
+      display: flex;
+      align-items: center;
+  }
