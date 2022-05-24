@@ -19,7 +19,7 @@
 
         // TODO: add link to resend email
         if ($user->isLocked())
-            throw new Exception("Vous devez valider votre compte. Merci de vérifier vos mails. (Pensez à regarder dans vos courriers indésirables)");
+            throw new Exception("Informations erronées");
 
         //check password validity
         if(!password_verify($_POST["password"], $user->getPassword()))

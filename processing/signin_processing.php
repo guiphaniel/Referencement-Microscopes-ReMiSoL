@@ -24,7 +24,7 @@
 
         // send verification mail
         $object = "[RéMiSoL] Activation de votre compte";
-        $content = "Bonjour,\n\nAfin d'activer votre compte, veuillez suivre le lien suivant : https://" . WEBSITE_URL . "/processing/unlock_user.php?id=$id&token=$token\n\nA bientôt.\n\n\n Ce mail est un mail automatique, merci de ne pas y répondre.";
+        $content = "Bonjour,\n\nAfin d'activer votre compte, veuillez suivre le lien suivant : https://" . WEBSITE_URL . "/processing/unlock_user.php?id=$id&token=$token\n\nA bientôt.\n\n\n Ce courriel est un courriel automatique, merci de ne pas y répondre.";
         sendEmail($user->getEmail(), $object, $content);
     } catch (\Throwable $th) {
         $_SESSION["form"]["errorMsg"]=$th->getMessage();
@@ -32,5 +32,6 @@
         exit();
     }
     
+    $_SESSION["form"]["infoMsg"] = "Vous devez désormais valider votre compte. Merci de vérifier vos mails. (Si vous ne recevez rien d'ici quelques minutes, pensez à regarder dans vos courriers indésirables)";
     header('location: /login.php');
 

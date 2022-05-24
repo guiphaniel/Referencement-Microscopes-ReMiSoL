@@ -27,11 +27,7 @@
 <body>
     <?php $header->create() ?>
     <main>
-        <?php if(isset($_SESSION["form"]["errorMsg"])) : ?>
-            <p id="error-msg"><?= $_SESSION["form"]["errorMsg"] ?></p>
-        <?php endif; unset($_SESSION["form"]["errorMsg"]); 
-            (new GroupFormCreator())->create();
-        ?>
+        <?php (new GroupFormCreator())->create(); ?>
     </main>
     <footer>
         <address>

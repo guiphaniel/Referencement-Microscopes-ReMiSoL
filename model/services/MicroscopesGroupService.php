@@ -129,11 +129,54 @@
             return $groups;
         }
 
+        function findAllMicroscopesGroupByOwner(int | User $user, $includeLocked = true) {
+            global $pdo;
+
+            if(is_int($user))
+                $userId = $user;
+            else    
+                $userId = $user->getId();
+
+            // get groups infos
+            $sql = "
+                select id, coordinates_id, lab_id
+                from microscopes_group as g
+                where user_id = $userId
+            ";
+            if(!$includeLocked)
+                $sql .= " and id not in (select microscopes_group_id from locked_microscopes_group)";
+            $sth = $pdo->query($sql);
+            $groupsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
+
+            // generate groups
+            $groups = [];
+            foreach ($groupsInfos as $groupInfos) {
+                $groupId = $groupInfos["id"];
+
+                $coor = CoordinatesService::getInstance()->findCoordinatesById($groupInfos["coordinates_id"]);
+                $lab = LabService::getInstance()->findLabById($groupInfos["lab_id"]);
+                $contacts = $this->findAllContacts($groupId);
+                $micros = $this->findAllMicroscopes($groupId);
+
+                $group = new MicroscopesGroup($coor, $lab, $contacts);
+
+                $group->setId($groupId);
+
+                $group->setMicroscopes($micros);
+
+                $group->setLocked($this->isLocked($group));
+
+                $groups[$groupId] = $group;
+            }
+
+            return $groups;
+        }
+
         function findAllContacts($groupId) {
             global $pdo;
 
             $sql = "
-                select c.id, firstname, lastname, role, email, phone_code, phone_num
+                select c.id, firstname, lastname, email, phone_code, phone_num, role
                 from contact as c
                 join manage as m
                 on m.contact_id = c.id

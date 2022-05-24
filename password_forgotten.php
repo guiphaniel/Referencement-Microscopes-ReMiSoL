@@ -1,12 +1,11 @@
 <?php 
     include_once("include/config.php");
-
     if(isUserSessionValid())
-        redirect("/form.php");
+        redirect("/account.php");
 
     include_once("view/generators/FormCreator.php");
     include_once("view/generators/HeaderCreator.php");
-    $header = new HeaderCreator("Connexion"); 
+    $header = new HeaderCreator("Mot de passe oublié"); 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -14,23 +13,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
+    <title>Mot de passe oublié</title>
 </head>
 <body>
     <?php 
         $header->create();
     ?>
     <main>
+        <p>Saisissez votre courriel. Vous allez recevoir un message vous permettant de modifier votre mot de passe.</p>
         <?php FormCreator::handleMsg(); ?>
-        <form action="processing/login_processing.php" method="post">
+        <form action="processing/password_forgotten_processing.php" method="post">
             <label for="email">Courriel</label>
             <input id="email" type="email" autocomplete="email" name="email" required>
-            <label for="password">Mot de passe</label>
-            <input id="password" type="password" autocomplete="current-password" name="password" required>
-            <input type="submit">
+            <input type="submit" value="Envoyer">
         </form>
-        <a href="signin.php">Pas encore de compte ?</a>
-        <a href="password_forgotten.php">Mot de passe oublié ?</a>
     </main>
     <footer>
         <address>

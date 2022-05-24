@@ -219,10 +219,11 @@
             return $id;
         }
 
-        function updateUser($id, $user) {
+        function updateUser($user) {
             global $pdo;
 
-            $this->checkUserInfosUniqueness($id, $user);
+            $id = $user->getId();
+            $this->checkUserInfosUniqueness($user);
 
             $sth = $pdo->prepare("
                 UPDATE user
@@ -255,13 +256,14 @@
                 $this->unlockUser($user);
         }
 
-        function checkUserInfosUniqueness($id, $user) {
-            $this->checkUserEmailUniqueness($id, $user);
-            $this->checkUserPhoneUniqueness($id, $user);
+        function checkUserInfosUniqueness($user) {
+            $this->checkUserEmailUniqueness($user);
+            $this->checkUserPhoneUniqueness($user);
         }
 
-        function checkUserEmailUniqueness($id, $user) {
+        function checkUserEmailUniqueness($user) {
             global $pdo;
+            $id = $user->getId();
             
             $sth = $pdo->prepare("
                 select id
@@ -279,8 +281,9 @@
                 throw new Exception("Ce courriel est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
         }
 
-        function checkUserPhoneUniqueness($id, User $user) {
+        function checkUserPhoneUniqueness(User $user) {
             global $pdo;
+            $id = $user->getId();
             
             $sth = $pdo->prepare("
                 select id
