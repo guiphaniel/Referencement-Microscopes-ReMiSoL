@@ -77,8 +77,12 @@
 
             $row = $sth->fetch();
 
-            // if this user exists, return it, else return null
-            return $row ? UserService::getInstance()->findUserById($row[0]) : null;
+            // if this group exists and a user is bound to it, return the user, else null
+            $user = null;
+            if($row && $row["user_id"] != null)
+                $user = UserService::getInstance()->findUserById($row["user_id"]);
+
+            return $user;
         }
 
         public function findGroupOwnerByGroupId(int $groupId) {
@@ -88,8 +92,12 @@
 
             $row = $sth->fetch();
 
-            // if this user exists, return it, else return null
-            return $row ? UserService::getInstance()->findUserById($row[0]) : null;
+            // if this group exists and a user is bound to it, return the user, else null
+            $user = null;
+            if($row && $row["user_id"] != null)
+                $user = UserService::getInstance()->findUserById($row["user_id"]);
+
+            return $user;
         }
 
         function findAllMicroscopesGroup($includeLocked = true) {

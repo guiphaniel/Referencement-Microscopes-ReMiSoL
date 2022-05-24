@@ -112,7 +112,7 @@ CREATE TABLE "microscopes_group" (
 	"user_id"	INTEGER,
 	FOREIGN KEY("coordinates_id") REFERENCES "coordinates"("id") ON DELETE CASCADE,
 	FOREIGN KEY("lab_id") REFERENCES "lab"("id") ON DELETE CASCADE,
-	FOREIGN KEY("user_id") REFERENCES "user"("id") ON DELETE CASCADE,
+	FOREIGN KEY("user_id") REFERENCES "user"("id") ON DELETE SET NULL,
 	CONSTRAINT "pk_microscope_group" PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "locked_microscopes_group" (
