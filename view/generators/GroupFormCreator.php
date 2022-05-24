@@ -21,14 +21,14 @@
             <fieldset id="contacts">
                 <legend>Référent·e·s</legend>
                 <?php
-                //create the first, not removable contact field
-                $this->createContactField(0, $this->group?->getContacts()[0], false);
-                //create all others, removable contact fields
-                foreach ($this->group?->getContacts()??[] as $key => $contact) {
-                    if($key == 0)
+                //create contact fields (only the first one isn't removable)
+                $first = true;  
+                $contactFieldId = 1;
+                foreach ($this->group?->getContacts()??[1 => null] as $contact) {
+                    $this->createContactField($contactFieldId++, $contact, !$first);
+                    
+                    if($first)
                         continue;
-
-                    $this->createContactField($key, $contact, true);
                 } 
                 ?>
                 <div id="add-contact" class="add-bt"></div>
@@ -64,8 +64,9 @@
                     
                     //create all micro fields (only the first one isn't removable)
                     $first = true;  
-                    foreach ($this->group?->getMicroscopes()??[1 => null] as $microId => $micro) {
-                        $this->createMicroField($microId, $micro, !$first);
+                    $microFieldId = 1;
+                    foreach ($this->group?->getMicroscopes()??[1 => null] as $micro) {
+                        $this->createMicroField($microFieldId++, $micro, !$first);
 
                         if($first)
                             $first = false;
@@ -152,10 +153,10 @@
     }
 
     private function createContactField($fieldId, $contact, bool $removable) {
-        $id = $contact?->getId()??0;
+        $id = $contact?->getId()??$fieldId;
         ?>
             <fieldset id="contact-field-<?=$id?>" class="contact-field">
-                <legend>Référent·e n°<?=$fieldId + 1?></legend>
+                <legend>Référent·e n°<?=$fieldId?></legend>
                 <address>
                     <label for="contact-firstname-<?=$id?>">Prénom</label>
                     <input id="contact-firstname-<?=$id?>" type="text" name="contacts[<?=$id?>][firstname]" autocomplete="given-name" <?=$this->valueOf($contact?->getFirstname())?> required>
@@ -194,7 +195,7 @@
     }
 
     private function createMicroField($fieldId, $micro, bool $removable) {
-        $id = $micro?->getId()??0;
+        $id = $micro?->getId()??$fieldId;
 
         $model = $micro?->getModel();
         $controller = $micro?->getController();
@@ -202,7 +203,7 @@
         $compagny = $brand?->getCompagny();
         ?>
         <fieldset id="micro-field-<?=$id?>" class="micro-field">
-            <legend>Microscope n°<?=$fieldId + 1?></legend>
+            <legend>Microscope n°<?=$fieldId?></legend>
             <label for="micro-compagny-<?=$id?>">Société</label>
             <input id="micro-compagny-<?=$id?>" class="micro-compagy" list="micro-compagnies" name="micros[<?=$id?>][compagny]" <?=$this->valueOf($compagny?->getName())?> required>
             <label for="micro-brand-<?=$id?>">Marque</label>
