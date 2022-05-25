@@ -48,6 +48,7 @@ CREATE TABLE "microscope" (
 	"id"	INTEGER,
 	"rate"	TEXT,
 	"desc"	TEXT,
+	"norm_desc"	TEXT,
 	"type"	TEXT, /* TODO: MySQL: replace by ENUM(LABO, SERV)*/
 	"access"	TEXT, /* TODO: MySQL: replace by ENUM(ACAD, INDU, BOTH)*/
 	"model_id"	INTEGER,
@@ -61,13 +62,16 @@ CREATE TABLE "microscope" (
 CREATE TABLE "category" (
 	"id"	INTEGER,
 	"name"	TEXT UNIQUE,
+	"norm_name"	TEXT UNIQUE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "keyword" (
 	"id"	INTEGER,
 	"category_id"	INTEGER,
 	"tag"	TEXT,
+	"norm_tag"	TEXT,
 	UNIQUE("category_id","tag"),
+	UNIQUE("category_id","norm_tag"),
 	FOREIGN KEY("category_id") REFERENCES "category"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );

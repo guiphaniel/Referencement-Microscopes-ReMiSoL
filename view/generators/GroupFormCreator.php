@@ -53,7 +53,7 @@
                     foreach ($cats as $cat): 
                         $catName = $cat->getName();
                         echo "<!-- $catName datalist -->" ?>
-                        <datalist id="cats-<?=HTMLNormalize($catName)?>">
+                        <datalist id="cats-<?=strNormalize($catName)?>">
                         <?php 
                             $tags = $keyWordService->getAllTags($cat);
                             foreach ($tags as $tag): ?>
@@ -267,7 +267,7 @@
                     $cats = $keyWordService->getAllCategories();
                     foreach ($cats as $cat): 
                         $catName =$cat->getName();
-                        $normCat = HTMLNormalize($catName)?>
+                        $normCat = strNormalize($catName)?>
                         <div>
                             <label for="cat-<?=$normCat?>-<?=$id?>"><?=$catName?></label>
                             <input id="cat-<?=$normCat?>-<?=$id?>" class="cat-input" list="cats-<?=$normCat?>">
@@ -277,7 +277,7 @@
                                 <div class="tag">
                                     <div class="rm-bt" data-type="ul"></div>
                                     <?=$kw->getTag()?>
-                                    <input id="micro-kw-<?=HTMLNormalize($catName)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$catName?>][]" value="<?=$kw->getTag()?>">
+                                    <input id="micro-kw-<?=strNormalize($catName)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$catName?>][]" value="<?=$kw->getTag()?>">
                                 </div>
                             <?php endforeach; ?>
                         </div>

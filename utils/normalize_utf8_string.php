@@ -70,7 +70,7 @@
             return $s;
     }
 
-    function HTMLNormalize ($s) {
+    function strNormalize ($s) {
         return strtolower(normalizeUtf8String($s));
     }
 ?>
