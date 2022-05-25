@@ -7,15 +7,11 @@
     {
         case 'GET':
             //TODO: parametres (limit, offset)
-            //TODO: if no compagny is provided, return all compagnies -> change the behavior of the BrandService::getAllBrands method, with optional parameter
-            if(!isset($_GET["compagny"])) {
-                echo "You must provide a compagny name : ?compagny=compagnyName";
-                die();
-            }
-
-            $cmp = CompagnyService::getInstance()->findCompagnyByName($_GET["compagny"]);
-
-            $brands = BrandService::getInstance()->getAllBrands($cmp);
+            if(isset($_GET["compagny"])) {
+                $cmp = CompagnyService::getInstance()->findCompagnyByName($_GET["compagny"]);
+                $brands = BrandService::getInstance()->getAllBrands($cmp);
+            } else
+                $brands = BrandService::getInstance()->getAllBrands();            
             
             header('Content-Type: application/json');
             echo json_encode(array_values($brands), JSON_PRETTY_PRINT); // we need to get rid of the keys (which are the ids), else, the json won't be an array but an object
