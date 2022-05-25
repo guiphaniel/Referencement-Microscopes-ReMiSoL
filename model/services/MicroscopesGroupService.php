@@ -2,6 +2,7 @@
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
     include_once(__DIR__ . "/../entities/User.php");
+    include_once(__DIR__ . "/../../utils/normalize_utf8_string.php");
     
     spl_autoload_register(function ($class_name) {
         include $class_name . '.php';
@@ -100,39 +101,52 @@
             return $user;
         }
 
-        function findAllMicroscopesGroup($includeLocked = true) {
+        function findAllMicroscopesGroup($includeLocked = true, $filters = []) {
             global $pdo;
 
             // get groups infos
-            $sql = "
-                select id, coordinates_id, lab_id
-                from microscopes_group as g
-            ";
-            if(!$includeLocked)
-                $sql .= "where id not in (select microscopes_group_id from locked_microscopes_group)";
+            if(empty($filters)) {
+                $sql = "
+                    select g.id
+                    from microscopes_group as g
+                ";
+                if(!$includeLocked)
+                    $sql .= "where g.id not in (select microscopes_group_id from locked_microscopes_group)";
+            } else {
+                $sqlFilters = implode("", array_map(function ($filter) {return "(?=.*" . strNormalize($filter) . ")";}, $filters));
+                $sql = "
+                    SELECT id from (
+                        select distinct g.id, CONCAT(GROUP_CONCAT(DISTINCT norm_name), GROUP_CONCAT(DISTINCT norm_tag), mo.name, ctr.name, b.name, cmp.name, mi.desc) as concat
+                        from microscopes_group as g
+                        join microscope as mi
+                        on mi.microscopes_group_id = g.id
+                        join microscope_keyword as mk
+                        on mk.microscope_id = mi.id
+                        join keyword as k
+                        on k.id = mk.keyword_id
+                        join category as c
+                        on c.id = k.category_id
+                        join model as mo
+                        on mo.id = mi.model_id
+                        join controller as ctr
+                        on ctr.id = mi.controller_id
+                        join brand as b
+                        on b.id = mo.brand_id
+                        join compagny as cmp
+                        on cmp.id = b.compagny_id
+                        GROUP BY g.id
+                    ) where concat REGEXP '$sqlFilters'
+                ";
+                if(!$includeLocked)
+                    $sql .= "and id not in (select microscopes_group_id from locked_microscopes_group)";
+            }
             $sth = $pdo->query($sql);
-            $groupsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
+            $groupIds = $sth->fetchAll(PDO::FETCH_COLUMN);
 
             // generate groups
             $groups = [];
-            foreach ($groupsInfos as $groupInfos) {
-                $groupId = $groupInfos["id"];
-
-                $coor = CoordinatesService::getInstance()->findCoordinatesById($groupInfos["coordinates_id"]);
-                $lab = LabService::getInstance()->findLabById($groupInfos["lab_id"]);
-                $contacts = $this->findAllContacts($groupId);
-                $micros = $this->findAllMicroscopes($groupId);
-
-                $group = new MicroscopesGroup($coor, $lab, $contacts);
-
-                $group->setId($groupId);
-
-                $group->setMicroscopes($micros);
-
-                $group->setLocked($this->isLocked($group));
-
-                $groups[$groupId] = $group;
-            }
+            foreach ($groupIds as $groupId)
+                $groups[$groupId] = $this->findMicroscopesGroupById($groupId);
 
             return $groups;
         }
