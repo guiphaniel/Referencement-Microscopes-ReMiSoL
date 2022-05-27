@@ -11,6 +11,10 @@
                 <nav>
                     <ul>
                         <li><a href="/index.php">Accueil</a></li>
+                        <li><form action="/search.php">
+                            <input type="search" name="filters">
+                            <input enterkeyhint="go" type="submit" value="Rechercher">
+                        </form></li>
                         <?php if(isUserSessionValid()): ?>
                             <li><a href="/form.php">Formulaire</a></li>
                             <li><a href="/account.php">Mon compte</a></li>
