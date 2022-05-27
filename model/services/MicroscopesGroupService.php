@@ -116,7 +116,7 @@
                 $sqlFilters = implode("", array_map(function ($filter) {return "(?=.*" . strNormalize($filter) . ")";}, $filters));
                 $sql = "
                     SELECT id from (
-                        select distinct g.id, CONCAT(GROUP_CONCAT(DISTINCT norm_name), GROUP_CONCAT(DISTINCT norm_tag), mo.name, ctr.name, b.name, cmp.name, mi.desc) as concat
+                        select distinct g.id, CONCAT(GROUP_CONCAT(DISTINCT norm_name), GROUP_CONCAT(DISTINCT norm_tag), LOWER(mo.name), LOWER(ctr.name), LOWER(b.name), LOWER(cmp.name), mi.norm_desc) as concat
                         from microscopes_group as g
                         join microscope as mi
                         on mi.microscopes_group_id = g.id
