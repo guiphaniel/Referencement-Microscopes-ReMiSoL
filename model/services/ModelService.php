@@ -69,6 +69,7 @@
                 $brandId = $brand->getId();
                 $sql .= " where brand_id = $brandId";
             }
+            $sql .= " ORDER BY name";
 
             $sth = $pdo->query($sql);
 

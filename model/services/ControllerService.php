@@ -70,6 +70,7 @@
                 on brand_id = b.id
                 JOIN compagny as cmp
                 on b.compagny_id = cmp.id
+                ORDER BY ctrName
             ");
 
             foreach ($sth->fetchAll() as $row) {
@@ -85,7 +86,7 @@
             global $pdo;
             $controllers = [];
             
-            $sth = $pdo->prepare("SELECT id, name FROM controller where brand_id = :brandId");
+            $sth = $pdo->prepare("SELECT id, name FROM controller where brand_id = :brandId ORDER BY name");
 
             $sth->execute([
                 "brandId" => BrandService::getInstance()->getBrandId($brand)

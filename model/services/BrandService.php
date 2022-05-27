@@ -118,6 +118,7 @@
                 $compagnyId = $compagny->getId();
                 $sql .= " where compagny_id = $compagnyId";
             }
+            $sql .= " ORDER BY name";
 
             $sth = $pdo->query($sql);
 
