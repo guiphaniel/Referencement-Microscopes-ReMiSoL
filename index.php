@@ -1,6 +1,17 @@
 <?php 
+    include_once("model/services/ModelService.php");
+    include_once("model/services/ControllerService.php");
     include_once("view/generators/HeaderCreator.php");
     $header = new HeaderCreator("Accueil"); 
+
+    function createCheckboxes($objs, $name) {
+        foreach($objs as $obj):
+            $id = "$name-{$obj->getId()}";
+            $name = $obj->getName(); ?>
+            <label for="<?=$id?>"><?=$name?></label>
+            <input type="checkbox" value="<?=$name?>" id="<?=$id?>">
+    <?php endforeach;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -26,6 +37,19 @@
     ?>
     <main>
         <p>Bienvenue sur notre site !</p>
+        <aside>
+            <form id="map-filters">
+                <h3>Filtres</h3>
+                <h4>Sociétés</h4>
+                <?php createCheckboxes(CompagnyService::getInstance()->getAllCompagnies(), "cmp"); ?>              
+                <h4>Marques</h4>
+                <?php createCheckboxes(BrandService::getInstance()->getAllBrands(), "brand"); ?>             
+                <h4>Modèles</h4>
+                <?php createCheckboxes(ModelService::getInstance()->getAllModels(), "model"); ?>             
+                <h4>Électronique/Contrôleurs</h4>
+                <?php createCheckboxes(ControllerService::getInstance()->findAllControllers(), "ctr"); ?>             
+            </form>
+        </aside>
         <div id="map" style="height: 400px;"></div>
     </main>
     <footer>
