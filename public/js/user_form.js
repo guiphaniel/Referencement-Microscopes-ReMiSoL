@@ -1,31 +1,30 @@
-const userForms = document.getElementById("user-forms");
+document.addEventListener("click", onClick);
 
-const rmBts = userForms.getElementsByClassName("rm-bt");
+function onClick(e) {
+    if(e.target.className != "rm-bt")
+        return;
 
-for (const rmBt of rmBts) {
-    rmBt.addEventListener("click", () => {
-        form = rmBt.parentElement;
-        timeoutID = window.setTimeout(removeUser, 5000, form);
+    rmBt = e.target;
 
-        rmBt.hidden = true;
+    form = rmBt.parentElement;
+    rmBt.hidden = true;
 
-        wrapper = document.createElement("div");
-        
-        wrapper.append(document.createTextNode("Suppression en cours..."));
-        
-        undo = document.createElement("span");
-        undo.append(document.createTextNode("Annuler"));
-        undo.className = "undo-bt";
-        undo.dataset.timeoutId = timeoutID
-        undo.addEventListener('click', function() { 
-            window.clearTimeout(this.dataset.timeoutId); 
-            this.parentElement.previousElementSibling.hidden = false // show the remove-bt again
-            this.parentElement.remove(); // remove wrapper
-        });
-        wrapper.append(undo);
-        
-        form.append(wrapper);
-    })
+    wrapper = document.createElement("div");
+    
+    wrapper.append(document.createTextNode("Suppression en cours..."));
+    
+    undo = document.createElement("span");
+    undo.append(document.createTextNode("Annuler"));
+    undo.className = "undo-bt";
+    undo.dataset.timeoutId = window.setTimeout(removeUser, 5000, form);
+    undo.addEventListener('click', function() { 
+        window.clearTimeout(this.dataset.timeoutId); 
+        this.parentElement.previousElementSibling.hidden = false // show the remove-bt again
+        this.parentElement.remove(); // remove wrapper
+    });
+    wrapper.append(undo);
+    
+    form.append(wrapper);
 }
 
 function removeUser(form) {

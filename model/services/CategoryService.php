@@ -39,10 +39,11 @@
 
             // if the category isn't already in the db, add it
             if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO category VALUES (NULL, :name)");
+                $sth = $pdo->prepare("INSERT INTO category VALUES (NULL, :name, :normName)");
         
                 $sth->execute([
-                    "name" => $category->getName()
+                    "name" => $category->getName(),
+                    "normName" => $category->getNormName()
                 ]);
                 
                 $id = $pdo->lastInsertId();
@@ -58,7 +59,7 @@
                 parent::update($old, $new);
         }
 
-        function getAllCategories() : array {
+        function findAllCategories() : array {
             global $pdo;
             $categories = [];
             

@@ -49,22 +49,17 @@
 
         /** Saves the coordinates if they don't exist yet, else throws */
         function save(Coordinates $coor) : int {
+            if($this->getCoordinatesId($coor) != -1)
+                throw new Exception("Un groupe de microscopes existe déjà à cet emplacement");
+
             global $pdo;
 
             $sth = $pdo->prepare("INSERT INTO coordinates VALUES (NULL, :lat, :lon)");
 
-            try {
-                $sth->execute([
-                    "lat" => $coor->getLat(), 
-                    "lon" => $coor->getLon(),
-                ]);
-            } catch (\Throwable $th) {
-                if(str_contains($th->getMessage(), "UNIQUE constraint failed"))
-                    throw new Exception("Un groupe de microscopes existe déjà à cet emplacement");
-                else
-                    throw new Exception("Une erreur s'est produite");
-            }
-            
+            $sth->execute([
+                "lat" => $coor->getLat(), 
+                "lon" => $coor->getLon(),
+            ]);
 
             $id = $pdo->lastInsertId();
             $coor->setId($id);  

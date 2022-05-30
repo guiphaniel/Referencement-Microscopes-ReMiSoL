@@ -9,7 +9,7 @@
             //TODO: parametres (limit, offset)            
             if(isset($_GET["brand"])) {
                 $brand = BrandService::getInstance()->findBrandByName($_GET["brand"]);
-                $controllers = ControllerService::getInstance()->findAllControllersByBrand($brand);
+                $controllers = ControllerService::getInstance()->findAllControllers($brand);
             }
             else
                 $controllers = ControllerService::getInstance()->findAllControllers();

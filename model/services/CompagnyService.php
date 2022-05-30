@@ -101,11 +101,11 @@
                 parent::update($old, $new);
         }
 
-        function getAllCompagnies() : array {
+        function findAllCompagnies() : array {
             global $pdo;
             $compagnies = [];
             
-            $sth = $pdo->query("SELECT id, name FROM compagny");
+            $sth = $pdo->query("SELECT id, name FROM compagny ORDER BY name");
 
             $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 

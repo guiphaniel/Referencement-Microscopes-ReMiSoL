@@ -8,15 +8,24 @@
     function userRedirect() {
         if($_SESSION["user"]["admin"])
             redirect("/admin.php?action=users");
-        else
-            redirect("/index.php"); // TODO: replace by account
+        else {
+            redirect("/account.php?action=settings");
+        }
     }
 
     if(empty($_POST["id"]) || empty($_POST["action"]))
         userRedirect();
 
     if ($_POST["action"] == "delete") {
-        UserService::getInstance()->deleteUser($_POST["id"]);
+        $userService = UserService::getInstance();
+        if(sizeof($userService->findAllAdmins()) <= 1) {
+            $_SESSION["form"]["errorMsg"] = "Il ne peut y avoir moins d'un administrateur.";
+        } else {
+            $userService->deleteUser($_POST["id"]);
+            if($_POST["id"] == $_SESSION["user"]["id"]) 
+                redirect("/processing/logout.php");
+        }
+        
         userRedirect();
     }
 
@@ -27,7 +36,7 @@
         userRedirect();
 
     if(!$_SESSION["user"]["admin"] && $_POST["id"] != $_SESSION["user"]["id"])
-        redirect("/index.php"); // TODO: replace by account
+        redirect("/account.php");
 
     // if a non-admin tries to modify admin fields, redirect
     if(!$_SESSION["user"]["admin"] && (!empty($_POST["admin"]) || !empty($_POST["locked"])))
@@ -48,12 +57,14 @@
             $hash = UserService::getInstance()->findUserById($id)->getPassword();
 
         //update user
-        $user = new User($_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["phoneCode"], substr($_POST["phoneNum"], -9), $hash, $_POST["locked"]??false, $_POST["admin"]??false);
+        $user = (new User($_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["phoneCode"], substr($_POST["phoneNum"], -9), $hash, $_POST["locked"]??false, $_POST["admin"]??false))
+            ->setId($id);
 
-        UserService::getInstance()->updateUser($id, $user);
+        UserService::getInstance()->updateUser($user);
     } catch (\Throwable $th) {
         $_SESSION["form"]["errorMsg"] = $th->getMessage();
         userRedirect();
     }
     
+    $_SESSION["form"]["infoMsg"] = "Vos modifications ont bien été prises en compte.";
     userRedirect();

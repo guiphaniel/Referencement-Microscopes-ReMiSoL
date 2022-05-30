@@ -1,7 +1,7 @@
 <?php
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
-    include_once(__DIR__ . "/../entities/Keyword.php");
+    include_once(__DIR__ . "/../services/KeywordService.php");
 
     spl_autoload_register(function ($class_name) {
         include $class_name . '.php';
@@ -20,11 +20,12 @@
         function save(Microscope $micro) : int {
             global $pdo;
             
-            $sth = $pdo->prepare("INSERT INTO microscope VALUES (NULL, :rate, :desc, :type, :access, :modId, :ctrId, NULL)");
+            $sth = $pdo->prepare("INSERT INTO microscope VALUES (NULL, :rate, :descr, :normDescr, :type, :access, :modId, :ctrId, NULL)");
 
             $sth->execute([
                 "rate" => $micro->getRate(),
-                "desc" => $micro->getDesc(),
+                "descr" => $micro->getDescr(),
+                "normDescr" => $micro->getNormDescr(),
                 "type" => $micro->getType(),
                 "access" => $micro->getAccess(),
                 "modId" => ModelService::getInstance()->getModelId($micro->getModel()),
@@ -49,50 +50,21 @@
             $pdo->exec("UPDATE microscope SET microscopes_group_id = $groupId WHERE id = $microId");
         }
 
-        function findAllKeywords($microId) {
-            global $pdo;
-
-            $sql = "
-                select c.name, k.id, tag
-                from microscope as mi
-                join microscope_keyword as mk
-                on mk.microscope_id = mi.id
-                join keyword as k
-                on k.id = mk.keyword_id
-                join category as c
-                on k.category_id = c.id
-                where mk.microscope_id = $microId
-            ";
-
-            $sth = $pdo->query($sql);
-            $keywords = $sth->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_NAMED);
-
-            $kws = [];
-
-            foreach($keywords as $cat => $infos) {
-                foreach ($infos as $info) {
-                    $kws[] = (new Keyword(new Category($cat), $info["tag"]))->setId($info["id"]);
-                }
-            }
-
-            return $kws;
-        }
-
         function findMicroscopeById($microId) {
             global $pdo;
 
             $sql = "
-                select mi.id as microId, com.id as comId, com.name as compagnyName, bra.id as braId, bra.name as brandName, mod.id as modId, mod.name as modelName, ctr.id as ctrId, ctr.name as controllerName, rate, desc, type, access
+                select mi.id as microId, com.id as comId, com.name as compagnyName, bra.id as braId, bra.name as brandName, model.id as modId, model.name as modelName, ctr.id as ctrId, ctr.name as controllerName, rate, `descr`, type, access
                 from microscope as mi
                 join controller as ctr
                 on ctr.id = mi.controller_id
-                join model as mod
-                on mod.id = mi.model_id
+                join model
+                on model.id = mi.model_id
                 join brand as bra
-                on bra.id = mod.brand_id
+                on bra.id = model.brand_id
                 join compagny as com
                 on com.id = bra.compagny_id
-                where microId = $microId
+                where mi.id = $microId
             ";
 
             $sth = $pdo->query($sql);
@@ -107,10 +79,31 @@
             $ctr = (new Controller($microInfos["controllerName"], $bra))
                 ->setId($microInfos["ctrId"]);;
 
-            $kws = $this->findAllKeywords($microInfos["microId"]);
+            $kws = KeywordService::getInstance()->findAllKeywordsByMicroscopeId($microInfos["microId"]);
 
-            $micro = new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["desc"], $microInfos["type"], $microInfos["access"], $kws);
+            $micro = new Microscope($mod, $ctr, $microInfos["rate"], $microInfos["descr"], $microInfos["type"], $microInfos["access"], $kws);
             return $micro->setId($microId);
+        }
+
+        function findAllMicroscopesByGroupId($groupId) {
+            global $pdo;
+
+            $sql = "
+                select id
+                from microscope
+                where microscopes_group_id = $groupId
+            ";
+
+            $sth = $pdo->query($sql);
+            $microsIds = $sth->fetchAll(PDO::FETCH_COLUMN);
+
+            $micros = [];
+            $microscopeService = MicroscopeService::getInstance();
+            foreach ($microsIds as $microId) {
+                $micros[$microId] = $microscopeService->findMicroscopeById($microId);
+            }
+
+            return $micros;
         }
 
         public function delete($entity) {

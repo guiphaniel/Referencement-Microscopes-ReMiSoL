@@ -113,16 +113,16 @@
     $modelService = ModelService::getInstance();
     $ctrService = ControllerService::getInstance();
 
-    update($compagnyService, $cmps, $compagnyService->getAllCompagnies());
+    update($compagnyService, $cmps, $compagnyService->findAllCompagnies());
 
     foreach($cmps as $cmpId => $cmp) {
-        update($brandService, $brands[$cmpId], $brandService->getAllBrands($cmp));
+        update($brandService, $brands[$cmpId], $brandService->findAllBrands($cmp));
 
         foreach($brands[$cmpId] as $brandId => $brand)
-            update($modelService, $models[$cmpId][$brandId], $modelService->getAllModels($brand));
+            update($modelService, $models[$cmpId][$brandId], $modelService->findAllModels($brand));
     
         foreach($brands[$cmpId] as $brandId => $brand)
-            update($ctrService, $ctrs[$cmpId][$brandId], $ctrService->findAllControllersByBrand($brand));
+            update($ctrService, $ctrs[$cmpId][$brandId], $ctrService->findAllControllers($brand));
     }
 
     

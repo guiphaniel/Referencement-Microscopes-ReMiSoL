@@ -21,14 +21,14 @@
             <fieldset id="contacts">
                 <legend>Référent·e·s</legend>
                 <?php
-                //create the first, not removable contact field
-                $this->createContactField(0, $this->group?->getContacts()[0], false);
-                //create all others, removable contact fields
-                foreach ($this->group?->getContacts()??[] as $key => $contact) {
-                    if($key == 0)
+                //create contact fields (only the first one isn't removable)
+                $first = true;  
+                $contactFieldId = 1;
+                foreach ($this->group?->getContacts()??[1 => null] as $contact) {
+                    $this->createContactField($contactFieldId++, $contact, !$first);
+                    
+                    if($first)
                         continue;
-
-                    $this->createContactField($key, $contact, true);
                 } 
                 ?>
                 <div id="add-contact" class="add-bt"></div>
@@ -42,20 +42,20 @@
                 <!-- Compagnies datalist -->
                 <datalist id="micro-compagnies">
                 <?php 
-                    foreach (CompagnyService::getInstance()->getAllCompagnies() as $compagny): ?>
+                    foreach (CompagnyService::getInstance()->findAllCompagnies() as $compagny): ?>
                         <option value="<?=$compagny->getName()?>">
                     <?php endforeach; ?>
                 </datalist>
                 <!-- Keywords datalists -->
                 <?php 
                     $keyWordService = KeywordService::getInstance();
-                    $cats = $keyWordService->getAllCategories();
+                    $cats = $keyWordService->findAllCategories();
                     foreach ($cats as $cat): 
                         $catName = $cat->getName();
                         echo "<!-- $catName datalist -->" ?>
-                        <datalist id="cats-<?=HTMLNormalize($catName)?>">
+                        <datalist id="cats-<?=strNormalize($catName)?>">
                         <?php 
-                            $tags = $keyWordService->getAllTags($cat);
+                            $tags = $keyWordService->findAllTags($cat);
                             foreach ($tags as $tag): ?>
                                 <option value="<?=$tag?>">
                             <?php endforeach; ?>
@@ -64,8 +64,9 @@
                     
                     //create all micro fields (only the first one isn't removable)
                     $first = true;  
-                    foreach ($this->group?->getMicroscopes()??[1 => null] as $microId => $micro) {
-                        $this->createMicroField($microId, $micro, !$first);
+                    $microFieldId = 1;
+                    foreach ($this->group?->getMicroscopes()??[1 => null] as $micro) {
+                        $this->createMicroField($microFieldId++, $micro, !$first);
 
                         if($first)
                             $first = false;
@@ -152,10 +153,10 @@
     }
 
     private function createContactField($fieldId, $contact, bool $removable) {
-        $id = $contact?->getId()??0;
+        $id = $contact?->getId()??$fieldId;
         ?>
             <fieldset id="contact-field-<?=$id?>" class="contact-field">
-                <legend>Référent·e n°<?=$fieldId + 1?></legend>
+                <legend>Référent·e n°<?=$fieldId?></legend>
                 <address>
                     <label for="contact-firstname-<?=$id?>">Prénom</label>
                     <input id="contact-firstname-<?=$id?>" type="text" name="contacts[<?=$id?>][firstname]" autocomplete="given-name" <?=$this->valueOf($contact?->getFirstname())?> required>
@@ -194,7 +195,7 @@
     }
 
     private function createMicroField($fieldId, $micro, bool $removable) {
-        $id = $micro?->getId()??0;
+        $id = $micro?->getId()??$fieldId;
 
         $model = $micro?->getModel();
         $controller = $micro?->getController();
@@ -202,7 +203,7 @@
         $compagny = $brand?->getCompagny();
         ?>
         <fieldset id="micro-field-<?=$id?>" class="micro-field">
-            <legend>Microscope n°<?=$fieldId + 1?></legend>
+            <legend>Microscope n°<?=$fieldId?></legend>
             <label for="micro-compagny-<?=$id?>">Société</label>
             <input id="micro-compagny-<?=$id?>" class="micro-compagy" list="micro-compagnies" name="micros[<?=$id?>][compagny]" <?=$this->valueOf($compagny?->getName())?> required>
             <label for="micro-brand-<?=$id?>">Marque</label>
@@ -230,8 +231,8 @@
                 <option value="INDU" <?=$micro?->getAccess() == "INDU" ? "selected" : ""?>>Industriels</option>
                 <option value="BOTH" <?=$micro?->getAccess() == "BOTH" ? "selected" : ""?>>Académiques et Industriels</option>
             </select>
-            <label for="micro-desc-<?=$id?>">Description</label>
-            <textarea id="micro-desc-<?=$id?>" name="micros[<?=$id?>][desc]" cols="30" rows="10" required><?=$micro?->getDesc()?></textarea>
+            <label for="micro-descr-<?=$id?>">Descrription</label>
+            <textarea id="micro-descr-<?=$id?>" name="micros[<?=$id?>][descr]" cols="30" rows="10" required><?=$micro?->getDescr()?></textarea>
             <div>
                 <label for="micro-img-<?=$id?>">Photo</label>
                     <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
@@ -263,10 +264,10 @@
                 <legend>Mots-clés</legend>
                 <?php 
                     $keyWordService = KeywordService::getInstance();
-                    $cats = $keyWordService->getAllCategories();
+                    $cats = $keyWordService->findAllCategories();
                     foreach ($cats as $cat): 
                         $catName =$cat->getName();
-                        $normCat = HTMLNormalize($catName)?>
+                        $normCat = strNormalize($catName)?>
                         <div>
                             <label for="cat-<?=$normCat?>-<?=$id?>"><?=$catName?></label>
                             <input id="cat-<?=$normCat?>-<?=$id?>" class="cat-input" list="cats-<?=$normCat?>">
@@ -276,7 +277,7 @@
                                 <div class="tag">
                                     <div class="rm-bt" data-type="ul"></div>
                                     <?=$kw->getTag()?>
-                                    <input id="micro-kw-<?=HTMLNormalize($catName)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$catName?>][]" value="<?=$kw->getTag()?>">
+                                    <input id="micro-kw-<?=strNormalize($catName)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$catName?>][]" value="<?=$kw->getTag()?>">
                                 </div>
                             <?php endforeach; ?>
                         </div>

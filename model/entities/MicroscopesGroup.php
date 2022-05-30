@@ -6,8 +6,10 @@
 
     class MicroscopesGroup extends AbstractEntity {
         private array $microscopes;
+        private bool $locked;
 
         function __construct(private Coordinates $coor, private Lab $lab, private array $contacts) {
+            $this->locked = false;
             parent::__construct();
         }
 
@@ -59,8 +61,8 @@
             $this->contacts[] = $contact;
         }
 
-        function removeContact(Contact $microscope) {
-            unset($microscopes[array_search($microscope, $this->microscopes, true)]);
+        function removeContact(Contact $contact) {
+            unset($this->contacts[array_search($contact, $this->contacts, true)]);
         }
 
         public function getLab() : Lab
@@ -71,6 +73,18 @@
         public function setLab(Lab $lab)
         {
             $this->lab = $lab;
+
+            return $this;
+        }
+
+        public function isLocked()
+        {
+            return $this->locked;
+        }
+
+        public function setLocked($locked)
+        {
+            $this->locked = $locked;
 
             return $this;
         }

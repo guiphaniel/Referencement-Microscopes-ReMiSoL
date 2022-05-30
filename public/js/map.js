@@ -11,14 +11,15 @@ L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
 	attribution: '&copy; OpenStreetMap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-// show microscopes' markers on the map
-loadAndShowMicroscopes();
+// init groups' markers on the map
+let markersClusters = L.markerClusterGroup();
+loadAndShowGroups("/api/v1/listMicroscopesGroups.php");
 
-async function loadAndShowMicroscopes() {
-	const response = await fetch("/api/v1/listMicroscopesGroups.php");
+async function loadAndShowGroups(url) {
+	markersClusters.clearLayers();
+
+	const response = await fetch(url);
 	const groups = await response.json();
-
-	let markersClusters = L.markerClusterGroup();
 
 	for (let group of groups) {
 		// set custom icon color
@@ -256,3 +257,40 @@ legend.addTo(map);
 
 // show the scale bar on the lower left corner
 L.control.scale({imperial: true, metric: true}).addTo(map);
+
+// MAP FILTERS
+
+let filters = [];
+initMapFilters();
+
+function initMapFilters() {
+	let mapFilters = document.getElementById("map-filters");
+
+	if(mapFilters == null)
+		return;
+
+	document.addEventListener("change", updateFilters);
+}
+
+function updateFilters(e) {
+	let checkbox = e.target;
+	if(checkbox.type != "checkbox")
+		return;
+
+	if(checkbox.checked)
+		filters.push(checkbox.value);
+	else
+		filters.splice(filters.indexOf(checkbox.value), 1);
+
+	let url = "/api/v1/search.php";
+
+	if(filters.length > 0)
+		url += "?filters[]=" + filters[0];
+
+	filters.forEach((filter, index) => {
+		if (index === 0) return;
+		url += "&filters[]=" + filter;
+	});
+
+	loadAndShowGroups(url);
+}

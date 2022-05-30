@@ -8,9 +8,9 @@
         case 'GET':
             //TODO: parametres (limit, offset)            
             if(!isset($_GET["brand"])) 
-                $brands = ModelService::getInstance()->getAllModels();
+                $brands = ModelService::getInstance()->findAllModels();
             else
-                $brands = ModelService::getInstance()->getAllModels(BrandService::getInstance()->findBrandByName($_GET["brand"]));
+                $brands = ModelService::getInstance()->findAllModels(BrandService::getInstance()->findBrandByName($_GET["brand"]));
             
             header('Content-Type: application/json');
             echo json_encode(array_values($brands), JSON_PRETTY_PRINT); // we need to get rid of the keys (which are the ids), else, the json won't be an array but an object

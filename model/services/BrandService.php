@@ -109,7 +109,7 @@
                 parent::update($old, $new);
         }
 
-        function getAllBrands($compagny = null) : array {
+        function findAllBrands($compagny = null) : array {
             global $pdo;
             $brands = [];
             
@@ -118,6 +118,7 @@
                 $compagnyId = $compagny->getId();
                 $sql .= " where compagny_id = $compagnyId";
             }
+            $sql .= " ORDER BY name";
 
             $sth = $pdo->query($sql);
 

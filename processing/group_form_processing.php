@@ -1,6 +1,7 @@
 <?php
     include_once("../include/config.php");
     include_once("../utils/resize_image_proportionnaly.php");
+    include_once("../utils/send_email.php");
     include_once("../model/entities/Lab.php");
     include_once("../model/entities/Contact.php");
     include_once("../model/entities/Model.php");
@@ -40,7 +41,7 @@
     }
 
     foreach($_POST["micros"] as $micro) {
-        if (empty($micro["compagny"]) || empty($micro["brand"]) || empty($micro["model"]) || empty($micro["controller"]) || empty($micro["desc"]) || empty($micro["type"]) || empty($micro["access"])) {
+        if (empty($micro["compagny"]) || empty($micro["brand"]) || empty($micro["model"]) || empty($micro["controller"]) || empty($micro["descr"]) || empty($micro["type"]) || empty($micro["access"])) {
             redirect("/form.php");
         }
     }
@@ -61,7 +62,7 @@
     
         $contacts = [];
         foreach($_POST["contacts"] as $id => $contact) {
-            $contacts[] = (new Contact($contact["firstname"], strtoupper($contact["lastname"]),  ucfirst($contact["role"]), $contact["email"], $contact["phoneCode"], substr($contact["phoneNum"], -9)))
+            $contacts[] = (new Contact($contact["firstname"], strtoupper($contact["lastname"]), $contact["email"], $contact["phoneCode"], substr($contact["phoneNum"], -9),  ucfirst($contact["role"])))
                 ->setId($id);
         }
         
@@ -86,18 +87,19 @@
                 }
             }
 
-            $group->addMicroscope((new Microscope($mod, $ctr, $micro["rate"]??null, $micro["desc"], $micro["type"], $micro["access"], $kws))->setId($id));
+            $group->addMicroscope((new Microscope($mod, $ctr, $micro["rate"]??null, $micro["descr"], $micro["type"], $micro["access"], $kws))->setId($id));
         }
             
         // ...and save/update the group into the db
+        $microscopesGroupService = MicroscopesGroupService::getInstance();
         if(isset($_POST["id"])) {
-            $microscopesGroupService = MicroscopesGroupService::getInstance();
             $oldGroup = $microscopesGroupService->findMicroscopesGroupById($_POST["id"]);
             $microscopesGroupService->update($oldGroup, $group);
             $groupId = $_POST["id"];
+        } else {
+            $groupId = $microscopesGroupService->save($group);
+            $microscopesGroupService->lock($group);
         }
-        else
-            $groupId = MicroscopesGroupService::getInstance()->save($group);
 
         //save the micros' imgs
         foreach (array_keys($group->getMicroscopes()) as $microId) { 
@@ -158,5 +160,23 @@
             $url = "/form.php";
         redirect($url);
     }
+
+    // if the group has been updated...
+    if(isset($_POST["id"])) {
+        $groupId = $_POST["id"];
+        // ...and edited by an admin, unlock the group
+        if($_SESSION["user"]["admin"])
+            MicroscopesGroupService::getInstance()->unlock($groupId);
+
+        redirect("/group-details.php?id=$groupId");
+    }
+
+    // else, send an email to all the admins
+    $object = "[RéMiSoL] Nouvelle fiche";
+    $content = "Bonjour,\n\nUne nouvelle fiche a été créée par {$_SESSION["user"]["firstname"]} {$_SESSION["user"]["lastname"]} ({$_SESSION["user"]["email"]}).\n\nPour l'administrer, suivez le lien suivant : https://" . WEBSITE_URL . "/group-details.php?id=$groupId.";
+
+    foreach (UserService::getInstance()->findAllAdmins() as $admin) {
+        sendEmail($admin->getEmail(), $object, $content);
+    }
     
-    redirect("/group-details.php?id=$groupId");
+    redirect("/index"); //TODO: redirect to user's account

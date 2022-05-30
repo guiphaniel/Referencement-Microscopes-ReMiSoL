@@ -9,11 +9,11 @@
 
         public function createBody() {            
             $keywordService = KeywordService::getInstance();
-            $cats = $keywordService->getAllCategories(); ?>
+            $cats = $keywordService->findAllCategories(); ?>
             <div id="cats-wrapper" data-next-cat-id="<?php $ids = array_keys($cats); echo empty($ids) ? 0 : max($ids) + 1; ?>">
                 <?php 
                 foreach($cats as $catId => $cat): 
-                    $tags = $keywordService->getAllTags($cat)?>
+                    $tags = $keywordService->findAllTags($cat)?>
                     <div>
                         <input class="kw-cat" type="text" name="cats[<?=$catId?>]" value="<?=$cat->getName()?>">
                         <div class="rm-bt"></div>

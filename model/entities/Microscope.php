@@ -4,14 +4,18 @@ include_once(__DIR__ . "/Model.php");
 include_once(__DIR__ . "/Controller.php");
 include_once(__DIR__ . "/Microscope.php");
 include_once(__DIR__ . "/../services/KeywordService.php");
+include_once(__DIR__ . "/../../utils/normalize_utf8_string.php");
 
 class Microscope extends AbstractEntity  {
+    private string $descr;
+    private string $normDescr;
     private string $type;
     private string $access;
     private array $keywords;
 
-    function __construct(private Model $model, private Controller $controller, private string $rate, private string $desc, string $type, string $access, array $keywords) {
+    function __construct(private Model $model, private Controller $controller, private string $rate, string $descr, string $type, string $access, array $keywords) {
         parent::__construct();
+        $this->setDescr($descr);
         $this->setType($type);
         $this->setAccess($access);
         $this->setKeywords($keywords);
@@ -68,16 +72,22 @@ class Microscope extends AbstractEntity  {
         return $this;
     }
 
-    public function getDesc() : string
+    public function getDescr() : string
     {
-        return $this->desc;
+        return $this->descr;
     }
 
-    public function setDesc(string $desc)
+    public function setDescr(string $descr)
     {
-        $this->desc = $desc;
+        $this->descr = $descr;
+        $this->normDescr = strNormalize($descr);
 
         return $this;
+    }
+
+    public function getNormDescr() : string
+    {
+        return $this->normDescr;
     }
 
     public function getAccess()
@@ -107,13 +117,13 @@ class Microscope extends AbstractEntity  {
 
         // check if some of the cats provided aren't in the database
         $keywordService = KeywordService::getInstance();
-        $extraCats = array_udiff(array_map(function($kw) {return $kw->getCat();}, $keywords), $keywordService->getAllCategories(), function ($a, $b) { return strcmp($a->getName(), $b->getName()); });
+        $extraCats = array_udiff(array_map(function($kw) {return $kw->getCat();}, $keywords), $keywordService->findAllCategories(), function ($a, $b) { return strcmp($a->getName(), $b->getName()); });
         if($extraCats)
             throw new Exception("Les catégories suivantes ne sont pas prises en charge : " . implode(", ", $extraCats));
         
         // check if some of the tags provided aren't in the database
         foreach ($keywords as $kw) {
-            if(!in_array($kw->getTag() , $keywordService->getAllTags($kw->getCat())))
+            if(!in_array($kw->getTag() , $keywordService->findAllTags($kw->getCat())))
                 throw new Exception('Le mot-clé "' . $kw->getTag() . '" n\'est pas pris en charge pour la catégorie "' . $kw->getCat() . '"');
         }
 

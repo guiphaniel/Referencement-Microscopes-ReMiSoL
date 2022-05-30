@@ -20,13 +20,13 @@
             $modelService =  ModelService::getInstance();
             $controllerService =  ControllerService::getInstance();
 
-            $cmps = $compagnyService->getAllCompagnies(); ?>
+            $cmps = $compagnyService->findAllCompagnies(); ?>
             <h3>Sociétés</h3>
             <div id="cmps-wrapper" data-next-cmp-id="<?= $this->getNextId($cmps); ?>">
                 <?php 
                 foreach($cmps as $cmpId => $cmp): 
                     if($cmp->getName() == "Homemade") continue;
-                    $brands = $brandService->getAllBrands($cmp); ?>
+                    $brands = $brandService->findAllBrands($cmp); ?>
                     <div class="cmp-wrapper">
                         <input type="text" name="cmps[<?=$cmpId?>]" value="<?=$cmp->getName()?>">
                         <div class="rm-bt"></div>
@@ -34,8 +34,8 @@
                         <div class="brands-wrapper" data-next-brand-id="<?= $this->getNextId($brands); ?>" data-parent-id=<?=$cmpId?>>
                             <?php
                             foreach($brands as $brandId => $brand): 
-                                $models = $modelService->getAllModels($brand);
-                                $ctrs = $controllerService->findAllControllersByBrand($brand); ?>
+                                $models = $modelService->findAllModels($brand);
+                                $ctrs = $controllerService->findAllControllers($brand); ?>
                                 <div class="brand-wrapper">
                                     <input type="text" name="brands[<?=$cmpId?>][<?=$brandId?>]" value="<?=$brand->getName()?>">
                                     <div class="rm-bt"></div>

@@ -19,15 +19,15 @@
         function getContactId(Contact $contact) {
             global $pdo;
     
-            $sth = $pdo->prepare("SELECT id FROM contact where firstname = :firstname and lastname = :lastname and role = :role and email = :email and phone_code = :phoneCode and phone_num = :phoneNum");
+            $sth = $pdo->prepare("SELECT id FROM contact where firstname = :firstname and lastname = :lastname and email = :email and phone_code = :phoneCode and phone_num = :phoneNum and role = :role");
     
             $sth->execute([
                 "firstname" => $contact->getFirstname(),
                 "lastname" => $contact->getLastname(),
-                "role" => $contact->getRole(),
                 "email" => $contact->getEmail(),
                 "phoneCode" => $contact->getPhoneCode(),
-                "phoneNum" => $contact->getPhoneNum()
+                "phoneNum" => $contact->getPhoneNum(),
+                "role" => $contact->getRole()
             ]);
     
             $row = $sth->fetch();
@@ -40,7 +40,30 @@
             }
             return $id;
         }
-    
+
+        function findAllContactsByGroupId($groupId) {
+            global $pdo;
+
+            $sql = "
+                select c.id, firstname, lastname, email, phone_code, phone_num, role
+                from contact as c
+                join manage as m
+                on m.contact_id = c.id
+                where microscopes_group_id = $groupId
+            ";
+
+            $sth = $pdo->query($sql);
+            $contactsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
+
+            $contacts = [];
+            foreach ($contactsInfos as $contactInfos) {
+                $contacts[] = (new Contact($contactInfos["firstname"], $contactInfos["lastname"], $contactInfos["email"], $contactInfos["phone_code"], $contactInfos["phone_num"], $contactInfos["role"]))
+                    ->setId($contactInfos["id"]);
+            }
+
+            return $contacts;
+        }
+
         /** Saves the contact if it doesn't exist yet, and returns its id */
         function save(Contact $contact) {
             global $pdo;
@@ -49,15 +72,16 @@
 
             // if the contact isn't already in the db, add it
             if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :firstname, :lastname, :role, :email, :phoneCode, :phoneNum)");
+                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :firstname, :lastname, :normLastname, :email, :phoneCode, :phoneNum, :role)");
         
                 $sth->execute([
                     "firstname" => $contact->getFirstname(),
                     "lastname" => $contact->getLastname(),
-                    "role" => $contact->getRole(),
+                    "normLastname" => $contact->getNormLastname(),
                     "email" => $contact->getEmail(),
                     "phoneCode" => $contact->getPhoneCode(),
-                    "phoneNum" => $contact->getPhoneNum()
+                    "phoneNum" => $contact->getPhoneNum(),
+                    "role" => $contact->getRole()
                 ]);
                 
                 $id = $pdo->lastInsertId();

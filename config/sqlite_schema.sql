@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS "microscope_keyword";
 DROP TABLE IF EXISTS "keyword";
 DROP TABLE IF EXISTS "category";
 DROP TABLE IF EXISTS "microscope";
+DROP TABLE IF EXISTS "locked_microscopes_group";
 DROP TABLE IF EXISTS "microscopes_group";
 DROP TABLE IF EXISTS "coordinates";
 DROP TABLE IF EXISTS "lab";
@@ -46,9 +47,10 @@ CREATE TABLE "controller" (
 CREATE TABLE "microscope" (
 	"id"	INTEGER,
 	"rate"	TEXT,
-	"desc"	TEXT,
-	"type"	TEXT, /* TODO: MySQL: replace by ENUM(LABO, SERV)*/
-	"access"	TEXT, /* TODO: MySQL: replace by ENUM(ACAD, INDU, BOTH)*/
+	"descr"	TEXT,
+	"norm_descr"	TEXT,
+	"type"	TEXT,
+	"access"	TEXT,
 	"model_id"	INTEGER,
 	"controller_id"	INTEGER,
 	"microscopes_group_id" INTEGER,
@@ -60,13 +62,16 @@ CREATE TABLE "microscope" (
 CREATE TABLE "category" (
 	"id"	INTEGER,
 	"name"	TEXT UNIQUE,
+	"norm_name"	TEXT UNIQUE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "keyword" (
 	"id"	INTEGER,
 	"category_id"	INTEGER,
 	"tag"	TEXT,
+	"norm_tag"	TEXT,
 	UNIQUE("category_id","tag"),
+	UNIQUE("category_id","norm_tag"),
 	FOREIGN KEY("category_id") REFERENCES "category"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
@@ -111,17 +116,23 @@ CREATE TABLE "microscopes_group" (
 	"user_id"	INTEGER,
 	FOREIGN KEY("coordinates_id") REFERENCES "coordinates"("id") ON DELETE CASCADE,
 	FOREIGN KEY("lab_id") REFERENCES "lab"("id") ON DELETE CASCADE,
-	FOREIGN KEY("user_id") REFERENCES "user"("id") ON DELETE CASCADE,
+	FOREIGN KEY("user_id") REFERENCES "user"("id") ON DELETE SET NULL,
 	CONSTRAINT "pk_microscope_group" PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE "locked_microscopes_group" (
+	"microscopes_group_id"	INTEGER,
+	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id") ON DELETE CASCADE,
+	PRIMARY KEY("microscopes_group_id")
 );
 CREATE TABLE "contact" (
 	"id"	INTEGER,
 	"firstname"	TEXT,
 	"lastname"	TEXT,
-	"role"	TEXT,
+	"norm_lastname"	TEXT,
 	"email"	TEXT,
 	"phone_code"	TEXT,
 	"phone_num"	TEXT,
+	"role"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "manage" (
@@ -135,17 +146,18 @@ CREATE TABLE "user" (
 	"id"	INTEGER,
 	"firstname"	TEXT,
 	"lastname"	TEXT,
+	"norm_lastname"	TEXT,
 	"email"	TEXT UNIQUE,
 	"phone_code"	TEXT,
 	"phone_num"	TEXT,
-	"password"	TEXT, /* TODO: MySQL: replace by VARCHAR(255)*/
+	"password"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "locked_user" (
 	"user_id"	INTEGER,
 	"token"	TEXT,
 	FOREIGN KEY("user_id") REFERENCES "user"("id") ON DELETE CASCADE,
-	PRIMARY KEY("user_id" AUTOINCREMENT)
+	PRIMARY KEY("user_id")
 );
 CREATE TABLE "admin" (
 	"user_id"	INTEGER,

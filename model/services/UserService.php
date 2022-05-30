@@ -52,6 +52,26 @@
             return $users;
         }
 
+        function findAllAdmins() {
+            global $pdo;
+
+            $sql = "
+                select id, firstname, lastname, email, phone_code, phone_num, password
+                from user
+                join admin as a
+                on a.user_id = id
+            ";
+
+            $admins = [];
+            foreach($pdo->query($sql, PDO::FETCH_NAMED) as $adminInfos) {
+                $admin = new User($adminInfos["firstname"], $adminInfos["lastname"], $adminInfos["email"], $adminInfos["phone_code"], $adminInfos["phone_num"], $adminInfos["password"]);
+                $admin->setId($adminInfos["id"])->setLocked($this->isLocked($admin))->setAdmin(true);
+                $admins[] = $admin;
+            }
+
+            return $admins;
+        }
+
         function findUserById($id) {
             global $pdo;
 
@@ -173,11 +193,12 @@
                 throw new Exception("Un compte existe déjà avec ces informations");
 
             // else, add it to the db
-            $sth = $pdo->prepare("INSERT INTO user VALUES (NULL, :firstname, :lastname, :email, :phoneCode, :phoneNum, :password)");
+            $sth = $pdo->prepare("INSERT INTO user VALUES (NULL, :firstname, :lastname, :normLastname, :email, :phoneCode, :phoneNum, :password)");
 
             $sth->execute([
                 "firstname" => $user->getFirstname(),
                 "lastname" => $user->getLastname(),
+                "normLastname" => $user->getNormLastname(),
                 "email" => $user->getEmail(), 
                 "phoneCode" => $user->getPhoneCode(),
                 "phoneNum" => $user->getPhoneNum(),
@@ -199,19 +220,21 @@
             return $id;
         }
 
-        function updateUser($id, $user) {
+        function updateUser($user) {
             global $pdo;
 
-            $this->checkUserInfosUniqueness($id, $user);
+            $id = $user->getId();
+            $this->checkUserInfosUniqueness($user);
 
             $sth = $pdo->prepare("
                 UPDATE user
-                SET firstname = :firstname, lastname = :lastname, email = :email, phone_code = :phoneCode, phone_num = :phoneNum, password = :password
+                SET firstname = :firstname, lastname = :lastname, norm_lastname = :normLastname, email = :email, phone_code = :phoneCode, phone_num = :phoneNum, password = :password
                 WHERE id = $id");
 
             $sth->execute([
                 "firstname" => $user->getFirstname(),
                 "lastname" => $user->getLastname(),
+                "normLastname" => $user->getNormLastname(),
                 "email" => $user->getEmail(), 
                 "phoneCode" => $user->getPhoneCode(),
                 "phoneNum" => $user->getPhoneNum(),
@@ -235,13 +258,14 @@
                 $this->unlockUser($user);
         }
 
-        function checkUserInfosUniqueness($id, $user) {
-            $this->checkUserEmailUniqueness($id, $user);
-            $this->checkUserPhoneUniqueness($id, $user);
+        function checkUserInfosUniqueness($user) {
+            $this->checkUserEmailUniqueness($user);
+            $this->checkUserPhoneUniqueness($user);
         }
 
-        function checkUserEmailUniqueness($id, $user) {
+        function checkUserEmailUniqueness($user) {
             global $pdo;
+            $id = $user->getId();
             
             $sth = $pdo->prepare("
                 select id
@@ -259,8 +283,9 @@
                 throw new Exception("Ce courriel est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
         }
 
-        function checkUserPhoneUniqueness($id, User $user) {
+        function checkUserPhoneUniqueness(User $user) {
             global $pdo;
+            $id = $user->getId();
             
             $sth = $pdo->prepare("
                 select id

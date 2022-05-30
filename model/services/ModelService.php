@@ -60,7 +60,7 @@
                 parent::update($old, $new);
         }
 
-        function getAllModels($brand = null) : array {
+        function findAllModels($brand = null) : array {
             global $pdo;
             $models = [];
             
@@ -69,6 +69,7 @@
                 $brandId = $brand->getId();
                 $sql .= " where brand_id = $brandId";
             }
+            $sql .= " ORDER BY name";
 
             $sth = $pdo->query($sql);
 
