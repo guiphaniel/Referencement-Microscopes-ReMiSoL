@@ -1,5 +1,5 @@
 <?php
-    include_once(__DIR__ . "/../../include/config.php");
+    include_once(__DIR__ . "/../../config/config.php");
     include_once(__DIR__ . "/FormCreator.php");
     include_once(__DIR__ . "/../../model/services/ControllerService.php");
     include_once(__DIR__ . "/../../model/services/ModelService.php");

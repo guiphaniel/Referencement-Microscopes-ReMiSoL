@@ -1,6 +1,6 @@
 <?php 
-    include_once("include/config.php");
-    include_once("view/generators/FormCreator.php");
+    include_once("config/config.php");
+    include_once("view/creators/FormCreator.php");
     include_once("model/services/UserService.php");
 
     if(isUserSessionValid())
@@ -23,7 +23,7 @@
     if($token != $_GET["token"])
         redirect("/index.php");
 
-    include_once("view/generators/HeaderCreator.php");
+    include_once("view/creators/HeaderCreator.php");
     $header = new HeaderCreator("Réinitialisation du mot de passe"); 
 ?>
 <!DOCTYPE html>

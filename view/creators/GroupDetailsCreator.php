@@ -1,5 +1,5 @@
 <?php
-    include_once(__DIR__ . "/../../include/config.php");
+    include_once(__DIR__ . "/../../config/config.php");
     include_once(__DIR__ . "/../../utils/browser_supports_webp.php");
     include_once(__DIR__ . "/../../model/services/MicroscopesGroupService.php");
     include_once(__DIR__ . "/Creator.php");

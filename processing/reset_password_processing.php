@@ -1,5 +1,5 @@
 <?php 
-    include_once("../include/config.php");
+    include_once("../config/config.php");
     include_once("../model/services/UserService.php");
 
     if(empty($_GET["id"]) || empty($_GET["token"]))

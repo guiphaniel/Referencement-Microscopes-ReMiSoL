@@ -1,7 +1,7 @@
 <?php 
-    include_once("include/config.php");
-    include_once("view/generators/HeaderCreator.php");
-    include_once("view/generators/GroupFormCreator.php");
+    include_once("config/config.php");
+    include_once("view/creators/HeaderCreator.php");
+    include_once("view/creators/GroupFormCreator.php");
     include_once("model/services/KeywordService.php");
     include_once("model/services/CompagnyService.php");
     include_once("utils/normalize_utf8_string.php");

@@ -1,5 +1,5 @@
 <?php
-    include_once("../include/config.php");
+    include_once("../config/config.php");
     include_once("../utils/resize_image_proportionnaly.php");
     include_once("../utils/send_email.php");
     include_once("../model/entities/Lab.php");

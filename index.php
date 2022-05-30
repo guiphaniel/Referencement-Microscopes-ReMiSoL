@@ -1,7 +1,7 @@
 <?php 
     include_once("model/services/ModelService.php");
     include_once("model/services/ControllerService.php");
-    include_once("view/generators/HeaderCreator.php");
+    include_once("view/creators/HeaderCreator.php");
     $header = new HeaderCreator("Accueil"); 
 
     function createCheckboxes($objs, $name) {

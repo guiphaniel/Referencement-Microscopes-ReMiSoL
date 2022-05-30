@@ -1,7 +1,7 @@
 <?php 
-    include_once("include/config.php");
+    include_once("config/config.php");
     include_once("model/services/UserService.php");
-    include_once("view/generators/HeaderCreator.php");
+    include_once("view/creators/HeaderCreator.php");
 
     http_response_code(422);
 

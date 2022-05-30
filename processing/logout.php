@@ -1,5 +1,5 @@
 <?php
-    include_once("../include/config.php");
+    include_once("../config/config.php");
 
     if(isUserSessionValid())
         session_unset();
