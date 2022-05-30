@@ -49,8 +49,8 @@ CREATE TABLE "microscope" (
 	"rate"	TEXT,
 	"descr"	TEXT,
 	"norm_descr"	TEXT,
-	"type"	TEXT, /* TODO: MySQL: replace by ENUM(LABO, SERV)*/
-	"access"	TEXT, /* TODO: MySQL: replace by ENUM(ACAD, INDU, BOTH)*/
+	"type"	TEXT,
+	"access"	TEXT,
 	"model_id"	INTEGER,
 	"controller_id"	INTEGER,
 	"microscopes_group_id" INTEGER,
@@ -150,7 +150,7 @@ CREATE TABLE "user" (
 	"email"	TEXT UNIQUE,
 	"phone_code"	TEXT,
 	"phone_num"	TEXT,
-	"password"	TEXT, /* TODO: MySQL: replace by VARCHAR(255)*/
+	"password"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE "locked_user" (
