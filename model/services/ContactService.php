@@ -49,11 +49,12 @@
 
             // if the contact isn't already in the db, add it
             if ($id == -1)  {
-                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :firstname, :lastname, :email, :phoneCode, :phoneNum, :role)");
+                $sth = $pdo->prepare("INSERT INTO contact VALUES (NULL, :firstname, :lastname, :normLastname, :email, :phoneCode, :phoneNum, :role)");
         
                 $sth->execute([
                     "firstname" => $contact->getFirstname(),
                     "lastname" => $contact->getLastname(),
+                    "normLastname" => $contact->getNormLastname(),
                     "email" => $contact->getEmail(),
                     "phoneCode" => $contact->getPhoneCode(),
                     "phoneNum" => $contact->getPhoneNum(),

@@ -1,12 +1,20 @@
 <?php
 
 include_once(__DIR__ . "/AbstractEntity.php");
+include_once(__DIR__ . "/../../utils/normalize_utf8_string.php");
 
 class Person extends AbstractEntity
 {
-    function __construct(protected string $firstname, protected string $lastname, protected string $email, protected string $phoneCode, protected string $phoneNum)
+    protected string $lastname;
+    protected string $normLastname;
+    protected string $phoneCode;
+
+    function __construct(protected string $firstname, string $lastname, protected string $email, string $phoneCode, protected string $phoneNum)
     {
         parent::__construct();
+
+        $this->setLastname($lastname);
+        $this->setPhoneCode($phoneCode);
     }
 
     public function getFirstname(): string
@@ -29,8 +37,14 @@ class Person extends AbstractEntity
     public function setLastname(string $lastname)
     {
         $this->lastname = $lastname;
+        $this->normLastname = strNormalize($lastname);
 
         return $this;
+    }
+
+    public function getNormLastname(): string
+    {
+        return $this->normLastname;
     }
 
     public function getEmail(): string
@@ -56,7 +70,8 @@ class Person extends AbstractEntity
 
         $valid = false;
         foreach ($codes as $code) {
-            if (strpos($phoneCode, $code)) {
+            if (str_contains($phoneCode, $code)) {
+                $phoneCode = $code;
                 $valid = true;
                 break;
             }

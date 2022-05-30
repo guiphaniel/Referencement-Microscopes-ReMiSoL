@@ -193,11 +193,12 @@
                 throw new Exception("Un compte existe déjà avec ces informations");
 
             // else, add it to the db
-            $sth = $pdo->prepare("INSERT INTO user VALUES (NULL, :firstname, :lastname, :email, :phoneCode, :phoneNum, :password)");
+            $sth = $pdo->prepare("INSERT INTO user VALUES (NULL, :firstname, :lastname, :normLastname, :email, :phoneCode, :phoneNum, :password)");
 
             $sth->execute([
                 "firstname" => $user->getFirstname(),
                 "lastname" => $user->getLastname(),
+                "normLastname" => $user->getNormLastname(),
                 "email" => $user->getEmail(), 
                 "phoneCode" => $user->getPhoneCode(),
                 "phoneNum" => $user->getPhoneNum(),
@@ -227,12 +228,13 @@
 
             $sth = $pdo->prepare("
                 UPDATE user
-                SET firstname = :firstname, lastname = :lastname, email = :email, phone_code = :phoneCode, phone_num = :phoneNum, password = :password
+                SET firstname = :firstname, lastname = :lastname, norm_lastname = :normLastname, email = :email, phone_code = :phoneCode, phone_num = :phoneNum, password = :password
                 WHERE id = $id");
 
             $sth->execute([
                 "firstname" => $user->getFirstname(),
                 "lastname" => $user->getLastname(),
+                "normLastname" => $user->getNormLastname(),
                 "email" => $user->getEmail(), 
                 "phoneCode" => $user->getPhoneCode(),
                 "phoneNum" => $user->getPhoneNum(),

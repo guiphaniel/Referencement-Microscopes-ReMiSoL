@@ -1,6 +1,4 @@
-DROP TABLE IF EXISTS admin;
-DROP TABLE IF EXISTS locked_user;
-DROP TABLE IF EXISTS `user`;
+
 DROP TABLE IF EXISTS manage;
 DROP TABLE IF EXISTS contact;
 DROP TABLE IF EXISTS microscope_keyword;
@@ -9,7 +7,10 @@ DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS microscope;
 DROP TABLE IF EXISTS locked_microscopes_group;
 DROP TABLE IF EXISTS microscopes_group;
-DROP TABLE IF EXISTS coordinate;
+DROP TABLE IF EXISTS admin;
+DROP TABLE IF EXISTS locked_user;
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS coordinates;
 DROP TABLE IF EXISTS lab;
 DROP TABLE IF EXISTS address;
 DROP TABLE IF EXISTS controller;
@@ -74,6 +75,7 @@ CREATE TABLE `user` (
 	id	INTEGER AUTO_INCREMENT,
 	firstname	VARCHAR(50),
 	lastname	VARCHAR(50),
+	norm_lastname	VARCHAR(50),
 	email	VARCHAR(50) UNIQUE,
 	phone_code	VARCHAR(3),
 	phone_num	VARCHAR(9),
@@ -148,6 +150,7 @@ CREATE TABLE contact (
 	id	INTEGER AUTO_INCREMENT,
 	firstname	VARCHAR(50),
 	lastname	VARCHAR(50),
+	norm_lastname	VARCHAR(50),
 	email	VARCHAR(50),
 	phone_code	VARCHAR(3),
 	phone_num	VARCHAR(9),

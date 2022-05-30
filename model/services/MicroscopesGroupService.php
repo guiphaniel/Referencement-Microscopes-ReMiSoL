@@ -115,9 +115,15 @@
             } else {
                 $sqlFilters = "(" .  implode("|", array_map(function ($filter) { return preg_quote($filter); }, $filters)) . ")";
                 $sql = "
-                    SELECT id from (
-                        select distinct g.id, CONCAT(GROUP_CONCAT(DISTINCT norm_name), GROUP_CONCAT(DISTINCT norm_tag), GROUP_CONCAT(DISTINCT LOWER(mo.name)), GROUP_CONCAT(DISTINCT LOWER(ctr.name)), GROUP_CONCAT(DISTINCT LOWER(b.name)), GROUP_CONCAT(DISTINCT LOWER(cmp.name)), GROUP_CONCAT(mi.norm_descr)) as concat
+                    SELECT groupId, coorId, labId, microId, concat from (
+                        select g.id as groupId, coordinates_id as coorId, lab.id as labId, mi.id as microId, CONCAT(GROUP_CONCAT(DISTINCT con.norm_lastname), GROUP_CONCAT(DISTINCT c.norm_name), GROUP_CONCAT(DISTINCT norm_tag), LOWER(mo.name), LOWER(ctr.name), LOWER(b.name), LOWER(cmp.name), mi.norm_descr) as concat
                         from microscopes_group as g
+                        join lab
+                        on lab.id = g.lab_id
+                        join manage as mana
+                        on mana.microscopes_group_id = g.id
+                        join contact as con
+                        on con.id = mana.contact_id
                         join microscope as mi
                         on mi.microscopes_group_id = g.id
                         join microscope_keyword as mk
@@ -134,19 +140,37 @@
                         on b.id = mo.brand_id
                         join compagny as cmp
                         on cmp.id = b.compagny_id
-                        GROUP BY g.id
+                        GROUP BY mi.id
                     ) as groupsInfos where concat REGEXP '$sqlFilters'
                 ";
                 if(!$includeLocked)
-                    $sql .= "and id not in (select microscopes_group_id from locked_microscopes_group)";
+                    $sql .= "and groupId not in (select microscopes_group_id from locked_microscopes_group)";
             }
             $sth = $pdo->query($sql);
-            $groupIds = $sth->fetchAll(PDO::FETCH_COLUMN);
 
             // generate groups
             $groups = [];
-            foreach ($groupIds as $groupId)
-                $groups[$groupId] = $this->findMicroscopesGroupById($groupId);
+            if(empty($filters)) {
+                $groupsIds = $sth->fetchAll(PDO::FETCH_COLUMN);
+                foreach ($groupsIds as $groupId)
+                    $groups[$groupId] = $this->findMicroscopesGroupById($groupId);
+            } else {
+                $groupsInfos = $sth->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_NAMED);
+                foreach ($groupsInfos as $groupId => $groupInfos) {
+                    $coor = CoordinatesService::getInstance()->findCoordinatesById($groupInfos[0]["coorId"]);
+                    $lab = LabService::getInstance()->findLabById($groupInfos[0]["labId"]);
+                    $contacts = $this->findAllContacts($groupId);
+
+                    $group = new MicroscopesGroup($coor, $lab, $contacts);
+
+                    $microscopeService = MicroscopeService::getInstance();
+                    foreach ($groupInfos as $infos) {
+                        $micro = $microscopeService->findMicroscopeById($infos["microId"]);
+                        $group->addMicroscope($micro);
+                    }
+                    $groups[$groupId] = $group->setId($groupId);
+                }
+            }
 
             return $groups;
         }
