@@ -25,4 +25,9 @@
 
             return $this;
         }
+
+        public function getNormName() : string
+        {
+            return $this->normName;
+        }
     }

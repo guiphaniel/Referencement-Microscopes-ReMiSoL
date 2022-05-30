@@ -41,7 +41,7 @@
     }
 
     foreach($_POST["micros"] as $micro) {
-        if (empty($micro["compagny"]) || empty($micro["brand"]) || empty($micro["model"]) || empty($micro["controller"]) || empty($micro["desc"]) || empty($micro["type"]) || empty($micro["access"])) {
+        if (empty($micro["compagny"]) || empty($micro["brand"]) || empty($micro["model"]) || empty($micro["controller"]) || empty($micro["descr"]) || empty($micro["type"]) || empty($micro["access"])) {
             redirect("/form.php");
         }
     }
@@ -87,7 +87,7 @@
                 }
             }
 
-            $group->addMicroscope((new Microscope($mod, $ctr, $micro["rate"]??null, $micro["desc"], $micro["type"], $micro["access"], $kws))->setId($id));
+            $group->addMicroscope((new Microscope($mod, $ctr, $micro["rate"]??null, $micro["descr"], $micro["type"], $micro["access"], $kws))->setId($id));
         }
             
         // ...and save/update the group into the db

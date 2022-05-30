@@ -231,8 +231,8 @@
                 <option value="INDU" <?=$micro?->getAccess() == "INDU" ? "selected" : ""?>>Industriels</option>
                 <option value="BOTH" <?=$micro?->getAccess() == "BOTH" ? "selected" : ""?>>Académiques et Industriels</option>
             </select>
-            <label for="micro-desc-<?=$id?>">Description</label>
-            <textarea id="micro-desc-<?=$id?>" name="micros[<?=$id?>][desc]" cols="30" rows="10" required><?=$micro?->getDesc()?></textarea>
+            <label for="micro-descr-<?=$id?>">Descrription</label>
+            <textarea id="micro-descr-<?=$id?>" name="micros[<?=$id?>][descr]" cols="30" rows="10" required><?=$micro?->getDescr()?></textarea>
             <div>
                 <label for="micro-img-<?=$id?>">Photo</label>
                     <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">

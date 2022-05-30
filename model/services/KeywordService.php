@@ -34,11 +34,12 @@
                 if($catId == -1) $catId = $categoryService->save($cat);
 
                 // insert the keyword
-                $sth = $pdo->prepare("INSERT INTO keyword VALUES (NULL, :catId, :tag)");
+                $sth = $pdo->prepare("INSERT INTO keyword VALUES (NULL, :catId, :tag, :normTag)");
         
                 $sth->execute([
                     "catId" => $catId,
-                    "tag" => $kw->getTag()
+                    "tag" => $kw->getTag(),
+                    "normTag" => $kw->getNormTag()
                 ]);
                 
                 $id = $pdo->lastInsertId();

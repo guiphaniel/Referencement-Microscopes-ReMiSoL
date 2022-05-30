@@ -7,15 +7,15 @@ include_once(__DIR__ . "/../services/KeywordService.php");
 include_once(__DIR__ . "/../../utils/normalize_utf8_string.php");
 
 class Microscope extends AbstractEntity  {
-    private string $desc;
-    private string $normDesc;
+    private string $descr;
+    private string $normDescr;
     private string $type;
     private string $access;
     private array $keywords;
 
-    function __construct(private Model $model, private Controller $controller, private string $rate, string $desc, string $type, string $access, array $keywords) {
+    function __construct(private Model $model, private Controller $controller, private string $rate, string $descr, string $type, string $access, array $keywords) {
         parent::__construct();
-        $this->setDesc($desc);
+        $this->setDescr($descr);
         $this->setType($type);
         $this->setAccess($access);
         $this->setKeywords($keywords);
@@ -72,17 +72,22 @@ class Microscope extends AbstractEntity  {
         return $this;
     }
 
-    public function getDesc() : string
+    public function getDescr() : string
     {
-        return $this->desc;
+        return $this->descr;
     }
 
-    public function setDesc(string $desc)
+    public function setDescr(string $descr)
     {
-        $this->desc = $desc;
-        $this->normDesc = strNormalize($desc);
+        $this->descr = $descr;
+        $this->normDescr = strNormalize($descr);
 
         return $this;
+    }
+
+    public function getNormDescr() : string
+    {
+        return $this->normDescr;
     }
 
     public function getAccess()

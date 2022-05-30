@@ -47,8 +47,8 @@ CREATE TABLE "controller" (
 CREATE TABLE "microscope" (
 	"id"	INTEGER,
 	"rate"	TEXT,
-	"desc"	TEXT,
-	"norm_desc"	TEXT,
+	"descr"	TEXT,
+	"norm_descr"	TEXT,
 	"type"	TEXT, /* TODO: MySQL: replace by ENUM(LABO, SERV)*/
 	"access"	TEXT, /* TODO: MySQL: replace by ENUM(ACAD, INDU, BOTH)*/
 	"model_id"	INTEGER,

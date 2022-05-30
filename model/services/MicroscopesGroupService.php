@@ -113,10 +113,10 @@
                 if(!$includeLocked)
                     $sql .= "where g.id not in (select microscopes_group_id from locked_microscopes_group)";
             } else {
-                $sqlFilters = implode("", array_map(function ($filter) {return "(?=.*" . strNormalize($filter) . ")";}, $filters));
+                $sqlFilters = "(" .  implode("|", array_map(function ($filter) { return preg_quote($filter); }, $filters)) . ")";
                 $sql = "
                     SELECT id from (
-                        select distinct g.id, CONCAT(GROUP_CONCAT(DISTINCT norm_name), GROUP_CONCAT(DISTINCT norm_tag), LOWER(mo.name), LOWER(ctr.name), LOWER(b.name), LOWER(cmp.name), mi.norm_desc) as concat
+                        select distinct g.id, CONCAT(GROUP_CONCAT(DISTINCT norm_name), GROUP_CONCAT(DISTINCT norm_tag), GROUP_CONCAT(DISTINCT LOWER(mo.name)), GROUP_CONCAT(DISTINCT LOWER(ctr.name)), GROUP_CONCAT(DISTINCT LOWER(b.name)), GROUP_CONCAT(DISTINCT LOWER(cmp.name)), GROUP_CONCAT(mi.norm_descr)) as concat
                         from microscopes_group as g
                         join microscope as mi
                         on mi.microscopes_group_id = g.id
@@ -135,7 +135,7 @@
                         join compagny as cmp
                         on cmp.id = b.compagny_id
                         GROUP BY g.id
-                    ) where concat REGEXP '$sqlFilters'
+                    ) as groupsInfos where concat REGEXP '$sqlFilters'
                 ";
                 if(!$includeLocked)
                     $sql .= "and id not in (select microscopes_group_id from locked_microscopes_group)";

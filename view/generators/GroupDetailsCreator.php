@@ -85,7 +85,7 @@
                             ?>
                                 <img class="micro-img" src="/public/img/micros/<?=$microId . $extension?>" alt="Microscope <?=$name?>">
                             <?php endif; ?>
-                            <p>Description : <?= $micro->getDesc(); ?></p>
+                            <p>Descrription : <?= $micro->getDescr(); ?></p>
                             <?php if(!empty($micro->getRate())) : ?>
                                 <p>Tarification : <a href="<?= $micro->getRate(); ?>" target="_blank"><?= $micro->getRate(); ?></a></p>
                             <?php endif; ?>

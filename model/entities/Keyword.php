@@ -37,4 +37,9 @@
 
                 return $this;
         }
+
+        public function getNormTag()
+        {
+                return $this->normTag;
+        }
     }

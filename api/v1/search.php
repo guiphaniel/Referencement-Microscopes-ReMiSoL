@@ -9,10 +9,10 @@
             //TODO: parametres (limit, offset)
             if(!isset($_GET["filters"]))
                 $filters = [];
-            else if(!is_array($_GET["filters"]))
-                $filters = [$_GET["filters"]];
-            else 
+            else if(is_array($_GET["filters"]))
                 $filters = $_GET["filters"];
+            else 
+                $filters =  explode(" ", $_GET["filters"]);
 
             $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroup(false, $filters);
 

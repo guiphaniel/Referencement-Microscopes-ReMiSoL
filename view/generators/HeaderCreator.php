@@ -3,7 +3,7 @@
     include_once(__DIR__ . "/Creator.php");
 
     Class HeaderCreator implements Creator {
-        function __construct(private string $title) {}
+        function __construct(private string $title, private string $searchContent = "") {}
 
         public function create() {
             ?>
@@ -12,7 +12,7 @@
                     <ul>
                         <li><a href="/index.php">Accueil</a></li>
                         <li><form action="/search.php">
-                            <input type="search" name="filters">
+                            <input type="search" name="filters" value="<?=$this->searchContent?>">
                             <input enterkeyhint="go" type="submit" value="Rechercher">
                         </form></li>
                         <?php if(isUserSessionValid()): ?>

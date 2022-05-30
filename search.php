@@ -10,7 +10,7 @@
     $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroup(false, $filters);
 
     include_once("view/generators/HeaderCreator.php");
-        $header = new HeaderCreator("Recherche"); 
+        $header = new HeaderCreator("Recherche", $_GET["filters"]); 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
