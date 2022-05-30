@@ -35,7 +35,7 @@
                             <?php
                             foreach($brands as $brandId => $brand): 
                                 $models = $modelService->findAllModels($brand);
-                                $ctrs = $controllerService->findAllControllersByBrand($brand); ?>
+                                $ctrs = $controllerService->findAllControllers($brand); ?>
                                 <div class="brand-wrapper">
                                     <input type="text" name="brands[<?=$cmpId?>][<?=$brandId?>]" value="<?=$brand->getName()?>">
                                     <div class="rm-bt"></div>

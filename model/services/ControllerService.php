@@ -59,44 +59,24 @@
             return $row ? $row[0] : -1;
         }
 
-        function findAllControllers() : array {
+        function findAllControllers($brand = null) : array {
             global $pdo;
             $controllers = [];
-            
-            $sth = $pdo->query("
-                SELECT ctr.id, ctr.name as ctrName, b.name as braName, cmp.name as comName 
-                FROM controller as ctr
-                JOIN brand as b
-                on brand_id = b.id
-                JOIN compagny as cmp
-                on b.compagny_id = cmp.id
-                ORDER BY ctrName
-            ");
 
-            foreach ($sth->fetchAll() as $row) {
-                $id = $row["id"];
-                $controllers[$id] = (new Controller($row["ctrName"], new Brand($row["braName"], new Compagny($row["comName"]))))
-                    ->setId($id);
+            $sql = "SELECT * FROM controller";
+            if (isset($brand)) {
+                $brandId = $brand->getId();
+                $sql .= " where brand_id = $brandId";
             }
+            $sql .= " ORDER BY name";
 
-            return $controllers;
-        }
-
-        function findAllControllersByBrand(Brand $brand) : array {
-            global $pdo;
-            $controllers = [];
-            
-            $sth = $pdo->prepare("SELECT id, name FROM controller where brand_id = :brandId ORDER BY name");
-
-            $sth->execute([
-                "brandId" => BrandService::getInstance()->getBrandId($brand)
-            ]);
+            $sth = $pdo->query($sql);
 
             $infos = $sth->fetchAll(PDO::FETCH_NAMED);
 
             foreach ($infos as $info) {
                 $id = $info["id"];
-                $controllers[$id] = (new Controller($info["name"], $brand))
+                $controllers[$id] = (new Controller($info["name"], $brand??BrandService::getInstance()->findBrandById($info["brand_id"])))
                     ->setId($id);
             }
 
