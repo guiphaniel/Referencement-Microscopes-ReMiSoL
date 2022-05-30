@@ -9,9 +9,9 @@
             //TODO: parametres (limit, offset)
             if(isset($_GET["compagny"])) {
                 $cmp = CompagnyService::getInstance()->findCompagnyByName($_GET["compagny"]);
-                $brands = BrandService::getInstance()->getAllBrands($cmp);
+                $brands = BrandService::getInstance()->findAllBrands($cmp);
             } else
-                $brands = BrandService::getInstance()->getAllBrands();            
+                $brands = BrandService::getInstance()->findAllBrands();
             
             header('Content-Type: application/json');
             echo json_encode(array_values($brands), JSON_PRETTY_PRINT); // we need to get rid of the keys (which are the ids), else, the json won't be an array but an object

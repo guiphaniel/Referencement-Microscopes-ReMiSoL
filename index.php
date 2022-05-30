@@ -41,11 +41,11 @@
             <form id="map-filters">
                 <h3>Filtres</h3>
                 <h4>Sociétés</h4>
-                <?php createCheckboxes(CompagnyService::getInstance()->getAllCompagnies(), "cmp"); ?>              
+                <?php createCheckboxes(CompagnyService::getInstance()->findAllCompagnies(), "cmp"); ?>
                 <h4>Marques</h4>
-                <?php createCheckboxes(BrandService::getInstance()->getAllBrands(), "brand"); ?>             
+                <?php createCheckboxes(BrandService::getInstance()->findAllBrands(), "brand"); ?>
                 <h4>Modèles</h4>
-                <?php createCheckboxes(ModelService::getInstance()->getAllModels(), "model"); ?>             
+                <?php createCheckboxes(ModelService::getInstance()->findAllModels(), "model"); ?>
                 <h4>Électronique/Contrôleurs</h4>
                 <?php createCheckboxes(ControllerService::getInstance()->findAllControllers(), "ctr"); ?>             
             </form>

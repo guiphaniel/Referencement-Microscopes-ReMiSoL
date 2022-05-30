@@ -71,11 +71,11 @@
             return $row ? $row[0] : -1;
         }
 
-        function getAllCategories() {
-            return CategoryService::getInstance()->getAllCategories();
+        function findAllCategories() {
+            return CategoryService::getInstance()->findAllCategories();
         }
 
-        function getAllTags($cat) {
+        function findAllTags($cat) {
             global $pdo;
 
             $sth = $pdo->prepare("SELECT k.id, tag FROM keyword as k JOIN category as c on k.category_id = c.id where c.name = :cat");
@@ -93,7 +93,7 @@
             return $tags;
         }
 
-        function getAllKeywords($cat = null) {
+        function findAllKeywords($cat = null) {
             global $pdo;
 
             $sql = "SELECT k.id, c.name, tag FROM keyword as k JOIN category as c on k.category_id = c.id";

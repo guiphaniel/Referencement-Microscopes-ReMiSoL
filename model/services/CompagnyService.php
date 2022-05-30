@@ -101,7 +101,7 @@
                 parent::update($old, $new);
         }
 
-        function getAllCompagnies() : array {
+        function findAllCompagnies() : array {
             global $pdo;
             $compagnies = [];
             

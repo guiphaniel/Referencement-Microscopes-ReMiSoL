@@ -47,7 +47,7 @@
     $categoryService = CategoryService::getInstance();
    
     $newCats = array_map(function ($key, $cat) { return (new Category($cat))->setId($key); }, array_keys($_POST["cats"]), $_POST["cats"]);
-    $oldCats = $categoryService->getAllCategories();
+    $oldCats = $categoryService->findAllCategories();
 
     update($categoryService, $newCats, $oldCats);
 
@@ -71,7 +71,7 @@
         foreach($tags as $id => $tag)
             $newKws[] = (new Keyword(new Category($cat), $tag))->setId($id);
 
-        update($keywordService, $newKws, $keywordService->getAllKeywords(new Category($cat))); 
+        update($keywordService, $newKws, $keywordService->findAllKeywords(new Category($cat)));
         $newKws = [];
     }
 

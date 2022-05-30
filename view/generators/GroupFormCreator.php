@@ -42,20 +42,20 @@
                 <!-- Compagnies datalist -->
                 <datalist id="micro-compagnies">
                 <?php 
-                    foreach (CompagnyService::getInstance()->getAllCompagnies() as $compagny): ?>
+                    foreach (CompagnyService::getInstance()->findAllCompagnies() as $compagny): ?>
                         <option value="<?=$compagny->getName()?>">
                     <?php endforeach; ?>
                 </datalist>
                 <!-- Keywords datalists -->
                 <?php 
                     $keyWordService = KeywordService::getInstance();
-                    $cats = $keyWordService->getAllCategories();
+                    $cats = $keyWordService->findAllCategories();
                     foreach ($cats as $cat): 
                         $catName = $cat->getName();
                         echo "<!-- $catName datalist -->" ?>
                         <datalist id="cats-<?=strNormalize($catName)?>">
                         <?php 
-                            $tags = $keyWordService->getAllTags($cat);
+                            $tags = $keyWordService->findAllTags($cat);
                             foreach ($tags as $tag): ?>
                                 <option value="<?=$tag?>">
                             <?php endforeach; ?>
@@ -264,7 +264,7 @@
                 <legend>Mots-clés</legend>
                 <?php 
                     $keyWordService = KeywordService::getInstance();
-                    $cats = $keyWordService->getAllCategories();
+                    $cats = $keyWordService->findAllCategories();
                     foreach ($cats as $cat): 
                         $catName =$cat->getName();
                         $normCat = strNormalize($catName)?>

@@ -60,7 +60,7 @@
                 parent::update($old, $new);
         }
 
-        function getAllModels($brand = null) : array {
+        function findAllModels($brand = null) : array {
             global $pdo;
             $models = [];
             

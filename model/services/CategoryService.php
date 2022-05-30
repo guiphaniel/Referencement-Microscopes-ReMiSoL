@@ -59,7 +59,7 @@
                 parent::update($old, $new);
         }
 
-        function getAllCategories() : array {
+        function findAllCategories() : array {
             global $pdo;
             $categories = [];
             
