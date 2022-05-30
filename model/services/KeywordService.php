@@ -114,6 +114,35 @@
             return $kws;
         }
 
+        function findAllKeywordsByMicroscopeId(int $microId) {
+            global $pdo;
+
+            $sql = "
+                select c.name, k.id, tag
+                from microscope as mi
+                join microscope_keyword as mk
+                on mk.microscope_id = mi.id
+                join keyword as k
+                on k.id = mk.keyword_id
+                join category as c
+                on k.category_id = c.id
+                where mk.microscope_id = $microId
+            ";
+
+            $sth = $pdo->query($sql);
+            $keywords = $sth->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_NAMED);
+
+            $kws = [];
+
+            foreach($keywords as $cat => $infos) {
+                foreach ($infos as $info) {
+                    $kws[] = (new Keyword(new Category($cat), $info["tag"]))->setId($info["id"]);
+                }
+            }
+
+            return $kws;
+        }
+
         function bind($kwId, $microId) {
             global $pdo;
 

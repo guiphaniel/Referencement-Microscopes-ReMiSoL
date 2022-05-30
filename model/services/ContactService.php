@@ -40,7 +40,30 @@
             }
             return $id;
         }
-    
+
+        function findAllContactsByGroupId($groupId) {
+            global $pdo;
+
+            $sql = "
+                select c.id, firstname, lastname, email, phone_code, phone_num, role
+                from contact as c
+                join manage as m
+                on m.contact_id = c.id
+                where microscopes_group_id = $groupId
+            ";
+
+            $sth = $pdo->query($sql);
+            $contactsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
+
+            $contacts = [];
+            foreach ($contactsInfos as $contactInfos) {
+                $contacts[] = (new Contact($contactInfos["firstname"], $contactInfos["lastname"], $contactInfos["email"], $contactInfos["phone_code"], $contactInfos["phone_num"], $contactInfos["role"]))
+                    ->setId($contactInfos["id"]);
+            }
+
+            return $contacts;
+        }
+
         /** Saves the contact if it doesn't exist yet, and returns its id */
         function save(Contact $contact) {
             global $pdo;

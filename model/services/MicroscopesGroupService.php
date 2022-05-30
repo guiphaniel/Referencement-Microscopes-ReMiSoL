@@ -2,6 +2,7 @@
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
     include_once(__DIR__ . "/../entities/User.php");
+    include_once(__DIR__ . "/../services/ContactService.php");
     include_once(__DIR__ . "/../../utils/normalize_utf8_string.php");
     
     spl_autoload_register(function ($class_name) {
@@ -159,7 +160,7 @@
                 foreach ($groupsInfos as $groupId => $groupInfos) {
                     $coor = CoordinatesService::getInstance()->findCoordinatesById($groupInfos[0]["coorId"]);
                     $lab = LabService::getInstance()->findLabById($groupInfos[0]["labId"]);
-                    $contacts = $this->findAllContacts($groupId);
+                    $contacts = ContactService::getInstance()->findAllContactsByGroupId($groupId);
 
                     $group = new MicroscopesGroup($coor, $lab, $contacts);
 
@@ -175,12 +176,13 @@
             return $groups;
         }
 
-        function findAllMicroscopesGroupByOwner(int | User $user, $includeLocked = true) {
+        function findAllMicroscopesGroupByOwner(int | User $user, $includeLocked = true)
+        {
             global $pdo;
 
-            if(is_int($user))
+            if (is_int($user))
                 $userId = $user;
-            else    
+            else
                 $userId = $user->getId();
 
             // get groups infos
@@ -189,7 +191,7 @@
                 from microscopes_group as g
                 where user_id = $userId
             ";
-            if(!$includeLocked)
+            if (!$includeLocked)
                 $sql .= " and id not in (select microscopes_group_id from locked_microscopes_group)";
             $sth = $pdo->query($sql);
             $groupsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
@@ -201,8 +203,8 @@
 
                 $coor = CoordinatesService::getInstance()->findCoordinatesById($groupInfos["coordinates_id"]);
                 $lab = LabService::getInstance()->findLabById($groupInfos["lab_id"]);
-                $contacts = $this->findAllContacts($groupId);
-                $micros = $this->findAllMicroscopes($groupId);
+                $contacts = ContactService::getInstance()->findAllContactsByGroupId($groupId);
+                $micros = MicroscopeService::findAllMicroscopesByGroupId($groupId);
 
                 $group = new MicroscopesGroup($coor, $lab, $contacts);
 
@@ -217,50 +219,6 @@
 
             return $groups;
         }
-
-        function findAllContacts($groupId) {
-            global $pdo;
-
-            $sql = "
-                select c.id, firstname, lastname, email, phone_code, phone_num, role
-                from contact as c
-                join manage as m
-                on m.contact_id = c.id
-                where microscopes_group_id = $groupId
-            ";
-
-            $sth = $pdo->query($sql);
-            $contactsInfos = $sth->fetchAll(PDO::FETCH_NAMED);
-
-            $contacts = [];
-            foreach ($contactsInfos as $contactInfos) {
-                $contacts[] = (new Contact($contactInfos["firstname"], $contactInfos["lastname"], $contactInfos["email"], $contactInfos["phone_code"], $contactInfos["phone_num"], $contactInfos["role"]))
-                    ->setId($contactInfos["id"]);
-            }
-
-            return $contacts;
-        } 
-        
-        function findAllMicroscopes($groupId) {
-            global $pdo;
-
-            $sql = "
-                select id
-                from microscope
-                where microscopes_group_id = $groupId
-            ";
-
-            $sth = $pdo->query($sql);
-            $microsIds = $sth->fetchAll(PDO::FETCH_COLUMN);
-
-            $micros = [];
-            $microscopeService = MicroscopeService::getInstance();
-            foreach ($microsIds as $microId) {
-                $micros[$microId] = $microscopeService->findMicroscopeById($microId);
-            }
-
-            return $micros;
-        }   
 
         function findMicroscopesGroupById(int $groupId) {
             global $pdo;
@@ -281,8 +239,8 @@
             // generate the group
             $coor = CoordinatesService::getInstance()->findCoordinatesById($groupInfos["coordinates_id"]);
             $lab = LabService::getInstance()->findLabById($groupInfos["lab_id"]);
-            $contacts = $this->findAllContacts($groupId);
-            $micros = $this->findAllMicroscopes($groupId);
+            $contacts = ContactService::getInstance()->findAllContactsByGroupId($groupId);
+            $micros = MicroscopeService::getInstance()->findAllMicroscopesByGroupId($groupId);
 
             $group = new MicroscopesGroup($coor, $lab, $contacts);
 
