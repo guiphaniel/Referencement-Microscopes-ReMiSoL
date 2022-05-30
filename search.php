@@ -3,14 +3,14 @@
     include("view/generators/GroupDetailsCreator.php");
 
     if(!isset($_GET["filters"]))
-        $filers = [];
+        $filters = [];
     else
         $filters = explode(" ", $_GET["filters"]);
 
     $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroup(false, $filters);
 
     include_once("view/generators/HeaderCreator.php");
-        $header = new HeaderCreator("Recherche", $_GET["filters"]); 
+        $header = new HeaderCreator("Recherche", $_GET["filters"]??""); 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -25,8 +25,46 @@
     <?php $header->create(); ?>
     <main>
         <?php
-            foreach($groups as $group)
-                (new GroupDetailsCreator($group, false))->create();
+            foreach($groups as $group) {
+                foreach($group->getMicroscopes() as $micro): 
+                    $ctr = $micro->getController();
+                    $model = $micro->getModel();
+                    $brand = $model->getBrand();
+                    $compagny = $brand->getCompagny();
+                    $color = match ($micro->getType()) {
+                        "LABO" => "blue-border",
+                        "PLAT" => "red-border"
+                    };
+                    if($compagny->getName() == "Homemade")
+                        $name = "Homemade - " . $ctr->getName();
+                    else
+                        $name = implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]);?>
+                    <a class="tile <?=$color?>" href="/group-details.php?id=<?=$group->getId()?>">
+                        <div class="picture"></div>
+                        <h2><?=$name?><?=!empty($micro->getRate()) ? " - €" : ""?></h2>
+                        <p><?=$group->getLab()->getAddress()->toString()?></p>
+                        <?php
+                            $access = $micro->getAccess();
+                            if($access == "ACAD") : ?>
+                                <p>Ouvert aux académiques</p>
+                            <?php
+                            elseif($access == "INDU") : ?>
+                                <p>Ouvert aux industriels</p>
+                        <?php elseif($access == "BOTH"): ?>
+                            <p>Ouvert aux académiques et aux industriels</p>
+                        <?php endif; ?>
+                        <ul>
+                            <?php
+                                foreach ($micro->getKeywords() as $kw)
+                                    $cats[$kw->getCat()->getName()][] = $kw->getTag();
+                            
+                                foreach($cats??[] as $cat => $tags): ?>
+                                    <li><?= $cat; ?> : <?=implode(", ", $tags)?></li>
+                                <?php endforeach; unset($cats);?>
+                        </ul>
+                    </a>    
+                <?php endforeach;
+            }
         ?>
     </main>
     <footer>
