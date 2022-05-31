@@ -1,5 +1,5 @@
 <?php
-    include("../include/config.php");
+    include("../config/config.php");
     include("../model/services/MicroscopesGroupService.php");
 
     if(!$_SESSION["user"]["admin"])

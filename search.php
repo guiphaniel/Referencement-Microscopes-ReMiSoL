@@ -1,6 +1,6 @@
 <?php
     include("model/services/MicroscopesGroupService.php");
-    include("view/generators/GroupDetailsCreator.php");
+    include("view/creators/GroupDetailsCreator.php");
 
     if(!isset($_GET["filters"]))
         $filters = [];
@@ -9,7 +9,7 @@
 
     $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroup(false, $filters);
 
-    include_once("view/generators/HeaderCreator.php");
+    include_once("view/creators/HeaderCreator.php");
         $header = new HeaderCreator("Recherche", $_GET["filters"]??""); 
 ?>
 <!DOCTYPE html>

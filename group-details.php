@@ -1,7 +1,7 @@
 <?php 
     include_once("model/services/MicroscopesGroupService.php");
-    include_once("view/generators/HeaderCreator.php");
-    include_once("view/generators/GroupDetailsCreator.php");
+    include_once("view/creators/HeaderCreator.php");
+    include_once("view/creators/GroupDetailsCreator.php");
 
     if(empty($_GET["id"])) {
         header('location: /index.php');

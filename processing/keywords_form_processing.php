@@ -1,5 +1,5 @@
 <?php
-    include_once("../include/config.php");
+    include_once("../config/config.php");
     include_once("../model/start_db.php");
     include_once("../model/services/KeywordService.php");
 

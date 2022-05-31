@@ -1,9 +1,9 @@
 <?php 
-    include_once("include/config.php");
+    include_once("config/config.php");
     if(isUserSessionValid())
         redirect("/form.php");
 
-    include_once("view/generators/HeaderCreator.php");
+    include_once("view/creators/HeaderCreator.php");
 
     $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
 

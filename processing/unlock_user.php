@@ -1,8 +1,8 @@
 <?php 
-    include_once("../include/config.php");
+    include_once("../config/config.php");
     include_once("../model/services/UserService.php");
-    include_once("../view/generators/FormCreator.php");
-    include_once("../view/generators/HeaderCreator.php");
+    include_once("../view/creators/FormCreator.php");
+    include_once("../view/creators/HeaderCreator.php");
     $header = new HeaderCreator("Validation du compte"); 
 
     if(!unlockUser())

@@ -1,5 +1,5 @@
 <?php
-    include_once(__DIR__ . "/../include/config.php");
+    include_once(__DIR__ . "/../config/config.php");
     include_once(__DIR__ . "/../model/services/UserService.php");
 
     //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form

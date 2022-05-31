@@ -1,5 +1,5 @@
 <?php
-    include_once(__DIR__ . "/../include/config.php");
+    include_once(__DIR__ . "/../config/config.php");
     include_once(__DIR__ . "/../utils/send_email.php");
     include_once(__DIR__ . "/../model/services/UserService.php");
 

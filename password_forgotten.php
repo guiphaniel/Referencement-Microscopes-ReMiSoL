@@ -1,10 +1,10 @@
 <?php 
-    include_once("include/config.php");
+    include_once("config/config.php");
     if(isUserSessionValid())
         redirect("/account.php");
 
-    include_once("view/generators/FormCreator.php");
-    include_once("view/generators/HeaderCreator.php");
+    include_once("view/creators/FormCreator.php");
+    include_once("view/creators/HeaderCreator.php");
     $header = new HeaderCreator("Mot de passe oublié"); 
 ?>
 <!DOCTYPE html>

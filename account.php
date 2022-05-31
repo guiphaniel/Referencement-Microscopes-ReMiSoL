@@ -1,8 +1,8 @@
 <?php
-    include_once("include/config.php");
-    include_once("view/generators/HeaderCreator.php");
-    include_once("view/generators/UserFormCreator.php");
-    include_once("view/generators/GroupDetailsCreator.php");
+    include_once("config/config.php");
+    include_once("view/creators/HeaderCreator.php");
+    include_once("view/creators/UserFormCreator.php");
+    include_once("view/creators/GroupDetailsCreator.php");
     include_once("model/services/MicroscopesGroupService.php");
 
     if(!isUserSessionValid()) 
