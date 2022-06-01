@@ -204,7 +204,7 @@
                 $coor = CoordinatesService::getInstance()->findCoordinatesById($groupInfos["coordinates_id"]);
                 $lab = LabService::getInstance()->findLabById($groupInfos["lab_id"]);
                 $contacts = ContactService::getInstance()->findAllContactsByGroupId($groupId);
-                $micros = MicroscopeService::findAllMicroscopesByGroupId($groupId);
+                $micros = MicroscopeService::getInstance()->findAllMicroscopesByGroupId($groupId);
 
                 $group = new MicroscopesGroup($coor, $lab, $contacts);
 
