@@ -4,12 +4,17 @@
     include_once("view/creators/HeaderCreator.php");
     $header = new HeaderCreator("Accueil"); 
 
-    function createCheckboxes($objs, $name) {
+    function createCheckboxes($objs, $type) {
         foreach($objs as $obj):
-            $id = "$name-{$obj->getId()}";
+            $id = "$type-{$obj->getId()}";
             $name = $obj->getName(); ?>
-            <label for="<?=$id?>"><?=$name?></label>
-            <input type="checkbox" value="<?=$name?>" id="<?=$id?>">
+            <div class="checkbox-group">
+                <input type="checkbox" value="<?=$name?>" id="<?=$id?>">
+                <svg class="checkmark">
+                    <polyline points="1,5 6,9 14,1"></polyline>
+                </svg>
+                <label for="<?=$id?>"><?=$name?></label>
+            </div>
     <?php endforeach;
     }
 ?>
@@ -37,20 +42,41 @@
     ?>
     <main>
         <p>Bienvenue sur notre site !</p>
-        <aside>
-            <form id="map-filters">
-                <h3>Filtres</h3>
-                <h4>Sociétés</h4>
-                <?php createCheckboxes(CompagnyService::getInstance()->findAllCompagnies(), "cmp"); ?>
-                <h4>Marques</h4>
-                <?php createCheckboxes(BrandService::getInstance()->findAllBrands(), "brand"); ?>
-                <h4>Modèles</h4>
-                <?php createCheckboxes(ModelService::getInstance()->findAllModels(), "model"); ?>
-                <h4>Électronique/Contrôleurs</h4>
-                <?php createCheckboxes(ControllerService::getInstance()->findAllControllers(), "ctr"); ?>             
-            </form>
-        </aside>
-        <div id="map" style="height: 400px;"></div>
+        <div class="aside-wrapper">
+            <aside>
+                <form id="map-filters">
+                    <h2>Filtres</h2>
+                    <input id="filters-reinit" type="reset" value="Réinitialiser">
+                    <div class="filters-group">
+                        <h3>Sociétés</h3>
+                        <div>
+                            <?php createCheckboxes(CompagnyService::getInstance()->findAllCompagnies(), "cmp"); ?>
+                        </div>
+                    </div>
+                    <div class="filters-group">
+                        <h3>Marques</h3>
+                        <div>
+                            <?php createCheckboxes(BrandService::getInstance()->findAllBrands(), "brand"); ?>
+                        </div>
+                    </div>
+                    <div class="filters-group">
+                        <h3>Modèles</h3>
+                        <div>
+                            <?php createCheckboxes(ModelService::getInstance()->findAllModels(), "model"); ?>
+                        </div>
+                    </div>
+                    <div class="filters-group">
+                        <h3>Électronique/Contrôleurs</h3>
+                        <div>
+                            <?php createCheckboxes(ControllerService::getInstance()->findAllControllers(), "ctr"); ?>             
+                        </div>
+                    </div>
+                </form>
+            </aside>
+            <div id="map-wrapper">
+                <div id="map"></div>
+            </div>
+        </div>
     </main>
     <footer>
         <address>

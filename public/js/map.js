@@ -260,6 +260,7 @@ L.control.scale({imperial: true, metric: true}).addTo(map);
 
 // MAP FILTERS
 
+
 let filters = [];
 initMapFilters();
 
@@ -269,6 +270,7 @@ function initMapFilters() {
 	if(mapFilters == null)
 		return;
 
+	document.getElementById("filters-reinit").addEventListener("click", () => filters = []);
 	document.addEventListener("change", updateFilters);
 }
 
