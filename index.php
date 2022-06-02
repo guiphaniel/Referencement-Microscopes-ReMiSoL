@@ -37,21 +37,20 @@
     <title>Accueil</title>
 </head>
 <body>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="def">            
-        <defs>
-            <path id="marker" d="M168.3 499.2C116.1 435 0 279.4 0 192C0 85.96 85.96 0 192 0C298 0 384 85.96 384 192C384 279.4 267 435 215.7 499.2C203.4 514.5 180.6 514.5 168.3 499.2H168.3zM192 256C227.3 256 256 227.3 256 192C256 156.7 227.3 128 192 128C156.7 128 128 156.7 128 192C128 227.3 156.7 256 192 256z"/>
-        </defs>
-    </svg>
     <?php 
         $header->create();
     ?>
     <main>
-        <p>Bienvenue sur notre site !</p>
+        <div class="details">
+            <p>Bienvenue sur notre notre site ! Que vous soyez chercheur, ingéneiur, ou technicien, nous vous aiderons à référencer votre matériel à l'échelle nationale, et à trouver celui dont vous avez besoin.</p>
+        </div>
         <div class="aside-wrapper">
             <aside>
                 <form id="map-filters">
-                    <h2>Filtres</h2>
-                    <input id="filters-reset" type="reset" value="Réinitialiser">
+                    <div id="map-filters-header">
+                        <h2>Filtres</h2>
+                        <input id="filters-reset" type="reset" value="Réinitialiser">
+                    </div>
                     <div class="filters-group">
                         <h3>Sociétés</h3>
                         <div>
@@ -79,6 +78,11 @@
                 </form>
             </aside>
             <div id="map-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="def">            
+                    <defs>
+                        <path id="marker" d="M168.3 499.2C116.1 435 0 279.4 0 192C0 85.96 85.96 0 192 0C298 0 384 85.96 384 192C384 279.4 267 435 215.7 499.2C203.4 514.5 180.6 514.5 168.3 499.2H168.3zM192 256C227.3 256 256 227.3 256 192C256 156.7 227.3 128 192 128C156.7 128 128 156.7 128 192C128 227.3 156.7 256 192 256z"/>
+                    </defs>
+                </svg>
                 <div id="map"></div>
             </div>
         </div>
