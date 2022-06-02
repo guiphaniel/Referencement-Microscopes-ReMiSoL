@@ -269,7 +269,7 @@ function initMapFilters() {
 		return;
 
 	document.getElementById("filters-reset").addEventListener("click", () => { filters = []; updateFilters(); });
-	document.getElementById("map-filters").addEventListener("change", onFilterChange);
+	mapFilters.addEventListener("change", onFilterChange);
 }
 
 function onFilterChange(e) {
