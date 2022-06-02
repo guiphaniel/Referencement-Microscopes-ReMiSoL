@@ -333,6 +333,11 @@ main {
     padding: var(--global-padding-1);
 }
 
+
+#map-filters h3 {
+    cursor: pointer;
+}
+
 #map-filters-header {
     display: flex;
     justify-content: space-between;

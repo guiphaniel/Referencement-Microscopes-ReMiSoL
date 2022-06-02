@@ -270,6 +270,7 @@ function initMapFilters() {
 
 	document.getElementById("filters-reset").addEventListener("click", () => { filters = []; updateFilters(); });
 	mapFilters.addEventListener("change", onFilterChange);
+	mapFilters.addEventListener("click", onHeaderClick)
 }
 
 function onFilterChange(e) {
@@ -281,6 +282,27 @@ function onFilterChange(e) {
 		filters.push(checkbox.value); // add filter
 	else
 		filters.splice(filters.indexOf(checkbox.value), 1); // remove filter
+
+	updateFilters();
+}
+
+function onHeaderClick(e){
+	let header = e.target;
+	if(header.tagName != "H3")
+		return;
+
+	let checkboxes = header.parentElement.getElementsByTagName("input");
+
+	let allChecked = true;
+	for (const checkbox of checkboxes) {
+		if(checkbox.checked == false) {
+			allChecked = false;
+			break;
+		}
+	}
+
+	for (const checkbox of checkboxes)
+		checkbox.checked = !allChecked;
 
 	updateFilters();
 }
