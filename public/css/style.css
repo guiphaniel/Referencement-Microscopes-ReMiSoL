@@ -11,6 +11,7 @@
     --nav-padding: 1em;
     --main-padding: 20px;
     --global-margin: 20px;
+    --global-margin-2: 10px;
     --global-padding-1: 20px;
     --global-padding-2: 10px;
 }
@@ -85,6 +86,10 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     margin: 0;
 }
 
+.def {
+    display: none;
+}
+
 svg {
     height: 100%;
     width: 100%;
@@ -115,10 +120,21 @@ h3 {
     box-shadow: 0 -0.33em inset var(--color-sec-2);
 }
 
+input[type=submit],
+input[type=reset] {
+    color: white;
+    background-color: black;
+    padding: var(--global-padding-2);
+    border-radius: 20px;
+}
+
 /*HEADER*/
 
 header {
     margin-top: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #navigation {
@@ -231,19 +247,17 @@ header nav ul li:hover {
     background-color: var(--color-pri-2);
     transition: ease-in-out var(--trans-dur);
 }
-/*
-#searchbar {
+
+.details {
     display: flex;
-    width: 100%;
-    height: 4em;
-    padding: var(--nav-padding);
-    background: var(--color-sec-1);
+    padding: 1em;
+    margin: 2em 0;
+    border-radius: var(--border-radius);
+    background: aquamarine;
+    align-items: center;
+    justify-content: center;
 }
 
-#searchbar input:first-child {
-    width: 100%;
-}
-*/
 /* MAIN */
 
 main {
@@ -314,9 +328,15 @@ main {
 }
 
 #map-filters {
-    background: var(--color-sec-1);    
+    background: var(--color-pri-2);    
     border-radius: var(--border-radius);
     padding: var(--global-padding-1);
+}
+
+#map-filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
 .filters-group {
@@ -334,17 +354,37 @@ main {
 text-align: center;
 }
 
-.legend-icon {
-display: inline-block;
-max-height: 3em;
-max-height: 3em;
-margin-bottom: calc(var(--global-margin) / 2);
-margin-right: calc(var(--global-margin) / 2);
-}
-
 .legend-item {
     display: flex;
     align-items: center;
+    margin-bottom: var(--global-margin-2);
+}
+
+.legend-icon {
+    display: inline-block;
+    max-width: 3em;
+    max-height: 3em;
+}
+
+.marker{
+    transform: scale(0.06);
+}
+
+.lab-marker {
+    fill: cornflowerblue;
+}
+
+.plat-marker {
+    fill: crimson;
+}
+
+.mix-marker {
+    fill: coral;
+}
+
+.leaflet-popup-content p, .leaflet-popup-content li {
+    margin: 0;
+    margin-bottom: 1em;
 }
 
 /* DESKTOP VIEW */
