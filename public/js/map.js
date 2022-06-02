@@ -37,13 +37,12 @@ async function loadAndShowGroups(url) {
 			}
 		}
 
-		let customIcon = new L.Icon({
-			iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
-			shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+		let customIcon = new L.divIcon({
+			html: '<div class="legend-icon"><svg><use class="marker lab-marker" href="#marker"/></svg></div>',
+			className: "",
 			iconSize: [25, 41],
 			iconAnchor: [12, 41],
-			popupAnchor: [1, -34],
-			shadowSize: [41, 41]
+			popupAnchor: [1, -41],
 		  });
 
 
@@ -244,9 +243,9 @@ let legend = L.control({ position: "bottomleft" });
 legend.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
   div.innerHTML += "<h2>Légende</h2>";
-  div.innerHTML += '<div class="legend-item"><img class="legend-icon" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png" alt="Marqueur mixte"></img><span>Laboratoire</span><br></div>';
-  div.innerHTML += '<div class="legend-item"><img class="legend-icon" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png" alt="Marqueur mixte"></img><span>Plateforme</span><br></div>';
-  div.innerHTML += '<div class="legend-item"><img class="legend-icon" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png" alt="Marqueur mixte"></img><span>Mixte</span><br></div>';
+  div.innerHTML += '<div class="legend-item"><div class="legend-icon"><svg><use class="marker lab-marker" href="#marker"/></svg></div><span>Laboratoire</span></div>';
+  div.innerHTML += '<div class="legend-item"><div class="legend-icon"><svg><use class="marker plat-marker" href="#marker"/></svg></div><span>Plateforme</span></div>';
+  div.innerHTML += '<div class="legend-item"><div class="legend-icon"><svg><use class="marker mix-marker" href="#marker"/></svg></div><span>Mixte</span></div>';
   
   
 
@@ -260,7 +259,6 @@ L.control.scale({imperial: true, metric: true}).addTo(map);
 
 // MAP FILTERS
 
-
 let filters = [];
 initMapFilters();
 
@@ -270,20 +268,24 @@ function initMapFilters() {
 	if(mapFilters == null)
 		return;
 
-	document.getElementById("filters-reinit").addEventListener("click", () => filters = []);
-	document.addEventListener("change", updateFilters);
+	document.getElementById("filters-reset").addEventListener("click", () => { filters = []; updateFilters(); });
+	document.getElementById("map-filters").addEventListener("change", onFilterChange);
 }
 
-function updateFilters(e) {
+function onFilterChange(e) {
 	let checkbox = e.target;
 	if(checkbox.type != "checkbox")
 		return;
 
-	if(checkbox.checked)
-		filters.push(checkbox.value);
+	if(checkbox.checked) 
+		filters.push(checkbox.value); // add filter
 	else
-		filters.splice(filters.indexOf(checkbox.value), 1);
+		filters.splice(filters.indexOf(checkbox.value), 1); // remove filter
 
+	updateFilters();
+}
+
+function updateFilters() {
 	let url = "/api/v1/search.php";
 
 	if(filters.length > 0)
