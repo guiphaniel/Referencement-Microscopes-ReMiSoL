@@ -13,6 +13,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/css/style.css">
     <title>Mot de passe oublié</title>
 </head>
 <body>
@@ -20,13 +21,19 @@
         $header->create();
     ?>
     <main>
-        <p>Saisissez votre courriel. Vous allez recevoir un message vous permettant de modifier votre mot de passe.</p>
+        <div class="infos">
+            <p>Saisissez votre courriel. Vous allez recevoir un message vous permettant de modifier votre mot de passe.</p>
+        </div>
         <?php FormCreator::handleMsg(); ?>
-        <form action="processing/password_forgotten_processing.php" method="post">
-            <label for="email">Courriel</label>
-            <input id="email" type="email" autocomplete="email" name="email" required>
-            <input type="submit" value="Envoyer">
-        </form>
+        <div class="form-wrapper">
+            <form action="processing/password_forgotten_processing.php" method="post">
+                <div class="input-wrapper">    
+                    <input id="email" type="email" autocomplete="email" name="email" placeholder=" " required>
+                    <label for="email">Courriel</label>
+                </div>
+                    <input type="submit" value="Envoyer">
+            </form>
+        </div>
     </main>
     <footer>
         <address>

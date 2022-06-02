@@ -41,8 +41,8 @@
         $header->create();
     ?>
     <main>
-        <div class="details">
-            <p>Bienvenue sur notre notre site ! Que vous soyez chercheur, ingéneiur, ou technicien, nous vous aiderons à référencer votre matériel à l'échelle nationale, et à trouver celui dont vous avez besoin.</p>
+        <div class="infos">
+            <p>Bienvenue sur notre notre site ! Que vous soyez chercheur, ingénieur, ou technicien, nous vous aiderons à référencer votre matériel à l'échelle nationale, et à trouver celui dont vous avez besoin.</p>
         </div>
         <div class="aside-wrapper">
             <aside>

@@ -7,11 +7,15 @@
 
         static function handleMsg() {
             if(isset($_SESSION["form"]["infoMsg"])) : ?>
-                <p class="info-msg"><?= $_SESSION["form"]["infoMsg"] ?></p>
+            <div class="msg-wrapper">
+                <p class="msg info-msg"><?= $_SESSION["form"]["infoMsg"] ?></p>
+            </div>
             <?php endif; unset($_SESSION["form"]["infoMsg"]);
 
             if(isset($_SESSION["form"]["errorMsg"])) : ?>
-                <p class="error-msg"><?= $_SESSION["form"]["errorMsg"] ?></p>
+            <div class="msg-wrapper">
+                <p class="msg error-msg"><?= $_SESSION["form"]["errorMsg"] ?></p>
+            </div>
             <?php endif; unset($_SESSION["form"]["errorMsg"]);
         }
 
