@@ -42,14 +42,16 @@
                     else
                         $unlockedGroups[] = $group;
                 }
-                echo "<h2>En attentes</h2>";
+                $nbLocked = sizeof($lockedGroups);
+                $nbUnlocked = sizeof($unlockedGroups);
+                echo "<h2>En attentes ($nbLocked)</h2>";
                 if(sizeof($lockedGroups) < 1)
                     echo "<p>Il n'y a aucune fiche en attente pour l'instant</p>";
                 else {
                     foreach($lockedGroups as $group)
                         (new GroupDetailsCreator($group, false))->create();
                 }
-                echo "<h2>Validées</h2>";
+                echo "<h2>Validées ($nbUnlocked)</h2>";
                 if(sizeof($unlockedGroups) < 1)
                     echo "<p>Il n'y a aucune fiche validée pour l'instant</p>";
                 else {
