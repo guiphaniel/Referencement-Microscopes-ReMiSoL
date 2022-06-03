@@ -50,10 +50,8 @@ async function onCompagnySelect(select) {
         let url = "/api/v1/listControllers.php";
         fillSelectOptions(controllerSelect, url);
     } else {
-        modelSelect.disabled = true;
-        modelSelect.innerHTML = '<option value="" selected disabled hidden>Choisissez ici</option>'
-        controllerSelect.disabled = true;
-        controllerSelect.innerHTML = '<option value="" selected disabled hidden>Choisissez ici</option>';
+        resetSelect(modelSelect);
+        resetSelect(controllerSelect);
 
         const url = `/api/v1/listBrands.php?compagny=${select.value}`;
     
@@ -155,11 +153,16 @@ document.getElementById("add-micro").addEventListener('click', function(){
     let tags = newField.getElementsByClassName("tag");
     while (tags.length > 0)
         tags[0].remove()
-
-    document.getElementById(`micro-brand-` + id).disabled = true;
-    document.getElementById(`micro-model-` + id).disabled = true;
-    document.getElementById(`micro-controller-` + id).disabled = true;
+    
+    resetSelect(document.getElementById(`micro-brands-` + id));
+    resetSelect(document.getElementById(`micro-models-` + id));
+    resetSelect(document.getElementById(`micro-controllers-` + id));
 });
+
+function resetSelect(select) {
+    select.disabled = true;
+    select.innerHTML = '<option value="" selected disabled hidden>Choisissez ici</option>'
+}
 
 function resetField(field) {
     let inputs = field.getElementsByTagName("input");
