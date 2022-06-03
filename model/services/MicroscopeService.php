@@ -2,6 +2,7 @@
     include_once(__DIR__ . "/../start_db.php");
     include_once(__DIR__ . "/../entities/MicroscopesGroup.php");
     include_once(__DIR__ . "/../services/KeywordService.php");
+    include_once(__DIR__ . "/../../utils/browser_supports_webp.php");
 
     spl_autoload_register(function ($class_name) {
         include $class_name . '.php';
@@ -116,5 +117,19 @@
             }
 
             parent::delete($entity);
+        }
+
+        function getImgPathById($microId) {
+            $path = glob(__DIR__ . "/../../public/img/micros/" . "$microId.*");
+
+            if(browserSupportsWebp())
+                $ext = ".webp"; 
+            else
+                $ext = ".jpeg"; 
+
+            if(!$path)
+                return "/public/img/micros/default" . $ext;
+            else
+                return "/public/img/micros/$microId" . $ext;
         }
     }

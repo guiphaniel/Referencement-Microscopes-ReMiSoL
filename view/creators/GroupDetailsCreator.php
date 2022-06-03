@@ -1,7 +1,7 @@
 <?php
     include_once(__DIR__ . "/../../config/config.php");
-    include_once(__DIR__ . "/../../utils/browser_supports_webp.php");
     include_once(__DIR__ . "/../../model/services/MicroscopesGroupService.php");
+    include_once(__DIR__ . "/../../model/services/MicroscopeService.php");
     include_once(__DIR__ . "/Creator.php");
 
     Class GroupDetailsCreator implements Creator {
@@ -76,22 +76,12 @@
                             $name = "Homemade - " . $ctr->getName();
                         else
                             $name = implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]);
+
+                        $imgPath = MicroscopeService::getInstance()->getImgPathById($micro->getId());
                         ?>
                         <section>
                             <h3><?= $name . " (" . $type . ")"; ?></h3>
-                            <?php 
-                                $microId = $micro->getId();
-
-                                $path = glob(__DIR__ . "/../../public/img/micros/" . "$microId.*");
-
-                                if($path) :
-                                    if(browserSupportsWebp())
-                                        $extension = ".webp"; 
-                                    else
-                                        $extension = ".jpeg"; 
-                            ?>
-                                <img class="micro-img" src="/public/img/micros/<?=$microId . $extension?>" alt="Microscope <?=$name?>">
-                            <?php endif; ?>
+                            <img class="micro-img" src="<?=$imgPath?>" alt="Microscope <?=$name?>">
                             <p>Descrription : <?= $micro->getDescr(); ?></p>
                             <?php if(!empty($micro->getRate())) : ?>
                                 <p>Tarification : <a href="<?= $micro->getRate(); ?>" target="_blank"><?= $micro->getRate(); ?></a></p>
