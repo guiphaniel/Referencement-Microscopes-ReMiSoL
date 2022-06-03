@@ -113,7 +113,7 @@ CREATE TABLE microscope (
 	rate	VARCHAR(200),
 	`descr`	VARCHAR(2000),
 	norm_descr	VARCHAR(2000),
-	type	ENUM('LABO', 'SERV'),
+	type	ENUM('LABO', 'PLAT'),
 	access	ENUM('ACAD', 'INDU', 'BOTH'),
 	model_id	INTEGER,
 	controller_id	INTEGER,
