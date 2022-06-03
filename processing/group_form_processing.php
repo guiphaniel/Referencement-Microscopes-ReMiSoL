@@ -41,7 +41,7 @@
     }
 
     foreach($_POST["micros"] as $micro) {
-        if (empty($micro["compagny"]) || empty($micro["brand"]) || empty($micro["model"]) || empty($micro["controller"]) || empty($micro["descr"]) || empty($micro["type"]) || empty($micro["access"])) {
+        if (empty($micro["compagny"]) || empty($micro["brand"]) || empty($micro["model"]) || empty($micro["controller"]) || empty($micro["descr"]) || sizeof($micro["descr"]) > 2000 || empty($micro["type"]) || empty($micro["access"])) {
             redirect("/form.php");
         }
     }
