@@ -23,11 +23,13 @@
 
         function begin() {
             $this->handleMsg() ?>
-            <form action=<?=$this->action?> method=<?=$this->method?> <?php if(!empty($this->enctype)) echo "enctype=$this->enctype"; ?>>
+            <div class="form-wrapper">
+                <form action=<?=$this->action?> method=<?=$this->method?> <?php if(!empty($this->enctype)) echo "enctype=$this->enctype"; ?>>
             <?php
         }
 
         function end() {
+            echo "</div>";
             echo "</form>";
         }
 
