@@ -59,6 +59,7 @@ insert into model values(NULL, 'Next II',7);
 insert into model values(NULL, 'STM1',8);
 insert into model values(NULL, 'STM2',8);
 insert into model values(NULL, 'SPM Probe',8);
+insert into model values(NULL, 'Homemade',9);
 insert into controller values(NULL, 'Nanoscope IIIa',1);
 insert into controller values(NULL, 'Nanoscope Quadrex',1);
 insert into controller values(NULL, 'Nanoscope V',1);
