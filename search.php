@@ -1,5 +1,6 @@
 <?php
     include("model/services/MicroscopesGroupService.php");
+    include("model/services/MicroscopeService.php");
     include("view/creators/GroupDetailsCreator.php");
 
     if(!isset($_GET["filters"]))
@@ -24,48 +25,57 @@
 <body>
     <?php $header->create(); ?>
     <main>
-        <?php
-            foreach($groups as $group) {
-                foreach($group->getMicroscopes() as $micro): 
-                    $ctr = $micro->getController();
-                    $model = $micro->getModel();
-                    $brand = $model->getBrand();
-                    $compagny = $brand->getCompagny();
-                    $color = match ($micro->getType()) {
-                        "LABO" => "blue-border",
-                        "PLAT" => "red-border"
-                    };
-                    if($compagny->getName() == "Homemade")
-                        $name = "Homemade - " . $ctr->getName();
-                    else
-                        $name = implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]);?>
-                    <a class="tile <?=$color?>" href="/group-details.php?id=<?=$group->getId()?>">
-                        <div class="picture"></div>
-                        <h2><?=$name?><?=!empty($micro->getRate()) ? " - €" : ""?></h2>
-                        <p><?=$group->getLab()->getAddress()->toString()?></p>
-                        <?php
-                            $access = $micro->getAccess();
-                            if($access == "ACAD") : ?>
-                                <p>Ouvert aux académiques</p>
-                            <?php
-                            elseif($access == "INDU") : ?>
-                                <p>Ouvert aux industriels</p>
-                        <?php elseif($access == "BOTH"): ?>
-                            <p>Ouvert aux académiques et aux industriels</p>
-                        <?php endif; ?>
-                        <ul>
-                            <?php
-                                foreach ($micro->getKeywords() as $kw)
-                                    $cats[$kw->getCat()->getName()][] = $kw->getTag();
+        <div class="tiles-wrapper">
+            <?php
+                foreach($groups as $group) {
+                    foreach($group->getMicroscopes() as $micro): 
+                        $ctr = $micro->getController();
+                        $model = $micro->getModel();
+                        $brand = $model->getBrand();
+                        $compagny = $brand->getCompagny();
+                        $color = match ($micro->getType()) {
+                            "LABO" => "lab-tile",
+                            "PLAT" => "plat-tile"
+                        };
+                        if($compagny->getName() == "Homemade")
+                            $name = "Homemade - " . $ctr->getName();
+                        else
+                            $name = implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]);
                             
-                                foreach($cats??[] as $cat => $tags): ?>
-                                    <li><?= $cat; ?> : <?=implode(", ", $tags)?></li>
-                                <?php endforeach; unset($cats);?>
-                        </ul>
-                    </a>    
-                <?php endforeach;
-            }
-        ?>
+                        $imgPath = MicroscopeService::getInstance()->getImgPathById($micro->getId());?>
+                        
+                        <a class="tile <?=$color?>" href="/group-details.php?id=<?=$group->getId()?>">
+                            <div class="img-wrapper">
+                                <img src="<?=$imgPath?>" alt="Microscope <?=$name?>">
+                            </div>
+                            <div class="tile-content">
+                                <h2><?=$name?><?=!empty($micro->getRate()) ? ' - <span class="euro">€</span>' : ""?></h2>
+                                <p><?=$group->getLab()->getAddress()->toString()?></p>
+                                <?php
+                                    $access = $micro->getAccess();
+                                    if($access == "ACAD") : ?>
+                                        <p>Ouvert aux académiques</p>
+                                    <?php
+                                    elseif($access == "INDU") : ?>
+                                        <p>Ouvert aux industriels</p>
+                                <?php elseif($access == "BOTH"): ?>
+                                    <p>Ouvert aux académiques et aux industriels</p>
+                                <?php endif; ?>
+                                <ul>
+                                    <?php
+                                        foreach ($micro->getKeywords() as $kw)
+                                            $cats[$kw->getCat()->getName()][] = $kw->getTag();
+                                    
+                                        foreach($cats??[] as $cat => $tags): ?>
+                                            <li><?= $cat; ?> : <?=implode(", ", $tags)?></li>
+                                        <?php endforeach; unset($cats);?>
+                                </ul>
+                            </div>
+                        </a>    
+                    <?php endforeach;
+                }
+            ?>
+        </div>
     </main>
     <footer>
         <address>

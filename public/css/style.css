@@ -14,6 +14,10 @@
     --global-margin-2: 10px;
     --global-padding-1: 20px;
     --global-padding-2: 10px;
+    --lab-color: 100, 149, 237;
+    --plat-color: 220, 20, 60;
+    --mix-color: 255, 127, 80;
+    --tile-width: 20em;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
@@ -267,8 +271,6 @@ header nav ul li:hover {
     width: fit-content;
 }
 
-
-
 /* MAIN */
 
 main {
@@ -386,15 +388,15 @@ text-align: center;
 }
 
 .lab-marker {
-    fill: cornflowerblue;
+    fill: rgb(var(--lab-color));
 }
 
 .plat-marker {
-    fill: crimson;
+    fill: rgb(var(--plat-color));
 }
 
 .mix-marker {
-    fill: coral;
+    fill: rgb(var(--mix-color));
 }
 
 .leaflet-popup-content p, .leaflet-popup-content li {
@@ -695,4 +697,69 @@ text-align: center;
 
 .info-msg {
     background: aquamarine;
+}
+
+/* MICROSCOPES DETAILS */
+
+.tiles-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, min(calc(var(--tile-width) + var(--global-margin-1) * 2)));
+    justify-content: space-evenly;
+    justify-items: center;
+}
+
+.tile {
+    display: inline-block;
+    width: var(--tile-width);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin: var(--global-margin-1);
+    transition: box-shadow ease-in-out var(--trans-dur);
+}
+
+.tile:hover {
+    transition: box-shadow ease-in-out var(--trans-dur);
+}
+
+.lab-tile {
+    box-shadow: 0 0 15px rgba(var(--lab-color), 0.6);
+}
+
+.lab-tile:hover {
+    box-shadow: 0 0 20px rgba(var(--lab-color), 0.7);
+}
+
+.plat-tile {
+    box-shadow: 0 0 15px rgba(var(--plat-color), 0.6);
+}
+
+.plat-tile:hover {
+    box-shadow: 0 0 20px rgba(var(--plat-color), 0.7);
+}
+
+.tile:hover img {
+    transform: scale(1);
+    transition: all ease-in-out var(--trans-dur);
+}
+
+.img-wrapper {
+    height: 10em;
+    overflow: hidden;
+}
+
+.img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.02);
+    transition: all ease-in-out var(--trans-dur);
+}
+
+.tile-content {
+    padding: var(--global-padding-1);
+}
+
+.euro {
+    font-weight: bold;
+    color: var(--color-pri-1);
 }
