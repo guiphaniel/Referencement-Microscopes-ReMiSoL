@@ -24,10 +24,10 @@
                             <li><a href="/presentation.php">Présentation</a></li>
                             <?php if(isUserSessionValid()): ?>
                                 <li><a href="/form.php">Formulaire</a></li>
-                                <li><a href="/account.php">Mon compte</a></li>
                                 <?php if($_SESSION["user"]["admin"]): ?>
                                     <li><a href="/admin.php">Administration</a></li>
                                 <?php endif; ?>
+                                <li><a href="/account.php">Mon compte</a></li>
                                 <li><a href="/processing/logout.php">Déconnexion</a></li>
                             <?php else: ?>
                                 <li><a href="/signin.php">Inscription</a></li>

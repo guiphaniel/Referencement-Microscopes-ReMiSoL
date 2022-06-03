@@ -23,22 +23,22 @@ async function loadAndShowGroups(url) {
 
 	for (let group of groups) {
 		// set custom icon color
-		let color;
+		let type;
 		let first = true;
 		for (let micro of Object.values(group.microscopes)) {
 			if(first) {
-				color = micro.type == "LABO" ? "blue" : "red";
+				type = micro.type == "LABO" ? "lab" : "plat";
 				first = false;
 			} else {
-				if(micro.type == "LABO" ? "blue" : "red" != color) {
-					color = "orange";
+				if(micro.type == "LABO" ? "lab" : "plat" != type) {
+					type = "mix";
 					break;
 				}
 			}
 		}
 
 		let customIcon = new L.divIcon({
-			html: '<div class="legend-icon"><svg><use class="marker lab-marker" href="#marker"/></svg></div>',
+			html: `<div class="legend-icon"><svg><use class="marker ${type}-marker" href="#marker"/></svg></div>`,
 			className: "",
 			iconSize: [25, 41],
 			iconAnchor: [12, 41],
