@@ -221,7 +221,7 @@
                 <?php endforeach; ?>
             </select>
             <label for="micro-brands-<?=$id?>">Marque</label>
-            <select id="micro-brands-<?=$id?>" class="micro-brands" name="" <?=$this->valueOf($brand?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
+            <select id="micro-brands-<?=$id?>" class="micro-brands" name="micros[<?=$id?>][brand]" <?=$this->valueOf($brand?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
                 <option value="" selected disabled hidden>Choisissez ici</option>
             </select>
             <label for="micro-models-<?=$id?>">Modèle</label>
