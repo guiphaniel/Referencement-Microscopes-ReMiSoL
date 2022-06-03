@@ -82,7 +82,7 @@
                         <section>
                             <h3><?= $name . " (" . $type . ")"; ?></h3>
                             <img class="micro-img" src="<?=$imgPath?>" alt="Microscope <?=$name?>">
-                            <p>Descrription : <?= $micro->getDescr(); ?></p>
+                            <p>Description : <?= $micro->getDescr(); ?></p>
                             <?php if(!empty($micro->getRate())) : ?>
                                 <p>Tarification : <a href="<?= $micro->getRate(); ?>" target="_blank"><?= $micro->getRate(); ?></a></p>
                             <?php endif; ?>
