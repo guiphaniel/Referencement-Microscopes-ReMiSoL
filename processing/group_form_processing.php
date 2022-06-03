@@ -102,12 +102,13 @@
         }
 
         //save the micros' imgs
-        foreach (array_keys($group->getMicroscopes()) as $microId) { 
+        foreach ($group->getMicroscopes() as $formMicroId => $micro) { 
+            $microId = $micro->getId();
             $imgs = $_FILES["imgs"];
 
             // if no image has been sent, keep it if it hasn't change, or remove it if it exists on the server
-            if($imgs['size'][$microId] == 0) {
-                if(isset($_POST["keepImg"]) && isset($_POST["keepImg"][$microId]) && $_POST["keepImg"][$microId])
+            if($imgs['size'][$formMicroId] == 0) {
+                if(isset($_POST["keepImg"]) && isset($_POST["keepImg"][$formMicroId]) && $_POST["keepImg"][$formMicroId])
                     continue;
 
                 $existingImgs = glob(__DIR__ . "/../public/img/micros/" . "$microId.*");
@@ -119,9 +120,9 @@
             }
 
             // retrieve the file extension
-            $fileType = $imgs['type'][$microId];
+            $fileType = $imgs['type'][$formMicroId];
             $fileType = substr($fileType, strrpos($fileType, "/") + 1);
-            $tmpName = $imgs['tmp_name'][$microId];
+            $tmpName = $imgs['tmp_name'][$formMicroId];
             $image;
             switch ($fileType) {
                 case "png":
@@ -179,4 +180,4 @@
         sendEmail($admin->getEmail(), $object, $content);
     }
     
-    redirect("/index"); //TODO: redirect to user's account
+    redirect("/account.php");
