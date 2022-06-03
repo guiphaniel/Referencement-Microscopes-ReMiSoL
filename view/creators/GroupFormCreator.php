@@ -39,13 +39,6 @@
 
             <fieldset id="micros">
                 <legend>Microscopes</legend>
-                <!-- Compagnies datalist -->
-                <datalist id="micro-compagnies">
-                <?php 
-                    foreach (CompagnyService::getInstance()->findAllCompagnies() as $compagny): ?>
-                        <option value="<?=$compagny->getName()?>">
-                    <?php endforeach; ?>
-                </datalist>
                 <!-- Keywords datalists -->
                 <?php 
                     $keyWordService = KeywordService::getInstance();
@@ -220,20 +213,25 @@
         ?>
         <fieldset id="micro-field-<?=$id?>" class="micro-field">
             <legend>Microscope n°<?=$fieldId?></legend>
-            <label for="micro-compagny-<?=$id?>">Société</label>
-            <input id="micro-compagny-<?=$id?>" class="micro-compagy" list="micro-compagnies" name="micros[<?=$id?>][compagny]" <?=$this->valueOf($compagny?->getName())?> required>
-            <label for="micro-brand-<?=$id?>">Marque</label>
-            <input id="micro-brand-<?=$id?>" class="micro-brand" list="micro-brands-<?=$id?>" name="micros[<?=$id?>][brand]" <?=$this->valueOf($brand?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
-            <datalist id="micro-brands-<?=$id?>">
-            </datalist>
-            <label for="micro-model-<?=$id?>">Modèle</label>
-            <input id="micro-model-<?=$id?>" list="micro-models-<?=$id?>" name="micros[<?=$id?>][model]" <?=$this->valueOf($model?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
-            <datalist id="micro-models-<?=$id?>">
-            </datalist>
-            <label for="micro-controller-<?=$id?>">Électronique / Contrôleur</label>
-            <input id="micro-controller-<?=$id?>" list="micro-controllers-<?=$id?>" name="micros[<?=$id?>][controller]" <?=$this->valueOf($controller?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
-            <datalist id="micro-controllers-<?=$id?>">
-            </datalist>
+            <label for="micro-compagnies-<?=$id?>">Société</label>
+            <select id="micro-compagnies-<?=$id?>" class="micro-compagnies" name="micros[<?=$id?>][compagny]" <?=$this->valueOf($compagny?->getName())?> required>
+            <option value="" selected disabled hidden>Choisissez ici</option>
+                <?php foreach (CompagnyService::getInstance()->findAllCompagnies() as $compagny): ?>
+                    <option value="<?=$compagny->getName()?>"><?=$compagny->getName()?></option>
+                <?php endforeach; ?>
+            </select>
+            <label for="micro-brands-<?=$id?>">Marque</label>
+            <select id="micro-brands-<?=$id?>" class="micro-brands" name="" <?=$this->valueOf($brand?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
+                <option value="" selected disabled hidden>Choisissez ici</option>
+            </select>
+            <label for="micro-models-<?=$id?>">Modèle</label>
+            <select id="micro-models-<?=$id?>" name="micros[<?=$id?>][model]" <?=$this->valueOf($model?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
+                <option value="" selected disabled hidden>Choisissez ici</option>
+            </select>
+            <label for="micro-controllers-<?=$id?>">Électronique / Contrôleur</label>
+            <select id="micro-controllers-<?=$id?>" name="micros[<?=$id?>][controller]" <?=$this->valueOf($controller?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
+                <option value="" selected disabled hidden>Choisissez ici</option>
+            </select>
             <label for="micro-type-<?=$id?>">Type</label>
             <select id="micro-type-<?=$id?>" name="micros[<?=$id?>][type]">
                 <option value="LABO" <?=$micro?->getType() == "LABO" ? "selected" : ""?>>Laboratoire</option>

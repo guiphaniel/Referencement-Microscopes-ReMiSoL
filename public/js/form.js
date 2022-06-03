@@ -2,15 +2,15 @@
 /* fill coherent microscope infomations dataLists on input */
 
 //init input listeners for microscopes inputs
-document.addEventListener("input", onInput);
+document.addEventListener("change", onChange);
 
-function onInput(event) {
-    let input = event.target;
+function onChange(event) {
+    let select = event.target;
 
-    if(input.className == "micro-compagy")
-        onCompagnyInput(input);
-    else if(input.className == "micro-brand")
-        onBrandInput(input);
+    if(select.className == "micro-compagnies")
+        onCompagnySelect(select);
+    else if(select.className == "micro-brands")
+        onBrandSelect(select);
 }
 
 //init listeners for bt clicks
@@ -32,71 +32,58 @@ function onClick(event) {
     }
 }
 
-async function onCompagnyInput(input) {
-    const fieldsetId = input.id.split('-')[2];
+async function onCompagnySelect(select) {
+    const fieldsetId = select.id.split('-')[2];
     
-    if(input.value == "Homemade") {
-        let brandInput = document.getElementById(`micro-brand-` + fieldsetId);
-        let modelInput = document.getElementById(`micro-model-` + fieldsetId);
+    const brandSelect = document.getElementById(`micro-brands-` + fieldsetId);
+    const modelSelect = document.getElementById(`micro-models-` + fieldsetId);
+    const controllerSelect = document.getElementById(`micro-controllers-` + fieldsetId);
 
-        brandInput.value = "Homemade";
-        document.getElementById(`micro-brands-` + fieldsetId).innerHTML = "<option value='Homemade'>";
-        brandInput.disabled = false;
-        modelInput.value = "Homemade";
-        document.getElementById(`micro-models-` + fieldsetId).innerHTML = "<option value='Homemade'>";
-        modelInput.disabled = false;
+    if(select.value == "Homemade") {
+        brandSelect.value = "Homemade";
+        document.getElementById(`micro-brands-` + fieldsetId).innerHTML = "<option value='Homemade'>Homemade</option>";
+        brandSelect.disabled = false;
+        modelSelect.value = "Homemade";
+        document.getElementById(`micro-models-` + fieldsetId).innerHTML = "<option value='Homemade'>Homemade</option>";
+        modelSelect.disabled = false;
 
         let url = "/api/v1/listControllers.php";
-        let controllerDatalist = document.getElementById(`micro-controllers-` + fieldsetId);
-        fillDatalist(controllerDatalist, url).then(() => document.getElementById(`micro-controller-` + fieldsetId).disabled = false);
+        fillSelectOptions(controllerSelect, url);
     } else {
-        if(!isInputDatalistValid(input, document.getElementById("micro-compagnies"))) {
-            document.getElementById(`micro-brand-` + fieldsetId).disabled = true;
-            document.getElementById(`micro-model-` + fieldsetId).disabled = true;
-            document.getElementById(`micro-controller-` + fieldsetId).disabled = true;
+        modelSelect.disabled = true;
+        modelSelect.innerHTML = '<option value="" selected disabled hidden>Choisissez ici</option>'
+        controllerSelect.disabled = true;
+        controllerSelect.innerHTML = '<option value="" selected disabled hidden>Choisissez ici</option>';
+
+        const url = `/api/v1/listBrands.php?compagny=${select.value}`;
     
-            return;
-        }
+        fillSelectOptions(brandSelect, url);
     }
-
-    const url = `/api/v1/listBrands.php?compagny=${input.value}`;
-    
-    let brandDatalist = document.getElementById(`micro-brands-` + fieldsetId);
-
-    fillDatalist(brandDatalist, url).then(() => document.getElementById(`micro-brand-` + fieldsetId).disabled = false);
 }
 
-async function onBrandInput(input) {
-    const fieldsetId = input.id.split('-')[2];
+async function onBrandSelect(select) {
+    const fieldsetId = select.id.split('-')[2];
 
-    if(!isInputDatalistValid(input, document.getElementById("micro-brands-" + fieldsetId))) {
-        document.getElementById(`micro-model-` + fieldsetId).disabled = true;
-        document.getElementById(`micro-controller-` + fieldsetId).disabled = true;
+	const modelsUrl = `/api/v1/listModels.php?brand=${select.value}`;
+    let modelSelect = document.getElementById(`micro-models-` + fieldsetId);
+    fillSelectOptions(modelSelect, modelsUrl);
 
-        return;
-    }
-
-    let compagnyInput = document.getElementById("micro-compagny-" + fieldsetId);
-
-	const modelsUrl = `/api/v1/listModels.php?brand=${input.value}`;
-    let modelDatalist = document.getElementById(`micro-models-` + fieldsetId);
-    fillDatalist(modelDatalist, modelsUrl).then(() => document.getElementById(`micro-model-` + fieldsetId).disabled = false);
-
-    const controllersUrl = `/api/v1/listControllers.php?brand=${input.value}`
-    let controllerDatalist = document.getElementById(`micro-controllers-` + fieldsetId);
-    fillDatalist(controllerDatalist, controllersUrl).then(() => document.getElementById(`micro-controller-` + fieldsetId).disabled = false);
+    const controllersUrl = `/api/v1/listControllers.php?brand=${select.value}`
+    let controllerSelect = document.getElementById(`micro-controllers-` + fieldsetId);
+    fillSelectOptions(controllerSelect, controllersUrl);
 }
 
-async function fillDatalist(datalist, url) {
+async function fillSelectOptions(select, url) {
     // get data from the url
     const response = await fetch(url);
 	const data = await response.json();
 
-    let innerHTML = "";
+    let innerHTML = '<option value="" selected disabled hidden>Choisissez ici</option>';
 	for (let item of data) {
-		innerHTML += `<option value="${item.name}">`;
+		innerHTML += `<option value="${item.name}">${item.name}</option>`;
 	}
-    datalist.innerHTML = innerHTML;
+    select.innerHTML = innerHTML;
+    select.disabled = false;
 }
 
 function isInputDatalistValid(input, datalist) {
