@@ -122,31 +122,47 @@
             <fieldset>
                 <legend>Laboratoire / service</legend>
                 <address>
-                    <label for="lab-name">Nom du laboratoire</label>
-                    <input id="lab-name" type="text" name="lab[name]" autocomplete="organization" <?=$this->valueOf($lab?->getName())?> required>
-                    <label for="lab-code">Code</label>
-                    <select name="lab[type]" id="lab-type" required>
-                    <?php foreach ($this->labTypes as $labType) : ?>
-                        <option value=<?=$labType;?> <?= $lab?->getType() == $labType ? "selected" : "" ?>><?=$labType?></option>
-                    <?php endforeach; ?>
-                    </select>
-                    <input id="lab-code" type="number" name="lab[code]" min="10" max="9999" <?=$this->valueOf($lab?->getCode())?> required>
-                    <label for="lab-address-school">Université / École</label>
-                    <input id="lab-address-school" type="text" name="lab[address][school]" <?=$this->valueOf($lab?->getAddress()->getSchool())?>>
-                    <label for="lab-address-street">Adresse</label>
-                    <input id="lab-address-street" type="text" name="lab[address][street]" autocomplete="address-line1" <?=$this->valueOf($lab?->getAddress()->getStreet())?> required>
-                    <label for="lab-address-zip">Code postal</label>
-                    <input id="lab-address-zip" type="text" name="lab[address][zipCode]" autocomplete="postal-code" <?=$this->valueOf($lab?->getAddress()->getZipCode())?> required>
-                    <label for="lab-address-city">Ville</label>
-                    <input id="lab-address-city" type="text" name="lab[address][city]" autocomplete="address-level2" <?=$this->valueOf($lab?->getAddress()->getCity())?> required>
+                    <div class="input-wrapper">
+                        <input id="lab-name" type="text" name="lab[name]" autocomplete="organization" <?=$this->valueOf($lab?->getName())?> placeholder=" " required>
+                        <label for="lab-name">Nom du laboratoire</label>
+                    </div>
+                    <div class="select-input">
+                        <select name="lab[type]" id="lab-type" required>
+                            <?php foreach ($this->labTypes as $labType) : ?>
+                                <option value=<?=$labType;?> <?= $lab?->getType() == $labType ? "selected" : "" ?>><?=$labType?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <div class="input-wrapper">
+                            <input id="lab-code" type="number" name="lab[code]" min="10" max="9999" <?=$this->valueOf($lab?->getCode())?> placeholder=" " required>
+                            <label for="lab-code">Code</label>
+                        </div>
+                    </div>
+                    <div class="input-wrapper">
+                        <input id="lab-address-school" type="text" name="lab[address][school]" <?=$this->valueOf($lab?->getAddress()->getSchool())?> placeholder=" ">
+                        <label for="lab-address-school">Université / École</label>
+                    </div>
+                    <div class="input-wrapper">
+                        <input id="lab-address-street" type="text" name="lab[address][street]" autocomplete="address-line1" <?=$this->valueOf($lab?->getAddress()->getStreet())?> placeholder=" " required>
+                        <label for="lab-address-street">Adresse</label>
+                    </div>
+                    <div class="input-wrapper">
+                        <input id="lab-address-zip" type="text" name="lab[address][zipCode]" autocomplete="postal-code" <?=$this->valueOf($lab?->getAddress()->getZipCode())?> placeholder=" " required>
+                        <label for="lab-address-zip">Code postal</label>
+                    </div>
+                    <div class="input-wrapper">
+                        <input id="lab-address-city" type="text" name="lab[address][city]" autocomplete="address-level2" <?=$this->valueOf($lab?->getAddress()->getCity())?> placeholder=" " required>
+                        <label for="lab-address-city">Ville</label>
+                    </div>
                     <label for="lab-address-country">Pays</label>
                     <select name="lab[address][country]" id="lab-address-country" autocomplete="country">
-                    <?php foreach ($this->countries as $country) : ?>
-                        <option value="<?=$country;?>"<?=$this->selectCountry($country)?>><?=$country?></option>
-                    <?php endforeach; ?>
+                        <?php foreach ($this->countries as $country) : ?>
+                            <option value="<?=$country;?>"<?=$this->selectCountry($country)?>><?=$country?></option>
+                        <?php endforeach; ?>
                     </select>
-                    <label for="lab-website">Site web</label>
-                    <input id="lab-website" type="url" name="lab[website]" autocomplete="url" <?=$this->valueOf($lab?->getWebsite())?> required>
+                    <div class="input-wrapper">
+                        <input id="lab-website" type="url" name="lab[website]" autocomplete="url" <?=$this->valueOf($lab?->getWebsite())?> placeholder=" " required>
+                        <label for="lab-website">Site web</label>
+                    </div>
                 </address>
             </fieldset>   
         <?php
@@ -231,8 +247,8 @@
                 <option value="INDU" <?=$micro?->getAccess() == "INDU" ? "selected" : ""?>>Industriels</option>
                 <option value="BOTH" <?=$micro?->getAccess() == "BOTH" ? "selected" : ""?>>Académiques et Industriels</option>
             </select>
-            <label for="micro-descr-<?=$id?>">Descrription</label>
-            <textarea id="micro-descr-<?=$id?>" name="micros[<?=$id?>][descr]" cols="30" rows="10" required><?=$micro?->getDescr()?></textarea>
+            <label for="micro-descr-<?=$id?>">Description</label>
+            <textarea id="micro-descr-<?=$id?>" name="micros[<?=$id?>][descr]" maxlength="2000" cols="30" rows="10" required><?=$micro?->getDescr()?></textarea>
             <div>
                 <label for="micro-img-<?=$id?>">Photo</label>
                     <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
