@@ -38,5 +38,5 @@
         $_SESSION["user"][$property->getName()] = $property->getValue($user);
     }
 
-    header('location: /form.php');
+    header('location: /account.php');
 
