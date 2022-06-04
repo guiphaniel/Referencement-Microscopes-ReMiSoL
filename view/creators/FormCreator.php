@@ -29,8 +29,8 @@
         }
 
         function end() {
-            echo "</div>";
             echo "</form>";
+            echo "</div>";
         }
 
         function create() {

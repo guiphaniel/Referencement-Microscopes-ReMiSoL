@@ -6,7 +6,7 @@
     include_once(__DIR__ . "/../../utils/normalize_utf8_string.php");
 
     Class GroupFormCreator extends FormCreator {
-        private $labTypes = ["UPR", "UMR", "IRL", "UAR", "FR", "EMR"];
+        private $labTypes = ["EMR", "FR", "IRL", "UAR", "UMR", "UPR", "Autre"];
         private $countries = ["Belgique", "France", "Suisse"]; // Belgium, France, Switzerland
         private $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
 
@@ -121,6 +121,7 @@
                     </div>
                     <div class="select-input">
                         <select name="lab[type]" id="lab-type" required>
+                            <option value="">Selectionnez un acronyme</option>
                             <?php foreach ($this->labTypes as $labType) : ?>
                                 <option value=<?=$labType;?> <?= $lab?->getType() == $labType ? "selected" : "" ?>><?=$labType?></option>
                             <?php endforeach; ?>
@@ -150,7 +151,7 @@
                         <label for="lab-address-country">Pays</label>
                         <select name="lab[address][country]" id="lab-address-country" autocomplete="country">
                             <?php foreach ($this->countries as $country) : ?>
-                                <option value="<?=$country;?>"<?=$this->selectCountry($country)?>><?=$country?></option>
+                                <option value="<?=$country;?>" <?=$this->selectCountry($country)?>><?=$country?></option>
                                 <?php endforeach; ?>
                             </select>
                     </div>
@@ -189,7 +190,7 @@
                         <select name="contacts[<?=$id?>][phoneCode]" id="contact-phone-code-<?=$id?>" autocomplete="tel-country-code">
                             <?php foreach ($this->phoneCodes as $codeCountry) : 
                                 $code = substr($codeCountry, 0, strpos($codeCountry, ' '));?>
-                                <option value="<?=$code;?>"<?=$this->selectPhoneCode($contact, $code)?>><?=$codeCountry?></option>
+                                <option value="<?=$code;?>" <?=$this->selectPhoneCode($contact, $code)?>><?=$codeCountry?></option>
                                 <?php endforeach; ?>
                         </select>
                         <div class="input-wrapper">

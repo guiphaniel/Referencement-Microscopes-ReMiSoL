@@ -706,13 +706,25 @@ text-align: center;
 
 /* SEARCH BAR */
 
+#search-wrapper {
+    position: relative;
+    background: black;
+}
+
 #search-label {
     width: 100%;
-    padding: var(--global-padding-1);
-    background: black;
+    height: 100%;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+}
+
+#searchbar {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    padding: var(--global-padding-1);
 }
 
 #search-bt {
@@ -725,7 +737,6 @@ text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: 2s;
     pointer-events: none;
 }
 
@@ -739,17 +750,16 @@ text-align: center;
 #search-bt svg {
     fill: white;
     position: absolute;
-    transform: scale(15%);
+    transform: scale(25%);
     pointer-events: none;
 }
 
 #search-input {
     background: none;
-    float: left;
     padding: 0;
     color: white;
     font-size: 20px;
-    transition: 0.4s;
+    transition: var(--trans-dur);
     line-height: 50px;
     width: 0;
 }
