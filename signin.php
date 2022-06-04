@@ -46,12 +46,12 @@
                             $value = substr($code, 0, strpos($code, ' '));?>
                             <option value=<?=$value;?> <?= $value == "+33" ? "selected" : "";?>><?=$code?></option>
                             <?php endforeach; ?>
-                        </select>
-                        <div class="input-wrapper">
-                            <input id="phone" type="text" name="phoneNum" autocomplete="tel-national" placeholder=" " required>
-                            <label for="phone">Télephone</label>
-                        </div>
+                    </select>
+                    <div class="input-wrapper">
+                        <input id="phone" type="text" name="phoneNum" autocomplete="tel-national" placeholder=" " required>
+                        <label for="phone">Télephone</label>
                     </div>
+                </div>
                 <div class="input-wrapper">
                     <input id="password1" type="password" autocomplete="new-password" name="password1" placeholder=" " required>
                     <label for="password1">Mot de passe</label>
