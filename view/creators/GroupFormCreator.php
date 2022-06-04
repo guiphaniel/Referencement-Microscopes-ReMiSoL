@@ -19,7 +19,7 @@
             $this->createLabField($this->group?->getLab());
             ?>
             <fieldset id="contacts">
-                <legend>Référent·e·s</legend>
+                <legend><h2>Référent·e·s</h2></legend>
                 <?php
                 //create contact fields (only the first one isn't removable)
                 $first = true;  
@@ -31,14 +31,14 @@
                         continue;
                 } 
                 ?>
-                <div id="add-contact" class="add-bt"></div>
+                <div id="add-contact" class="add-bt">Ajouter un·e référent·e</div>
             </fieldset>
             <?php
             $this->createCoorField($this->group?->getCoor());
             ?>
 
             <fieldset id="micros">
-                <legend>Microscopes</legend>
+                <legend><h2>Microscopes</h2></legend>
                 <!-- Keywords datalists -->
                 <?php 
                     $keyWordService = KeywordService::getInstance();
@@ -65,7 +65,7 @@
                             $first = false;
                     }  
                 ?>
-                <div id="add-micro" class="add-bt"></div>
+                <div id="add-micro" class="add-bt">Ajouter un microscope</div>
             </fieldset>
             <input type="submit">
             <?php
@@ -113,7 +113,7 @@
     private function createLabField($lab) {
         ?>
             <fieldset>
-                <legend>Laboratoire / service</legend>
+                <legend><h2>Laboratoire / service</h2></legend>
                 <address>
                     <div class="input-wrapper">
                         <input id="lab-name" type="text" name="lab[name]" autocomplete="organization" <?=$this->valueOf($lab?->getName())?> placeholder=" " required>
@@ -146,12 +146,14 @@
                         <input id="lab-address-city" type="text" name="lab[address][city]" autocomplete="address-level2" <?=$this->valueOf($lab?->getAddress()->getCity())?> placeholder=" " required>
                         <label for="lab-address-city">Ville</label>
                     </div>
-                    <label for="lab-address-country">Pays</label>
-                    <select name="lab[address][country]" id="lab-address-country" autocomplete="country">
-                        <?php foreach ($this->countries as $country) : ?>
-                            <option value="<?=$country;?>"<?=$this->selectCountry($country)?>><?=$country?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <div class="select-wrapper">
+                        <label for="lab-address-country">Pays</label>
+                        <select name="lab[address][country]" id="lab-address-country" autocomplete="country">
+                            <?php foreach ($this->countries as $country) : ?>
+                                <option value="<?=$country;?>"<?=$this->selectCountry($country)?>><?=$country?></option>
+                                <?php endforeach; ?>
+                            </select>
+                    </div>
                     <div class="input-wrapper">
                         <input id="lab-website" type="url" name="lab[website]" autocomplete="url" <?=$this->valueOf($lab?->getWebsite())?> placeholder=" " required>
                         <label for="lab-website">Site web</label>
@@ -165,24 +167,36 @@
         $id = $contact?->getId()??$fieldId;
         ?>
             <fieldset id="contact-field-<?=$id?>" class="contact-field">
-                <legend>Référent·e n°<?=$fieldId?></legend>
+                <legend><h3>Référent·e n°<?=$fieldId?></h3></legend>
                 <address>
-                    <label for="contact-firstname-<?=$id?>">Prénom</label>
-                    <input id="contact-firstname-<?=$id?>" type="text" name="contacts[<?=$id?>][firstname]" autocomplete="given-name" <?=$this->valueOf($contact?->getFirstname())?> required>
-                    <label for="contact-lastname-<?=$id?>">Nom</label>
-                    <input id="contact-lastname-<?=$id?>" type="text" name="contacts[<?=$id?>][lastname]" autocomplete="family-name" <?=$this->valueOf($contact?->getLastname())?> required>
-                    <label for="contact-role-<?=$id?>">Titre</label>
-                    <input id="contact-role-<?=$id?>" type="text" name="contacts[<?=$id?>][role]" autocomplete="organization-title" <?=$this->valueOf($contact?->getRole())?> required>
-                    <label for="contact-email-<?=$id?>">Email</label>
-                    <input id="contact-email-<?=$id?>" type="text" name="contacts[<?=$id?>][email]" autocomplete="email" <?=$this->valueOf($contact?->getEmail())?> required>
-                    <label for="contact-phone-<?=$id?>">Téléphone</label>
-                    <select name="contacts[<?=$id?>][phoneCode]" id="contact-phone-code-<?=$id?>" autocomplete="tel-country-code">
-                    <?php foreach ($this->phoneCodes as $codeCountry) : 
-                        $code = substr($codeCountry, 0, strpos($codeCountry, ' '));?>
-                        <option value="<?=$code;?>"<?=$this->selectPhoneCode($contact, $code)?>><?=$codeCountry?></option>
-                    <?php endforeach; ?>
-                    </select>
-                    <input id="contact-phone-<?=$id?>" type="text" name="contacts[<?=$id?>][phoneNum]" autocomplete="tel-national" <?=$this->valueOf($contact?->getPhoneNum())?> required>
+                    <div class="input-wrapper">
+                        <input id="contact-firstname-<?=$id?>" type="text" name="contacts[<?=$id?>][firstname]" autocomplete="given-name" <?=$this->valueOf($contact?->getFirstname())?> placeholder=" " required>
+                        <label for="contact-firstname-<?=$id?>">Prénom</label>
+                    </div>
+                    <div class="input-wrapper">
+                        <input id="contact-lastname-<?=$id?>" type="text" name="contacts[<?=$id?>][lastname]" autocomplete="family-name" <?=$this->valueOf($contact?->getLastname())?> placeholder=" " required>
+                        <label for="contact-lastname-<?=$id?>">Nom</label>
+                    </div>
+                    <div class="input-wrapper">
+                        <input id="contact-role-<?=$id?>" type="text" name="contacts[<?=$id?>][role]" autocomplete="organization-title" <?=$this->valueOf($contact?->getRole())?> placeholder=" " required>
+                        <label for="contact-role-<?=$id?>">Titre</label>
+                    </div>
+                    <div class="input-wrapper">
+                        <input id="contact-email-<?=$id?>" type="text" name="contacts[<?=$id?>][email]" autocomplete="email" <?=$this->valueOf($contact?->getEmail())?> placeholder=" " required>
+                        <label for="contact-email-<?=$id?>">Email</label>
+                    </div>
+                    <div class="select-input">
+                        <select name="contacts[<?=$id?>][phoneCode]" id="contact-phone-code-<?=$id?>" autocomplete="tel-country-code">
+                            <?php foreach ($this->phoneCodes as $codeCountry) : 
+                                $code = substr($codeCountry, 0, strpos($codeCountry, ' '));?>
+                                <option value="<?=$code;?>"<?=$this->selectPhoneCode($contact, $code)?>><?=$codeCountry?></option>
+                                <?php endforeach; ?>
+                        </select>
+                        <div class="input-wrapper">
+                            <input id="contact-phone-<?=$id?>" type="text" name="contacts[<?=$id?>][phoneNum]" autocomplete="tel-national" <?=$this->valueOf($contact?->getPhoneNum())?> placeholder=" " required>
+                            <label for="contact-phone-<?=$id?>">Téléphone</label>
+                        </div>
+                    </div>
                 </address>
                 <?php if($removable) : ?>
                     <div id="rm-contact-<?=$id?>" class="rm-bt" data-type="ol"></div>
@@ -194,11 +208,15 @@
     private function createCoorField($coor) {
         ?>
             <fieldset id="coor">
-                <legend>Coordonnées</legend>
-                <label for="lat">Latitude</label>
-                <input id="lat" type="number" name="coor[lat]" min="41" max="52" step="0.00001" <?=$this->valueOf($coor?->getLat())?> required>
-                <label for="lon">Longitude</label>
-                <input id="lon" type="number" name="coor[lon]" min="-6" max="11" step="0.00001" <?=$this->valueOf($coor?->getLon())?> required>
+                <legend><h2>Coordonnées</h2></legend>
+                <div class="input-wrapper">
+                    <input id="lat" type="number" name="coor[lat]" min="41" max="52" step="0.00001" <?=$this->valueOf($coor?->getLat())?> placeholder=" " required>
+                    <label for="lat">Latitude</label>
+                </div>
+                <div class="input-wrapper">
+                    <input id="lon" type="number" name="coor[lon]" min="-6" max="11" step="0.00001" <?=$this->valueOf($coor?->getLon())?> placeholder=" " required>
+                    <label for="lon">Longitude</label>
+                </div>
             </fieldset>
         <?php
     }
@@ -212,41 +230,57 @@
         $compagny = $brand?->getCompagny();
         ?>
         <fieldset id="micro-field-<?=$id?>" class="micro-field">
-            <legend>Microscope n°<?=$fieldId?></legend>
-            <label for="micro-compagnies-<?=$id?>">Société</label>
-            <select id="micro-compagnies-<?=$id?>" class="micro-compagnies" name="micros[<?=$id?>][compagny]" <?=$this->valueOf($compagny?->getName())?> required>
-            <option value="" selected disabled hidden>Choisissez ici</option>
-                <?php foreach (CompagnyService::getInstance()->findAllCompagnies() as $compagny): ?>
-                    <option value="<?=$compagny->getName()?>"><?=$compagny->getName()?></option>
-                <?php endforeach; ?>
-            </select>
-            <label for="micro-brands-<?=$id?>">Marque</label>
-            <select id="micro-brands-<?=$id?>" class="micro-brands" name="micros[<?=$id?>][brand]" <?=$this->valueOf($brand?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
+            <legend><h3>Microscope n°<?=$fieldId?></h3></legend>
+            <div class="select-wrapper">
+                <label for="micro-compagnies-<?=$id?>">Société</label>
+                <select id="micro-compagnies-<?=$id?>" class="micro-compagnies" name="micros[<?=$id?>][compagny]" <?=$this->valueOf($compagny?->getName())?> required>
                 <option value="" selected disabled hidden>Choisissez ici</option>
-            </select>
-            <label for="micro-models-<?=$id?>">Modèle</label>
-            <select id="micro-models-<?=$id?>" name="micros[<?=$id?>][model]" <?=$this->valueOf($model?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
-                <option value="" selected disabled hidden>Choisissez ici</option>
-            </select>
-            <label for="micro-controllers-<?=$id?>">Électronique / Contrôleur</label>
-            <select id="micro-controllers-<?=$id?>" name="micros[<?=$id?>][controller]" <?=$this->valueOf($controller?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
-                <option value="" selected disabled hidden>Choisissez ici</option>
-            </select>
-            <label for="micro-type-<?=$id?>">Type</label>
-            <select id="micro-type-<?=$id?>" name="micros[<?=$id?>][type]">
-                <option value="LABO" <?=$micro?->getType() == "LABO" ? "selected" : ""?>>Laboratoire</option>
-                <option value="PLAT" <?=$micro?->getType() == "PLAT" ? "selected" : ""?>>Plateforme</option>
-            </select>
-            <label for="micro-rate-<?=$id?>">Tarification (le cas échéant. Lien internet)</label>
-            <input id="micro-rate-<?=$id?>" type="url" name="micros[<?=$id?>][rate]" <?=$this->valueOf($micro?->getRate())?> autocomplete="url">
-            <label for="micro-access-<?=$id?>">Ouvert aux</label>
-            <select name="micros[<?=$id?>][access]" id="micro-access-<?=$id?>">
-                <option value="ACAD" <?=$micro?->getAccess() == "ACAD" ? "selected" : ""?>>Académiques</option>
-                <option value="INDU" <?=$micro?->getAccess() == "INDU" ? "selected" : ""?>>Industriels</option>
-                <option value="BOTH" <?=$micro?->getAccess() == "BOTH" ? "selected" : ""?>>Académiques et Industriels</option>
-            </select>
-            <label for="micro-descr-<?=$id?>">Description</label>
-            <textarea id="micro-descr-<?=$id?>" name="micros[<?=$id?>][descr]" maxlength="2000" cols="30" rows="10" required><?=$micro?->getDescr()?></textarea>
+                    <?php foreach (CompagnyService::getInstance()->findAllCompagnies() as $compagny): ?>
+                        <option value="<?=$compagny->getName()?>"><?=$compagny->getName()?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="select-wrapper">
+                <label for="micro-brands-<?=$id?>">Marque</label>
+                <select id="micro-brands-<?=$id?>" class="micro-brands" name="micros[<?=$id?>][brand]" <?=$this->valueOf($brand?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
+                    <option value="" selected disabled hidden>Choisissez ici</option>
+                </select>
+            </div>
+            <div class="select-wrapper">
+                <label for="micro-models-<?=$id?>">Modèle</label>
+                <select id="micro-models-<?=$id?>" name="micros[<?=$id?>][model]" <?=$this->valueOf($model?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
+                    <option value="" selected disabled hidden>Choisissez ici</option>
+                </select>
+            </div>
+            <div class="select-wrapper">
+                <label for="micro-controllers-<?=$id?>">Électronique / Contrôleur</label>
+                <select id="micro-controllers-<?=$id?>" name="micros[<?=$id?>][controller]" <?=$this->valueOf($controller?->getName())?> required <?=isset($micro) ? "" : "disabled"?>>
+                    <option value="" selected disabled hidden>Choisissez ici</option>
+                </select>
+            </div>
+            <div class="select-wrapper">
+                <label for="micro-type-<?=$id?>">Type</label>
+                <select id="micro-type-<?=$id?>" name="micros[<?=$id?>][type]">
+                    <option value="LABO" <?=$micro?->getType() == "LABO" ? "selected" : ""?>>Laboratoire</option>
+                    <option value="PLAT" <?=$micro?->getType() == "PLAT" ? "selected" : ""?>>Plateforme</option>
+                </select>
+            </div>
+            <div class="input-wrapper">
+                <input id="micro-rate-<?=$id?>" type="url" name="micros[<?=$id?>][rate]" <?=$this->valueOf($micro?->getRate())?> autocomplete="url" placeholder=" ">
+                <label for="micro-rate-<?=$id?>">Tarification (si concerné : lien internet)</label>
+            </div>
+            <div class="select-wrapper">
+                <label for="micro-access-<?=$id?>">Ouvert aux</label>
+                <select name="micros[<?=$id?>][access]" id="micro-access-<?=$id?>">
+                    <option value="ACAD" <?=$micro?->getAccess() == "ACAD" ? "selected" : ""?>>Académiques</option>
+                    <option value="INDU" <?=$micro?->getAccess() == "INDU" ? "selected" : ""?>>Industriels</option>
+                    <option value="BOTH" <?=$micro?->getAccess() == "BOTH" ? "selected" : ""?>>Académiques et Industriels</option>
+                </select>
+            </div>
+            <div class="input-wrapper">
+                <textarea id="micro-descr-<?=$id?>" name="micros[<?=$id?>][descr]" maxlength="2000" cols="30" rows="10" placeholder=" " required><?=$micro?->getDescr()?></textarea>
+                <label for="micro-descr-<?=$id?>">Description (2000 caractères max.)</label>
+            </div>
             <div>
                 <label for="micro-img-<?=$id?>">Photo</label>
                     <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
@@ -275,7 +309,7 @@
             </div>
                 
             <fieldset id="keywords">
-                <legend>Mots-clés</legend>
+                <legend><h2>Mots-clés</h2></legend>
                 <?php 
                     $keyWordService = KeywordService::getInstance();
                     $cats = $keyWordService->findAllCategories();

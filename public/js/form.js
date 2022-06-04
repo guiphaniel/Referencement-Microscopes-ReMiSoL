@@ -20,12 +20,16 @@ function onClick(event) {
     let bt = event.target;
 
     if(bt.className == "rm-bt") {
-        bt.parentElement.remove()
+        const y = bt.parentElement.previousElementSibling.getBoundingClientRect().top + window.pageYOffset - 200;
+        window.scrollTo({top: y, behavior: 'smooth'});
+
+        bt.parentElement.remove();
+
         if(bt.dataset.type == "ol") {
             // update other fields' legend index
             let cpt = 1;
             for (const field of document.getElementsByClassName(bt.id.split("-")[1] + "-field")) {
-                let legend = field.querySelector("legend");
+                let legend = field.querySelector("legend h3");
                 legend.textContent =legend.textContent.substring(0, legend.textContent.lastIndexOf('°') + 1) + cpt++;
             }
         }
@@ -85,7 +89,7 @@ async function fillSelectOptions(select, url) {
 }
 
 function isInputDatalistValid(input, datalist) {
-    return datalist.querySelector("option[value='" + input.value + "']") != null;
+    return datalist.querySelector("option[value=\"" + input.value.replace(/"/g, '\\\"') + "\"]") != null;
 }
 
 /* ADD FIELDSETS */
@@ -100,16 +104,34 @@ function addField(fieldType, fieldId, firstField) {
     newField.className = fieldType + "-field";
     newField.innerHTML = firstField.innerHTML.replaceAll(`[${firstFieldId}]`, `[${fieldId}]`).replaceAll(`-${firstFieldId}`, `-${fieldId}`);
     // update legend's index
-    let legend = newField.querySelector("legend");
+    let legend = newField.querySelector("legend h3");
     legend.textContent = legend.textContent.substring(0, legend.textContent.lastIndexOf('°') + 1) + (document.getElementsByClassName(fieldType + "-field").length + 1);
 
     // add the form fieldset at the end of the form (before the add button)
     let addButton = document.getElementById("add-" + fieldType);
     fieldsWrapper.insertBefore(newField, addButton);
+    const y = newField.getBoundingClientRect().top + window.pageYOffset - 200;
+
+    window.scrollTo({top: y, behavior: 'smooth'});
+
+    newField.classList.add("closed");
+    window.setTimeout(() => newField.classList.remove("closed"), 1); // a timeout is needed, else css wont trigger the transition
+    
 
     // append the remove button to the fieldset
     let rmButton = document.createElement("div")
     rmButton.className = "rm-bt";
+    switch (fieldType) {
+        case "contact":
+            rmButton.innerHTML = "Supprimer la·le référent·e";
+            break;
+        case "micro":
+            rmButton.innerHTML = "Supprimer le microscope";
+            break;
+        default:
+            rmButton.innerHTML = "Supprimer"
+            break;
+    }
     rmButton.dataset.type = "ol"; // ordered list, so other elements get their index updated
     rmButton.id = "rm-" + fieldType + "-" + fieldId;
 
@@ -221,6 +243,7 @@ function addKeyword(keyword, catInput) {
 
     const rmBt = document.createElement("div");
     rmBt.className = "rm-bt";
+    rmBt.innerHTML = "X"
     rmBt.dataset.type = "ul";
 
     tag.append(rmBt);
@@ -278,6 +301,7 @@ document.addEventListener("change", function(event) {
 
         const rmBt = document.createElement("div");
         rmBt.className = "rm-bt";
+        rmBt.innerHTML = "Supprimer l'image"
         rmBt.addEventListener("click", function(e) {e.target.parentElement.previousSibling.value = null}) // set input value to null
         
         snapshotWrapper.append(snapshot);

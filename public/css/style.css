@@ -132,9 +132,13 @@ input[type=reset] {
     border-radius: 20px;
 }
 
-input {
+input, select, textarea {
     border: none;
     outline: none;
+}
+
+textarea {
+    resize: none;
 }
 
 /*HEADER*/
@@ -279,18 +283,6 @@ main {
 
 /*FORM*/
 
-.add-bt {
-    width: 20px;
-    height: 20px;
-    background-color: green;
-}
-
-.rm-bt {
-    width: 20px;
-    height: 20px;
-    background-color: red;
-}
-
 .edit-bt {
     width: 20px;
     height: 20px;
@@ -318,6 +310,192 @@ main {
     font-size: larger;
     margin-top: 2em;
     margin-bottom: 1em;
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-wrapper a {
+    margin-bottom: var(--global-margin-2);
+}
+
+.form-wrapper form {
+    background: var(--color-pri-2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 450px;
+    align-self: center;
+    padding: var(--global-padding-1);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--global-margin-1);
+}
+
+.input-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: var(--global-margin-1) 0;
+    position: relative;
+}
+
+.input-wrapper label {
+    color:var(--color-primary); 
+    position:absolute;
+    pointer-events:none;
+    user-select: none;
+    top: var(--global-padding-2);
+    left: var(--global-padding-2);
+    transition: 0.5s ease-in-out all; 
+}
+
+.input-wrapper input:focus ~label,
+.input-wrapper textarea:focus ~label,
+.input-wrapper input:not(:placeholder-shown) ~label,
+.input-wrapper textarea:not(:placeholder-shown) ~label
+{
+    top: -1.5em;
+    color: white;
+    transition: all ease-in-out var(--trans-dur);
+}
+
+.input-wrapper input, .input-wrapper textarea {
+    margin: 0;
+    width: 100%;
+    border-radius: var(--border-radius);
+    padding: var(--global-padding-2);
+    box-shadow: inset 0 2px 5px rgb(0 0 0 / 20%);
+    transition: all ease-in-out var(--trans-dur);
+}
+
+.input-wrapper input:focus,
+.input-wrapper textarea:focus {
+    box-shadow: inset 0 2px 5px rgb(0 0 0 / 25%);
+    transition: all ease-in-out var(--trans-dur);
+}
+
+.select-input {
+    display: flex;
+    width: 100%;
+    margin: var(--global-margin-1) 0;
+}
+
+.select-input select {
+    border: 0;
+    box-shadow: inset 0 2px 5px rgb(0 0 0 / 20%);
+    border-top-left-radius: var(--border-radius);   
+    border-bottom-left-radius: var(--border-radius);   
+}
+
+.select-input input {
+    border-top-left-radius: 0;   
+    border-bottom-left-radius: 0;  
+}
+
+.select-input .input-wrapper {
+    margin: 0;
+}
+
+.msg-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.msg {
+    padding: 1em;
+    margin: 2em 0;
+    border-radius: var(--border-radius);
+    width: fit-content;
+    text-align: center;
+    font-weight: bold;
+}
+
+.error-msg {
+    color: white;
+    background: crimson;
+}
+
+.info-msg {
+    background: aquamarine;
+}
+
+legend h2, legend h3 {
+    margin: 0;
+}
+
+fieldset {
+    padding: var(--global-padding-1);
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(1);
+    transform-origin: top;
+    transition: transform ease-in-out var(--trans-dur);
+}
+
+.closed {
+    transform: scale(0);
+    transition: none;
+}
+
+fieldset, address {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: var(--global-margin-1);
+}
+
+.select-input:last-of-type, .input-wrapper:last-of-type {
+    margin-bottom: 0;
+}
+
+.select-wrapper {
+    display: flex;
+    width: 100%;
+    margin: var(--global-margin-1) 0;
+    align-items: center;
+}
+
+.select-wrapper select {
+    margin: 0;
+    width: 100%;
+    border-radius: var(--border-radius);
+    padding: var(--global-padding-2);
+    box-shadow: inset 0 2px 5px rgb(0 0 0 / 20%);
+    transition: all ease-in-out var(--trans-dur);
+}
+
+.select-wrapper label {
+    margin-right: var(--global-margin-1);
+}
+
+.add-bt, .rm-bt {
+    width: fit-content;
+    height: fit-content;
+    padding: var(--global-padding-2);
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+}
+
+.add-bt {
+    background: aquamarine;
+}
+
+.rm-bt {
+    color: white;
+    background: crimson;
 }
 
 /* ASIDE */
@@ -583,120 +761,6 @@ text-align: center;
 
 #search-input:not(:placeholder-shown) ~ #search-bt {
     pointer-events: all;
-}
-
-/* FORM */
-
-.form-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.form-wrapper a {
-    margin-bottom: var(--global-margin-2);
-}
-
-.form-wrapper form {
-    background: var(--color-pri-2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 450px;
-    align-self: center;
-    padding: var(--global-padding-1);
-    border-radius: var(--border-radius);
-    margin-bottom: var(--global-margin-1);
-}
-
-.input-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
-    justify-content: space-between;
-    margin: var(--global-margin-1) 0;
-    position: relative;
-}
-
-.input-wrapper label {
-    color:var(--color-primary); 
-    position:absolute;
-    pointer-events:none;
-    user-select: none;
-    bottom: var(--global-padding-2);
-    left: var(--global-padding-2);
-    transition: 0.5s ease-in-out all; 
-}
-
-.input-wrapper input:focus ~label,
-.input-wrapper input:not(:placeholder-shown) ~label
-{
-    bottom: 2.5em;
-    color: white;
-    transition: all ease-in-out var(--trans-dur);
-}
-
-.input-wrapper input {
-    margin: 0;
-    width: 100%;
-    border-radius: var(--border-radius);
-    padding: var(--global-padding-2);
-    box-shadow: inset 0 2px 5px rgb(0 0 0 / 20%);
-    transition: all ease-in-out var(--trans-dur);
-}
-
-.input-wrapper input:focus {
-    box-shadow: inset 0 2px 5px rgb(0 0 0 / 25%);
-    transition: all ease-in-out var(--trans-dur);
-}
-
-.select-input {
-    display: flex;
-    width: 100%;
-    margin: var(--global-margin-1) 0;
-}
-
-.select-input select {
-    border: 0;
-    box-shadow: inset 0 2px 5px rgb(0 0 0 / 20%);
-    border-top-left-radius: var(--border-radius);   
-    border-bottom-left-radius: var(--border-radius);   
-}
-
-.select-input input {
-    border-top-left-radius: 0;   
-    border-bottom-left-radius: 0;  
-}
-
-.select-input .input-wrapper {
-    margin: 0;
-}
-
-.msg-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.msg {
-    padding: 1em;
-    margin: 2em 0;
-    border-radius: var(--border-radius);
-    width: fit-content;
-    text-align: center;
-    font-weight: bold;
-}
-
-.error-msg {
-    color: white;
-    background: crimson;
-}
-
-.info-msg {
-    background: aquamarine;
 }
 
 /* MICROSCOPES DETAILS */
