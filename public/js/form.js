@@ -175,6 +175,10 @@ document.getElementById("add-micro").addEventListener('click', function(){
     let tags = newField.getElementsByClassName("tag");
     while (tags.length > 0)
         tags[0].remove()
+
+    imgLabel = document.getElementById("micro-img-" + id).labels[0];
+    imgLabel.innerText = "Ajouter une image";
+    imgLabel.className = "bt add-bt";
     
     resetSelect(document.getElementById(`micro-brands-` + id));
     resetSelect(document.getElementById(`micro-models-` + id));
