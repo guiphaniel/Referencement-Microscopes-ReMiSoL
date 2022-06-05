@@ -33,7 +33,7 @@
                 <input id="password" type="password" autocomplete="current-password" name="password" placeholder=" " required>
                 <label for="password">Mot de passe</label>
             </div>
-                <input type="submit">
+                <input type="submit" class="bt">
             </form>
             <a href="signin.php">Pas encore de compte ?</a>
             <a href="password_forgotten.php">Mot de passe oublié ?</a>

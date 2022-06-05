@@ -72,7 +72,7 @@
                 endforeach; ?>
                 <div id="add-cmp" class="add-bt"></div>
             </div>
-            <input type="submit">
+            <input type="submit" class="bt">
             <?php
         }
     }

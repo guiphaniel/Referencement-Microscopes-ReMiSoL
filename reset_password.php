@@ -46,7 +46,7 @@
             <input id="password1" type="password" autocomplete="new-password" name="password1" required>
             <label for="password2">Vérification du mot de passe</label>
             <input id="password2" type="password" name="password2" required>
-            <input type="submit">
+            <input type="submit" class="bt">
         </form>
     </main>
     <footer>

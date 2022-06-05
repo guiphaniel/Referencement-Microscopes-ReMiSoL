@@ -49,7 +49,7 @@
                 <form id="map-filters">
                     <div id="map-filters-header">
                         <h2>Filtres</h2>
-                        <input id="filters-reset" type="reset" value="Réinitialiser">
+                        <input id="filters-reset" type="reset" class="bt" value="Réinitialiser">
                     </div>
                     <div class="filters-group">
                         <h3>Sociétés</h3>

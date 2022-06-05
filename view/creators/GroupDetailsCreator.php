@@ -20,7 +20,7 @@
                 if($this->group->isLocked() == true && $_SESSION["user"]["admin"]): ?>
                     <form action="/processing/unlock_group_processing.php" method="GET">
                         <input type="hidden" name="groupId" value="<?=$groupId?>">
-                        <input type="submit" value="Valider la fiche">
+                        <input type="submit" value="Valider la fiche" class="bt">
                     </form>
                 <?php endif; ?>
                 <a href="/edit_micros_group.php?id=<?=$groupId?>"><div class="edit-bt"></div></a>

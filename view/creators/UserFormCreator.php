@@ -38,7 +38,7 @@
                     <label for="admin">Administrateur</label>
                     <input type="checkbox" id="admin" name="admin" <?= $this->user->isAdmin() ? "checked" : "";?>>
                 <?php endif; ?>
-                <input type="submit">
+                <input type="submit" class="bt">
                 <div class="rm-bt"></div>
             <?php
         }

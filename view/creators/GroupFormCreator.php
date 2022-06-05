@@ -31,7 +31,7 @@
                         continue;
                 } 
                 ?>
-                <div id="add-contact" class="add-bt">Ajouter un·e référent·e</div>
+                <div id="add-contact" class="bt add-bt">Ajouter un·e référent·e</div>
             </fieldset>
             <?php
             $this->createCoorField($this->group?->getCoor());
@@ -65,9 +65,9 @@
                             $first = false;
                     }  
                 ?>
-                <div id="add-micro" class="add-bt">Ajouter un microscope</div>
+                <div id="add-micro" class="bt add-bt">Ajouter un microscope</div>
             </fieldset>
-            <input type="submit">
+            <input class="bt" type="submit">
             <?php
         }
 
@@ -200,7 +200,7 @@
                     </div>
                 </address>
                 <?php if($removable) : ?>
-                    <div id="rm-contact-<?=$id?>" class="rm-bt" data-type="ol"></div>
+                    <div id="rm-contact-<?=$id?>" class="bt rm-bt" data-type="ol"></div>
                 <?php endif; ?>
             </fieldset>
         <?php
@@ -299,20 +299,20 @@
                 ?>
                             <div class="snapshot-wrapper">
                                 <img class="micro-snapshot" src="/public/img/micros/<?=$microId . $extension?>" alt="Microscope <?=$name?>">
-                                <div class="rm-bt"></div>
+                                <div class="bt rm-bt"></div>
                                 <input type="hidden" name="keepImg[<?=$microId?>]" value="true">
                             </div>
                             <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
-                            <label for="micro-img-<?=$id?>" class="edit-bt">Modifier l'image</label>
+                            <label for="micro-img-<?=$id?>" class="bt edit-bt">Modifier l'image</label>
                 <?php
                         else: ?>
                             <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
-                            <label for="micro-img-<?=$id?>" class="add-bt">Ajouter une image</label>
+                            <label for="micro-img-<?=$id?>" class="bt add-bt">Ajouter une image</label>
                 <?php 
                         endif;
                     else: ?>
                         <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
-                        <label for="micro-img-<?=$id?>" class="add-bt">Ajouter une image</label>
+                        <label for="micro-img-<?=$id?>" class="bt add-bt">Ajouter une image</label>
                 <?php
                     endif;
                 ?>
@@ -334,7 +334,7 @@
                             return $kw->getCat()->getName() == $catName;
                             }) as $kw): ?>
                             <div class="tag">
-                                <div class="rm-bt" data-type="ul"></div>
+                                <div class="bt rm-bt" data-type="ul"></div>
                                 <?=$kw->getTag()?>
                                 <input id="micro-kw-<?=strNormalize($catName)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$catName?>][]" value="<?=$kw->getTag()?>">
                             </div>
@@ -342,7 +342,7 @@
                     endforeach; ?>
             </fieldset>
             <?php if($removable) : ?>
-                <div class="rm-bt" data-type="ol" id="rm-micro-<?=$id?>"></div>
+                <div class="bt rm-bt" data-type="ol" id="rm-micro-<?=$id?>"></div>
             <?php endif; ?>
         </fieldset>
         <?php

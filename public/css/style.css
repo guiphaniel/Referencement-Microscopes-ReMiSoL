@@ -128,9 +128,6 @@ input[type=submit],
 input[type=reset] {
     color: white;
     background-color: black;
-    padding: var(--global-padding-2);
-    border-radius: 20px;
-    cursor: pointer;
 }
 
 input, select, textarea {
@@ -284,7 +281,7 @@ main {
 
 /*FORM*/
 
-.add-bt, .rm-bt, .edit-bt {
+.bt {
     width: fit-content;
     height: fit-content;
     padding: var(--global-padding-2);
@@ -293,6 +290,12 @@ main {
     align-items: center;
     border-radius: 20px;
     cursor: pointer;
+    transition: box-shadow var(--trans-dur);
+}
+
+.bt:hover {
+    box-shadow: 0 0 15px rgb(0 0 0 / 20%);
+    transition: box-shadow var(--trans-dur);
 }
 
 .add-bt {

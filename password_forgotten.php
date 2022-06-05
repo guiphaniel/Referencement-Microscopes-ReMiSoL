@@ -31,7 +31,7 @@
                     <input id="email" type="email" autocomplete="email" name="email" placeholder=" " required>
                     <label for="email">Courriel</label>
                 </div>
-                    <input type="submit" value="Envoyer">
+                    <input type="submit" value="Envoyer" class="bt">
             </form>
         </div>
     </main>

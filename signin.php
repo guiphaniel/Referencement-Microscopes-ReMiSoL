@@ -60,7 +60,7 @@
                     <input id="password2" type="password" name="password2" placeholder=" " required>
                     <label for="password2">Vérification du mot de passe</label>
                 </div>
-                <input type="submit">
+                <input type="submit" class="bt">
             </form>
         </div>
         

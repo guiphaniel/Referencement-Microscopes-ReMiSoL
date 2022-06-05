@@ -34,7 +34,7 @@
                 endforeach; ?>
                 <div class="add-bt add-cat">c</div>
             </div>
-            <input type="submit">
+            <input type="submit" class="bt">
             <?php
         }
     }
