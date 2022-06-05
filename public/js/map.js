@@ -30,7 +30,7 @@ async function loadAndShowGroups(url) {
 				type = micro.type == "LABO" ? "lab" : "plat";
 				first = false;
 			} else {
-				if(micro.type == "LABO" ? "lab" : "plat" != type) {
+				if((micro.type == "LABO" ? "lab" : "plat") != type) {
 					type = "mix";
 					break;
 				}
