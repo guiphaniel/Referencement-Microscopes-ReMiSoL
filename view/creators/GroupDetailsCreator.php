@@ -14,7 +14,7 @@
                 <script src="/public/js/delete_group.js" defer></script>
                 <form action="/processing/delete_group_processing.php" method="POST">
                     <input type="hidden" name="groupId" value="<?=$groupId?>">
-                    <div class="rm-bt"></div>
+                    <div class="bt rm-bt"></div>
                 </form>
                 <?php
                 if($this->group->isLocked() == true && $_SESSION["user"]["admin"]): ?>
@@ -23,7 +23,7 @@
                         <input type="submit" value="Valider la fiche" class="bt">
                     </form>
                 <?php endif; ?>
-                <a href="/edit_micros_group.php?id=<?=$groupId?>"><div class="edit-bt"></div></a>
+                <a href="/edit_micros_group.php?id=<?=$groupId?>"><div class="bt edit-bt"></div></a>
             <?php
             endif;
         }

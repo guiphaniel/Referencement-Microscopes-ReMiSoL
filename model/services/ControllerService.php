@@ -62,6 +62,8 @@
         function findAllControllers($brand = null) : array {
             global $pdo;
             $controllers = [];
+            if($brand?->getName() === "Homemade") // if the brand is Homemade, we want to retrieve all the controllers
+                unset($brand);
 
             $sql = "SELECT * FROM controller";
             if (isset($brand)) {

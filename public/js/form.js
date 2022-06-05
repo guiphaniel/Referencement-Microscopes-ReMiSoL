@@ -254,7 +254,7 @@ function addKeyword(keyword, catInput) {
 
     tag.append(keyword);
 
-    catInput.parentElement.append(tag);
+    catInput.parentElement.nextElementSibling.append(tag);
 
     // add hidden input with keyword
     let hiddenInput = document.createElement("input")
