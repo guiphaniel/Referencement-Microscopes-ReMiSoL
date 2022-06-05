@@ -282,9 +282,8 @@
                 <textarea id="micro-descr-<?=$id?>" name="micros[<?=$id?>][descr]" maxlength="2000" cols="30" rows="10" placeholder=" " required><?=$micro?->getDescr()?></textarea>
                 <label for="micro-descr-<?=$id?>">Description (2000 caractères max.)</label>
             </div>
-            <div>
-                <label for="micro-img-<?=$id?>">Photo</label>
-                    <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
+            <fieldset>
+            <legend><h4>Image</h4></legend>
                 <?php 
                     if(isset($micro)) :
                         $microId = $micro->getId();
@@ -298,39 +297,49 @@
                             else
                                 $extension = ".jpeg"; 
                 ?>
-                            <div>
+                            <div class="snapshot-wrapper">
                                 <img class="micro-snapshot" src="/public/img/micros/<?=$microId . $extension?>" alt="Microscope <?=$name?>">
                                 <div class="rm-bt"></div>
                                 <input type="hidden" name="keepImg[<?=$microId?>]" value="true">
                             </div>
+                            <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
+                            <label for="micro-img-<?=$id?>" class="edit-bt">Modifier l'image</label>
                 <?php
-                        endif; 
+                        else: ?>
+                            <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
+                            <label for="micro-img-<?=$id?>" class="add-bt">Ajouter une image</label>
+                <?php 
+                        endif;
+                    else: ?>
+                        <input id="micro-img-<?=$id?>" name="imgs[<?=$id?>]" type="file" accept="image/png, image/jpg, image/jpeg, image/webp">
+                        <label for="micro-img-<?=$id?>" class="add-bt">Ajouter une image</label>
+                <?php
                     endif;
                 ?>
-            </div>
+            </fieldset>
                 
             <fieldset id="keywords">
-                <legend><h2>Mots-clés</h2></legend>
+                <legend><h4>Mots-clés</h4></legend>
                 <?php 
                     $keyWordService = KeywordService::getInstance();
                     $cats = $keyWordService->findAllCategories();
                     foreach ($cats as $cat): 
                         $catName =$cat->getName();
                         $normCat = strNormalize($catName)?>
-                        <div>
+                        <div class="input-wrapper">
+                            <input id="cat-<?=$normCat?>-<?=$id?>" class="cat-input" list="cats-<?=$normCat?>" placeholder=" ">
                             <label for="cat-<?=$normCat?>-<?=$id?>"><?=$catName?></label>
-                            <input id="cat-<?=$normCat?>-<?=$id?>" class="cat-input" list="cats-<?=$normCat?>">
-                            <?php foreach (array_filter($micro?->getKeywords()??[], function ($kw) use ($catName) {
-                                return $kw->getCat()->getName() == $catName;
-                                }) as $kw): ?>
-                                <div class="tag">
-                                    <div class="rm-bt" data-type="ul"></div>
-                                    <?=$kw->getTag()?>
-                                    <input id="micro-kw-<?=strNormalize($catName)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$catName?>][]" value="<?=$kw->getTag()?>">
-                                </div>
-                            <?php endforeach; ?>
                         </div>
-                    <?php endforeach; ?>
+                        <?php foreach (array_filter($micro?->getKeywords()??[], function ($kw) use ($catName) {
+                            return $kw->getCat()->getName() == $catName;
+                            }) as $kw): ?>
+                            <div class="tag">
+                                <div class="rm-bt" data-type="ul"></div>
+                                <?=$kw->getTag()?>
+                                <input id="micro-kw-<?=strNormalize($catName)?>-<?=$id?>" type="hidden" name="micros[<?=$id?>][keywords][<?=$catName?>][]" value="<?=$kw->getTag()?>">
+                            </div>
+                        <?php endforeach;
+                    endforeach; ?>
             </fieldset>
             <?php if($removable) : ?>
                 <div class="rm-bt" data-type="ol" id="rm-micro-<?=$id?>"></div>

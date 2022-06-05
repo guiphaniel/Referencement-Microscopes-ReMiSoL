@@ -118,7 +118,7 @@ h2 {
     box-shadow: 0 -0.33em inset var(--color-sec-1);
 }
 
-h3 {
+h3, h4 {
     font-size: 1em;
     margin-bottom: var(--global-margin-1);
     box-shadow: 0 -0.33em inset var(--color-sec-2);
@@ -130,6 +130,7 @@ input[type=reset] {
     background-color: black;
     padding: var(--global-padding-2);
     border-radius: 20px;
+    cursor: pointer;
 }
 
 input, select, textarea {
@@ -283,9 +284,27 @@ main {
 
 /*FORM*/
 
+.add-bt, .rm-bt, .edit-bt {
+    width: fit-content;
+    height: fit-content;
+    padding: var(--global-padding-2);
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.add-bt {
+    background: aquamarine;
+}
+
+.rm-bt {
+    color: white;
+    background: crimson;
+}
+
 .edit-bt {
-    width: 20px;
-    height: 20px;
     background-color: orange;
 }
 
@@ -427,7 +446,7 @@ main {
     background: aquamarine;
 }
 
-legend h2, legend h3 {
+legend h2, legend h3, legend h4 {
     margin: 0;
 }
 
@@ -455,7 +474,7 @@ fieldset, address {
     margin-bottom: var(--global-margin-1);
 }
 
-.select-input:last-of-type, .input-wrapper:last-of-type {
+fieldset:last-child, address:last-child {
     margin-bottom: 0;
 }
 
@@ -479,23 +498,39 @@ fieldset, address {
     margin-right: var(--global-margin-1);
 }
 
-.add-bt, .rm-bt {
-    width: fit-content;
-    height: fit-content;
-    padding: var(--global-padding-2);
-    justify-content: center;
+.snapshot-wrapper {
+    position: relative;
+    margin-bottom: var(--global-margin-1);
+}
+
+.snapshot-wrapper img {
+    border-radius: var(--border-radius);
+}
+
+.snapshot-wrapper .rm-bt {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+}
+
+.tag {
     display: flex;
     align-items: center;
-    border-radius: 20px;
+    padding: var(--global-padding-2);
+    box-shadow: 0 0 15px rgb(0 0 0 / 20%);
+    border-radius: var(--border-radius);
+    background: rgb(154, 199, 245);
+    margin: var(--global-margin-2) 0;
 }
 
-.add-bt {
-    background: aquamarine;
+.tag .rm-bt {
+    margin-right: var(--global-margin-1);
 }
 
-.rm-bt {
-    color: white;
-    background: crimson;
+.rm-bt svg {
+    height: 1em;
+    fill: white;
+    pointer-events: none;
 }
 
 /* ASIDE */
@@ -773,6 +808,10 @@ text-align: center;
     pointer-events: all;
 }
 
+input[type=file] {
+    display: none;
+}
+
 /* MICROSCOPES DETAILS */
 
 .tiles-wrapper {
@@ -846,4 +885,5 @@ input[list] {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d=\"M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM382.6 302.6l-103.1 103.1C270.7 414.6 260.9 416 256 416c-4.881 0-14.65-1.391-22.65-9.398L129.4 302.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 306.8V128c0-17.69 14.33-32 32-32s32 14.31 32 32v178.8l49.38-49.38c12.5-12.5 32.75-12.5 45.25 0S395.1 290.1 382.6 302.6z\"/></svg>');
     background-repeat: no-repeat;
     background-position: calc(100% - var(--global-padding-2));
+    background-size: 7%;
 }
