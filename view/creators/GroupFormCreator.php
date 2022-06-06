@@ -235,7 +235,7 @@
             <div class="select-wrapper">
                 <label for="micro-compagnies-<?=$id?>">Société</label>
                 <select id="micro-compagnies-<?=$id?>" class="micro-compagnies" name="micros[<?=$id?>][compagny]" required>
-                    <option value="" <?php !isset($micro) ? "selected" : "" ?> disabled hidden>Choisissez ici</option>
+                    <option value="" <?= !isset($micro) ? "selected" : "" ?> disabled hidden>Choisissez ici</option>
                     <?php foreach (CompagnyService::getInstance()->findAllCompagnies() as $cmp): ?>
                         <option value="<?=$cmp->getName()?>" <?=$microCompagny?->getName() === $cmp->getName() ? "selected" : ""?>><?=$cmp->getName()?></option>
                     <?php endforeach; ?>
