@@ -6,7 +6,7 @@ function onRemoveGroupBt(e) {
         form = rmBt.parentElement;
         timeoutID = window.setTimeout(removeGroup, 5000, form);
 
-        rmBt.hidden = true;
+        rmBt.style.display = "none";
 
         wrapper = document.createElement("div");
         
@@ -18,7 +18,7 @@ function onRemoveGroupBt(e) {
         undo.dataset.timeoutId = timeoutID
         undo.addEventListener('click', function() { 
             window.clearTimeout(this.dataset.timeoutId); 
-            this.parentElement.previousElementSibling.hidden = false // show the remove-bt again
+            this.parentElement.previousElementSibling.style.display = "block"; // show the remove-bt again
             this.parentElement.remove(); // remove wrapper
         });
         wrapper.append(undo);
