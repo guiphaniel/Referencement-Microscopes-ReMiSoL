@@ -148,17 +148,16 @@ function getCustomPopupHTML(group) {
 	}
 
 	// contacts
-	infos.append(createContentElement("h3", "Référents"))
+	infos.append(createH(3, "Référent·e·s"))
 	let contactsAddress = document.createElement("address");
+	let nb = 1;
 	for (const contact of group.contacts) {
 		// generate contact infos
 		let contactAddress = document.createElement("address");
+		contactAddress.append(createH(4, "Référent·e n°" + nb++))
 
-		// role
-		contactAddress.append(createP(contact.role));
-
-		// name
-		contactAddress.append(createP([contact.firstname, contact.lastname].join(" ")));
+		// name (role)
+		contactAddress.append(createP([contact.firstname, contact.lastname].join(" ") + " (" + contact.role + ")"));
 		
 		// email
 		{
