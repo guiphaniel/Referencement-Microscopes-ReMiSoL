@@ -103,6 +103,11 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Open Sans', sans-serif;
     text-transform: uppercase;
     display: inline-block;
+    width: fit-content;
+}
+
+a {
+    color: var(--color-pri-1) !important;
 }
 
 h1 {
@@ -137,6 +142,42 @@ input, select, textarea {
 
 textarea {
     resize: none;
+}
+
+thead th {
+    background-color: var(--color-pri-2);
+}
+
+thead th:first-of-type {
+    border-top-left-radius: var(--border-radius);
+}
+
+thead th:last-of-type {
+    border-top-right-radius: var(--border-radius);
+}
+
+tbody tr:last-of-type th:first-of-type {
+    border-bottom-left-radius: var(--border-radius);
+}
+
+tbody tr:last-of-type td:last-of-type {
+    border-bottom-right-radius: var(--border-radius);
+}
+
+tbody th {
+    background-color: var(--color-sec-1);
+}
+
+tbody td {
+    background-color: var(--color-sec-2);
+}
+
+td, th {
+    padding: var(--global-padding-2);
+}
+
+.column-reverse {
+    flex-direction: column-reverse !important;
 }
 
 /*HEADER*/
@@ -233,6 +274,7 @@ header {
     display: inline-block;
     padding: var(--nav-padding);
     line-height: var(--icon-size);
+    color: white !important;
 }
 
 #navbar nav {
@@ -312,7 +354,8 @@ main {
 }
 
 .undo-bt {
-    text-decoration: underline;
+    background-color: mediumvioletred;
+    color: white;
 }
 
 .micro-snapshot {
@@ -321,10 +364,6 @@ main {
     background-position: center;
     max-width: 300px;
     max-height: 150px;
-}
-
-.micro-img {
-    max-height: 400px;
 }
 
 .kw-cat {
@@ -548,7 +587,37 @@ fieldset:last-child, address:last-child {
 
 .aside-wrapper {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
+}
+
+.aside-wrapper aside > :first-child {
+    background: var(--color-pri-2);    
+    border-radius: var(--border-radius);
+    padding: var(--global-padding-1);
+    margin-bottom: var(--global-margin-1);
+}
+
+.aside-wrapper aside nav a {
+    color: white !important;
+    display: inline-block;
+    padding: var(--global-padding-2);
+    border-radius: var(--border-radius);
+    width: 100%;
+    transition: all ease-in-out var(--trans-dur);
+}
+
+.aside-wrapper aside nav li + li {
+    margin-top: var(--global-margin-1);
+}
+
+.aside-wrapper aside nav a:hover {
+    background-color: var(--color-sec-2);
+    color: black !important;
+    transition: all ease-in-out var(--trans-dur);
+}
+
+.aside-content {
+    width: 100%;
 }
 
 /* MAP */
@@ -562,12 +631,6 @@ fieldset:last-child, address:last-child {
     height: 400px;
     border-radius: var(--border-radius);
     margin-bottom: var(--global-margin-1);
-}
-
-#map-filters {
-    background: var(--color-pri-2);    
-    border-radius: var(--border-radius);
-    padding: var(--global-padding-1);
 }
 
 #map-filters h3 {
@@ -671,13 +734,19 @@ text-align: center;
     /* ASIDE */
 
     .aside-wrapper {
-        flex-direction: row;
+        flex-direction: row !important; 
+    }
+
+    .aside-wrapper aside {
+        margin-right: var(--global-margin-1);
+    }
+
+    .aside-wrapper aside > :first-child {
+        position: sticky; 
+        top: 16em;
     }
     
     /* MAP */
-    #map-filters {
-        margin-right: var(--global-margin-1);
-    }
 
     #map {
         height: 600px;
@@ -897,4 +966,66 @@ input[list] {
     background-repeat: no-repeat;
     background-position: calc(100% - var(--global-padding-2));
     background-size: 7%;
+}
+
+/* GROUP DETAILS */
+
+.group-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.group-details {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    padding: var(--global-padding-1);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--global-margin-1);
+    width: 100%;
+}
+
+.group-details-header {
+    display: flex;
+}
+
+.group-details-header h2 {
+    margin-right: auto;
+}
+
+.group-details-header h2 {
+    margin-right: auto;
+}
+
+.group-details-header .bt {
+    margin-left: var(--global-margin-2);
+}
+
+.group-details section {
+    margin-bottom: var(--global-margin-1);
+}
+
+.micro-img {
+    max-width: 533px;
+    max-height: 200px;
+    display: block;
+    margin: 0 auto;
+}
+
+.micro-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.micro-section div {
+    margin: var(--global-margin-1) 0;
+}
+
+.micro-section div p {
+    margin: var(--global-margin-1) 0;
+}
+
+.undo-wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: var(--global-margin-2);
 }

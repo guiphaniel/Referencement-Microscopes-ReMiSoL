@@ -32,7 +32,7 @@
                 break;
             default:
                 echo "<h2>Fiches</h2>";
-                echo "<div id='micro-group-forms'>";
+                echo "<div>";
                 $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroup();
                 $lockedGroups = [];
                 $unlockedGroups = [];
@@ -84,6 +84,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="public/css/style.css">
+    <script src="/public/js/delete_group.js" defer></script>
     <?php loadJS($_GET["action"]??""); ?>
     <title>Administration</title>
 </head>

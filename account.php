@@ -17,39 +17,44 @@
                     (new UserFormCreator(UserService::getInstance()->findUserById($_SESSION["user"]["id"]), $_SESSION["user"]["admin"]))->create();
                 break;
             default:
-                echo "<h2>Fiches</h2>";
-                echo "<div id='micro-group-forms'>";
-                $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroupByOwner($_SESSION["user"]["id"]);
-                $lockedGroups = [];
-                $unlockedGroups = [];
-                foreach ($groups as $group) {
-                    if($group->isLocked())
-                        $lockedGroups[] = $group;
-                    else
-                        $unlockedGroups[] = $group;
-                }
-                $nbLocked = sizeof($lockedGroups);
-                $nbUnlocked = sizeof($unlockedGroups);
-                echo "<h2>En attentes ($nbLocked)</h2>";
-                if(sizeof($lockedGroups) < 1)
-                    echo "<p>Vous n'avez aucune fiche en attente pour l'instant</p>";
-                else {
-                    foreach($lockedGroups as $group)
-                        (new GroupDetailsCreator($group, false))->create();
-                }
-                echo "<h2>Validées ($nbUnlocked)</h2>";
-                if(sizeof($unlockedGroups) < 1)
-                    echo "<p>Vous n'avez aucune fiche validée pour l'instant</p>";
-                else {
-                    foreach($unlockedGroups as $group)
-                        (new GroupDetailsCreator($group, false))->create();
-                }
+                echo "<h2>Mes fiches</h2>";
+                echo "<div>";
+                    $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroupByOwner($_SESSION["user"]["id"]);
+                    $lockedGroups = [];
+                    $unlockedGroups = [];
+                    foreach ($groups as $group) {
+                        if($group->isLocked())
+                            $lockedGroups[] = $group;
+                        else
+                            $unlockedGroups[] = $group;
+                    }
+                    $nbLocked = sizeof($lockedGroups);
+                    $nbUnlocked = sizeof($unlockedGroups);
+                    echo "<h2>En attentes ($nbLocked)</h2>";
+                    echo '<div class="group-details-wrapper">';
+                        if(sizeof($lockedGroups) < 1)
+                            echo "<p>Vous n'avez aucune fiche en attente pour l'instant. <a href=\"/form.php\">Créer une nouvelle fiche ?</a></p></p>";
+                        else {
+                            foreach($lockedGroups as $group)
+                                (new GroupDetailsCreator($group, false))->create();
+                        }
+                    echo "</div>";
+                    echo "<h2>Validées ($nbUnlocked)</h2>";
+                    echo '<div class="group-details-wrapper">';
+                        if(sizeof($unlockedGroups) < 1)
+                            echo "<p>Vous n'avez aucune fiche validée pour l'instant.";
+                        else {
+                            foreach($unlockedGroups as $group)
+                                (new GroupDetailsCreator($group, false))->create();
+                        }
+                    echo "</div>";
                 echo "</div>";
-                break;
+            break;
         }
     }
 
     function loadJS($action) {
+        echo '<script src="/public/js/delete_group.js" defer></script>';
         switch ($action) {
             case 'settings':
                 echo '<script src="/public/js/user_form.js" defer></script>';
@@ -69,14 +74,20 @@
 </head>
 <body>
     <?php $header->create() ?>
-    <aside>
-        <ul>
-            <li><a href="/account.php?action=groups">Fiches</a></li>
-            <li><a href="/account.php?action=settings">Paramètres</a></li>
-        </ul>
-    </aside>
     <main>
-        <?php getMapping($_GET["action"]??""); ?>
+        <div class="aside-wrapper">
+            <aside>
+                <nav>
+                    <ul>
+                        <li><a href="/account.php?action=groups">Mes fiches</a></li>
+                        <li><a href="/account.php?action=settings">Paramètres</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <div class="aside-content">
+                <?php getMapping($_GET["action"]??""); ?>
+            </div>
+        </div>
     </main>
     <footer>
         <address>
