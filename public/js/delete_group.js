@@ -1,7 +1,7 @@
 document.addEventListener("click", onRemoveGroupBt)
 
 function onRemoveGroupBt(e) {
-    if(e.target.className == "rm-bt") {
+    if(e.target.classList.contains("rm-bt")) {
         let rmBt = e.target;
         form = rmBt.parentElement;
         timeoutID = window.setTimeout(removeGroup, 5000, form);
