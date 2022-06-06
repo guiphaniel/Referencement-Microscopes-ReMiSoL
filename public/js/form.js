@@ -235,7 +235,7 @@ function addKeyword(keyword, catInput) {
     let id = infos[2];
 
     // if the keyword is already selected, do nothing
-    tags = catInput.parentElement.getElementsByClassName("tag");
+    tags = catInput.parentElement.parentElement.getElementsByClassName("tag");
     for (const tag of tags) {
         if(tag.textContent == keyword)
             return;
