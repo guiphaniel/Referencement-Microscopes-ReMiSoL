@@ -20,8 +20,11 @@ function onClick(event) {
     let bt = event.target;
 
     if(bt.classList.contains("rm-bt")) {
-        const y = bt.parentElement.previousElementSibling.getBoundingClientRect().top + window.pageYOffset - 200;
-        window.scrollTo({top: y, behavior: 'smooth'});
+        const previousTag = bt.parentElement.previousElementSibling;
+        if(previousTag != null) {
+            const y = previousTag.getBoundingClientRect().top + window.pageYOffset - 200;
+            window.scrollTo({top: y, behavior: 'smooth'});
+        }
 
         bt.parentElement.remove();
 
