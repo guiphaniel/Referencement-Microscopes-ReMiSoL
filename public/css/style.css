@@ -537,7 +537,7 @@ fieldset:last-child, address:last-child {
     width: 100%;
 }
 
-.rm-bt svg {
+.bt svg {
     width: 1em;
     height: 1em;
     fill: white;
