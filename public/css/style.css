@@ -231,6 +231,10 @@ header {
 }
 
 #hamburger-check {
+    display: none;
+}
+
+#hamburger-check ~ label {
     z-index: 1;
     cursor: pointer;
     position: absolute;
@@ -725,6 +729,10 @@ text-align: center;
     }
 
     #hamburger-check ~ .hamburger {
+        display: none;
+    }
+
+    #hamburger-check ~ label {
         display: none;
     }
 
