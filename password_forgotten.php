@@ -5,6 +5,7 @@
 
     include_once("view/creators/FormCreator.php");
     include_once("view/creators/HeaderCreator.php");
+    include_once("view/creators/FooterCreator.php");
     $header = new HeaderCreator("Mot de passe oublié"); 
 ?>
 <!DOCTYPE html>
@@ -37,10 +38,6 @@
             </form>
         </div>
     </main>
-    <footer>
-        <address>
-            <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
-        </address>
-    </footer>
+    <?php (new FooterCreator)->create() ?>
 </body>
 </html>

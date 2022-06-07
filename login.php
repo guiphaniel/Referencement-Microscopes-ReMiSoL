@@ -6,6 +6,7 @@
 
     include_once("view/creators/FormCreator.php");
     include_once("view/creators/HeaderCreator.php");
+    include_once("view/creators/FooterCreator.php");
     $header = new HeaderCreator("Connexion"); 
 ?>
 <!DOCTYPE html>
@@ -41,10 +42,6 @@
             <a href="password_forgotten.php">Mot de passe oublié ?</a>
         </div>
     </main>
-    <footer>
-        <address>
-            <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
-        </address>
-    </footer>
+    <?php (new FooterCreator)->create() ?>
 </body>
 </html>

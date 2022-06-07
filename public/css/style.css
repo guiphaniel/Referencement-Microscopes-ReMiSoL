@@ -18,6 +18,7 @@
     --plat-color: 220, 20, 60;
     --mix-color: 255, 127, 80;
     --tile-width: 20em;
+    --footer-height: 5em;
 }
 
 @font-face {
@@ -68,8 +69,14 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+html {
+    height: 100vh;
+}
 body {
 	line-height: 1;
+    width: 100%;
+    min-height: calc(100% - var(--footer-height));
+    position: absolute;
 }
 ol, ul {
 	list-style: none;
@@ -294,6 +301,7 @@ header {
     padding: var(--nav-padding);
     line-height: var(--icon-size);
     color: white !important;
+    transition: color ease-in-out var(--trans-dur);
 }
 
 #navbar nav {
@@ -320,6 +328,11 @@ header nav ul li:hover {
     transition: ease-in-out var(--trans-dur);
 }
 
+#navbar ul li:hover a {
+    color: black !important;
+    transition: color ease-in-out var(--trans-dur);
+}
+
 header nav .active {
     background-color: var(--color-pri-2);
 }
@@ -342,6 +355,45 @@ header nav .active {
 
 main {
     padding: var(--main-padding);
+}
+
+/* FOOTER */
+
+footer {
+    padding: var(--global-padding-1);
+    background-color: var(--color-pri-1);
+    bottom: calc(-1 * var(--footer-height));
+    position: absolute;
+    width: 100%;
+    height: var(--footer-height);
+    display: flex;
+    align-items: center;
+}
+
+footer nav {
+    width: 100%;
+}
+
+footer ul {
+    display: flex;
+    justify-content: space-around;
+}
+
+footer ul li {
+    display: flex;
+}
+
+footer ul li a {
+    color: white !important;
+    padding: var(--global-padding-1);
+    border-radius: var(--border-radius);
+    transition: ease-in-out var(--trans-dur);
+}
+
+footer ul li a:hover {
+    color: black !important;
+    background-color: var(--color-pri-2);
+    transition: ease-in-out var(--trans-dur);
 }
 
 /*FORM*/
@@ -784,6 +836,7 @@ text-align: center;
         height: 600px;
         position: sticky !important; 
         top: 16em;
+        margin-bottom: 0;
     }
 }
 

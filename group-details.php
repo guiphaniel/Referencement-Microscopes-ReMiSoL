@@ -1,6 +1,7 @@
 <?php 
     include_once("model/services/MicroscopesGroupService.php");
     include_once("view/creators/HeaderCreator.php");
+    include_once("view/creators/FooterCreator.php");
     include_once("view/creators/GroupDetailsCreator.php");
 
     if(empty($_GET["id"])) {
@@ -49,11 +50,7 @@
     <main>
         <?php (new GroupDetailsCreator($group, true))->create() ?>
     </main>
-    <footer>
-        <address>
-            <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
-        </address>
-    </footer>
+    <?php (new FooterCreator)->create() ?>
 </body>
 <script src="public/js/map.js"></script>
 </html>

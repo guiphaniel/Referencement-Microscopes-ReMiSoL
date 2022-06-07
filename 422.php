@@ -2,6 +2,7 @@
     include_once("config/config.php");
     include_once("model/services/UserService.php");
     include_once("view/creators/HeaderCreator.php");
+    include_once("view/creators/FooterCreator.php");
 
     http_response_code(422);
 
@@ -29,11 +30,7 @@
             echo "<p>Si le problème persiste, veuillez contacter un administrateur à l'addresse suivante : $adminEmail</p>";
         ?>
     </main>
-    <footer>
-        <address>
-            <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
-        </address>
-    </footer>
+    <?php (new FooterCreator)->create() ?>
 </body>
 </html>
 

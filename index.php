@@ -2,6 +2,7 @@
     include_once("model/services/ModelService.php");
     include_once("model/services/ControllerService.php");
     include_once("view/creators/HeaderCreator.php");
+    include_once("view/creators/FooterCreator.php");
     $header = new HeaderCreator("Accueil"); 
 
     function createCheckboxes($objs, $type) {
@@ -90,11 +91,7 @@
             </div>
         </div>
     </main>
-    <footer>
-        <address>
-            <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
-        </address>
-    </footer>
+    <?php (new FooterCreator)->create() ?>
 </body>
 <script src="public/js/map.js"></script>
 </html>

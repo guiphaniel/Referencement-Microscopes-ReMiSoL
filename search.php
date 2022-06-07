@@ -11,6 +11,7 @@
     $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroup(false, $filters);
 
     include_once("view/creators/HeaderCreator.php");
+    include_once("view/creators/FooterCreator.php");
         $header = new HeaderCreator("Recherche", $_GET["filters"]??""); 
 ?>
 <!DOCTYPE html>
@@ -79,10 +80,6 @@
             ?>
         </div>
     </main>
-    <footer>
-        <address>
-            <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
-        </address>
-    </footer>
+    <?php (new FooterCreator)->create() ?>
 </body>
 </html>

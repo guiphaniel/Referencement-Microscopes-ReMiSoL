@@ -51,11 +51,7 @@
         <p>Votre compte a été activé avec succès !</p>
         <p>Vous pouvez fermer cette page en toute sécurité</p>
     </main>
-    <footer>
-        <address>
-            <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
-        </address>
-    </footer>
+    <?php (new FooterCreator)->create() ?>
 </body>
 </html>
 

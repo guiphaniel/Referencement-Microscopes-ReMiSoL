@@ -4,6 +4,7 @@
         redirect("/form.php");
 
     include_once("view/creators/HeaderCreator.php");
+    include_once("view/creators/FooterCreator.php");
     include_once("view/creators/FormCreator.php");
 
     $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
@@ -67,10 +68,6 @@
         </div>
         
     </main>
-    <footer>
-        <address>
-            <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
-        </address>
-    </footer>
+    <?php (new FooterCreator)->create() ?>
 </body>
 </html>
