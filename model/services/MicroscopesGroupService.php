@@ -71,10 +71,14 @@
             return $groupId;
         }
 
-        public function findGroupOwner(MicroscopesGroup $group) {
+        public function findGroupOwner(MicroscopesGroup | int $group) {
             global $pdo;
 
-            $groupId = $group->getId();
+            if(is_int($group))
+                $groupId = $group;
+            else
+                $groupId = $group->getId();
+
             $sth = $pdo->query("SELECT user_id FROM microscopes_group WHERE id = $groupId");
 
             $row = $sth->fetch();
