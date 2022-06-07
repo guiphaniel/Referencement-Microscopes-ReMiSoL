@@ -301,6 +301,10 @@ header nav ul li:hover {
     transition: ease-in-out var(--trans-dur);
 }
 
+header nav .active {
+    background-color: var(--color-pri-2);
+}
+
 .infos {
     display: flex;
     align-items: center;
@@ -614,6 +618,11 @@ fieldset:last-child, address:last-child {
     background-color: var(--color-sec-2);
     color: black !important;
     transition: all ease-in-out var(--trans-dur);
+}
+
+.aside-wrapper aside nav .active {
+    background-color: var(--color-sec-2);
+    color: black !important;
 }
 
 .aside-content {

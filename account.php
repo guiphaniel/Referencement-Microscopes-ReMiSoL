@@ -10,6 +10,18 @@
 
     $header = new HeaderCreator("Mon compte"); 
 
+    function isActive($action) {
+        if(empty($_GET["action"])) {
+            if($action == 'groups')
+                return 'active';
+            else
+                return;
+        }
+            
+        if ($_GET["action"] == $action)
+            return 'active';
+    }
+
     function getMapping($action) {
         switch ($action) {
             case 'settings':
@@ -79,8 +91,8 @@
             <aside>
                 <nav>
                     <ul>
-                        <li><a href="/account.php?action=groups">Mes fiches</a></li>
-                        <li><a href="/account.php?action=settings">Paramètres</a></li>
+                        <li><a href="/account.php?action=groups" class="<?=isActive('groups')?>">Mes fiches</a></li>
+                        <li><a href="/account.php?action=settings" class="<?=isActive('settings')?>">Paramètres</a></li>
                     </ul>
                 </nav>
             </aside>

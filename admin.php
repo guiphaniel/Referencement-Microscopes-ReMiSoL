@@ -13,6 +13,18 @@
 
     $header = new HeaderCreator("Administration"); 
 
+    function isActive($action) {
+        if(empty($_GET["action"])) {
+            if($action == 'groups')
+                return 'active';
+            else
+                return;
+        }
+            
+        if ($_GET["action"] == $action)
+            return 'active';
+    }
+
     function getMapping($action) {
         switch ($action) {
             case 'keywords':
@@ -90,16 +102,22 @@
 </head>
 <body>
     <?php $header->create() ?>
-    <aside>
-        <ul>
-            <li><a href="/admin.php?action=groups">Fiches</a></li>
-            <li><a href="/admin.php?action=keywords">Mots-clés</a></li>
-            <li><a href="/admin.php?action=micros">Microscopes</a></li>
-            <li><a href="/admin.php?action=users">Utilisateurs</a></li>
-        </ul>
-    </aside>
     <main>
-        <?php getMapping($_GET["action"]??""); ?>
+        <div class="aside-wrapper">
+            <aside>
+                <nav>
+                    <ul>
+                        <li><a href="/admin.php?action=groups" class="<?=isActive('groups')?>">Fiches</a></li>
+                        <li><a href="/admin.php?action=keywords" class="<?=isActive('keywords')?>">Mots-clés</a></li>
+                        <li><a href="/admin.php?action=micros" class="<?=isActive('micros')?>">Microscopes</a></li>
+                        <li><a href="/admin.php?action=users" class="<?=isActive('users')?>">Utilisateurs</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <div class="aside-content">
+                <?php getMapping($_GET["action"]??""); ?>
+            </div>
+        </div>
     </main>
     <footer>
         <address>

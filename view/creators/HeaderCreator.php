@@ -20,18 +20,18 @@
                     </div>
                     <nav>
                         <ul>
-                            <li><a href="/index.php">Accueil</a></li>
-                            <li><a href="/presentation.php">Présentation</a></li>
+                            <li class="<?= $this->isActive('/index.php') ?>"><a href="/index.php">Accueil</a></li>
+                            <li class="<?= $this->isActive('/presentation.php') ?>"><a href="/presentation.php">Présentation</a></li>
                             <?php if(isUserSessionValid()): ?>
-                                <li><a href="/form.php">Formulaire</a></li>
+                                <li class="<?= $this->isActive('/form.php') ?>"><a href="/form.php">Formulaire</a></li>
                                 <?php if($_SESSION["user"]["admin"]): ?>
-                                    <li><a href="/admin.php">Administration</a></li>
+                                    <li class="<?= $this->isActive('/admin.php') ?>"><a href="/admin.php">Administration</a></li>
                                 <?php endif; ?>
-                                <li><a href="/account.php">Mon compte</a></li>
-                                <li><a href="/processing/logout.php">Déconnexion</a></li>
+                                <li class="<?= $this->isActive('/account.php') ?>"><a href="/account.php">Mon compte</a></li>
+                                <li class="<?= $this->isActive('/processing/logout.php') ?>"><a href="/processing/logout.php">Déconnexion</a></li>
                             <?php else: ?>
-                                <li><a href="/signin.php">Inscription</a></li>
-                                <li><a href="/login.php">Connexion</a></li>
+                                <li class="<?= $this->isActive('/signin.php') ?>"><a href="/signin.php">Inscription</a></li>
+                                <li class="<?= $this->isActive('/login.php') ?>"><a href="/login.php">Connexion</a></li>
                             <?php endif; ?>
                         </ul>
                     </nav>
@@ -51,5 +51,10 @@
                 <h1><?=$this->title?></h1>
             </header>
             <?php
+        }
+
+        private function isActive($link) {
+            if ($_SERVER['PHP_SELF'] == $link)
+                return 'active';
         }
     }
