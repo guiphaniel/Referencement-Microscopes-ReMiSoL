@@ -31,6 +31,8 @@
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
     <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="preload" as="font" href="/public/fonts/OpenSans-ExtraBold.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="/public/fonts/MontSerrat.woff2" type="font/woff2" crossorigin="anonymous">
     <link rel="stylesheet" href="/public/css/MarkerCluster.css">
     <link rel="stylesheet" href="/public/css/MarkerCluster.Default.css">
     <script src="/public/js/leaflet.markercluster.js"></script>

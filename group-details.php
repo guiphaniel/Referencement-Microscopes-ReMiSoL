@@ -30,7 +30,9 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
     crossorigin=""/>
-    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="preload" as="font" href="/public/fonts/OpenSans-ExtraBold.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="/public/fonts/MontSerrat.woff2" type="font/woff2" crossorigin="anonymous">
     <link rel="stylesheet" href="/public/css/MarkerCluster.css">
     <link rel="stylesheet" href="/public/css/MarkerCluster.Default.css">
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
