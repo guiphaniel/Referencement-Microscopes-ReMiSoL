@@ -449,6 +449,10 @@ footer ul li a:hover {
     max-height: 150px;
 }
 
+.big-form {
+    max-width: 700px !important;
+}
+
 .form-wrapper {
     display: flex;
     flex-direction: column;
@@ -698,6 +702,7 @@ fieldset:last-child, address:last-child {
     border-radius: var(--border-radius);
     width: 100%;
     transition: all ease-in-out var(--trans-dur);
+    text-align: center;
 }
 
 .aside-wrapper aside nav li + li {
@@ -847,6 +852,10 @@ text-align: center;
     .aside-wrapper aside > :first-child {
         position: sticky; 
         top: 16em;
+    }
+
+    .aside-wrapper aside nav a {
+        text-align: left;
     }
     
     /* MAP */

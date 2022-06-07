@@ -19,12 +19,12 @@
             <?php endif; unset($_SESSION["form"]["errorMsg"]);
         }
 
-        function __construct(private string $action, private string $method, private string $enctype = "") {}
+        function __construct(private string $action, private string $method, private string $enctype = "", private bool $bigForm = false) {}
 
         function begin() {
             $this->handleMsg() ?>
             <div class="form-wrapper">
-                <form action=<?=$this->action?> method=<?=$this->method?> <?php if(!empty($this->enctype)) echo "enctype=$this->enctype"; ?>>
+                <form <?= $this->bigForm ? 'class="big-form"' : "" ?> action=<?=$this->action?> method=<?=$this->method?> <?php if(!empty($this->enctype)) echo "enctype=$this->enctype"; ?>>
             <?php
         }
 

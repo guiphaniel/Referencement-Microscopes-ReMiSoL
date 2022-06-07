@@ -6,7 +6,7 @@
 
     Class MicrosFormCreator extends FormCreator {
         function __construct() {
-            parent::__construct("/processing/micros_form_processing.php", "POST");
+            parent::__construct("/processing/micros_form_processing.php", "POST", bigForm:true);
         }
 
         private function getNextId($entities) {

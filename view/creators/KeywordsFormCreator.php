@@ -4,7 +4,7 @@
 
     Class KeywordsFormCreator extends FormCreator {
         function __construct() {
-            parent::__construct("/processing/keywords_form_processing.php", "POST");
+            parent::__construct("/processing/keywords_form_processing.php", "POST", bigForm:true);
         }
 
         public function createBody() {            

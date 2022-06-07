@@ -11,7 +11,7 @@
         private $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
 
         function __construct(private $group = null) {
-            parent::__construct("processing/group_form_processing.php", "post", "multipart/form-data");
+            parent::__construct("processing/group_form_processing.php", "post", "multipart/form-data", bigForm:true);
         }
 
         public function createBody() {

@@ -57,6 +57,12 @@ function addCat(bt) {
 
     let cat = createCat(catsWrapper.dataset.nextCatId++);
     bt.insertAdjacentElement("beforebegin", cat);
+
+    //animation
+    cat.classList.add("closed");
+    const y = cat.getBoundingClientRect().top + window.pageYOffset - 200;
+    window.scrollTo({top: y, behavior: 'smooth'});
+    window.setTimeout(() => cat.classList.remove("closed"), 1); // a timeout is needed, else css wont trigger the transition
 }
 
 function createCat(catId) {
@@ -75,7 +81,7 @@ function createCat(catId) {
     addTagBt.textContent = "Ajouter une étiquette"
     
     tagsWrapper.appendChild(addTagBt);
-    
+
     catWrapper.append(tagsWrapper);
 
     let rmBt = document.createElement("div");
