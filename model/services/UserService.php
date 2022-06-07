@@ -40,6 +40,7 @@
             $sql = "
                 select id, firstname, lastname, email, phone_code, phone_num, password
                 from user
+                ORDER BY firstname, lastname, phone_code, phone_num
             ";
 
             $users = [];
