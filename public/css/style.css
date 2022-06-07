@@ -437,6 +437,7 @@ footer ul li a:hover {
 }
 
 .undo-bt {
+    margin-left: var(--global-margin-2);
     background-color: mediumvioletred;
     color: white;
 }
@@ -1109,7 +1110,7 @@ input[list] {
     margin-right: auto;
 }
 
-.group-details-header .bt {
+.group-details-header .bt:not(.undo-bt) {
     margin-left: var(--global-margin-2);
 }
 
