@@ -45,7 +45,10 @@
             $users = [];
             foreach($pdo->query($sql, PDO::FETCH_NAMED) as $userInfos) {
                 $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone_code"], $userInfos["phone_num"], $userInfos["password"]);
-                $user->setId($userInfos["id"])->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
+                $user
+                    ->setId($userInfos["id"])
+                    ->setLocked($this->isLocked($user))
+                    ->setAdmin($this->isAdmin($user));
                 $users[] = $user;
             }
 
@@ -90,7 +93,10 @@
 
             $user = new User($userInfos["firstname"], $userInfos["lastname"], $userInfos["email"], $userInfos["phone_code"], $userInfos["phone_num"], $userInfos["password"]);
         
-            return $user->setId($userInfos["id"])->setLocked($this->isLocked($user))->setAdmin($this->isAdmin($user));
+            return $user
+                ->setId($userInfos["id"])
+                ->setLocked($this->isLocked($user))
+                ->setAdmin($this->isAdmin($user));
         }
 
         function findUserByEmail($email) {
@@ -162,19 +168,22 @@
             return !empty($locked);
         }
 
-        function isAdmin(User $user) {
+        function isAdmin($user) {
             global $pdo;
 
+            if(is_int($user))
+                $userId = $user;
+            else
+                $userId = $user->getId();
+
             $sth = $pdo->prepare("
-                SELECT id
-                from user
-                where email = :email AND id IN (
-                    SELECT user_id FROM admin
-                )
+                SELECT user_id 
+                FROM admin
+                WHERE user_id = :userId;
             ");
 
             $sth->execute([
-                "email" => $user->getEmail()
+                "userId" => $userId
             ]);
 
             $admin = $sth->fetch();
@@ -241,6 +250,12 @@
                 "password" => $user->getPassword()
             ]);
 
+            // lock / unlock the user
+            if($user->isLocked())
+                $this->lockUser($user);
+            else if (!$user->isLocked() && $this->isLocked($user))
+                $this->unlockUser($user);
+
             // if the user is admin, but not yet admin in db, add it as admin in db
             if($user->isAdmin() && !$this->isAdmin($user)) {
                 $sth = $pdo->prepare("INSERT INTO admin VALUES (:id)");
@@ -248,14 +263,11 @@
                 $sth->execute([
                     "id" => $id
                 ]);
-            } else if (!$user->isAdmin() && $this->isAdmin($user))
+            } else if (!$user->isAdmin() && $this->isAdmin($user)) {
+                if(sizeof($this->findAllAdmins()) <= 1)
+                    throw new Exception("Il ne peut y avoir moins d'un administrateur.");
                 $pdo->exec("DELETE FROM admin where user_id = $id");
-
-            // lock / unlock the user
-            if($user->isLocked())
-                $this->lockUser($user);
-            else if (!$user->isLocked() && $this->isLocked($user))
-                $this->unlockUser($user);
+            }
         }
 
         function checkUserInfosUniqueness($user) {
@@ -279,8 +291,12 @@
 
             $row = $sth->fetch();
 
-            if($row ? $row[0] : $id != $id)
-                throw new Exception("Ce courriel est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
+            if($row ? $row[0] : $id != $id) {
+                if($_SESSION["user"]["admin"])
+                    throw new Exception("Ce courriel est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
+                else
+                    throw new Exception("Ce numéro de téléphone est déjà pris par un utilisateur.");
+            }
         }
 
         function checkUserPhoneUniqueness(User $user) {
@@ -300,14 +316,23 @@
 
             $row = $sth->fetch();
 
-            if($row ? $row[0] : $id != $id)
-                throw new Exception("Ce numéro de téléphone est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
+            if($row ? $row[0] : $id != $id) {
+                if($_SESSION["user"]["admin"])
+                    throw new Exception("Ce numéro de téléphone est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
+                else
+                    throw new Exception("Ce numéro de téléphone est déjà pris par un utilisateur.");
+            }
         }
 
-        function deleteUser($id) {
+        function deleteUser($user) {
             global $pdo;
 
-            $pdo->exec("DELETE FROM user where id = $id");
+            if(is_int($user))
+                $userId = $user;
+            else
+                $userId = $user->getId();
+
+            $pdo->exec("DELETE FROM user where id = $userId");
         }
 
         function lockUser(User $user) {

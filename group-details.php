@@ -37,7 +37,7 @@
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
     <script src="/public/js/leaflet.markercluster.js"></script>
-    <script src="/public/js/delete_group.js" defer></script>
+    <script src="/public/js/undo.js" defer></script>
     <title>Détails</title>
 </head>
 <body>

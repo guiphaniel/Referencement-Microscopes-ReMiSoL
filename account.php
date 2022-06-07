@@ -66,7 +66,7 @@
     }
 
     function loadJS($action) {
-        echo '<script src="/public/js/delete_group.js" defer></script>';
+        echo '<script src="/public/js/undo.js" defer></script>';
         switch ($action) {
             case 'settings':
                 echo '<script src="/public/js/user_form.js" defer></script>';

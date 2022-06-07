@@ -5,61 +5,64 @@
 
     Class UserFormCreator extends FormCreator {
         private $phoneCodes = ["+32 (Belgique)", "+33 (France)", "+41 (Suisse)"]; // Belgium, France, Switzerland
+        private $userId;
 
         function __construct(private User $user, private bool $adminView) {
             parent::__construct("processing/user_processing.php", "post", "");
+
+            $this->userId = $this->user->getId();
         }
 
         public function createBody() {
             ?>
-                <input type="hidden" name="id" value="<?=UserService::getInstance()->getUserId($this->user)?>">
+                <input type="hidden" name="id" value="<?=$this->userId?>">
                 <input type="hidden" name="action" value="update">
                 <div class="input-wrapper">
-                    <input id="firstname" type="text" autocomplete="given-name" name="firstname" value="<?=$this->user->getFirstname()?>" placeholder=" " required>
-                    <label for="firstname">Prénom</label>
+                    <input id="firstname-<?=$this->userId?>" type="text" autocomplete="given-name" name="firstname" value="<?=$this->user->getFirstname()?>" placeholder=" " required>
+                    <label for="firstname-<?=$this->userId?>">Prénom</label>
                 </div>
                 <div class="input-wrapper">
-                    <input id="lastname" type="text" autocomplete="family-name" autocapitalize="characters" name="lastname" value="<?=$this->user->getLastname()?>" placeholder=" " required>
-                    <label for="lastname">NOM</label>
+                    <input id="lastname-<?=$this->userId?>" type="text" autocomplete="family-name" autocapitalize="characters" name="lastname" value="<?=$this->user->getLastname()?>" placeholder=" " required>
+                    <label for="lastname-<?=$this->userId?>">NOM</label>
                 </div>
                 <div class="input-wrapper">
-                    <input id="email" type="email" autocomplete="email" name="email" value="<?=$this->user->getEmail()?>" placeholder=" " required>
-                    <label for="email">Courriel</label>
+                    <input id="email-<?=$this->userId?>" type="email" autocomplete="email" name="email" value="<?=$this->user->getEmail()?>" placeholder=" " required>
+                    <label for="email-<?=$this->userId?>">Courriel</label>
                 </div>
                 <div class="select-input">
-                    <select id="phone-code" name="phoneCode" autocomplete="tel-country-code">
+                    <select id="phone-code-<?=$this->userId?>" name="phoneCode" autocomplete="tel-country-code">
                         <?php 
                     foreach ($this->phoneCodes as $phoneCode) : ?>
                         <option value="<?=$phoneCode;?>"<?= str_contains($phoneCode, $this->user->getPhoneCode()) ? " selected" : "";?>><?=$phoneCode?></option>
                         <?php endforeach; ?>
                     </select>
                     <div class="input-wrapper">
-                        <input id="phone" type="text" name="phoneNum" autocomplete="tel-national" value="<?=$this->user->getPhoneNum()?>" placeholder=" " required>
-                        <label for="phone">Télephone</label>
+                        <input id="phone-<?=$this->userId?>" type="text" name="phoneNum" autocomplete="tel-national" value="<?=$this->user->getPhoneNum()?>" placeholder=" " required>
+                        <label for="phone-<?=$this->userId?>">Télephone</label>
                     </div>
                 </div>
                 <div class="input-wrapper">
-                    <input id="password1" type="password" autocomplete="new-password" name="password1" placeholder=" ">
-                    <label for="password1">Mot de passe</label>
+                    <input id="password1-<?=$this->userId?>" type="password" autocomplete="new-password" name="password1" placeholder=" ">
+                    <label for="password1-<?=$this->userId?>">Mot de passe</label>
                 </div>
                 <div class="input-wrapper">
-                    <input id="password2" type="password" name="password2" placeholder=" ">
-                    <label for="password2">Vérification du mot de passe</label>
+                    <input id="password2-<?=$this->userId?>" type="password" name="password2" placeholder=" ">
+                    <label for="password2-<?=$this->userId?>">Vérification du mot de passe</label>
                 </div>
                 <?php if($this->adminView): ?>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="locked" name="locked" <?= $this->user->isLocked() ? "checked" : "";?>>
+                        <input type="checkbox" id="locked-<?=$this->userId?>" name="locked" <?= $this->user->isLocked() ? "checked" : "";?>>
                         <svg class="checkmark">
                             <polyline points="1,5 6,9 14,1"></polyline>
                         </svg>
-                        <label for="locked">Verrouillé</label>
+                        <label for="locked-<?=$this->userId?>">Verrouillé</label>
                     </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="admin" name="admin" <?= $this->user->isAdmin() ? "checked" : "";?>>
+                        <input type="checkbox" id="admin-<?=$this->userId?>" name="admin" <?= $this->user->isAdmin() ? "checked" : "";?>>
                         <svg class="checkmark">
                             <polyline points="1,5 6,9 14,1"></polyline>
                         </svg>
-                        <label for="admin">Administrateur</label>
+                        <label for="admin-<?=$this->userId?>">Administrateur</label>
                     </div>
                 <?php endif; ?>
                 <input type="submit" class="bt">
@@ -68,8 +71,9 @@
 
         function end() { ?>
             </form>
-            <form action="/processing/delete_user_processing.php" method="POST">
-                <input type="hidden" name="userId" value="<?=$_SESSION["user"]["id"]?>">
+            <form action="/processing/user_processing.php" method="POST">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="id" value="<?=$this->userId?>">
                 <div class="bt rm-bt">Supprimer le compte</div>
             </form>
             </div>

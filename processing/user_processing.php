@@ -5,6 +5,9 @@
     if(!isUserSessionValid()) 
         redirect("/index.php");
 
+    if(!$_SESSION["user"]["admin"] && $_POST["id"] != $_SESSION["user"]["id"])
+        redirect("/account.php");
+
     function userRedirect() {
         if($_SESSION["user"]["admin"])
             redirect("/admin.php?action=users");
@@ -16,17 +19,21 @@
     if(empty($_POST["id"]) || empty($_POST["action"]))
         userRedirect();
 
-    if ($_POST["action"] == "delete") {
+    if ($_POST["action"] == "delete" && ($_SESSION["user"]["admin"] || $_POST["id"] == $_SESSION["user"]["id"])) {
         $userService = UserService::getInstance();
-        if(sizeof($userService->findAllAdmins()) <= 1) {
+        $user = $userService->findUserById($_POST["id"]);
+        if($userService->isAdmin($user) && sizeof($userService->findAllAdmins()) <= 1) {
             $_SESSION["form"]["errorMsg"] = "Il ne peut y avoir moins d'un administrateur.";
+            userRedirect();
         } else {
-            $userService->deleteUser($_POST["id"]);
-            if($_POST["id"] == $_SESSION["user"]["id"]) 
+            $userService->deleteUser($user);
+            if($_POST["id"] == $_SESSION["user"]["id"])
                 redirect("/processing/logout.php");
+            else {
+                $_SESSION["form"]["infoMsg"] = "L'utilisateur " . $user->getFirstname() . " " . $user->getLastname() . " a bien été supprimé.";
+                redirect("/admin.php?action=users");
+            }
         }
-        
-        userRedirect();
     }
 
     if($_POST["action"] != "update")
@@ -34,9 +41,6 @@
 
     if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"]) || empty($_POST["phoneCode"]) || empty($_POST["phoneNum"]))     
         userRedirect();
-
-    if(!$_SESSION["user"]["admin"] && $_POST["id"] != $_SESSION["user"]["id"])
-        redirect("/account.php");
 
     // if a non-admin tries to modify admin fields, redirect
     if(!$_SESSION["user"]["admin"] && (!empty($_POST["admin"]) || !empty($_POST["locked"])))
