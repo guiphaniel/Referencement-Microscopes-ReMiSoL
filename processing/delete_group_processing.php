@@ -19,4 +19,7 @@
         $microscopesGroupService->delete($group);
     }
 
-    redirect("/index.php");
+    if($_SESSION["user"]["admin"])
+        redirect("/admin.php?action=groups");
+    else
+        redirect("/account.php");
