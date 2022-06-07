@@ -449,13 +449,6 @@ footer ul li a:hover {
     max-height: 150px;
 }
 
-.kw-cat {
-    display: block;
-    font-size: larger;
-    margin-top: 2em;
-    margin-bottom: 1em;
-}
-
 .form-wrapper {
     display: flex;
     flex-direction: column;
@@ -664,6 +657,24 @@ fieldset:last-child, address:last-child {
     height: 1em;
     fill: white;
     pointer-events: none;
+}
+
+#cats-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: var(--global-margin-1);
+}
+
+.input-rm-wrapper {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.input-rm-wrapper .rm-bt {
+    margin-left: var(--global-margin-1);
 }
 
 /* ASIDE */

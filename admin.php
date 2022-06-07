@@ -77,16 +77,17 @@
     }
 
     function loadJS($action) {
-        echo '<script src="/public/js/undo.js" defer></script>';
         switch ($action) {
             case 'keywords':
                 echo '<script src="/public/js/keywords_form.js" defer></script>';
                 break;
             case 'micros':
+                echo '<script src="/public/js/undo.js" defer></script>';
                 echo '<script src="/public/js/micros_form.js" defer></script>';
                 echo '<script src="/public/js/undo.js" defer></script>';
                 break;
             case 'users':
+                echo '<script src="/public/js/undo.js" defer></script>';
                 echo '<script src="/public/js/user_form.js" defer></script>';
                 break;
         }
