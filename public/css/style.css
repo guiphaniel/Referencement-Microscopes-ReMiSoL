@@ -563,8 +563,8 @@ footer ul li a:hover {
 }
 
 .error-msg {
-    color: white;
-    background: crimson;
+    color: black;
+    background: #ffc8d2;
 }
 
 .info-msg {

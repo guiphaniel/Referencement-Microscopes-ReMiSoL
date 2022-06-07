@@ -22,13 +22,15 @@
 <body>
     <?php 
         $header->create();
+        $email = UserService::getInstance()->findAllAdmins()[0]->getEmail();
     ?>
     <main>
-        <?php
-            echo "<p>Une erreur est survenue.</p>";
-            $adminEmail = UserService::getInstance()->findAllAdmins()[0]->getEmail();
-            echo "<p>Si le problème persiste, veuillez contacter un administrateur à l'addresse suivante : $adminEmail</p>";
-        ?>
+        <div class="msg-wrapper">
+            <div class="msg error-msg">
+                <p>Une erreur est survenue.</p> 
+                <p>Si le problème persiste, veuillez contacter un administrateur à l'addresse suivante : <a href="<?=$email?>"><?=$email?></a></p>   
+            </div>
+        </div>
     </main>
     <?php (new FooterCreator)->create() ?>
 </body>

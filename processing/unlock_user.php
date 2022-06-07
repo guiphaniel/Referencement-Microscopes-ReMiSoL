@@ -48,8 +48,12 @@
         $header->create();
     ?>
     <main>
-        <p>Votre compte a été activé avec succès !</p>
-        <p>Vous pouvez fermer cette page en toute sécurité</p>
+        <div class="msg-wrapper">
+            <div class="msg info-msg">
+                <p>Votre compte a été activé avec succès !</p>
+                <p>Vous pouvez fermer cette page en toute sécurité</p>  
+            </div>
+        </div>
     </main>
     <?php (new FooterCreator)->create() ?>
 </body>
