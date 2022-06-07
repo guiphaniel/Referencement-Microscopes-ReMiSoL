@@ -175,11 +175,11 @@
                         <label for="contact-firstname-<?=$id?>">Prénom</label>
                     </div>
                     <div class="input-wrapper">
-                        <input id="contact-lastname-<?=$id?>" type="text" name="contacts[<?=$id?>][lastname]" autocomplete="family-name" <?=$this->valueOf($contact?->getLastname())?> placeholder=" " required>
+                        <input id="contact-lastname-<?=$id?>" class="strtoupper" type="text" name="contacts[<?=$id?>][lastname]" autocomplete="family-name" <?=$this->valueOf($contact?->getLastname())?> placeholder=" " required>
                         <label for="contact-lastname-<?=$id?>">Nom</label>
                     </div>
                     <div class="input-wrapper">
-                        <input id="contact-role-<?=$id?>" type="text" name="contacts[<?=$id?>][role]" autocomplete="organization-title" <?=$this->valueOf($contact?->getRole())?> placeholder=" " required>
+                        <input id="contact-role-<?=$id?>" class="ucfirst" type="text" name="contacts[<?=$id?>][role]" autocomplete="organization-title" <?=$this->valueOf($contact?->getRole())?> placeholder=" " required>
                         <label for="contact-role-<?=$id?>">Titre</label>
                     </div>
                     <div class="input-wrapper">
