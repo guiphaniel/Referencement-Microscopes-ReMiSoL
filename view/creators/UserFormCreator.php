@@ -63,7 +63,16 @@
                     </div>
                 <?php endif; ?>
                 <input type="submit" class="bt">
-                <div class="rm-bt"></div>
             <?php
+        }
+
+        function end() { ?>
+            </form>
+            <form action="/processing/delete_user_processing.php" method="POST">
+                <input type="hidden" name="userId" value="<?=$_SESSION["user"]["id"]?>">
+                <div class="bt rm-bt">Supprimer le compte</div>
+            </form>
+            </div>
+        <?php 
         }
     }
