@@ -85,7 +85,7 @@
     <link rel="preload" as="font" href="/public/fonts/OpenSans-ExtraBold.woff2" type="font/woff2" crossorigin="anonymous">
     <link rel="preload" as="font" href="/public/fonts/MontSerrat.woff2" type="font/woff2" crossorigin="anonymous">
     <?php loadJS($_GET["action"]??""); ?>
-    <title>Administration</title>
+    <title>Mon compte</title>
 </head>
 <body>
     <?php $header->create() ?>
