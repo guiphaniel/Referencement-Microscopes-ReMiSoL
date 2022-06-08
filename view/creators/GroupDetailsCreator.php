@@ -110,7 +110,7 @@
                                     foreach ($micro->getKeywords() as $kw)
                                         $cats[$kw->getCat()->getName()][] = $kw->getTag();
                                     
-                                    foreach($cats??[] as $cat => $tags):
+                                    foreach($cats??["Aucunes" => ["Aucunes"]] as $cat => $tags):
                                     ?>
                                         <tr>
                                             <th scope="rowgroup"><?= $cat; ?></th>
