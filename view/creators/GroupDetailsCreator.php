@@ -52,15 +52,17 @@
                 </section>
                 <section>
                     <h2>Référent·e·s</h2>
-                    <?php $nb = 1; foreach ($this->group->getContacts() as $id => $contact) : ?>
-                        <address>
-                            <h3>Référent·e n° <?=$nb++?></h3>
-                            <p><?= $contact->getFirstname() . ' ' . $contact->getLastname() . " (" . $contact->getRole() .")" ?></p>
-                            <p>Email : <a href="mailto:<?= $contact->getEmail() ?>"><?= $contact->getEmail() ?></a></p>
-                            <?php $phone = $contact->getPhoneCode() . $contact->getPhoneNum(); ?>
-                            <p>Téléphone : <a href="tel:<?= $phone ?>"><?= $phone ?></a></p>
-                        </address>
-                    <?php endforeach ?>
+                    <div class="contacts-wrapper">
+                        <?php $nb = 1; foreach ($this->group->getContacts() as $id => $contact) : ?>
+                            <address class="contact-wrapper">
+                                <h3>Référent·e n° <?=$nb++?></h3>
+                                <p><?= $contact->getFirstname() . ' ' . $contact->getLastname() . " (" . $contact->getRole() .")" ?></p>
+                                <p>Email : <a href="mailto:<?= $contact->getEmail() ?>"><?= $contact->getEmail() ?></a></p>
+                                <?php $phone = $contact->getPhoneCode() . $contact->getPhoneNum(); ?>
+                                <p>Téléphone : <a href="tel:<?= $phone ?>"><?= $phone ?></a></p>
+                            </address>
+                        <?php endforeach ?>
+                    </div>
                 </section>
                 <section>
                     <h2>Microscopes</h2>
