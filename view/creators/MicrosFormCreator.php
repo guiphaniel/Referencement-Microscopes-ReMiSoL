@@ -21,56 +21,49 @@
             $controllerService =  ControllerService::getInstance();
 
             $cmps = $compagnyService->findAllCompagnies(); ?>
-            <h3>Sociétés</h3>
-            <div id="cmps-wrapper" data-next-cmp-id="<?= $this->getNextId($cmps); ?>">
+            <div id="cmps-wrapper" class="wrapper" data-next-cmp-id="<?= $this->getNextId($cmps); ?>">
+                <h4>Sociétés</h4> 
                 <?php 
                 foreach($cmps as $cmpId => $cmp): 
                     if($cmp->getName() == "Homemade") continue;
                     $brands = $brandService->findAllBrands($cmp); ?>
-                    <div class="cmp-wrapper">
-                        <input type="text" name="cmps[<?=$cmpId?>]" value="<?=$cmp->getName()?>">
-                        <div class="rm-bt"></div>
-                        <h4>Marques</h4>
-                        <div class="brands-wrapper" data-next-brand-id="<?= $this->getNextId($brands); ?>" data-parent-id=<?=$cmpId?>>
+                    <fieldset>
+                        <?php $this->createInput("cmp-$cmpId", "cmps[$cmpId]", "Société", $cmp->getName(), class:"ucfirst") ?>
+                        <fieldset class="brands-wrapper wrapper" data-next-brand-id="<?= $this->getNextId($brands); ?>" data-parent-id=<?=$cmpId?>>
+                            <h4>Marques</h4>  
                             <?php
                             foreach($brands as $brandId => $brand): 
                                 $models = $modelService->findAllModels($brand);
                                 $ctrs = $controllerService->findAllControllers($brand); ?>
-                                <div class="brand-wrapper">
-                                    <input type="text" name="brands[<?=$cmpId?>][<?=$brandId?>]" value="<?=$brand->getName()?>">
-                                    <div class="rm-bt"></div>
-                                    <h5>Modèles</h5>
-                                    <div class="models-wrapper" data-next-model-id="<?= $this->getNextId($models); ?>" data-parent-id=<?=$brandId?>>
-                                        <?php
-                                            foreach($models as $modelId => $model): ?>
-                                            <div class="model-input-wrapper">
-                                                <input type="text" name="models[<?=$cmpId?>][<?=$brandId?>][<?=$modelId?>]" value="<?=$model->getName()?>">
-                                                <div class="rm-bt"></div>
-                                            </div>
+                                <fieldset>
+                                    <?php $this->createInput("brand-$cmpId-$brandId", "brands[$cmpId][$brandId]", "Marque", $brand->getName(), class:"ucfirst") ?>
+                                    <fieldset class="models-wrapper" data-next-model-id="<?= $this->getNextId($models); ?>" data-parent-id=<?=$brandId?>>
+                                        <h5>Modèles</h5>    
+                                        <?php foreach($models as $modelId => $model): ?>
+                                            <?php $this->createInputRm("model-$cmpId-$brandId-$modelId", "models[$cmpId][$brandId][$modelId]", "Modèle", $model->getName(), class:"ucfirst") ?>
                                         <?php endforeach; ?>
-                                        <div id="add-model" class="add-bt"></div>
-                                    </div>
-                                    <h5>Électroniques / Contrôleurs</h5>
-                                    <div class="ctrs-wrapper" data-next-ctr-id="<?= $this->getNextId($ctrs); ?>" data-parent-id=<?=$brandId?>>
+                                        <div id="add-model" class="bt add-bt">Ajouter un modèle</div>
+                                    </fieldset>
+                                    <fieldset class="ctrs-wrapper" data-next-ctr-id="<?= $this->getNextId($ctrs); ?>" data-parent-id=<?=$brandId?>>
+                                        <h5>Contrôleurs</h5>
                                         <?php
                                             foreach($ctrs as $ctrId => $ctr): ?>
-                                            <div class="ctr-input-wrapper">
-                                                <input type="text" name="ctrs[<?=$cmpId?>][<?=$brandId?>][<?=$ctrId?>]" value="<?=$ctr->getName()?>">
-                                                <div class="rm-bt"></div>
-                                            </div>
+                                            <?php $this->createInputRm("ctr-$cmpId-$brandId-$ctrId", "ctrs[$cmpId][$brandId][$ctrId]", "Contrôleur", $ctr->getName(), class:"ucfirst") ?>
                                         <?php endforeach; ?>
-                                        <div id="add-ctr" class="add-bt"></div>
-                                    </div>
-                                </div>
+                                        <div id="add-ctr" class="bt add-bt">Ajouter un contrôleur</div>
+                                    </fieldset>
+                                    <div class="bt rm-bt">Supprimer la marque</div>
+                                </fieldset>
                             <?php
                             endforeach; 
                             ?>
-                            <div id="add-brand" class="add-bt"></div>
-                        </div>
-                    </div>
+                            <div id="add-brand" class="bt add-bt">Ajouter une marque</div>
+                        </fieldset>
+                        <div class="bt rm-bt">Supprimer la société</div>
+                    </fieldset>
                 <?php
                 endforeach; ?>
-                <div id="add-cmp" class="add-bt"></div>
+                <div id="add-cmp" class="bt add-bt">Ajouter une société</div>
             </div>
             <input type="submit" class="bt">
             <?php
