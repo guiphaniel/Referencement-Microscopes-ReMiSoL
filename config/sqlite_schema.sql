@@ -54,8 +54,8 @@ CREATE TABLE "microscope" (
 	"model_id"	INTEGER,
 	"controller_id"	INTEGER,
 	"microscopes_group_id" INTEGER,
-	FOREIGN KEY("controller_id") REFERENCES "controller"("id"),
-	FOREIGN KEY("model_id") REFERENCES "model"("id"),
+	FOREIGN KEY("controller_id") REFERENCES "controller"("id") ON DELETE CASCADE,
+	FOREIGN KEY("model_id") REFERENCES "model"("id") ON DELETE CASCADE,
 	FOREIGN KEY("microscopes_group_id") REFERENCES "microscopes_group"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
