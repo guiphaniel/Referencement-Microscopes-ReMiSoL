@@ -210,6 +210,10 @@ td, th {
     flex-direction: column-reverse !important;
 }
 
+.padding-bottom-1 {
+    padding-bottom: var(--global-padding-1);
+}
+
 .ucfirst {
     text-transform: capitalize;
 }
@@ -1180,4 +1184,14 @@ input[list] {
     display: flex;
     align-items: center;
     margin-left: var(--global-margin-2);
+}
+
+/* LICENCE */
+
+.article, .clause, .subclause, .notice, .preamble {
+    margin-bottom: 2em;
+}
+
+.definition:is(span) {
+    font-weight: bold;
 }
