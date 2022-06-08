@@ -128,6 +128,14 @@ h1, h2, h3, h4, h5, h6 {
     width: fit-content;
 }
 
+p {
+    margin-bottom: var(--global-margin-1);
+}
+
+p:last-child {
+    margin: 0;
+}
+
 a {
     color: var(--color-pri-1) !important;
 }
@@ -349,14 +357,14 @@ header nav .active {
     display: flex;
     align-items: center;
     flex-direction: column;
-}
-
-.infos p {
     padding: 1em;
     margin: 2em 0;
     border-radius: var(--border-radius);
     background: var(--color-sec-2);
-    width: fit-content;
+}
+
+.infos p {
+    margin: 0;
 }
 
 /* MAIN */
@@ -389,6 +397,7 @@ footer ul {
 
 footer ul li {
     display: flex;
+    align-items: center;
 }
 
 footer ul li a {
@@ -1100,12 +1109,6 @@ input[list] {
 }
 
 /* GROUP DETAILS */
-
-.group-details-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
 .group-details {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
