@@ -92,6 +92,6 @@
         </div>
     </main>
     <?php (new FooterCreator)->create() ?>
+    <script src="public/js/map.js"></script>
 </body>
-<script src="public/js/map.js"></script>
 </html>
