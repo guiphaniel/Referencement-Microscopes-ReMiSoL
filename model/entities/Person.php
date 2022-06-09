@@ -5,14 +5,16 @@ include_once(__DIR__ . "/../../utils/normalize_utf8_string.php");
 
 class Person extends AbstractEntity
 {
+    protected string $firstname;
     protected string $lastname;
     protected string $normLastname;
     protected string $phoneCode;
 
-    function __construct(protected string $firstname, string $lastname, protected string $email, string $phoneCode, protected string $phoneNum)
+    function __construct(string $firstname, string $lastname, protected string $email, string $phoneCode, protected string $phoneNum)
     {
         parent::__construct();
 
+        $this->setFirstname($firstname);
         $this->setLastname($lastname);
         $this->setPhoneCode($phoneCode);
     }
@@ -24,7 +26,7 @@ class Person extends AbstractEntity
 
     public function setFirstname(string $firstname)
     {
-        $this->firstname = $firstname;
+        $this->firstname = ucwords($firstname);
 
         return $this;
     }
@@ -36,7 +38,7 @@ class Person extends AbstractEntity
 
     public function setLastname(string $lastname)
     {
-        $this->lastname = $lastname;
+        $this->lastname = strtoupper($lastname);
         $this->normLastname = strNormalize($lastname);
 
         return $this;

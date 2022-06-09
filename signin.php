@@ -32,11 +32,11 @@
             <form action="processing/signin_processing.php" method="post">
                 <h2>Formulaire</h2>
                 <div class="input-wrapper">
-                    <input id="firstname" type="text" autocomplete="given-name" name="firstname" placeholder=" " required>
+                    <input id="firstname" class="ucfirst" type="text" autocomplete="given-name" name="firstname" placeholder=" " required>
                     <label for="firstname">Prénom</label>
                 </div>
                 <div class="input-wrapper">
-                    <input id="lastname" type="text" autocomplete="family-name" autocapitalize="characters" name="lastname" placeholder=" " required>
+                    <input id="lastname" class="strtoupper" type="text" autocomplete="family-name" autocapitalize="characters" name="lastname" placeholder=" " required>
                     <label for="lastname">NOM</label>
                 </div>
                 <div class="input-wrapper">
