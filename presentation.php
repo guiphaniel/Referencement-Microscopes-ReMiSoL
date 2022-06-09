@@ -34,7 +34,7 @@
         </p>
         <h2>Fontionnement</h2>
         <p>
-            Le site web est alimenté par la communauté. Chaque information est soumise au contrôle du comité, puis rendue accessible à tous, par le biais de la carte présente sur la page d'accueil, la barre de recherche, et l'<a href="">API REST</a>.
+            Le site web est alimenté par la communauté. Chaque information est soumise au contrôle du comité, puis rendue accessible à tous, par le biais de la carte présente sur la page d'accueil, la barre de recherche, et notre <a href="/api/v1/reference.php">API</a>.
         </p>
     </main>
     <?php (new FooterCreator)->create() ?>

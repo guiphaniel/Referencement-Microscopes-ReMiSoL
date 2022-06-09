@@ -8,8 +8,9 @@
             <footer>
                 <nav>
                     <ul>
-                        <li class="<?= $this->isActive('/legal-infos.php') ?>"><a href="/legal-infos.php">Mentions légales</a></li>
-                        <li class="<?= $this->isActive('/contact.php') ?>"><a href="/contact.php">Nous contacter</a></li>
+                        <li><a href="/legal-infos.php" class="<?= $this->isActive('/legal-infos.php') ?>">Mentions légales</a></li>
+                        <li><a href="/contact.php" class="<?= $this->isActive('/contact.php') ?>">Nous contacter</a></li>
+                        <li><a href="/api/v1/reference.php" class="<?= $this->isActive('/api/v1/reference.php') ?>">API</a></li>
                     </ul>
                 </nav>
             </footer>

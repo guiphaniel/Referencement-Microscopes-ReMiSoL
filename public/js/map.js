@@ -13,7 +13,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
 
 // init groups' markers on the map
 let markersClusters = L.markerClusterGroup();
-loadAndShowGroups("/api/v1/listMicroscopesGroups.php");
+loadAndShowGroups("/api/v1/search.php");
 
 async function loadAndShowGroups(url) {
 	markersClusters.clearLayers();

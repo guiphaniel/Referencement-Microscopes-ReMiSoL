@@ -54,13 +54,13 @@ async function onCompagnySelect(select) {
         document.getElementById(`micro-models-` + fieldsetId).innerHTML = "<option value='Homemade'>Homemade</option>";
         modelSelect.disabled = false;
 
-        let url = "/api/v1/listControllers.php";
+        let url = "/api/v1/list_controllers.php";
         fillSelectOptions(controllerSelect, url);
     } else {
         resetSelect(modelSelect);
         resetSelect(controllerSelect);
 
-        const url = `/api/v1/listBrands.php?compagny=${select.value}`;
+        const url = `/api/v1/list_brands.php?compagny=${select.value}`;
     
         fillSelectOptions(brandSelect, url);
     }
@@ -69,11 +69,11 @@ async function onCompagnySelect(select) {
 async function onBrandSelect(select) {
     const fieldsetId = select.id.split('-')[2];
 
-	const modelsUrl = `/api/v1/listModels.php?brand=${select.value}`;
+	const modelsUrl = `/api/v1/list_models.php?brand=${select.value}`;
     let modelSelect = document.getElementById(`micro-models-` + fieldsetId);
     fillSelectOptions(modelSelect, modelsUrl);
 
-    const controllersUrl = `/api/v1/listControllers.php?brand=${select.value}`
+    const controllersUrl = `/api/v1/list_controllers.php?brand=${select.value}`
     let controllerSelect = document.getElementById(`micro-controllers-` + fieldsetId);
     fillSelectOptions(controllerSelect, controllersUrl);
 }

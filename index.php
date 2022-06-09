@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <div class="filters-group">
-                        <h3>Électronique/Contrôleurs</h3>
+                        <h3>Électronique</h3>
                         <div>
                             <?php createCheckboxes(ControllerService::getInstance()->findAllControllers(), "ctr"); ?>             
                         </div>
