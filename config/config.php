@@ -7,6 +7,8 @@
     }
 
     const WEBSITE_URL = "guilhem.davidalbertini.fr";
+    const WEB_MASTER_EMAIL = "<email of the one who'll receive the 'contact us' emails>";
+
     const MY_DBMS = DBMS::MySQL; // switch here from SQLite to MySQL as necessary
     const DB_HOST = '<database hostname>'; // fill this as necessery
     const DB_NAME = '<database name>'; // fill this as necessery

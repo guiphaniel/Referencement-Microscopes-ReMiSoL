@@ -4,18 +4,12 @@
     include_once(__DIR__ . "/Creator.php");
 
     Class FooterCreator implements Creator {
-        public function create() {
-            $email = UserService::getInstance()->findAllAdmins()[0]->getEmail();?>
+        public function create() { ?>
             <footer>
                 <nav>
                     <ul>
                         <li class="<?= $this->isActive('/legal-infos.php') ?>"><a href="/legal-infos.php">Mentions légales</a></li>
-                        <li class="<?= $this->isActive('/contact.php') ?>"><a href="/contact.php">Contact</a></li>
-                        <li>
-                        <address>
-                            <a href="mailto:<?=$email?>"><?=$email?></a>
-                        </address>
-                        </li>
+                        <li class="<?= $this->isActive('/contact.php') ?>"><a href="/contact.php">Nous contacter</a></li>
                     </ul>
                 </nav>
             </footer>
