@@ -88,6 +88,9 @@
                 echo '<script src="/public/js/undo.js" defer></script>';
                 echo '<script src="/public/js/user_form.js" defer></script>';
                 break;
+            default:
+                echo '<script src="/public/js/undo.js" defer></script>';
+                break;
         }
     }
 ?>
