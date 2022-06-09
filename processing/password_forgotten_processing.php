@@ -20,9 +20,9 @@
         $id = $user->getId();
 
         // send reset mail
-        $object = "[RéMiSoL] Réinitialisation de votre mot de passe";
+        $subject = "[RéMiSoL] Réinitialisation de votre mot de passe";
         $content = "Bonjour,\n\nVotre demande de réinitialisation de mot de passe à bien été prise en compte. Pour finaliser la procédure, veuillez suivre le lien suivant : https://" . WEBSITE_URL . "/reset_password.php?id=$id&token=$token\n\nA bientôt.\n\n\n Ce courriel est un courriel automatique, merci de ne pas y répondre.";
-        sendEmail($user->getEmail(), $object, $content);
+        sendEmail($user->getEmail(), $subject, $content);
     }
 
     $_SESSION["form"]["infoMsg"] = "Nous avons bien enregistré votre demande de réinitialisation de mot de passe. Si le courriel que vous nous avez communiqué correspond à un compte enregistré sur " . WEBSITE_URL . ", un message vous a été envoyé.";

@@ -23,9 +23,9 @@
         $token = $userService->lockUser($user);
 
         // send verification mail
-        $object = "[RéMiSoL] Activation de votre compte";
+        $subject = "[RéMiSoL] Activation de votre compte";
         $content = "Bonjour,\n\nAfin d'activer votre compte, veuillez suivre le lien suivant : https://" . WEBSITE_URL . "/processing/unlock_user.php?id=$id&token=$token\n\nA bientôt.\n\n\n Ce courriel est un courriel automatique, merci de ne pas y répondre.";
-        sendEmail($user->getEmail(), $object, $content);
+        sendEmail($user->getEmail(), $subject, $content);
     } catch (\Throwable $th) {
         $_SESSION["form"]["errorMsg"]=$th->getMessage();
         header('location: /signin.php');

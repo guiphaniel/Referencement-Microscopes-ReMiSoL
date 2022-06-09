@@ -173,11 +173,11 @@
     }
 
     // else, send an email to all the admins
-    $object = "[RéMiSoL] Nouvelle fiche";
+    $subject = "[RéMiSoL] Nouvelle fiche";
     $content = "Bonjour,\n\nUne nouvelle fiche a été créée par {$_SESSION["user"]["firstname"]} {$_SESSION["user"]["lastname"]} ({$_SESSION["user"]["email"]}).\n\nPour l'administrer, suivez le lien suivant : https://" . WEBSITE_URL . "/group-details.php?id=$groupId.";
 
     foreach (UserService::getInstance()->findAllAdmins() as $admin) {
-        sendEmail($admin->getEmail(), $object, $content);
+        sendEmail($admin->getEmail(), $subject, $content);
     }
     
     redirect("/account.php");
