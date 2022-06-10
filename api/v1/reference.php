@@ -29,7 +29,7 @@
         <h2>Conditions d'utilisation</h2>
         <p> 
             En utilisant cette API, vous vous engagez à respecter notre clause relative à l'utilisation des données personnelles, telle que définie dans nos <a href="/legal-infos.php">mentions légales</a>. <br>
-            Ainsi, vous ne devrez pas traiter les données personnelles (téléphones, courriels...) reseignées par les utilisateurs.
+            Ainsi, vous ne devrez pas traiter les données à caractère personnel (téléphones, courriels...) renseignées par les utilisateurs.
         </p>
         <h2>Avertissement</h2>
         <p> 
