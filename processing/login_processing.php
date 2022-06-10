@@ -17,7 +17,6 @@
         if (!$user)
             throw new Exception("Informations erronées");
 
-        // TODO: add link to resend email
         if ($user->isLocked())
             throw new Exception("Informations erronées");
 

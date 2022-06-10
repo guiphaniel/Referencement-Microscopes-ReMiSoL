@@ -19,7 +19,6 @@
             return self::$instance;
         }
 
-        // TODO: check if the lab / brand / controller / are already in db, else add them but also add them in a table "to_verify", maybe in the add/save functions of each Service
         function save(MicroscopesGroup $group) : int {
             global $pdo;
 
