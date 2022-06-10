@@ -209,7 +209,15 @@
     private function createCoorField($coor) {
         ?>
             <fieldset id="coor">
-                <legend><h2>Coordonnées</h2></legend>
+                <legend><h2>Coordonnées<span class="tooltip" data-tooltip-content="Renseignez les coordonnées de votre groupe de microscope. Il vous suffit de cliquer sur la carte à l'emplacement désiré !"></span></h2></legend>
+                <div id="map-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="def">            
+                        <defs>
+                            <path id="marker" d="M168.3 499.2C116.1 435 0 279.4 0 192C0 85.96 85.96 0 192 0C298 0 384 85.96 384 192C384 279.4 267 435 215.7 499.2C203.4 514.5 180.6 514.5 168.3 499.2H168.3zM192 256C227.3 256 256 227.3 256 192C256 156.7 227.3 128 192 128C156.7 128 128 156.7 128 192C128 227.3 156.7 256 192 256z"/>
+                        </defs>
+                    </svg>
+                    <div id="map"></div>
+                </div>
                 <div class="input-wrapper">
                     <input id="lat" type="number" name="coor[lat]" min="41" max="52" step="0.00001" <?=$this->valueOf($coor?->getLat())?> placeholder=" " required>
                     <label for="lat">Latitude</label>

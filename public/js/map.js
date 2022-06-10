@@ -322,3 +322,15 @@ function updateFilters() {
 
 	loadAndShowGroups(url);
 }
+
+/* form auto fill */
+
+if(page == "form.php") {
+	map.on('click', fillCoordinates);
+}
+
+function fillCoordinates(e) {
+	normalizedLatLng = normalizeLatLng(e.latlng, 5);
+    document.getElementById("lat").value = normalizedLatLng.lat;
+    document.getElementById("lon").value = normalizedLatLng.lng;
+}

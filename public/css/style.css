@@ -839,9 +839,18 @@ text-align: center;
     fill: rgb(var(--mix-color));
 }
 
+.leaflet-popup-content {
+    margin: var(--global-margin-1) !important;
+    width: max-content;
+}
+
 .leaflet-popup-content p, .leaflet-popup-content li {
     margin: 0;
-    margin-bottom: 1em;
+    margin-bottom: 1em !important;
+}
+
+.leaflet-popup-content address > :last-child {
+    margin-bottom: 0 !important;
 }
 
 /* DESKTOP VIEW */
@@ -1277,6 +1286,7 @@ code {
     max-width: 200px;
     text-align: center;
     text-transform: none;
+    font-size: 16px;
     border-radius: var(--border-radius);
     padding: var(--global-padding-1);
     background-color: var(--color-sec-2);
