@@ -244,6 +244,28 @@ strong {
     font-weight: bold;
 }
 
+/* SCROLLBAR */
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: var(--color-sec-2)
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--color-pri-2);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-pri-1);
+}
+
 /*HEADER*/
 
 header {
@@ -290,6 +312,7 @@ header {
     width: var(--icon-size);
     height: var(--icon-size);
     opacity: 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 #hamburger-check:checked ~ .hamburger {
