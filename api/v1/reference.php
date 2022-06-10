@@ -41,7 +41,7 @@
         <div class="api-wrapper">
             <h3>/search</h3>
             <p>Retourne, parmi les groupes de microscopes présents sur le site, ceux comportant au moins une occurrence d'un des filtres fournis, parmis leur <strong>matériel</strong> (société, marque, modèle, élèctronique), leur <strong>description</strong>, leurs <strong>mots-clés</strong>, ou le <strong>nom de famille</strong> d'un·e de leurs référent·e·s.</p>
-            <p>La recherche s'effectue donc avec un <strong>ou logique</strong> <code>|</code> entre les filtres</p>
+            <p>La recherche s'effectue donc avec un <strong>ou logique</strong> entre les filtres</p>
             <h4>Paramètres</h4>
             <table class="api-params">
                 <thead>
