@@ -916,8 +916,11 @@ text-align: center;
 
     /* MAP */
 
+    .index-map-wrapper #map {
+        height: 500px;
+    }
+    
     #map {
-        height: 600px;
         position: sticky !important; 
         top: 16em;
         margin-bottom: 0;

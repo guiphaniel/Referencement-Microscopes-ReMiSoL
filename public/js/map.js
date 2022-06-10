@@ -60,9 +60,9 @@ async function loadAndShowGroups(url) {
 		
 		markersClusters.addLayer(marker);
 
-		// zoom on the marker if wer're on it's group-details page
-		if(page == "group-details.php" && group.id == window.location.search.split("=").pop()) {
-			map.setView(group.coor, 13);
+		// zoom on the marker if wer're on it's group-details/edit page
+		if((page == "group-details.php" || page == "edit_micros_group.php") && group.id == window.location.search.split("=").pop()) {
+			map.setView(group.coor, 16);
 		}
 	}
 
@@ -325,7 +325,7 @@ function updateFilters() {
 
 /* form auto fill */
 
-if(page == "form.php") {
+if(page == "form.php" || page == "edit_micros_group.php") {
 	map.on('click', fillCoordinates);
 }
 
