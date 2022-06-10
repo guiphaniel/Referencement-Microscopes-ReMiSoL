@@ -1218,6 +1218,7 @@ input[list] {
 .micro-img {
     max-width: 533px;
     max-height: 200px;
+    border-radius: var(--border-radius);
     display: block;
     margin: 0 auto;
 }
