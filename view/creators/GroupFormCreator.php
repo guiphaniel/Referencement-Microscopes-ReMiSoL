@@ -289,7 +289,7 @@
             </div>
             <div class="input-wrapper">
                 <input id="micro-rate-<?=$id?>" type="url" name="micros[<?=$id?>][rate]" <?=$this->valueOf($micro?->getRate())?> autocomplete="url" placeholder=" ">
-                <label for="micro-rate-<?=$id?>">Tarification (si concerné : lien internet)</label>
+                <label for="micro-rate-<?=$id?>">Tarification<span class="tooltip" data-tooltip-content="Si vous proposez une tarification pour votre matériel, merci de fournir un lien internet vers celle-ci."></span></label>
             </div>
             <div class="select-wrapper">
                 <label for="micro-access-<?=$id?>">Ouvert aux</label>
@@ -339,7 +339,7 @@
                 ?>
             </fieldset>
             <fieldset id="keywords">
-                <legend><h4>Mots-clés</h4></legend>
+                <legend><h4>Mots-clés<span class="tooltip" data-tooltip-content="Choisissez des mots-clés parmis ceux proposés. Notez que sur certains navigateurs, il peut être nécessaire de cliquer deux fois sur le champ pour que la liste s'affiche."></span></h4></legend>
                 <?php 
                     $keyWordService = KeywordService::getInstance();
                     $cats = $keyWordService->findAllCategories();
