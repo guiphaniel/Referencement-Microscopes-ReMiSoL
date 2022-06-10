@@ -124,19 +124,16 @@
             }
 
             // retrieve the file extension
-            $fileType = $imgs['type'][$formMicroId];
-            $fileType = substr($fileType, strrpos($fileType, "/") + 1);
             $tmpName = $imgs['tmp_name'][$formMicroId];
             $image;
-            switch ($fileType) {
-                case "png":
+            switch (exif_imagetype($tmpName)) {
+                case IMAGETYPE_PNG:
                     $image = imagecreatefrompng($tmpName);
                     break;
-                case "jpg":
-                case "jpeg":
+                case IMAGETYPE_JPEG:
                     $image = imagecreatefromjpeg($tmpName);
                     break;
-                case "webp":
+                case IMAGETYPE_WEBP:
                     $image = imagecreatefromwebp($tmpName);
                     break;
                 default:
@@ -157,6 +154,7 @@
             ); 
         }
     } catch (\Throwable $th) {
+        throw $th;
         $_SESSION["form"]["errorMsg"]=$th->getMessage();
         
         if(isset($_POST["id"])) {
