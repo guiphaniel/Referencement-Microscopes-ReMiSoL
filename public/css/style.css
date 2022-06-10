@@ -89,6 +89,9 @@ q:before, q:after {
 	content: '';
 	content: none;
 }
+.table-wrapper {
+    overflow-x: auto;
+}
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -484,7 +487,7 @@ footer nav .active {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    max-width: 300px;
+    max-width: 100%;
     max-height: 150px;
 }
 
@@ -1216,7 +1219,7 @@ input[list] {
 }
 
 .micro-img {
-    max-width: 533px;
+    max-width: 100%;
     max-height: 200px;
     border-radius: var(--border-radius);
     display: block;

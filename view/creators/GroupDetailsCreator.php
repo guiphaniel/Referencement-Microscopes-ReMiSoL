@@ -105,28 +105,30 @@
                                     <p>Ouvert aux industriels</p>
                                 <?php endif; ?>
                             </div>
-                            <table>
-                                <caption><h4>Mots-clés</h4></caption>
-                                <thead>
-                                    <tr>
-                                        <th scope="colgroup">Catégories</th>
-                                        <th scope="colgroup">Étiquettes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php 
-                                    foreach ($micro->getKeywords() as $kw)
-                                        $cats[$kw->getCat()->getName()][] = $kw->getTag();
-                                    
-                                    foreach($cats??["Aucunes" => ["Aucunes"]] as $cat => $tags):
-                                    ?>
+                            <div class="table-wrapper">
+                                <table>
+                                    <caption><h4>Mots-clés</h4></caption>
+                                    <thead>
                                         <tr>
-                                            <th scope="rowgroup"><?= $cat; ?></th>
-                                            <td><?= implode(", ", $tags); ?></td>
+                                            <th scope="colgroup">Catégories</th>
+                                            <th scope="colgroup">Étiquettes</th>
                                         </tr>
-                                    <?php endforeach; unset($cats);?>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                        foreach ($micro->getKeywords() as $kw)
+                                            $cats[$kw->getCat()->getName()][] = $kw->getTag();
+                                        
+                                        foreach($cats??["Aucunes" => ["Aucunes"]] as $cat => $tags):
+                                        ?>
+                                            <tr>
+                                                <th scope="rowgroup"><?= $cat; ?></th>
+                                                <td><?= implode(", ", $tags); ?></td>
+                                            </tr>
+                                        <?php endforeach; unset($cats);?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </section>
                     <?php endforeach ?>
                 </section>
