@@ -26,16 +26,21 @@
             Afin de vous aider à créer votre propre application de consultation du matériel mis à disposition sur notre site, nous mettons à disposition notre <strong>API REST</strong>. <br>
             Celle-ci est accessible à tous, et à tout moment. 
         </p>
+        <h2>Conditions d'utilisation</h2>
+        <p> 
+            En utilisant cette API, vous vous engagez à respecter notre clause relative à l'utilisation des données personnelles, telle que définie dans nos <a href="/legal-infos.php">mentions légales</a>. <br>
+            Ainsi, vous ne devrez pas traiter les données personnelles (téléphones, courriels...) reseignées par les utilisateurs.
+        </p>
         <h2>Avertissement</h2>
         <p> 
-            Cette API etant libre d'accès, nous vous prions d'en avoir une utilisation raisonnable, et d'éviter les requêtes trop fréquentes, qui risqueraient de surcharger notre site. <br>
+            Cette API étant libre d'accès, nous vous prions d'en avoir une utilisation raisonnable, et d'éviter les requêtes trop fréquentes, qui risqueraient de surcharger notre site. <br>
             Pour toute question technique sur l'utilisation de l'API, ou pour tout problème rencontré, n'hésitez pas à ouvrir une "issue" sur notre <a href="https://github.com/guiphaniel/Referencement-Microscopes-ReMiSoL" target="_blank">GitHub</a>.
         </p>
         <h2>Utilisation</h2>
-        <p>nb : les recherches son <strong>insensibles à la casse</strong></p>
+        <p>nb : les recherches sont <strong>insensibles à la casse</strong></p>
         <div class="api-wrapper">
             <h3>/search</h3>
-            <p>Retourne, parmis les groupes de microscopes présents sur le site, ceux comportant au moins une occurrence d'un des filtres fournis, parmis leur <strong>matériel</strong> (société, marque, modèle, élèctronique), leur <strong>description</strong>, leurs <strong>mots-clés</strong>, ou le <strong>nom de famille</strong> d'un·e de leurs référent·e·s.</p>
+            <p>Retourne, parmi les groupes de microscopes présents sur le site, ceux comportant au moins une occurrence d'un des filtres fournis, parmis leur <strong>matériel</strong> (société, marque, modèle, élèctronique), leur <strong>description</strong>, leurs <strong>mots-clés</strong>, ou le <strong>nom de famille</strong> d'un·e de leurs référent·e·s.</p>
             <p>La recherche s'effectue donc avec un <strong>ou logique</strong> <code>|</code> entre les filtres</p>
             <h4>Paramètres</h4>
             <table class="api-params">
