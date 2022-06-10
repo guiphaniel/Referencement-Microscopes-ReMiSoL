@@ -331,6 +331,14 @@ if(page == "form.php" || page == "edit_micros_group.php") {
 
 function fillCoordinates(e) {
 	normalizedLatLng = normalizeLatLng(e.latlng, 5);
-    document.getElementById("lat").value = normalizedLatLng.lat;
-    document.getElementById("lon").value = normalizedLatLng.lng;
+	let lat = normalizedLatLng.lat;
+	let lon = normalizedLatLng.lng;
+
+	if(lat < 41) lat = 41;
+	if(lat > 52) lat = 52;
+	if(lon < -6) lon = -6;
+	if(lon > 11) lon = 11;
+
+    document.getElementById("lat").value = lat;
+    document.getElementById("lon").value = lon;
 }
