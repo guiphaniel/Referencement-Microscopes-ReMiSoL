@@ -7,7 +7,7 @@
     include_once("model/services/UserService.php");
     include_once("model/services/MicroscopesGroupService.php");
 
-    if(!isUserSessionValid() || MicroscopesGroupService::getInstance()->findGroupOwner($_GET["id"])?->getId() != $_SESSION["user"]["id"]) 
+    if(!isUserSessionValid() || MicroscopesGroupService::getInstance()->findGroupOwner($_GET["id"])?->getId() != $_SESSION["user"]["id"] ||  !$_SESSION["user"]["admin"]) 
         redirect("/index.php");
 
     $header = new HeaderCreator("Édition"); 
