@@ -32,7 +32,13 @@
             <section class="group-details">
                 <section>
                     <div class="group-details-header">
-                        <h2><?= $this->group->getLab()->getName() . " (" . $this->group->getLab()->getType() . $this->group->getLab()->getCode() . ")"; ?></h2>
+                        <?php 
+                            $lab = $this->group->getLab();
+                            $labName = $lab->getName();
+                            if($lab->getType() != "Autre")
+                            $labName .= " (" . $this->group->getLab()->getType() . $this->group->getLab()->getCode() . ")"; 
+                        ?> 
+                        <h2><?= $labName ?></h2>
                         <?php $this->createEditBts() ?>
                     </div>
                     <?php if($this->showMap) : ?>

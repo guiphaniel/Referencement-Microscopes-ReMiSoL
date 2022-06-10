@@ -3,9 +3,9 @@
     include_once(__DIR__ . "/Address.php");
     
     class Lab extends AbstractEntity {
-        private string $code;
+        private $code;
 
-        function __construct(private string $name, private string $type, string $code, private string $website, private Address $address) {
+        function __construct(private string $name, private string $type, $code, private string $website, private Address $address) {
             parent::__construct();
             $this->setCode($code);
         }
@@ -29,7 +29,7 @@
 
         public function setType($type)
         {
-            if(!in_array($type, ["UPR", "UMR","UAR", "FR", "EMR"]))
+            if(!in_array($type, ["UPR", "UMR","UAR", "FR", "EMR", "Autre"]))
                 throw new Exception("Le code du laboratoire / service saisi est invalide");
 
             $this->type = $type;
@@ -44,7 +44,7 @@
 
         public function setCode($code)
         {
-            if($code < 10 || $code > 9999)
+            if($code != null && ($code < 10 || $code > 9999))
                 throw new Exception("Le numéro du code du laboratoire / service saisi est invalide");
 
             $this->code = $code;

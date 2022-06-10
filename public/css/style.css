@@ -699,6 +699,10 @@ form fieldset :last-child, form address :last-child {
     width: 100%;
 }
 
+.tags-wrapper > :last-child {
+    margin-bottom: var(--global-margin-1);
+}
+
 .bt svg {
     width: 1em;
     height: 1em;

@@ -19,9 +19,13 @@
     }
 
     $labInfos = $_POST["lab"];
-    if(empty($labInfos["name"]) || empty($labInfos["type"]) || empty($labInfos["code"]) || empty($labInfos["address"]) || empty($labInfos["website"])) {     
+    if(empty($labInfos["name"]) || empty($labInfos["type"]) || empty($labInfos["address"]) || empty($labInfos["website"])) {     
         redirect("/form.php");
     }
+
+    if($labInfos["type"] != "Autre" && empty($labInfos["code"])) {
+        redirect("/form.php");
+    } 
 
     $labAddress = $labInfos["address"];
     if (empty($labAddress["street"]) || empty($labAddress["zipCode"]) || empty($labAddress["city"]) || empty($labAddress["country"])) {
@@ -58,7 +62,7 @@
     try {
         // Convert form values into objects...
         $address = new Address($labAddress["school"], $labAddress["street"], $labAddress["zipCode"], $labAddress["city"], $labAddress["country"]);
-        $lab = new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"], $labInfos["website"], $address);
+        $lab = new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"]??null, $labInfos["website"], $address);
     
         $contacts = [];
         foreach($_POST["contacts"] as $id => $contact) {

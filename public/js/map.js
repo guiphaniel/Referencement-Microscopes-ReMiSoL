@@ -137,7 +137,10 @@ function getCustomPopupHTML(group) {
 	let infos = document.createElement("section");
 
 	// lab
-	infos.append(createH(2, group.lab.name + " (" + group.lab.type + group.lab.code + ")"));
+	let labName = group.lab.name;
+	if(group.lab.type != "Autre")
+		labName += " (" + group.lab.type + group.lab.code + ")";
+	infos.append(createH(2, labName));
 
 	// website
 	{

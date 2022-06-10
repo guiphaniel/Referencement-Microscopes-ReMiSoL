@@ -127,7 +127,7 @@
                             <?php endforeach; ?>
                         </select>
                         <div class="input-wrapper">
-                            <input id="lab-code" type="number" name="lab[code]" min="10" max="9999" <?=$this->valueOf($lab?->getCode())?> placeholder=" " required>
+                            <input id="lab-code" type="number" name="lab[code]" min="10" max="9999" <?=$this->valueOf($lab?->getCode())?> placeholder=" " <?=isset($lab) && $lab->getCode() == null ? "disabled" : ""?> required>
                             <label for="lab-code">Code</label>
                         </div>
                     </div>

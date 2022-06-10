@@ -56,7 +56,7 @@ CREATE TABLE address (
 CREATE TABLE lab (
 	id	INTEGER AUTO_INCREMENT,
 	name	VARCHAR(50),
-	type	VARCHAR(4),
+	type	ENUM("UPR", "UMR","UAR", "FR", "EMR", "Autre"),
 	code	VARCHAR(10),
 	website	VARCHAR(200),
 	address_id	INTEGER,

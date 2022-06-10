@@ -331,6 +331,11 @@ document.addEventListener("change", function(event) {
     reader.readAsDataURL(file);
 })
 
+/* LAB TYPE "autre" (other) */
 
+document.getElementById("lab-type").addEventListener("change", onLabTypeChange);
 
+function onLabTypeChange(e) {
+    document.getElementById("lab-code").disabled = e.target.value == "Autre";
+}
 
