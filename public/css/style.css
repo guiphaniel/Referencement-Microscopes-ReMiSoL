@@ -454,6 +454,7 @@ footer ul li a {
     padding: var(--global-padding-1);
     border-radius: var(--border-radius);
     transition: ease-in-out var(--trans-dur);
+    text-align: center;
 }
 
 footer nav a:hover {
