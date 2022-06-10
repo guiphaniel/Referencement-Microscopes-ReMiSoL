@@ -74,8 +74,12 @@
         foreach ($toUpdate as $e) 
             $service->update($olds[$e->getId()], $e);
         
-        foreach ($toDelete as $e) 
+        foreach ($toDelete as $e)  {
+            if($e->getName() == "Homemade")
+                continue;
+                
             $service->delete($e);
+        }
     }
 
     function getDuplicates($array) {
