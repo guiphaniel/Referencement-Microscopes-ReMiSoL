@@ -1055,14 +1055,28 @@ text-align: center;
     padding: 0;
     color: white;
     font-size: 20px;
-    transition: var(--trans-dur);
+    transition: width var(--trans-dur);
     line-height: 50px;
     width: 0;
+}
+
+/* reset css */
+#search-input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px black inset !important;
+    -webkit-text-fill-color: white !important;
 }
 
 #search-input:focus,
 #search-input:not(:placeholder-shown) {
     width: 100%;
+}
+
+#search-input:not(:placeholder-shown) ~ #search-bt {
+    pointer-events: all;
+}
+
+#search-input:not(:placeholder-shown) ~ #search-label {
+    pointer-events: none;
 }
 
 #search-input:not(:placeholder-shown) ~ #search-bt {
