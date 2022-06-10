@@ -1247,6 +1247,10 @@ input[list] {
     margin-bottom: 2em;
 }
 
+.article a {
+    scroll-margin-top: 200px;
+}
+
 .definition:is(span) {
     font-weight: bold;
 }
