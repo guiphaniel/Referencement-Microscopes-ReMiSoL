@@ -154,7 +154,6 @@
             ); 
         }
     } catch (\Throwable $th) {
-        throw $th;
         $_SESSION["form"]["errorMsg"]=$th->getMessage();
         
         if(isset($_POST["id"])) {
