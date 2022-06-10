@@ -11,7 +11,7 @@
     $subject = "[RéMiSoL] ";
     $subject .= $_POST["subject"];
 
-    $content = "Bonjour,\n\nVous avez reçu un nouveau message de {$_POST["firstname"]} {$_POST["lastname"]}.\n\n\n";
+    $content = "Bonjour,\n\nVous avez reçu un nouveau message de {$_POST["firstname"]} {$_POST["lastname"]} ({$_POST["email"]}).\n\n\n";
     $content .= $_POST["subject"] ."\n\n";
     $content .= $_POST["content"];
 
