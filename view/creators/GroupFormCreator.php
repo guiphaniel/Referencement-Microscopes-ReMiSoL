@@ -347,7 +347,7 @@
                 ?>
             </fieldset>
             <fieldset id="keywords">
-                <legend><h4>Mots-clés<span class="tooltip" data-tooltip-content="Choisissez des mots-clés parmis ceux proposés. Notez que sur certains navigateurs, il peut être nécessaire de cliquer deux fois sur le champ pour que la liste s'affiche."></span></h4></legend>
+                <legend><h4>Mots-clés<span class="tooltip" data-tooltip-content="Choisissez des mots-clés parmi ceux proposés. Notez que sur certains navigateurs, il peut être nécessaire de cliquer deux fois sur le champ pour que la liste s'affiche."></span></h4></legend>
                 <?php 
                     $keyWordService = KeywordService::getInstance();
                     $cats = $keyWordService->findAllCategories();

@@ -25,14 +25,14 @@
         <h2>Historique</h2>
         <p>
             Le réseau des microscopies à sonde locale (<abbr title="Réseau des Microscopies à Sonde Locale">RéMiSoL</abbr>) est un réseau technologique implanté nationalement, qui a pour objet de fédérer les techniciens, ingénieurs et chercheurs ayant une expertise dans l’utilisation et/ou le développement de techniques de pointes.<br>
-            C'est dans cette même cette démarche d'unité que s'incrit de ce site.
+            C'est dans cette même démarche que s'incrit de ce site.
         </p>
         <h2>Objectifs</h2>
         <p>
             Ce site a pour but d'aider le référencement des microscopes présents sur le territoire, pour simplifier leur mise à disposition au reste de la communauté.<br>
             L'accès aux informations est libre, mais un compte est nécessaire pour référencer son propre matériel.
         </p>
-        <h2>Fontionnement</h2>
+        <h2>Fonctionnement</h2>
         <p>
             Le site web est alimenté par la communauté. Chaque information est soumise au contrôle du comité, puis rendue accessible à tous, par le biais de la carte présente sur la page d'accueil, la barre de recherche, et notre <a href="/api/v1/reference.php">API</a>.
         </p>
