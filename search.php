@@ -91,23 +91,23 @@
             ?>
         </div>
         <?php if($nbTotalMicros > RESULT_PER_QUERY): ?>
-            <nav id="page-nav">
-                <ul>
-                    <?php $maxPage = ceil($nbTotalMicros / RESULT_PER_QUERY) - 1;
-                    if($page > 0): ?>
-                        <li><a id="previous-page" class="bt" href="/search.php?filters=<?=$_GET["filters"]?>&page=<?=max(0, $page - 1)?>">< Précédent</a></li>
-                    <?php endif;?>
-                    <li><a href="/search.php?filters=<?=$_GET["filters"]?>&page=0" <?=$page == 0 ? 'class="current-page"' : ""?>><?=1?></a></li>
-                    <?php for($i = max(1, $page - 3); $i < min($page + 4, $maxPage) ; $i++): ?>
-                        <li><a href="/search.php?filters=<?=$_GET["filters"]?>&page=<?=$i?>" <?=$page == $i ? 'class="current-page"' : ""?>><?=$i + 1?></a></li>
-                    <?php endfor; ?>
-                    <li><a href="/search.php?filters=<?=$_GET["filters"]?>&page=<?=$maxPage?>" <?=$page == $maxPage ? 'class="current-page"' : ""?>><?=$maxPage + 1?></a></li>
-                    <?php if($nbTotalMicros > ($page + 1) * RESULT_PER_QUERY): ?>
-                        <li><a  id="next-page" class="bt" href="/search.php?filters=<?=$_GET["filters"]?>&page=<?=$page + 1?>">Suivant ></a></li>
-                    <?php endif; ?>
-                </ul>
-            </nav>
-            <?php endif; ?>
+        <nav id="page-nav">
+            <ul>
+                <?php $maxPage = ceil($nbTotalMicros / RESULT_PER_QUERY) - 1;
+                if($page > 0): ?>
+                    <li><a id="previous-page" class="bt" href="/search.php?filters=<?=$_GET["filters"]?>&page=<?=max(0, $page - 1)?>">< Précédent</a></li>
+                <?php endif;?>
+                <li><a href="/search.php?filters=<?=$_GET["filters"]?>&page=0" <?=$page == 0 ? 'class="current-page"' : ""?>><?=1?></a></li>
+                <?php for($i = max(1, $page - 3); $i < min($page + 4, $maxPage) ; $i++): ?>
+                    <li><a href="/search.php?filters=<?=$_GET["filters"]?>&page=<?=$i?>" <?=$page == $i ? 'class="current-page"' : ""?>><?=$i + 1?></a></li>
+                <?php endfor; ?>
+                <li><a href="/search.php?filters=<?=$_GET["filters"]?>&page=<?=$maxPage?>" <?=$page == $maxPage ? 'class="current-page"' : ""?>><?=$maxPage + 1?></a></li>
+                <?php if($nbTotalMicros > ($page + 1) * RESULT_PER_QUERY): ?>
+                    <li><a  id="next-page" class="bt" href="/search.php?filters=<?=$_GET["filters"]?>&page=<?=$page + 1?>">Suivant ></a></li>
+                <?php endif; ?>
+            </ul>
+        </nav>
+        <?php endif; ?>
     </main>
     <?php (new FooterCreator)->create() ?>
 </body>
