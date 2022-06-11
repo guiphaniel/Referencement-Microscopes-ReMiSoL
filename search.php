@@ -95,7 +95,7 @@
                         <li><a id="previous-page" class="bt" href="/search.php?filters=<?=$_GET["filters"]?>&page=<?=max(0, $page - 1)?>">< Précédent</a></li>
                     <?php endif;?>
                     <li><a href="/search.php?filters=<?=$_GET["filters"]?>&page=0" <?=$page == 0 ? 'class="current-page"' : ""?>><?=1?></a></li>
-                    <?php for($i = max(1, $page - 3); $i < max(1, min($page + 3, $maxPage)); $i++): ?>
+                    <?php for($i = max(1, $page - 3); $i < min($page + 4, $maxPage) ; $i++): ?>
                         <li><a href="/search.php?filters=<?=$_GET["filters"]?>&page=<?=$i?>" <?=$page == $i ? 'class="current-page"' : ""?>><?=$i + 1?></a></li>
                     <?php endfor; ?>
                     <li><a href="/search.php?filters=<?=$_GET["filters"]?>&page=<?=$maxPage?>" <?=$page == $maxPage ? 'class="current-page"' : ""?>><?=$maxPage + 1?></a></li>
