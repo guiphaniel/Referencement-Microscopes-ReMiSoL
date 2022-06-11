@@ -61,7 +61,7 @@ async function loadAndShowGroups(url) {
 		markersClusters.addLayer(marker);
 
 		// zoom on the marker if wer're on it's group-details/edit page
-		if((page == "group-details.php" || page == "edit_micros_group.php") && group.id == window.location.search.split("=").pop()) {
+		if((page == "group-details.php" || page == "edit_micros_group.php") && group.id == window.location.search.split("&")[0].split("=").pop()) {
 			map.setView(group.coor, 16);
 		}
 	}
