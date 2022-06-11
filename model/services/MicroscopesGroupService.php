@@ -105,13 +105,13 @@
             return $user;
         }
 
-        function findAllMicroscopesGroup($includeLocked = true, $filters = []) {
+        function findAllMicroscopesGroup($includeLocked = true, $filters = [], int $limit = -1, int $offset = -1) {
             global $pdo;
 
             // get groups infos
             if(empty($filters)) {
                 $sql = "
-                    select g.id
+                    select g.id as groupId
                     from microscopes_group as g
                 ";
                 if(!$includeLocked)
@@ -150,6 +150,13 @@
                 if(!$includeLocked)
                     $sql .= "and groupId not in (select microscopes_group_id from locked_microscopes_group)";
             }
+
+            $sql .= " ORDER BY groupId";
+            if($limit >=0) 
+                $sql .= " LIMIT $limit";
+            if($offset >=0) 
+                $sql .= " OFFSET $offset";
+
             $sth = $pdo->query($sql);
 
             // generate groups

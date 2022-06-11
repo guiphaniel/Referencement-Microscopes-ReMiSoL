@@ -44,33 +44,21 @@
                 echo "</div>";
                 break;
             default:
-                echo "<h2>Fiches</h2>";
+                echo "<h2>Fiches en attente</h2>";
                 echo "<div>";
-                $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroup();
-                $lockedGroups = [];
-                $unlockedGroups = [];
-                foreach ($groups as $group) {
-                    if($group->isLocked())
-                        $lockedGroups[] = $group;
-                    else
-                        $unlockedGroups[] = $group;
-                }
-                $nbLocked = sizeof($lockedGroups);
-                $nbUnlocked = sizeof($unlockedGroups);
-                echo "<h2>En attentes ($nbLocked)</h2>";
-                if(sizeof($lockedGroups) < 1)
-                    echo "<p>Il n'y a aucune fiche en attente pour l'instant</p>";
-                else {
-                    foreach($lockedGroups as $group)
-                        (new GroupDetailsCreator($group, false))->create();
-                }
-                echo "<h2>Validées ($nbUnlocked)</h2>";
-                if(sizeof($unlockedGroups) < 1)
-                    echo "<p>Il n'y a aucune fiche validée pour l'instant</p>";
-                else {
-                    foreach($unlockedGroups as $group)
-                        (new GroupDetailsCreator($group, false))->create();
-                }
+                    $groups = MicroscopesGroupService::getInstance()->findAllMicroscopesGroup();
+                    $lockedGroups = [];
+                    foreach ($groups as $group) {
+                        if($group->isLocked())
+                            $lockedGroups[] = $group;
+                    }
+                    $nbLocked = sizeof($lockedGroups);
+                    if(sizeof($lockedGroups) < 1)
+                        echo "<p>Il n'y a aucune fiche en attente pour l'instant</p>";
+                    else {
+                        foreach($lockedGroups as $group)
+                            (new GroupDetailsCreator($group, false))->create();
+                    }
                 echo "</div>";
                 break;
         }

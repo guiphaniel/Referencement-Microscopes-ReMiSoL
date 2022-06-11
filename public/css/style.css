@@ -1090,6 +1090,32 @@ text-align: center;
     width: 0;
 }
 
+.current-page {
+    text-decoration: underline;
+}
+
+#page-nav {
+    margin-top: var(--global-margin-1);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#page-nav ul {
+    display: flex;
+    align-items: center;
+}
+
+#page-nav ul li + li {
+    margin-left: var(--global-margin-1);
+}
+
+#previous-page, #next-page {
+    background-color: var(--color-pri-2);
+    color: white !important;
+    width: 8em;
+}
+
 /* reset css */
 #search-input:-webkit-autofill {
     box-shadow: 0 0 0 30px black inset !important;

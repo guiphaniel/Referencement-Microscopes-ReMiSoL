@@ -52,6 +52,28 @@
                 ->setId($labInfos["labId"]);
         }
 
+        function findLabByGroupId($id) : Lab {
+            global $pdo;
+
+            $sql = "
+                select lab.id as labId, a.id as addrId, name, type, code, website, school, street, zipCode, city, country
+                from microscopes_group as g
+                join lab
+                on lab.id = g.lab_id
+                join address as a
+                on address_id = a.id
+                where g.id = $id
+            ";
+
+            $sth = $pdo->query($sql);
+            $labInfos = $sth->fetch(PDO::FETCH_NAMED);
+
+            $address = (new Address($labInfos["school"], $labInfos["street"], $labInfos["zipCode"], $labInfos["city"], $labInfos["country"]))
+                ->setId($labInfos["addrId"]);
+            return (new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"], $labInfos["website"], $address))
+                ->setId($labInfos["labId"]);
+        }
+
         /** Saves the lab if it doesn't exist yet, and returns its id */
         function save(Lab $lab) : int {
             global $pdo;

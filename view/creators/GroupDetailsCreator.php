@@ -5,7 +5,7 @@
     include_once(__DIR__ . "/Creator.php");
 
     Class GroupDetailsCreator implements Creator {
-        public function __construct(private MicroscopesGroup $group, private bool $showMap) {}
+        public function __construct(private MicroscopesGroup $group, private bool $showMap, private $microId = null) {}
 
         private function createEditBts() {
             $groupId = $this->group->getId();
@@ -71,8 +71,13 @@
                     </div>
                 </section>
                 <section>
-                    <h2>Microscopes</h2>
-                    <?php $id = 1; foreach ($this->group->getMicroscopes() as $micro) : 
+                    <?php $micros = $this->group->getMicroscopes(); ?>
+                    <h2>Microscope<?= sizeof($micros) > 1 && $this->microId === null ? "s" : ""?></h2>
+                    <?php 
+                        $id = 1; foreach ($this->group->getMicroscopes() as $micro) :
+                        if($this->microId !== null && $micro->getId() != $this->microId) 
+                            continue;
+                            
                         $ctr = $micro->getController();
                         $model = $micro->getModel();
                         $brand = $model->getBrand();
@@ -89,7 +94,7 @@
                         $imgPath = MicroscopeService::getInstance()->getImgPathById($micro->getId());
                         ?>
                         <section class="micro-section">
-                            <h3>Microscope n°<?=$id++?> - <?= $name . " (" . $type . ")"; ?></h3>
+                            <h3><?= sizeof($micros) > 1 && $this->microId === null ? "Microscope n°{$id} - " : ""?> <?= $name . " (" . $type . ")"; ?></h3>
                             <img class="micro-img" src="<?=$imgPath?>" alt="Microscope <?=$name?>">
                             <div>
                                 <p>Description : <?= $micro->getDescr(); ?></p>
@@ -130,7 +135,8 @@
                                 </table>
                             </div>
                         </section>
-                    <?php endforeach ?>
+                    <?php $id++;
+                        endforeach ?>
                 </section>
             </section>
             <?php

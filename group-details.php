@@ -48,7 +48,7 @@
         $header->create()
     ?>
     <main>
-        <?php (new GroupDetailsCreator($group, true))->create() ?>
+        <?php (new GroupDetailsCreator($group, true, $_GET["microId"]??null))->create() ?>
     </main>
     <?php (new FooterCreator)->create() ?>
 </body>
