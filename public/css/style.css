@@ -572,7 +572,6 @@ footer nav .active {
     top: -1.5em;
     color: white;
     transition: all ease-in-out var(--trans-dur);
-    backdrop-filter: white;
 }
 
 .input-wrapper input, .input-wrapper textarea {
@@ -1076,7 +1075,7 @@ text-align: center;
 #search-bt svg {
     fill: white;
     position: absolute;
-    transform: scale(25%);
+    transform: scale(0.25);
     pointer-events: none;
 }
 
