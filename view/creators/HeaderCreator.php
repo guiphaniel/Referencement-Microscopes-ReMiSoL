@@ -39,7 +39,7 @@
                     </div>
                     <form id="search-wrapper" action="/search.php">
                         <div id="searchbar">
-                            <input id="search-input" type="search" name="filters" value="<?=$this->searchContent?>" placeholder="Effectuez une recherche">
+                            <input id="search-input" type="search" name="filters" value='<?=$this->searchContent?>' placeholder="Effectuez une recherche">
                             <label id="search-label" for="search-input"></label>
                             <div id="search-bt">
                                 <input enterkeyhint="go" type="submit" value="Rechercher">

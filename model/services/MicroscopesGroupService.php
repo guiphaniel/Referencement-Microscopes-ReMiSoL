@@ -117,7 +117,7 @@
                 if(!$includeLocked)
                     $sql .= "where g.id not in (select microscopes_group_id from locked_microscopes_group)";
             } else {
-                $sqlFilters = "(" .  implode("|", array_map(function ($filter) { $quote = preg_quote($filter); if(MY_DBMS == DBMS::MySQL) $quote = preg_quote($quote); return $quote; }, $filters)) . ")"; // MySQL needs to escape parentheses, for exemple, two times => \\(
+                $sqlFilters = "(" .  implode("|", array_map(function ($filter) use ($pdo) { $quote = preg_quote($filter); return $pdo->quote(strNormalize($quote)); }, $filters)) . ")";
                 $sql = "
                     SELECT groupId, coorId, labId, microId, concat from (
                         select g.id as groupId, coordinates_id as coorId, lab.id as labId, mi.id as microId, CONCAT(GROUP_CONCAT(DISTINCT con.norm_lastname), GROUP_CONCAT(DISTINCT c.norm_name), GROUP_CONCAT(DISTINCT norm_tag), LOWER(mo.name), LOWER(ctr.name), LOWER(b.name), LOWER(cmp.name), mi.norm_descr) as concat
@@ -145,7 +145,7 @@
                         join compagny as cmp
                         on cmp.id = b.compagny_id
                         GROUP BY mi.id
-                    ) as groupsInfos where concat REGEXP '$sqlFilters'
+                    ) as groupsInfos where concat REGEXP $sqlFilters
                 ";
                 if(!$includeLocked)
                     $sql .= "and groupId not in (select microscopes_group_id from locked_microscopes_group)";

@@ -121,7 +121,7 @@
                             select id
                             from locked_microscopes_group)";
             } else {
-                $sqlFilters = implode(" AND concat REGEXP ", array_map(function ($filter) { $quote = preg_quote($filter); if(MY_DBMS == DBMS::MySQL) $quote = preg_quote($quote); return "'" . $quote . "'"; }, $filters)); // MySQL needs to escape parentheses, for exemple, two times => \\(
+                $sqlFilters = implode(" AND concat REGEXP ", array_map(function ($filter) use ($pdo) { $quote = preg_quote($filter); return $pdo->quote(strNormalize($quote)); }, $filters));
                 $sql = "
                     SELECT microId, groupId, concat from (select mi.id as microId, g.id as groupId, CONCAT_WS(' ', GROUP_CONCAT(DISTINCT con.norm_lastname SEPARATOR ' '), GROUP_CONCAT(DISTINCT c.norm_name SEPARATOR ' '), GROUP_CONCAT(DISTINCT norm_tag SEPARATOR ' '), LOWER(mo.name), LOWER(ctr.name), LOWER(b.name), LOWER(cmp.name), mi.norm_descr) as concat
                     from microscopes_group as g
@@ -194,7 +194,7 @@
                             select id
                             from locked_microscopes_group)";
             } else {
-                $sqlFilters = implode(" AND concat REGEXP ", array_map(function ($filter) { $quote = preg_quote($filter); if(MY_DBMS == DBMS::MySQL) $quote = preg_quote($quote); return "'" . $quote . "'"; }, $filters)); // MySQL needs to escape parentheses, for exemple, two times => \\(
+                $sqlFilters = implode(" AND concat REGEXP ", array_map(function ($filter) use ($pdo) { $quote = preg_quote($filter); return $pdo->quote(strNormalize($quote)); }, $filters));
                 $sql = "
                     select count(microId) as nbMicros from (select mi.id as microId, g.id as groupId, CONCAT_WS(' ', GROUP_CONCAT(DISTINCT con.norm_lastname SEPARATOR ' '), GROUP_CONCAT(DISTINCT c.norm_name SEPARATOR ' '), GROUP_CONCAT(DISTINCT norm_tag SEPARATOR ' '), LOWER(mo.name), LOWER(ctr.name), LOWER(b.name), LOWER(cmp.name), mi.norm_descr) as concat
                     from microscopes_group as g

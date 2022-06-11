@@ -10,8 +10,9 @@
 
     if(empty($_GET["filters"]))
         $filters = [];
-    else
+    else {
         $filters = array_filter(explode(" ", $_GET["filters"]));
+    }
 
     $microscopeService = MicroscopeService::getInstance();
     $micros = $microscopeService->findAllMicroscopes(false, $filters, RESULT_PER_QUERY, RESULT_PER_QUERY * $page);
@@ -19,7 +20,7 @@
 
     include_once("view/creators/HeaderCreator.php");
     include_once("view/creators/FooterCreator.php");
-    $header = new HeaderCreator("Recherche", $_GET["filters"]??""); 
+    $header = new HeaderCreator("Recherche", str_replace("'", "&apos;", $_GET["filters"]??"")); 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -36,7 +37,13 @@
     <?php $header->create(); ?>
     <main>
         <div class="infos">
-            <p><?=$nbTotalMicros?> microscopes correspondent à votre recherche.</p>
+            <?php if($nbTotalMicros == 0): ?>
+                <p>Nous n'avons trouvé aucun microscope correspondant à votre recherche.</p>
+            <?php elseif($nbTotalMicros == 1): ?>
+                <p>1 microscope correspond à votre recherche.</p>
+            <?php else: ?>
+                <p><?=$nbTotalMicros?> microscopes correspondent à votre recherche.</p>
+            <?php endif; ?>
         </div>
         <div class="tiles-wrapper">
             <?php
