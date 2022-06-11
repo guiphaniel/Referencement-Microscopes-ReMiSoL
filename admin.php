@@ -36,13 +36,38 @@
                 echo "<h2>Matériel</h2>";
                     (new MicrosFormCreator())->create();
                 break;
-            case 'users':
-                echo "<h2>Utilisateurs</h2>";
-                echo "<div id='user-forms'>";
-                foreach(UserService::getInstance()->findAllUsers() as $user)
-                    (new UserFormCreator($user, true))->create();
-                echo "</div>";
-                break;
+            case 'users': 
+                if(empty($_GET["page"]) || $_GET["page"] < 0)
+                    $page = 0;
+                else
+                    $page = $_GET["page"];
+                $userService = UserService::getInstance();
+                $nbTotalUsers = $userService->countAllUsers(); ?>
+                <h2>Utilisateurs (<?=$nbTotalUsers?>)</h2>
+                <div id='user-forms'>
+                    <?php
+                foreach($userService->findAllUsers(RESULT_PER_QUERY, $page * RESULT_PER_QUERY) as $user)
+                    (new UserFormCreator($user, true))->create(); ?>
+                </div>
+                <?php if($nbTotalUsers > RESULT_PER_QUERY): ?>
+                <nav id="page-nav">
+                    <ul>
+                        <?php $maxPage = ceil($nbTotalUsers / RESULT_PER_QUERY) - 1;
+                        if($page > 0): ?>
+                            <li><a id="previous-page" class="bt" href="/admin.php?action=users&page=<?=max(0, $page - 1)?>">< Précédent</a></li>
+                        <?php endif;?>
+                        <li><a href="/admin.php?action=users&page=0" <?=$page == 0 ? 'class="current-page"' : ""?>><?=1?></a></li>
+                        <?php for($i = max(1, $page - 3); $i < min($page + 4, $maxPage) ; $i++): ?>
+                            <li><a href="/admin.php?action=users&page=<?=$i?>" <?=$page == $i ? 'class="current-page"' : ""?>><?=$i + 1?></a></li>
+                        <?php endfor; ?>
+                        <li><a href="/admin.php?action=users&page=<?=$maxPage?>" <?=$page == $maxPage ? 'class="current-page"' : ""?>><?=$maxPage + 1?></a></li>
+                        <?php if($nbTotalUsers > ($page + 1) * RESULT_PER_QUERY): ?>
+                            <li><a  id="next-page" class="bt" href="/admin.php?action=users&page=<?=$page + 1?>">Suivant ></a></li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
+                <?php endif; ?>
+                <?php break;
             default:
                 echo "<h2>Fiches en attente</h2>";
                 echo "<div>";

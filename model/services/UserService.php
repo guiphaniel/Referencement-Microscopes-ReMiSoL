@@ -34,7 +34,7 @@
             return $row ? $row[0] : -1;
         }
 
-        function findAllUsers() {
+        function findAllUsers(int $limit = -1, int $offset = -1) {
             global $pdo;
 
             $sql = "
@@ -42,6 +42,11 @@
                 from user
                 ORDER BY firstname, lastname, phone_code, phone_num
             ";
+
+            if($limit >=0) 
+                $sql .= " LIMIT $limit";
+            if($offset >=0) 
+                $sql .= " OFFSET $offset";
 
             $users = [];
             foreach($pdo->query($sql, PDO::FETCH_NAMED) as $userInfos) {
@@ -54,6 +59,17 @@
             }
 
             return $users;
+        }
+
+        function countAllUsers() {
+            global $pdo;
+
+            $sql = "
+                select count(id)
+                from user
+            ";
+
+            return $pdo->query($sql)->fetch(PDO::FETCH_COLUMN);
         }
 
         function findAllAdmins() {
