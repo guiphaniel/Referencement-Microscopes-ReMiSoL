@@ -19,7 +19,7 @@
 
     include_once("view/creators/HeaderCreator.php");
     include_once("view/creators/FooterCreator.php");
-        $header = new HeaderCreator("Recherche", $_GET["filters"]??""); 
+    $header = new HeaderCreator("Recherche", $_GET["filters"]??""); 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -35,6 +35,9 @@
 <body>
     <?php $header->create(); ?>
     <main>
+        <div class="infos">
+            <p><?=$nbTotalMicros?> microscopes correspondent à votre recherche.</p>
+        </div>
         <div class="tiles-wrapper">
             <?php
             foreach($micros as $groupId => $micros) {
