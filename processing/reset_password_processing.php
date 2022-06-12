@@ -3,7 +3,7 @@
     include_once("../model/services/UserService.php");
 
     if(empty($_GET["id"]) || empty($_GET["token"]))
-        redirect("/422.php");
+        redirect("/errors/422.php");
 
     if($_POST["password1"] !== $_POST["password2"]) {
         $_SESSION["form"]["errorMsg"] = "Les mots de passe fournis ne correspondent pas";
@@ -16,13 +16,13 @@
     $user = $userService->findUserById($_GET["id"]);
 
     if($user == null)
-        redirect("/422.php");
+        redirect("/errors/422.php");
 
     // check the token's validity
     $token = $userService->getLockedUserToken($user);
 
     if($token != $_GET["token"])
-        redirect("/422.php");
+        redirect("/errors/422.php");
 
     // if everything's good, update the user's password... 
     $user->setPassword(password_hash($_POST["password1"], PASSWORD_DEFAULT));
