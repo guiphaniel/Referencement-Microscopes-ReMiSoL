@@ -85,6 +85,30 @@
             return $controllers;
         }
 
+        function findControllerByName($name) {
+            global $pdo;
+
+            $sql = "
+                select *
+                from controller
+                where name = :name
+            ";
+
+            $sth = $pdo->prepare($sql);
+
+            $sth->execute([
+                "name" => $name
+            ]);
+
+            $infos = $sth->fetch(PDO::FETCH_NAMED);
+
+            if(empty($infos))
+                return null;
+
+            return (new Controller($name, BrandService::getInstance()->findBrandById($infos["brand_id"])))
+                ->setId($infos["id"]);
+        }
+
         function bind($controllerId, $microId) {
             global $pdo;
 
