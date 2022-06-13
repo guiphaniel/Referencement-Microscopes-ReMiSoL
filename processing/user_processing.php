@@ -54,7 +54,7 @@
         if(!empty($_POST["password1"]) && !empty($_POST["password2"])) {
             // check password validity
             if($_POST["password1"] !== $_POST["password2"])
-                throw new Exception("Les mots de passe fournis ne correspondent pas");
+                throw new Exception("Les mots de passe fournis ne correspondent pas.");
             else
                 $hash = password_hash($_POST["password1"], PASSWORD_DEFAULT);
         } else

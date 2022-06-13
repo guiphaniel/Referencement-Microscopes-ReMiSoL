@@ -580,13 +580,13 @@ footer nav .active {
     border-radius: var(--border-radius);
     padding: var(--global-padding-2);
     box-shadow: inset 0 2px 5px rgb(0 0 0 / 20%);
-    transition: box-shadow ease-in-out var(--trans-dur);
+    transition: ease-in-out var(--trans-dur);
 }
 
 .input-wrapper input:focus,
 .input-wrapper textarea:focus {
     box-shadow: inset 0 2px 5px rgb(0 0 0 / 25%);
-    transition: box-shadow ease-in-out var(--trans-dur);
+    transition: all ease-in-out var(--trans-dur);
 }
 
 .select-input {
@@ -753,6 +753,11 @@ form fieldset :last-child, form address :last-child {
 
 .input-rm-wrapper .rm-bt {
     margin-left: var(--global-margin-1);
+}
+
+input:not(:disabled):not(:placeholder-shown):not(:focus):not(:valid) {
+    background-color: rgb(255 221 227);
+    transition: background-color ease-in-out var(--trans-dur);
 }
 
 /* ASIDE */

@@ -140,7 +140,7 @@
                         <label for="lab-address-street">Adresse</label>
                     </div>
                     <div class="input-wrapper">
-                        <input id="lab-address-zip" type="text" name="lab[address][zipCode]" autocomplete="postal-code" <?=$this->valueOf($lab?->getAddress()->getZipCode())?> placeholder=" " required>
+                        <input id="lab-address-zip" type="text" name="lab[address][zipCode]"  pattern="[0-9]{5}" autocomplete="postal-code" <?=$this->valueOf($lab?->getAddress()->getZipCode())?> placeholder=" " required>
                         <label for="lab-address-zip">Code postal</label>
                     </div>
                     <div class="input-wrapper">
@@ -149,7 +149,7 @@
                     </div>
                     <div class="select-wrapper">
                         <label for="lab-address-country">Pays</label>
-                        <select name="lab[address][country]" id="lab-address-country" autocomplete="country">
+                        <select name="lab[address][country]" id="lab-address-country" autocomplete="country" required>
                             <?php foreach ($this->countries as $country) : ?>
                                 <option value="<?=$country;?>" <?=$this->selectCountry($country)?>><?=$country?></option>
                                 <?php endforeach; ?>
@@ -187,7 +187,7 @@
                         <label for="contact-email-<?=$id?>">Email</label>
                     </div>
                     <div class="select-input">
-                        <select name="contacts[<?=$id?>][phoneCode]" id="contact-phone-code-<?=$id?>" autocomplete="tel-country-code">
+                        <select name="contacts[<?=$id?>][phoneCode]" id="contact-phone-code-<?=$id?>" autocomplete="tel-country-code" required>
                             <?php foreach ($this->phoneCodes as $codeCountry) : 
                                 $code = substr($codeCountry, 0, strpos($codeCountry, ' '));?>
                                 <option value="<?=$code;?>" <?=$this->selectPhoneCode($contact, $code)?>><?=$codeCountry?></option>
@@ -290,7 +290,7 @@
             </div>
             <div class="select-wrapper">
                 <label for="micro-type-<?=$id?>">Type</label>
-                <select id="micro-type-<?=$id?>" name="micros[<?=$id?>][type]">
+                <select id="micro-type-<?=$id?>" name="micros[<?=$id?>][type]" required>
                     <option value="LABO" <?=$micro?->getType() == "LABO" ? "selected" : ""?>>Laboratoire</option>
                     <option value="PLAT" <?=$micro?->getType() == "PLAT" ? "selected" : ""?>>Plateforme</option>
                 </select>
@@ -301,7 +301,7 @@
             </div>
             <div class="select-wrapper">
                 <label for="micro-access-<?=$id?>">Ouvert aux</label>
-                <select name="micros[<?=$id?>][access]" id="micro-access-<?=$id?>">
+                <select name="micros[<?=$id?>][access]" id="micro-access-<?=$id?>" required>
                     <option value="ACAD" <?=$micro?->getAccess() == "ACAD" ? "selected" : ""?>>Académiques</option>
                     <option value="INDU" <?=$micro?->getAccess() == "INDU" ? "selected" : ""?>>Industriels</option>
                     <option value="BOTH" <?=$micro?->getAccess() == "BOTH" ? "selected" : ""?>>Académiques et Industriels</option>

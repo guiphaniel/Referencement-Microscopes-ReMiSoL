@@ -8,6 +8,11 @@
         redirect("/contact.php");
     }
 
+    if(!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+        $_SESSION["form"]["errorMsg"] = "Veuillez saisir un courriel valide.";
+        redirect("/contact.php");
+    }
+
     $subject = "[RéMiSoL] ";
     $subject .= $_POST["subject"];
 

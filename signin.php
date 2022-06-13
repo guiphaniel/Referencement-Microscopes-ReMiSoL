@@ -52,7 +52,7 @@
                             <?php endforeach; ?>
                     </select>
                     <div class="input-wrapper">
-                        <input id="phone" type="text" name="phoneNum" autocomplete="tel-national" placeholder=" " required>
+                        <input id="phone" type="text" name="phoneNum" autocomplete="tel-national" pattern="0?\d{9}" placeholder=" " required>
                         <label for="phone">Télephone</label>
                     </div>
                 </div>
@@ -67,8 +67,8 @@
                 <input type="submit" class="bt">
             </form>
         </div>
-        
     </main>
     <?php (new FooterCreator)->create() ?>
+    <script src="public/js/password_validation.js"></script>
 </body>
 </html>

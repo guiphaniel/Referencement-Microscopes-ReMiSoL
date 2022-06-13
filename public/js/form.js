@@ -336,6 +336,8 @@ document.addEventListener("change", function(event) {
 document.getElementById("lab-type").addEventListener("change", onLabTypeChange);
 
 function onLabTypeChange(e) {
-    document.getElementById("lab-code").disabled = e.target.value == "Autre";
+    let labCode = document.getElementById("lab-code");
+    labCode.required = e.target.value != "Autre";
+    labCode.disabled = e.target.value == "Autre";
 }
 

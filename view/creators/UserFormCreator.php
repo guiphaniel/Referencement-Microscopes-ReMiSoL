@@ -37,7 +37,7 @@
                         <?php endforeach; ?>
                     </select>
                     <div class="input-wrapper">
-                        <input id="phone-<?=$this->userId?>" type="text" name="phoneNum" autocomplete="tel-national" value="<?=$this->user->getPhoneNum()?>" placeholder=" " required>
+                        <input id="phone-<?=$this->userId?>" type="text" name="phoneNum" autocomplete="tel-national" value="<?=$this->user->getPhoneNum()?>" pattern="0?\d{9}" placeholder=" " required>
                         <label for="phone-<?=$this->userId?>">Télephone</label>
                     </div>
                 </div>
@@ -77,6 +77,7 @@
                 <div class="bt rm-bt">Supprimer le compte</div>
             </form>
             </div>
+            <script src="public/js/password_validation.js"></script>
         <?php 
         }
     }

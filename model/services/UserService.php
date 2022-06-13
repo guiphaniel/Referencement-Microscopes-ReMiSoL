@@ -216,7 +216,7 @@
             
             // if the user is already in the db (i.e. has the same email or phone), throw
             if ($id != -1) 
-                throw new Exception("Un compte existe déjà avec ces informations");
+                throw new Exception("Un compte existe déjà avec ces informations.");
 
             // else, add it to the db
             $sth = $pdo->prepare("INSERT INTO user VALUES (NULL, :firstname, :lastname, :normLastname, :email, :phoneCode, :phoneNum, :password)");
@@ -310,7 +310,7 @@
 
             if($row ? $row[0] : $id != $id) {
                 if($_SESSION["user"]["admin"])
-                    throw new Exception("Ce courriel est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
+                    throw new Exception("Ce courriel est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname() . ".");
                 else
                     throw new Exception("Ce numéro de téléphone est déjà pris par un utilisateur.");
             }
@@ -335,7 +335,7 @@
 
             if($row ? $row[0] : $id != $id) {
                 if($_SESSION["user"]["admin"])
-                    throw new Exception("Ce numéro de téléphone est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname());
+                    throw new Exception("Ce numéro de téléphone est déjà pris par l'utilisateur " . $user->getFirstname() . " " . $user->getLastname() . ".");
                 else
                     throw new Exception("Ce numéro de téléphone est déjà pris par un utilisateur.");
             }

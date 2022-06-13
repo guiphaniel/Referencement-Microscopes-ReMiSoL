@@ -85,7 +85,7 @@
                     $kwId = KeywordService::getInstance()->getKeywordId($kw);
 
                     if($kwId == -1)
-                        throw new Exception("Le mot clé suivant n'est pas pris en charge : catégorie ($cat), étiquette ($tag)");
+                        throw new Exception("Le mot clé suivant n'est pas pris en charge : catégorie ($cat), étiquette ($tag).");
 
                     $kws[] = $kw->setId($kwId);
                 }

@@ -13,7 +13,7 @@
 
         //check password validity
         if($_POST["password1"] !== $_POST["password2"])
-            throw new Exception("Les mots de passe fournis ne correspondent pas");
+            throw new Exception("Les mots de passe fournis ne correspondent pas.");
 
         $user = new User($_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["phoneCode"], substr($_POST["phoneNum"], -9), password_hash($_POST["password1"], PASSWORD_DEFAULT));
         
