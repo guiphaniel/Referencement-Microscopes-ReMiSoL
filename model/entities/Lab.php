@@ -33,7 +33,7 @@
 
         public function setType($type)
         {
-            if(!in_array($type, ["UPR", "UMR","UAR", "FR", "EMR", "Autre"]))
+            if(!in_array($type, ["EMR", "FR", "IRL", "UAR", "UMR", "UPR", "Autre"]))
                 throw new Exception("Le code du laboratoire / service saisi est invalide.");
 
             $this->type = $type;
