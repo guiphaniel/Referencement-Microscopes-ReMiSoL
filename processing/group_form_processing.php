@@ -4,9 +4,9 @@
     include_once("../utils/send_email.php");
     include_once("../model/entities/Lab.php");
     include_once("../model/entities/Contact.php");
-    include_once("../model/entities/Model.php");
-    include_once("../model/entities/Controller.php");
     include_once("../model/entities/MicroscopesGroup.php");
+    include_once("../model/services/ModelService.php");
+    include_once("../model/services/ControllerService.php");
     include_once("../model/services/MicroscopesGroupService.php");
     include_once("../model/services/KeywordService.php");
     
@@ -73,10 +73,30 @@
         $group = new MicroscopesGroup(new Coordinates($coorInfos["lat"], $coorInfos["lon"]), $lab, $contacts);
 
         foreach($_POST["micros"] as $id => $micro) {
-            $com = new Compagny($micro["compagny"]);
-            $bra = new Brand($micro["brand"], $com);
+            $cmp = new Compagny($micro["compagny"]);
+            $cmp->setId(CompagnyService::getInstance()->getCompagnyId($cmp));
+
+            $bra = new Brand($micro["brand"], $cmp);
+            $bra->setId(BrandService::getInstance()->getBrandId($bra));
+
             $mod = new Model($micro["model"], $bra);
+            $mod->setId(ModelService::getInstance()->getModelId($mod));
+
             $ctr = new Controller($micro["controller"], $bra);
+            $ctr->setId(ControllerService::getInstance()->getControllerId($ctr));
+
+            //check material validity
+            if($cmp->getId() == -1 || !in_array($cmp, CompagnyService::getInstance()->findAllCompagnies()))
+                throw new Exception("La société suivante n'est pas pris en charge : {$cmp->getName()}.");
+
+            if($bra->getId() == -1 || !in_array($bra, BrandService::getInstance()->findAllBrands($cmp)))
+                throw new Exception("La marque suivante n'est pas pris en charge : Société : {$cmp->getName()} ; Marque : {$bra->getName()}.");
+
+            if($mod->getId() == -1 || !in_array($mod, ModelService::getInstance()->findAllModels($bra)))
+                throw new Exception("Le modèle suivant n'est pas pris en charge : Société : {$cmp->getName()} ; Marque : {$bra->getName()} ; Modèle : {$mod->getName()}.");
+
+            if($ctr->getId() == -1 || !in_array($ctr, ControllerService::getInstance()->findAllControllers($bra)))
+                throw new Exception("L'électronique suivante n'est pas pris en charge : Société : {$cmp->getName()} ; Marque : {$bra->getName()} ; Électronique : {$ctr->getName()}.");
 
             $kws = [];
             foreach($micro["keywords"]??[] as $cat => $tags) {
