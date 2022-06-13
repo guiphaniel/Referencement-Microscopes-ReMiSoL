@@ -755,7 +755,7 @@ form fieldset :last-child, form address :last-child {
     margin-left: var(--global-margin-1);
 }
 
-input:not(:disabled):not(:placeholder-shown):not(:focus):not(:valid) {
+input:not(.bt):not(:disabled):not(:placeholder-shown):not(:focus):not(:valid) {
     background-color: rgb(255 221 227);
     transition: background-color ease-in-out var(--trans-dur);
 }
