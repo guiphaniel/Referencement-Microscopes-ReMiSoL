@@ -13,7 +13,7 @@
     if(!isUserSessionValid()) 
         redirect("/index.php");
 
-    //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form TODO: check that the two contacts aren't the same ones
+    //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
     if (empty($_POST["lab"]) || empty($_POST["coor"]) || empty($_POST["contacts"]) || empty($_POST["micros"])) {       
         redirect("/form.php");
     }
