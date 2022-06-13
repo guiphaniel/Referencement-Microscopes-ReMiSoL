@@ -84,6 +84,30 @@
             return $models;
         }
 
+        function findModelByName($name) {
+            global $pdo;
+
+            $sql = "
+                select *
+                from model
+                where name = :name
+            ";
+
+            $sth = $pdo->prepare($sql);
+
+            $sth->execute([
+                "name" => $name
+            ]);
+
+            $infos = $sth->fetch(PDO::FETCH_NAMED);
+
+            if(empty($infos))
+                return null;
+
+            return (new Model($name, BrandService::getInstance()->findBrandById($infos["brand_id"])))
+                ->setId($infos["id"]);
+        }
+
         function bind($modelId, $microId) {
             global $pdo;
 

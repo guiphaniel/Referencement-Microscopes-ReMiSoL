@@ -73,30 +73,26 @@
         $group = new MicroscopesGroup(new Coordinates($coorInfos["lat"], $coorInfos["lon"]), $lab, $contacts);
 
         foreach($_POST["micros"] as $id => $micro) {
-            $cmp = new Compagny($micro["compagny"]);
-            $cmp->setId(CompagnyService::getInstance()->getCompagnyId($cmp));
+            $cmp = CompagnyService::getInstance()->findCompagnyByName($micro["compagny"]);
 
-            $bra = new Brand($micro["brand"], $cmp);
-            $bra->setId(BrandService::getInstance()->getBrandId($bra));
+            $bra = BrandService::getInstance()->findBrandByName($micro["brand"]);
 
-            $mod = new Model($micro["model"], $bra);
-            $mod->setId(ModelService::getInstance()->getModelId($mod));
+            $mod = ModelService::getInstance()->findModelByName($micro["model"]);
 
-            $ctr = new Controller($micro["controller"], $bra);
-            $ctr->setId(ControllerService::getInstance()->getControllerId($ctr));
+            $ctr = ControllerService::getInstance()->findControllerByName($micro["controller"]);
 
             //check material validity
-            if($cmp->getId() == -1 || !in_array($cmp, CompagnyService::getInstance()->findAllCompagnies()))
-                throw new Exception("La société suivante n'est pas pris en charge : {$cmp->getName()}.");
+            if($cmp === null || !in_array($cmp, CompagnyService::getInstance()->findAllCompagnies()))
+                throw new Exception("La société suivante n'est pas pris en charge : {$micro["compagny"]}.");
 
-            if($bra->getId() == -1 || !in_array($bra, BrandService::getInstance()->findAllBrands($cmp)))
-                throw new Exception("La marque suivante n'est pas pris en charge : Société : {$cmp->getName()} ; Marque : {$bra->getName()}.");
+            if($labAddress === null || !in_array($bra, BrandService::getInstance()->findAllBrands($cmp)))
+                throw new Exception("La marque suivante n'est pas pris en charge : Société : {$micro["compagny"]} ; Marque : {$micro["brand"]}.");
 
-            if($mod->getId() == -1 || !in_array($mod, ModelService::getInstance()->findAllModels($bra)))
-                throw new Exception("Le modèle suivant n'est pas pris en charge : Société : {$cmp->getName()} ; Marque : {$bra->getName()} ; Modèle : {$mod->getName()}.");
+            if($mod === null || !in_array($mod, ModelService::getInstance()->findAllModels($bra)))
+                throw new Exception("Le modèle suivant n'est pas pris en charge : Société : {$micro["compagny"]} ; Marque : {$micro["brand"]} ; Modèle : {$micro["model"]}.");
 
-            if($ctr->getId() == -1 || !in_array($ctr, ControllerService::getInstance()->findAllControllers($bra)))
-                throw new Exception("L'électronique suivante n'est pas pris en charge : Société : {$cmp->getName()} ; Marque : {$bra->getName()} ; Électronique : {$ctr->getName()}.");
+            if($ctr === null || !in_array($ctr, ControllerService::getInstance()->findAllControllers($bra)))
+                throw new Exception("L'électronique suivante n'est pas pris en charge : Société : {$micro["compagny"]} ; Marque : {$micro["brand"]} ; Électronique : {$micro["controller"]}.");
 
             $kws = [];
             foreach($micro["keywords"]??[] as $cat => $tags) {
