@@ -2,15 +2,15 @@
 /* fill coherent microscope infomations dataLists on input */
 
 //init input listeners for microscopes inputs
-document.addEventListener("input", onInput);
+document.addEventListener("change", onChange);
 
-function onInput(event) {
-    let input = event.target;
+function onChange(event) {
+    let select = event.target;
 
-    if(input.className == "micro-compagy")
-        onCompagnyInput(input);
-    else if(input.className == "micro-brand")
-        onBrandInput(input);
+    if(select.className == "micro-compagnies")
+        onCompagnySelect(select);
+    else if(select.className == "micro-brands")
+        onBrandSelect(select);
 }
 
 //init listeners for bt clicks
@@ -19,88 +19,80 @@ document.addEventListener("click", onClick);
 function onClick(event) {
     let bt = event.target;
 
-    if(bt.className == "rm-bt") {
-        bt.parentElement.remove()
+    if(bt.classList.contains("rm-bt")) {
+        const previousTag = bt.parentElement.previousElementSibling;
+        if(previousTag != null) {
+            const y = previousTag.getBoundingClientRect().top + window.pageYOffset - 200;
+            window.scrollTo({top: y, behavior: 'smooth'});
+        }
+
+        bt.parentElement.remove();
+
         if(bt.dataset.type == "ol") {
             // update other fields' legend index
             let cpt = 1;
             for (const field of document.getElementsByClassName(bt.id.split("-")[1] + "-field")) {
-                let legend = field.querySelector("legend");
+                let legend = field.querySelector("legend h3");
                 legend.textContent =legend.textContent.substring(0, legend.textContent.lastIndexOf('°') + 1) + cpt++;
             }
         }
     }
 }
 
-async function onCompagnyInput(input) {
-    const fieldsetId = input.id.split('-')[2];
+async function onCompagnySelect(select) {
+    const fieldsetId = select.id.split('-')[2];
     
-    if(input.value == "Homemade") {
-        let brandInput = document.getElementById(`micro-brand-` + fieldsetId);
-        let modelInput = document.getElementById(`micro-model-` + fieldsetId);
+    const brandSelect = document.getElementById(`micro-brands-` + fieldsetId);
+    const modelSelect = document.getElementById(`micro-models-` + fieldsetId);
+    const controllerSelect = document.getElementById(`micro-controllers-` + fieldsetId);
 
-        brandInput.value = "Homemade";
-        document.getElementById(`micro-brands-` + fieldsetId).innerHTML = "<option value='Homemade'>";
-        brandInput.disabled = false;
-        modelInput.value = "Homemade";
-        document.getElementById(`micro-models-` + fieldsetId).innerHTML = "<option value='Homemade'>";
-        modelInput.disabled = false;
+    if(select.value == "Homemade") {
+        brandSelect.value = "Homemade";
+        document.getElementById(`micro-brands-` + fieldsetId).innerHTML = "<option value='Homemade'>Homemade</option>";
+        brandSelect.disabled = false;
+        modelSelect.value = "Homemade";
+        document.getElementById(`micro-models-` + fieldsetId).innerHTML = "<option value='Homemade'>Homemade</option>";
+        modelSelect.disabled = false;
 
-        let url = "/api/v1/listControllers.php";
-        let controllerDatalist = document.getElementById(`micro-controllers-` + fieldsetId);
-        fillDatalist(controllerDatalist, url).then(() => document.getElementById(`micro-controller-` + fieldsetId).disabled = false);
+        let url = "/api/v1/list_controllers.php";
+        fillSelectOptions(controllerSelect, url);
     } else {
-        if(!isInputDatalistValid(input, document.getElementById("micro-compagnies"))) {
-            document.getElementById(`micro-brand-` + fieldsetId).disabled = true;
-            document.getElementById(`micro-model-` + fieldsetId).disabled = true;
-            document.getElementById(`micro-controller-` + fieldsetId).disabled = true;
+        resetSelect(modelSelect);
+        resetSelect(controllerSelect);
+
+        const url = `/api/v1/list_brands.php?compagny=${select.value}`;
     
-            return;
-        }
+        fillSelectOptions(brandSelect, url);
     }
-
-    const url = `/api/v1/listBrands.php?compagny=${input.value}`;
-    
-    let brandDatalist = document.getElementById(`micro-brands-` + fieldsetId);
-
-    fillDatalist(brandDatalist, url).then(() => document.getElementById(`micro-brand-` + fieldsetId).disabled = false);
 }
 
-async function onBrandInput(input) {
-    const fieldsetId = input.id.split('-')[2];
+async function onBrandSelect(select) {
+    const fieldsetId = select.id.split('-')[2];
 
-    if(!isInputDatalistValid(input, document.getElementById("micro-brands-" + fieldsetId))) {
-        document.getElementById(`micro-model-` + fieldsetId).disabled = true;
-        document.getElementById(`micro-controller-` + fieldsetId).disabled = true;
+	const modelsUrl = `/api/v1/list_models.php?brand=${select.value}`;
+    let modelSelect = document.getElementById(`micro-models-` + fieldsetId);
+    fillSelectOptions(modelSelect, modelsUrl);
 
-        return;
-    }
-
-    let compagnyInput = document.getElementById("micro-compagny-" + fieldsetId);
-
-	const modelsUrl = `/api/v1/listModels.php?brand=${input.value}`;
-    let modelDatalist = document.getElementById(`micro-models-` + fieldsetId);
-    fillDatalist(modelDatalist, modelsUrl).then(() => document.getElementById(`micro-model-` + fieldsetId).disabled = false);
-
-    const controllersUrl = `/api/v1/listControllers.php?brand=${input.value}`
-    let controllerDatalist = document.getElementById(`micro-controllers-` + fieldsetId);
-    fillDatalist(controllerDatalist, controllersUrl).then(() => document.getElementById(`micro-controller-` + fieldsetId).disabled = false);
+    const controllersUrl = `/api/v1/list_controllers.php?brand=${select.value}`
+    let controllerSelect = document.getElementById(`micro-controllers-` + fieldsetId);
+    fillSelectOptions(controllerSelect, controllersUrl);
 }
 
-async function fillDatalist(datalist, url) {
+async function fillSelectOptions(select, url) {
     // get data from the url
     const response = await fetch(url);
 	const data = await response.json();
 
-    let innerHTML = "";
+    let innerHTML = '<option value="" selected disabled hidden>Choisissez ici</option>';
 	for (let item of data) {
-		innerHTML += `<option value="${item.name}">`;
+		innerHTML += `<option value="${item.name}">${item.name}</option>`;
 	}
-    datalist.innerHTML = innerHTML;
+    select.innerHTML = innerHTML;
+    select.disabled = false;
 }
 
 function isInputDatalistValid(input, datalist) {
-    return datalist.querySelector("option[value='" + input.value + "']") != null;
+    return datalist.querySelector("option[value=\"" + input.value.replace(/"/g, '\\\"') + "\"]") != null;
 }
 
 /* ADD FIELDSETS */
@@ -115,16 +107,34 @@ function addField(fieldType, fieldId, firstField) {
     newField.className = fieldType + "-field";
     newField.innerHTML = firstField.innerHTML.replaceAll(`[${firstFieldId}]`, `[${fieldId}]`).replaceAll(`-${firstFieldId}`, `-${fieldId}`);
     // update legend's index
-    let legend = newField.querySelector("legend");
+    let legend = newField.querySelector("legend h3");
     legend.textContent = legend.textContent.substring(0, legend.textContent.lastIndexOf('°') + 1) + (document.getElementsByClassName(fieldType + "-field").length + 1);
 
     // add the form fieldset at the end of the form (before the add button)
     let addButton = document.getElementById("add-" + fieldType);
     fieldsWrapper.insertBefore(newField, addButton);
+    const y = newField.getBoundingClientRect().top + window.pageYOffset - 200;
+
+    window.scrollTo({top: y, behavior: 'smooth'});
+
+    newField.classList.add("closed");
+    window.setTimeout(() => newField.classList.remove("closed"), 1); // a timeout is needed, else css wont trigger the transition
+    
 
     // append the remove button to the fieldset
     let rmButton = document.createElement("div")
-    rmButton.className = "rm-bt";
+    rmButton.className = "bt rm-bt";
+    switch (fieldType) {
+        case "contact":
+            rmButton.innerHTML = "Supprimer la·le référent·e";
+            break;
+        case "micro":
+            rmButton.innerHTML = "Supprimer le microscope";
+            break;
+        default:
+            rmButton.innerHTML = "Supprimer"
+            break;
+    }
     rmButton.dataset.type = "ol"; // ordered list, so other elements get their index updated
     rmButton.id = "rm-" + fieldType + "-" + fieldId;
 
@@ -169,10 +179,19 @@ document.getElementById("add-micro").addEventListener('click', function(){
     while (tags.length > 0)
         tags[0].remove()
 
-    document.getElementById(`micro-brand-` + id).disabled = true;
-    document.getElementById(`micro-model-` + id).disabled = true;
-    document.getElementById(`micro-controller-` + id).disabled = true;
+    imgLabel = document.getElementById("micro-img-" + id).labels[0];
+    imgLabel.innerText = "Ajouter une image";
+    imgLabel.className = "bt add-bt";
+    
+    resetSelect(document.getElementById(`micro-brands-` + id));
+    resetSelect(document.getElementById(`micro-models-` + id));
+    resetSelect(document.getElementById(`micro-controllers-` + id));
 });
+
+function resetSelect(select) {
+    select.disabled = true;
+    select.innerHTML = '<option value="" selected disabled hidden>Choisissez ici</option>'
+}
 
 function resetField(field) {
     let inputs = field.getElementsByTagName("input");
@@ -192,7 +211,7 @@ function resetField(field) {
 
     let images = field.getElementsByClassName("micro-snapshot");
     while(images.length > 0)
-        images[0].remove();
+        images[0].parentElement.remove();
 }
 
 /* add multiple keywords */
@@ -216,7 +235,7 @@ function addKeyword(keyword, catInput) {
     let id = infos[2];
 
     // if the keyword is already selected, do nothing
-    tags = catInput.parentElement.getElementsByClassName("tag");
+    tags = catInput.parentElement.parentElement.getElementsByClassName("tag");
     for (const tag of tags) {
         if(tag.textContent == keyword)
             return;
@@ -230,14 +249,15 @@ function addKeyword(keyword, catInput) {
     tag.className = "tag";
 
     const rmBt = document.createElement("div");
-    rmBt.className = "rm-bt";
+    rmBt.className = "bt rm-bt";
+    rmBt.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M135.2 17.69C140.6 6.848 151.7 0 163.8 0H284.2C296.3 0 307.4 6.848 312.8 17.69L320 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H32C14.33 96 0 81.67 0 64C0 46.33 14.33 32 32 32H128L135.2 17.69zM31.1 128H416V448C416 483.3 387.3 512 352 512H95.1C60.65 512 31.1 483.3 31.1 448V128zM111.1 208V432C111.1 440.8 119.2 448 127.1 448C136.8 448 143.1 440.8 143.1 432V208C143.1 199.2 136.8 192 127.1 192C119.2 192 111.1 199.2 111.1 208zM207.1 208V432C207.1 440.8 215.2 448 223.1 448C232.8 448 240 440.8 240 432V208C240 199.2 232.8 192 223.1 192C215.2 192 207.1 199.2 207.1 208zM304 208V432C304 440.8 311.2 448 320 448C328.8 448 336 440.8 336 432V208C336 199.2 328.8 192 320 192C311.2 192 304 199.2 304 208z"/></svg>';
     rmBt.dataset.type = "ul";
 
     tag.append(rmBt);
 
     tag.append(keyword);
 
-    catInput.parentElement.append(tag);
+    catInput.parentElement.nextElementSibling.append(tag);
 
     // add hidden input with keyword
     let hiddenInput = document.createElement("input")
@@ -258,11 +278,14 @@ document.addEventListener("change", function(event) {
         return;
 
     // set keepImg to false
-    let snapshotWrapper = imgInput.nextElementSibling;
-    if(snapshotWrapper != undefined) {
-        // if the input is empty, remove the last displayed snapshot
+    let snapshotWrapper = imgInput.previousElementSibling;
+    if(snapshotWrapper.className == "snapshot-wrapper") {
+        // if the input is empty (no image selected by user), remove the last displayed snapshot
         if (imgInput.files.length == 0) {
             snapshotWrapper.remove();
+            label = imgInput.labels[0];
+            label.innerText = "Ajouter une image";
+            label.className = "bt add-bt";
             return;
         }
 
@@ -280,20 +303,26 @@ document.addEventListener("change", function(event) {
 
     // display the snapshot
     // if a previous snapshot already existed, replace its url, else, create a new snapshot
-    if(snapshotWrapper == undefined) {// check a snapshot wrapper already existed. If not, create one.
+    if(snapshotWrapper.className != "snapshot-wrapper") {// check a snapshot wrapper already existed. If not, create one.
         snapshotWrapper =  document.createElement("div");
+        snapshotWrapper.className = "snapshot-wrapper";
 
         let snapshot = document.createElement("img");
         snapshot.className = "micro-snapshot";
 
+        label = imgInput.labels[0];
+        label.innerText = "Modifier l'image";
+        label.className = "bt edit-bt";
+
         const rmBt = document.createElement("div");
-        rmBt.className = "rm-bt";
-        rmBt.addEventListener("click", function(e) {e.target.parentElement.previousSibling.value = null}) // set input value to null
+        rmBt.className = "bt rm-bt";
+        rmBt.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M135.2 17.69C140.6 6.848 151.7 0 163.8 0H284.2C296.3 0 307.4 6.848 312.8 17.69L320 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H32C14.33 96 0 81.67 0 64C0 46.33 14.33 32 32 32H128L135.2 17.69zM31.1 128H416V448C416 483.3 387.3 512 352 512H95.1C60.65 512 31.1 483.3 31.1 448V128zM111.1 208V432C111.1 440.8 119.2 448 127.1 448C136.8 448 143.1 440.8 143.1 432V208C143.1 199.2 136.8 192 127.1 192C119.2 192 111.1 199.2 111.1 208zM207.1 208V432C207.1 440.8 215.2 448 223.1 448C232.8 448 240 440.8 240 432V208C240 199.2 232.8 192 223.1 192C215.2 192 207.1 199.2 207.1 208zM304 208V432C304 440.8 311.2 448 320 448C328.8 448 336 440.8 336 432V208C336 199.2 328.8 192 320 192C311.2 192 304 199.2 304 208z"/></svg>';
+        rmBt.addEventListener("click", function(e) {imgInput.value = null; label.innerText = "Ajouter une image"; label.className = "bt add-bt";}) // set input value to null
         
         snapshotWrapper.append(snapshot);
         snapshotWrapper.append(rmBt);
 
-        imgInput.insertAdjacentElement("afterend", snapshotWrapper);
+        imgInput.insertAdjacentElement("beforebegin", snapshotWrapper);
     }
 
     let snapshot = snapshotWrapper.firstElementChild;
@@ -302,6 +331,13 @@ document.addEventListener("change", function(event) {
     reader.readAsDataURL(file);
 })
 
+/* LAB TYPE "autre" (other) */
 
+document.getElementById("lab-type").addEventListener("change", onLabTypeChange);
 
+function onLabTypeChange(e) {
+    let labCode = document.getElementById("lab-code");
+    labCode.required = e.target.value != "Autre";
+    labCode.disabled = e.target.value == "Autre";
+}
 

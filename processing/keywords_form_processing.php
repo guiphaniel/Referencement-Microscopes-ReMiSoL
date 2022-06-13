@@ -69,7 +69,7 @@
     $newKws = [];
     foreach($_POST["keywords"] as $cat => $tags) {
         foreach($tags as $id => $tag)
-            $newKws[] = (new Keyword(new Category($cat), $tag))->setId($id);
+            $newKws[] = (new Keyword(new Category(ucfirst($cat)), ucfirst($tag)))->setId($id);
 
         update($keywordService, $newKws, $keywordService->findAllKeywords(new Category($cat)));
         $newKws = [];

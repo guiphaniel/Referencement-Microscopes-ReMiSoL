@@ -13,7 +13,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
 
 // init groups' markers on the map
 let markersClusters = L.markerClusterGroup();
-loadAndShowGroups("/api/v1/listMicroscopesGroups.php");
+loadAndShowGroups("/api/v1/search.php");
 
 async function loadAndShowGroups(url) {
 	markersClusters.clearLayers();
@@ -23,27 +23,26 @@ async function loadAndShowGroups(url) {
 
 	for (let group of groups) {
 		// set custom icon color
-		let color;
+		let type;
 		let first = true;
 		for (let micro of Object.values(group.microscopes)) {
 			if(first) {
-				color = micro.type == "LABO" ? "blue" : "red";
+				type = micro.type == "LABO" ? "lab" : "plat";
 				first = false;
 			} else {
-				if(micro.type == "LABO" ? "blue" : "red" != color) {
-					color = "orange";
+				if((micro.type == "LABO" ? "lab" : "plat") != type) {
+					type = "mix";
 					break;
 				}
 			}
 		}
 
-		let customIcon = new L.Icon({
-			iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
-			shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+		let customIcon = new L.divIcon({
+			html: `<div class="legend-icon"><svg><use class="marker ${type}-marker" href="#marker"/></svg></div>`,
+			className: "",
 			iconSize: [25, 41],
 			iconAnchor: [12, 41],
-			popupAnchor: [1, -34],
-			shadowSize: [41, 41]
+			popupAnchor: [1, -41],
 		  });
 
 
@@ -61,9 +60,9 @@ async function loadAndShowGroups(url) {
 		
 		markersClusters.addLayer(marker);
 
-		// zoom on the marker if wer're on it's group-details page
-		if(page == "group-details.php" && group.id == window.location.search.split("=").pop()) {
-			map.setView(group.coor, 13);
+		// zoom on the marker if wer're on it's group-details/edit page
+		if((page == "group-details.php" || page == "edit_micros_group.php") && group.id == window.location.search.split("&")[0].split("=").pop()) {
+			map.setView(group.coor, 16);
 		}
 	}
 
@@ -138,7 +137,10 @@ function getCustomPopupHTML(group) {
 	let infos = document.createElement("section");
 
 	// lab
-	infos.append(createH(2, group.lab.name + " (" + group.lab.type + group.lab.code + ")"));
+	let labName = group.lab.name;
+	if(group.lab.type != "Autre")
+		labName += " (" + group.lab.type + group.lab.code + ")";
+	infos.append(createH(2, labName));
 
 	// website
 	{
@@ -149,17 +151,16 @@ function getCustomPopupHTML(group) {
 	}
 
 	// contacts
-	infos.append(createContentElement("h3", "Référents"))
+	infos.append(createH(3, "Référent·e·s"))
 	let contactsAddress = document.createElement("address");
+	let nb = 1;
 	for (const contact of group.contacts) {
 		// generate contact infos
 		let contactAddress = document.createElement("address");
+		contactAddress.append(createH(4, "Référent·e n°" + nb++))
 
-		// role
-		contactAddress.append(createP(contact.role));
-
-		// name
-		contactAddress.append(createP([contact.firstname, contact.lastname].join(" ")));
+		// name (role)
+		contactAddress.append(createP([contact.firstname, contact.lastname].join(" ") + " (" + contact.role + ")"));
 		
 		// email
 		{
@@ -244,9 +245,9 @@ let legend = L.control({ position: "bottomleft" });
 legend.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
   div.innerHTML += "<h2>Légende</h2>";
-  div.innerHTML += '<div class="legend-item"><img class="legend-icon" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png" alt="Marqueur mixte"></img><span>Laboratoire</span><br></div>';
-  div.innerHTML += '<div class="legend-item"><img class="legend-icon" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png" alt="Marqueur mixte"></img><span>Plateforme</span><br></div>';
-  div.innerHTML += '<div class="legend-item"><img class="legend-icon" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png" alt="Marqueur mixte"></img><span>Mixte</span><br></div>';
+  div.innerHTML += '<div class="legend-item"><div class="legend-icon"><svg><use class="marker lab-marker" href="#marker"/></svg></div><span>Laboratoire</span></div>';
+  div.innerHTML += '<div class="legend-item"><div class="legend-icon"><svg><use class="marker plat-marker" href="#marker"/></svg></div><span>Plateforme</span></div>';
+  div.innerHTML += '<div class="legend-item"><div class="legend-icon"><svg><use class="marker mix-marker" href="#marker"/></svg></div><span>Mixte</span></div>';
   
   
 
@@ -269,19 +270,46 @@ function initMapFilters() {
 	if(mapFilters == null)
 		return;
 
-	document.addEventListener("change", updateFilters);
+	document.getElementById("filters-reset").addEventListener("click", () => { filters = []; updateFilters(); });
+	mapFilters.addEventListener("change", onFilterChange);
+	mapFilters.addEventListener("click", onHeaderClick)
 }
 
-function updateFilters(e) {
+function onFilterChange(e) {
 	let checkbox = e.target;
 	if(checkbox.type != "checkbox")
 		return;
 
-	if(checkbox.checked)
-		filters.push(checkbox.value);
+	if(checkbox.checked) 
+		filters.push(checkbox.value); // add filter
 	else
-		filters.splice(filters.indexOf(checkbox.value), 1);
+		filters.splice(filters.indexOf(checkbox.value), 1); // remove filter
 
+	updateFilters();
+}
+
+function onHeaderClick(e){
+	let header = e.target;
+	if(header.tagName != "H3")
+		return;
+
+	let checkboxes = header.parentElement.getElementsByTagName("input");
+
+	let allChecked = true;
+	for (const checkbox of checkboxes) {
+		if(checkbox.checked == false) {
+			allChecked = false;
+			break;
+		}
+	}
+
+	for (const checkbox of checkboxes)
+		checkbox.checked = !allChecked;
+
+	updateFilters();
+}
+
+function updateFilters() {
 	let url = "/api/v1/search.php";
 
 	if(filters.length > 0)
@@ -293,4 +321,24 @@ function updateFilters(e) {
 	});
 
 	loadAndShowGroups(url);
+}
+
+/* form auto fill */
+
+if(page == "form.php" || page == "edit_micros_group.php") {
+	map.on('click', fillCoordinates);
+}
+
+function fillCoordinates(e) {
+	normalizedLatLng = normalizeLatLng(e.latlng, 5);
+	let lat = normalizedLatLng.lat;
+	let lon = normalizedLatLng.lng;
+
+	if(lat < 41) lat = 41;
+	if(lat > 52) lat = 52;
+	if(lon < -6) lon = -6;
+	if(lon > 11) lon = 11;
+
+    document.getElementById("lat").value = lat;
+    document.getElementById("lon").value = lon;
 }

@@ -1,7 +1,7 @@
 <?php   
     include_once(__DIR__ . "/../config/config.php");
 
-    function sendEmail($to, $object, $content) {
+    function sendEmail($to, $subject, $content) {
         $headers = "";
         $headers .= "Reply-To: ReMiSoL <noreply@" . WEBSITE_URL . ">\r\n"; 
         $headers .= "Return-Path: ReMiSoL <noreply@" . WEBSITE_URL . ">\r\n"; 
@@ -12,5 +12,5 @@
         $headers .= "X-Priority: 3\r\n";
         $headers .= "X-Mailer: PHP". phpversion() ."\r\n" ;
 
-        return mail($to, $object, $content, $headers);
+        return mail($to, $subject, $content, $headers);
     }

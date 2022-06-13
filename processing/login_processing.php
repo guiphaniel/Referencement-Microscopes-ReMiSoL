@@ -15,15 +15,14 @@
         $user = $userService->findUserByEmail($_POST["email"]);
         
         if (!$user)
-            throw new Exception("Informations erronées");
+            throw new Exception("Informations erronées.");
 
-        // TODO: add link to resend email
         if ($user->isLocked())
-            throw new Exception("Informations erronées");
+            throw new Exception("Informations erronées.");
 
         //check password validity
         if(!password_verify($_POST["password"], $user->getPassword()))
-            throw new Exception("Informations erronées");
+            throw new Exception("Informations erronées.");
 
     } catch (\Throwable $th) {
         $_SESSION["form"]["errorMsg"]=$th->getMessage();
@@ -38,5 +37,5 @@
         $_SESSION["user"][$property->getName()] = $property->getValue($user);
     }
 
-    header('location: /form.php');
+    header('location: /account.php');
 

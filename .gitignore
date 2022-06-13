@@ -1,7 +1,8 @@
 # Default ignored files
 .vscode/
 .idea/
-/public/img/micros/
+/public/img/micros/*
+!/public/img/micros/default.*
 /shelf/
 /workspace.xml
 # Editor-based HTTP Client requests

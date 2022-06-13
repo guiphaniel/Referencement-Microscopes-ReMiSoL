@@ -6,7 +6,7 @@
     $header = new HeaderCreator("Validation du compte"); 
 
     if(!unlockUser())
-        redirect("/422.php");
+        redirect("/errors/422.php");
     
     function unlockUser() {
         if(empty($_GET["id"]) || empty($_GET["token"]))
@@ -38,6 +38,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Page permettant de valider son compte suite à l'inscription.">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="preload" as="font" href="/public/fonts/OpenSans-ExtraBold.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="/public/fonts/MontSerrat.woff2" type="font/woff2" crossorigin="anonymous">
     <title>Validation du compte</title>
 </head>
 <body>
@@ -45,14 +49,14 @@
         $header->create();
     ?>
     <main>
-        <p>Votre compte a été activé avec succès !</p>
-        <p>Vous pouvez fermer cette page en toute sécurité</p>
+        <div class="msg-wrapper">
+            <div class="msg info-msg">
+                <p>Votre compte a été activé avec succès !</p>
+                <p>Vous pouvez fermer cette page en toute sécurité</p>  
+            </div>
+        </div>
     </main>
-    <footer>
-        <address>
-            <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
-        </address>
-    </footer>
+    <?php (new FooterCreator)->create() ?>
 </body>
 </html>
 

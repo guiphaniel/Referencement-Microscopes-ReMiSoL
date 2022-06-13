@@ -2,8 +2,12 @@
     include_once(__DIR__ . "/AbstractEntity.php");
 
     class Address extends AbstractEntity  {
-        function __construct(private string $school, private string $street, private string $zipCode, private string $city, private string $country) {
+        private string $zipCode;
+
+        function __construct(private string $school, private string $street, string $zipCode, private string $city, private string $country) {
             parent::__construct();
+
+            $this->setZipCode($zipCode);
         }
 
         public function toString() {
@@ -41,6 +45,9 @@
 
         public function setZipCode($zipCode)
         {
+            if(!preg_match("/^\d{5}$/", $zipCode))
+                throw new Exception("Veuillez saisir un code postal valide.");
+
             $this->zipCode = $zipCode;
 
             return $this;

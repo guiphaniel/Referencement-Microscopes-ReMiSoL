@@ -20,45 +20,45 @@ DROP TABLE IF EXISTS compagny;
 
 CREATE TABLE compagny (
 	id	INTEGER AUTO_INCREMENT,
-	name	VARCHAR(50) UNIQUE,
+	name	VARCHAR(400) UNIQUE,
 	PRIMARY KEY(id)
 );
 CREATE TABLE brand (
 	id	INTEGER AUTO_INCREMENT,
-	name	VARCHAR(50) UNIQUE,
+	name	VARCHAR(400) UNIQUE,
 	compagny_id	INTEGER,
 	FOREIGN KEY(compagny_id) REFERENCES compagny(id) ON DELETE CASCADE,
 	PRIMARY KEY(id)
 );
 CREATE TABLE model (
 	id	INTEGER AUTO_INCREMENT,
-	name	VARCHAR(50) UNIQUE,
+	name	VARCHAR(400) UNIQUE,
 	brand_id	INTEGER,
 	FOREIGN KEY(brand_id) REFERENCES brand(id) ON DELETE CASCADE,
 	PRIMARY KEY(id)
 );
 CREATE TABLE controller (
 	id	INTEGER AUTO_INCREMENT,
-	name	VARCHAR(50) UNIQUE,
+	name	VARCHAR(400) UNIQUE,
 	brand_id	INTEGER,
 	FOREIGN KEY(brand_id) REFERENCES brand(id) ON DELETE CASCADE,
 	PRIMARY KEY(id)
 );
 CREATE TABLE address (
 	id	INTEGER AUTO_INCREMENT,
-	school	VARCHAR(50),
-	street	VARCHAR(50),
-	zipCode	VARCHAR(50),
-	city	VARCHAR(50),
-	country	VARCHAR(50),
+	school	VARCHAR(400),
+	street	VARCHAR(400),
+	zipCode	VARCHAR(400),
+	city	VARCHAR(400),
+	country	VARCHAR(400),
 	PRIMARY KEY(id)
 );
 CREATE TABLE lab (
 	id	INTEGER AUTO_INCREMENT,
-	name	VARCHAR(50),
-	type	VARCHAR(4),
-	code	VARCHAR(10),
-	website	VARCHAR(200),
+	name	VARCHAR(400),
+	type	ENUM("UPR", "UMR","UAR", "FR", "EMR", "Autre"),
+	code	SMALLINT,
+	website	VARCHAR(400),
 	address_id	INTEGER,
 	UNIQUE(type,code),
 	PRIMARY KEY(id),
@@ -73,10 +73,10 @@ CREATE TABLE coordinates (
 );
 CREATE TABLE `user` (
 	id	INTEGER AUTO_INCREMENT,
-	firstname	VARCHAR(50),
-	lastname	VARCHAR(50),
-	norm_lastname	VARCHAR(50),
-	email	VARCHAR(50) UNIQUE,
+	firstname	VARCHAR(400),
+	lastname	VARCHAR(400),
+	norm_lastname	VARCHAR(400),
+	email	VARCHAR(400) UNIQUE,
 	phone_code	VARCHAR(3),
 	phone_num	VARCHAR(9),
 	password	VARCHAR(255),
@@ -110,30 +110,30 @@ CREATE TABLE locked_microscopes_group (
 );
 CREATE TABLE microscope (
 	id	INTEGER AUTO_INCREMENT,
-	rate	VARCHAR(200),
+	rate	VARCHAR(400),
 	`descr`	VARCHAR(2000),
 	norm_descr	VARCHAR(2000),
-	type	ENUM('LABO', 'SERV'),
+	type	ENUM('LABO', 'PLAT'),
 	access	ENUM('ACAD', 'INDU', 'BOTH'),
 	model_id	INTEGER,
 	controller_id	INTEGER,
 	microscopes_group_id INTEGER,
-	FOREIGN KEY(controller_id) REFERENCES controller(id),
-	FOREIGN KEY(model_id) REFERENCES model(id),
+	FOREIGN KEY(controller_id) REFERENCES controller(id) ON DELETE CASCADE,
+	FOREIGN KEY(model_id) REFERENCES model(id) ON DELETE CASCADE,
 	FOREIGN KEY(microscopes_group_id) REFERENCES microscopes_group(id) ON DELETE CASCADE,
 	PRIMARY KEY(id)
 );
 CREATE TABLE category (
 	id	INTEGER AUTO_INCREMENT,
-	name	VARCHAR(50) UNIQUE,
-	norm_name	VARCHAR(50) UNIQUE,
+	name	VARCHAR(400) UNIQUE,
+	norm_name	VARCHAR(400) UNIQUE,
 	PRIMARY KEY(id)
 );
 CREATE TABLE keyword (
 	id	INTEGER AUTO_INCREMENT,
 	category_id	INTEGER,
-	tag	VARCHAR(50),
-	norm_tag	VARCHAR(50),
+	tag	VARCHAR(400),
+	norm_tag	VARCHAR(400),
 	UNIQUE(category_id,tag),
 	UNIQUE(category_id,norm_tag),
 	FOREIGN KEY(category_id) REFERENCES category(id) ON DELETE CASCADE,
@@ -148,13 +148,13 @@ CREATE TABLE microscope_keyword (
 );
 CREATE TABLE contact (
 	id	INTEGER AUTO_INCREMENT,
-	firstname	VARCHAR(50),
-	lastname	VARCHAR(50),
-	norm_lastname	VARCHAR(50),
-	email	VARCHAR(50),
+	firstname	VARCHAR(400),
+	lastname	VARCHAR(400),
+	norm_lastname	VARCHAR(400),
+	email	VARCHAR(400),
 	phone_code	VARCHAR(3),
 	phone_num	VARCHAR(9),
-	role	VARCHAR(50),
+	role	VARCHAR(400),
 	PRIMARY KEY(id)
 );
 CREATE TABLE manage (

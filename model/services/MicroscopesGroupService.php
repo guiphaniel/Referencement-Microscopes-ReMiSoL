@@ -19,7 +19,6 @@
             return self::$instance;
         }
 
-        // TODO: check if the lab / brand / controller / are already in db, else add them but also add them in a table "to_verify", maybe in the add/save functions of each Service
         function save(MicroscopesGroup $group) : int {
             global $pdo;
 
@@ -40,7 +39,7 @@
                 ]);
             } catch (\Throwable $th) {
                 if(str_contains($th->getMessage() ,"UNIQUE constraint failed"))
-                    throw new Exception("Un groupe de microscopes existe déjà à cet emplacement");
+                    throw new Exception("Un groupe de microscopes existe déjà à cet emplacement.");
                 else
                     throw $th;
             }
@@ -71,10 +70,14 @@
             return $groupId;
         }
 
-        public function findGroupOwner(MicroscopesGroup $group) {
+        public function findGroupOwner(MicroscopesGroup | int $group) {
             global $pdo;
 
-            $groupId = $group->getId();
+            if(is_int($group))
+                $groupId = $group;
+            else
+                $groupId = $group->getId();
+
             $sth = $pdo->query("SELECT user_id FROM microscopes_group WHERE id = $groupId");
 
             $row = $sth->fetch();
@@ -102,19 +105,19 @@
             return $user;
         }
 
-        function findAllMicroscopesGroup($includeLocked = true, $filters = []) {
+        function findAllMicroscopesGroup($includeLocked = true, $filters = [], int $limit = -1, int $offset = -1) {
             global $pdo;
 
             // get groups infos
             if(empty($filters)) {
                 $sql = "
-                    select g.id
+                    select g.id as groupId
                     from microscopes_group as g
                 ";
                 if(!$includeLocked)
                     $sql .= "where g.id not in (select microscopes_group_id from locked_microscopes_group)";
             } else {
-                $sqlFilters = "(" .  implode("|", array_map(function ($filter) { return preg_quote($filter); }, $filters)) . ")";
+                $sqlFilters = "(" .  implode("|", array_map(function ($filter) use ($pdo) { $quote = preg_quote($filter); return $pdo->quote(strNormalize($quote)); }, $filters)) . ")";
                 $sql = "
                     SELECT groupId, coorId, labId, microId, concat from (
                         select g.id as groupId, coordinates_id as coorId, lab.id as labId, mi.id as microId, CONCAT(GROUP_CONCAT(DISTINCT con.norm_lastname), GROUP_CONCAT(DISTINCT c.norm_name), GROUP_CONCAT(DISTINCT norm_tag), LOWER(mo.name), LOWER(ctr.name), LOWER(b.name), LOWER(cmp.name), mi.norm_descr) as concat
@@ -142,11 +145,18 @@
                         join compagny as cmp
                         on cmp.id = b.compagny_id
                         GROUP BY mi.id
-                    ) as groupsInfos where concat REGEXP '$sqlFilters'
+                    ) as groupsInfos where concat REGEXP $sqlFilters
                 ";
                 if(!$includeLocked)
                     $sql .= "and groupId not in (select microscopes_group_id from locked_microscopes_group)";
             }
+
+            $sql .= " ORDER BY groupId";
+            if($limit >=0) 
+                $sql .= " LIMIT $limit";
+            if($offset >=0) 
+                $sql .= " OFFSET $offset";
+
             $sth = $pdo->query($sql);
 
             // generate groups
@@ -204,7 +214,7 @@
                 $coor = CoordinatesService::getInstance()->findCoordinatesById($groupInfos["coordinates_id"]);
                 $lab = LabService::getInstance()->findLabById($groupInfos["lab_id"]);
                 $contacts = ContactService::getInstance()->findAllContactsByGroupId($groupId);
-                $micros = MicroscopeService::findAllMicroscopesByGroupId($groupId);
+                $micros = MicroscopeService::getInstance()->findAllMicroscopesByGroupId($groupId);
 
                 $group = new MicroscopesGroup($coor, $lab, $contacts);
 

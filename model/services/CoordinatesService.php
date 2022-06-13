@@ -50,7 +50,7 @@
         /** Saves the coordinates if they don't exist yet, else throws */
         function save(Coordinates $coor) : int {
             if($this->getCoordinatesId($coor) != -1)
-                throw new Exception("Un groupe de microscopes existe déjà à cet emplacement");
+                throw new Exception("Un groupe de microscopes existe déjà à cet emplacement.");
 
             global $pdo;
 

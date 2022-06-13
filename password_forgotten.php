@@ -5,6 +5,7 @@
 
     include_once("view/creators/FormCreator.php");
     include_once("view/creators/HeaderCreator.php");
+    include_once("view/creators/FooterCreator.php");
     $header = new HeaderCreator("Mot de passe oublié"); 
 ?>
 <!DOCTYPE html>
@@ -13,6 +14,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Page permettant la demande de réinitialisation du mot de passe en cas d'oubli de ce dernier.">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="preload" as="font" href="/public/fonts/OpenSans-ExtraBold.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="/public/fonts/MontSerrat.woff2" type="font/woff2" crossorigin="anonymous">
     <title>Mot de passe oublié</title>
 </head>
 <body>
@@ -20,18 +25,20 @@
         $header->create();
     ?>
     <main>
-        <p>Saisissez votre courriel. Vous allez recevoir un message vous permettant de modifier votre mot de passe.</p>
+        <div class="infos">
+            <p>Saisissez votre courriel. Vous allez recevoir un message vous permettant de modifier votre mot de passe.</p>
+        </div>
         <?php FormCreator::handleMsg(); ?>
-        <form action="processing/password_forgotten_processing.php" method="post">
-            <label for="email">Courriel</label>
-            <input id="email" type="email" autocomplete="email" name="email" required>
-            <input type="submit" value="Envoyer">
-        </form>
+        <div class="form-wrapper">
+            <form action="processing/password_forgotten_processing.php" method="post">
+                <div class="input-wrapper">    
+                    <input id="email" type="email" autocomplete="email" name="email" placeholder=" " required>
+                    <label for="email">Courriel</label>
+                </div>
+                    <input type="submit" value="Envoyer" class="bt">
+            </form>
+        </div>
     </main>
-    <footer>
-        <address>
-            <a href="mailto:xxx.xxx@xxx.fr">xxx.xxx@xxx.fr</a>
-        </address>
-    </footer>
+    <?php (new FooterCreator)->create() ?>
 </body>
 </html>

@@ -3,11 +3,15 @@
     include_once(__DIR__ . "/Address.php");
     
     class Lab extends AbstractEntity {
-        private string $code;
+        private string $type;
+        private $code;
+        private string $website;
 
-        function __construct(private string $name, private string $type, string $code, private string $website, private Address $address) {
+        function __construct(private string $name, string $type, $code, string $website, private Address $address) {
             parent::__construct();
+            $this->setType($type);
             $this->setCode($code);
+            $this->setWebsite($website);
         }
 
         public function getName()
@@ -29,8 +33,8 @@
 
         public function setType($type)
         {
-            if(!in_array($type, ["UPR", "UMR","UAR", "FR", "EMR"]))
-                throw new Exception("Le code du laboratoire / service saisi est invalide");
+            if(!in_array($type, ["EMR", "FR", "IRL", "UAR", "UMR", "UPR", "Autre"]))
+                throw new Exception("Le code du laboratoire / service saisi est invalide.");
 
             $this->type = $type;
 
@@ -44,8 +48,8 @@
 
         public function setCode($code)
         {
-            if($code < 10 || $code > 9999)
-                throw new Exception("Le numéro du code du laboratoire / service saisi est invalide");
+            if(!empty($code) && (!is_numeric($code) || ($code < 10 || $code > 9999)))
+                throw new Exception("Le numéro du code du laboratoire / service saisi est invalide.");
 
             $this->code = $code;
 
@@ -54,14 +58,17 @@
 
         public function getWebsite()
         {
-                return $this->website;
+            return $this->website;
         }
 
         public function setWebsite($website)
         {
-                $this->website = $website;
+            if(!filter_var($website, FILTER_VALIDATE_URL))
+                throw new Exception("Veuillez saisir un site web valide pour votre laboratoire.");
 
-                return $this;
+            $this->website = $website;
+
+            return $this;
         }
 
         public function getAddress() : Address

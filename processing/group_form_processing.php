@@ -4,24 +4,28 @@
     include_once("../utils/send_email.php");
     include_once("../model/entities/Lab.php");
     include_once("../model/entities/Contact.php");
-    include_once("../model/entities/Model.php");
-    include_once("../model/entities/Controller.php");
     include_once("../model/entities/MicroscopesGroup.php");
+    include_once("../model/services/ModelService.php");
+    include_once("../model/services/ControllerService.php");
     include_once("../model/services/MicroscopesGroupService.php");
     include_once("../model/services/KeywordService.php");
     
     if(!isUserSessionValid()) 
         redirect("/index.php");
 
-    //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form TODO: check that the two contacts aren't the same ones
+    //verify that all fields were sent by the form TODO: if not, store values in session to prefill the form
     if (empty($_POST["lab"]) || empty($_POST["coor"]) || empty($_POST["contacts"]) || empty($_POST["micros"])) {       
         redirect("/form.php");
     }
 
     $labInfos = $_POST["lab"];
-    if(empty($labInfos["name"]) || empty($labInfos["type"]) || empty($labInfos["code"]) || empty($labInfos["address"]) || empty($labInfos["website"])) {     
+    if(empty($labInfos["name"]) || empty($labInfos["type"]) || empty($labInfos["address"]) || empty($labInfos["website"])) {     
         redirect("/form.php");
     }
+
+    if($labInfos["type"] != "Autre" && empty($labInfos["code"])) {
+        redirect("/form.php");
+    } 
 
     $labAddress = $labInfos["address"];
     if (empty($labAddress["street"]) || empty($labAddress["zipCode"]) || empty($labAddress["city"]) || empty($labAddress["country"])) {
@@ -41,7 +45,7 @@
     }
 
     foreach($_POST["micros"] as $micro) {
-        if (empty($micro["compagny"]) || empty($micro["brand"]) || empty($micro["model"]) || empty($micro["controller"]) || empty($micro["descr"]) || empty($micro["type"]) || empty($micro["access"])) {
+        if (empty($micro["compagny"]) || empty($micro["brand"]) || empty($micro["model"]) || empty($micro["controller"]) || empty($micro["descr"]) || strlen($micro["descr"]) > 2000 || empty($micro["type"]) || empty($micro["access"])) {
             redirect("/form.php");
         }
     }
@@ -58,7 +62,7 @@
     try {
         // Convert form values into objects...
         $address = new Address($labAddress["school"], $labAddress["street"], $labAddress["zipCode"], $labAddress["city"], $labAddress["country"]);
-        $lab = new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"], $labInfos["website"], $address);
+        $lab = new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"]??null, $labInfos["website"], $address);
     
         $contacts = [];
         foreach($_POST["contacts"] as $id => $contact) {
@@ -69,10 +73,30 @@
         $group = new MicroscopesGroup(new Coordinates($coorInfos["lat"], $coorInfos["lon"]), $lab, $contacts);
 
         foreach($_POST["micros"] as $id => $micro) {
-            $com = new Compagny($micro["compagny"]);
-            $bra = new Brand($micro["brand"], $com);
+            $cmp = new Compagny($micro["compagny"]);
+            $cmp->setId(CompagnyService::getInstance()->getCompagnyId($cmp));
+
+            $bra = new Brand($micro["brand"], $cmp);
+            $bra->setId(BrandService::getInstance()->getBrandId($bra));
+
             $mod = new Model($micro["model"], $bra);
+            $mod->setId(ModelService::getInstance()->getModelId($mod));
+
             $ctr = new Controller($micro["controller"], $bra);
+            $ctr->setId(ControllerService::getInstance()->getControllerId($ctr));
+
+            //check material validity
+            if($cmp->getId() == -1 || !in_array($cmp, CompagnyService::getInstance()->findAllCompagnies()))
+                throw new Exception("La société suivante n'est pas pris en charge : {$cmp->getName()}.");
+
+            if($bra->getId() == -1 || !in_array($bra, BrandService::getInstance()->findAllBrands($cmp)))
+                throw new Exception("La marque suivante n'est pas pris en charge : Société : {$cmp->getName()} ; Marque : {$bra->getName()}.");
+
+            if($mod->getId() == -1 || !in_array($mod, ModelService::getInstance()->findAllModels($bra)))
+                throw new Exception("Le modèle suivant n'est pas pris en charge : Société : {$cmp->getName()} ; Marque : {$bra->getName()} ; Modèle : {$mod->getName()}.");
+
+            if($ctr->getId() == -1 || !in_array($ctr, ControllerService::getInstance()->findAllControllers($bra)))
+                throw new Exception("L'électronique suivante n'est pas pris en charge : Société : {$cmp->getName()} ; Marque : {$bra->getName()} ; Électronique : {$ctr->getName()}.");
 
             $kws = [];
             foreach($micro["keywords"]??[] as $cat => $tags) {
@@ -81,7 +105,7 @@
                     $kwId = KeywordService::getInstance()->getKeywordId($kw);
 
                     if($kwId == -1)
-                        throw new Exception("Le mot clé suivant n'est pas pris en charge : catégorie ($cat), étiquette ($tag)");
+                        throw new Exception("Le mot clé suivant n'est pas pris en charge : catégorie ($cat), étiquette ($tag).");
 
                     $kws[] = $kw->setId($kwId);
                 }
@@ -102,12 +126,13 @@
         }
 
         //save the micros' imgs
-        foreach (array_keys($group->getMicroscopes()) as $microId) { 
+        foreach ($group->getMicroscopes() as $formMicroId => $micro) { 
+            $microId = $micro->getId();
             $imgs = $_FILES["imgs"];
 
             // if no image has been sent, keep it if it hasn't change, or remove it if it exists on the server
-            if($imgs['size'][$microId] == 0) {
-                if(isset($_POST["keepImg"]) && isset($_POST["keepImg"][$microId]) && $_POST["keepImg"][$microId])
+            if($imgs['size'][$formMicroId] == 0) {
+                if(isset($_POST["keepImg"]) && isset($_POST["keepImg"][$formMicroId]) && $_POST["keepImg"][$formMicroId])
                     continue;
 
                 $existingImgs = glob(__DIR__ . "/../public/img/micros/" . "$microId.*");
@@ -119,19 +144,16 @@
             }
 
             // retrieve the file extension
-            $fileType = $imgs['type'][$microId];
-            $fileType = substr($fileType, strrpos($fileType, "/") + 1);
-            $tmpName = $imgs['tmp_name'][$microId];
+            $tmpName = $imgs['tmp_name'][$formMicroId];
             $image;
-            switch ($fileType) {
-                case "png":
+            switch (exif_imagetype($tmpName)) {
+                case IMAGETYPE_PNG:
                     $image = imagecreatefrompng($tmpName);
                     break;
-                case "jpg":
-                case "jpeg":
+                case IMAGETYPE_JPEG:
                     $image = imagecreatefromjpeg($tmpName);
                     break;
-                case "webp":
+                case IMAGETYPE_WEBP:
                     $image = imagecreatefromwebp($tmpName);
                     break;
                 default:
@@ -172,11 +194,11 @@
     }
 
     // else, send an email to all the admins
-    $object = "[RéMiSoL] Nouvelle fiche";
+    $subject = "[RéMiSoL] Nouvelle fiche";
     $content = "Bonjour,\n\nUne nouvelle fiche a été créée par {$_SESSION["user"]["firstname"]} {$_SESSION["user"]["lastname"]} ({$_SESSION["user"]["email"]}).\n\nPour l'administrer, suivez le lien suivant : https://" . WEBSITE_URL . "/group-details.php?id=$groupId.";
 
     foreach (UserService::getInstance()->findAllAdmins() as $admin) {
-        sendEmail($admin->getEmail(), $object, $content);
+        sendEmail($admin->getEmail(), $subject, $content);
     }
     
-    redirect("/index"); //TODO: redirect to user's account
+    redirect("/account.php");
