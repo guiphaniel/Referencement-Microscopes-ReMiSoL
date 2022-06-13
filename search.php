@@ -16,7 +16,7 @@
 
     $microscopeService = MicroscopeService::getInstance();
     $micros = $microscopeService->findAllMicroscopes(false, $filters, RESULT_PER_QUERY, RESULT_PER_QUERY * $page);
-    $nbTotalMicros = $microscopeService->countAllMicroscopes(false, $filters, RESULT_PER_QUERY, RESULT_PER_QUERY * $page);
+    $nbTotalMicros = $microscopeService->countAllMicroscopes(false, $filters);
 
     include_once("view/creators/HeaderCreator.php");
     include_once("view/creators/FooterCreator.php");
