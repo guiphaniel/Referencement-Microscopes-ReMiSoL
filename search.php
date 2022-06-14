@@ -20,7 +20,7 @@
 
     include_once("view/creators/HeaderCreator.php");
     include_once("view/creators/FooterCreator.php");
-    $header = new HeaderCreator("Recherche", str_replace("'", "&apos;", $_GET["filters"]??"")); 
+    $header = new HeaderCreator("Recherche", htmlspecialchars($_GET["filters"]??""));
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -61,7 +61,7 @@
                     if($compagny->getName() == "Homemade")
                         $name = "Homemade - " . $ctr->getName();
                     else
-                        $name = implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]);
+                        $name = htmlspecialchars(implode(" - ", [$compagny->getName(), $brand->getName(), $model->getName(), $ctr->getName()]));
                         
                     $imgPath = MicroscopeService::getInstance()->getImgPathById($microId);?>
                     
@@ -71,7 +71,7 @@
                         </div>
                         <div class="tile-content">
                             <h2><?=$name?><?=!empty($micro->getRate()) ? ' - <span class="euro">€</span>' : ""?></h2>
-                            <p><?=LabService::getInstance()->findLabByGroupId($groupId)->getAddress()->toString()?></p>
+                            <p><?=htmlspecialchars(LabService::getInstance()->findLabByGroupId($groupId)->getAddress()->toString())?></p>
                             <?php
                                 $access = $micro->getAccess();
                                 if($access == "ACAD") : ?>

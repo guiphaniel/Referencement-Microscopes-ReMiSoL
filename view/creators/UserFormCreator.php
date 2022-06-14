@@ -18,15 +18,15 @@
                 <input type="hidden" name="id" value="<?=$this->userId?>">
                 <input type="hidden" name="action" value="update">
                 <div class="input-wrapper">
-                    <input id="firstname-<?=$this->userId?>" type="text" autocomplete="given-name" name="firstname" value="<?=$this->user->getFirstname()?>" placeholder=" " required>
+                    <input id="firstname-<?=$this->userId?>" type="text" autocomplete="given-name" name="firstname" value="<?=htmlspecialchars($this->user->getFirstname())?>" placeholder=" " required>
                     <label for="firstname-<?=$this->userId?>">Prénom</label>
                 </div>
                 <div class="input-wrapper">
-                    <input id="lastname-<?=$this->userId?>" type="text" autocomplete="family-name" autocapitalize="characters" name="lastname" value="<?=$this->user->getLastname()?>" placeholder=" " required>
+                    <input id="lastname-<?=$this->userId?>" type="text" autocomplete="family-name" autocapitalize="characters" name="lastname" value="<?=htmlspecialchars($this->user->getLastname())?>" placeholder=" " required>
                     <label for="lastname-<?=$this->userId?>">NOM</label>
                 </div>
                 <div class="input-wrapper">
-                    <input id="email-<?=$this->userId?>" type="email" autocomplete="email" name="email" value="<?=$this->user->getEmail()?>" placeholder=" " required>
+                    <input id="email-<?=$this->userId?>" type="email" autocomplete="email" name="email" value="<?=htmlspecialchars($this->user->getEmail())?>" placeholder=" " required>
                     <label for="email-<?=$this->userId?>">Courriel</label>
                 </div>
                 <div class="select-input">

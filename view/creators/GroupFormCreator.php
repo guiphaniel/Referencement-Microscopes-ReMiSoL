@@ -73,7 +73,7 @@
 
     private function valueOf($value) {
         if(isset($value))
-            return "value='$value'";
+            return "value='" . htmlspecialchars($value) . "'";
         else 
             return null;
     }
@@ -183,7 +183,7 @@
                         <label for="contact-role-<?=$id?>">Titre</label>
                     </div>
                     <div class="input-wrapper">
-                        <input id="contact-email-<?=$id?>" type="text" name="contacts[<?=$id?>][email]" autocomplete="email" <?=$this->valueOf($contact?->getEmail())?> placeholder=" " required>
+                        <input id="contact-email-<?=$id?>" type="email" name="contacts[<?=$id?>][email]" autocomplete="email" <?=$this->valueOf($contact?->getEmail())?> placeholder=" " required>
                         <label for="contact-email-<?=$id?>">Email</label>
                     </div>
                     <div class="select-input">
@@ -308,7 +308,7 @@
                 </select>
             </div>
             <div class="input-wrapper">
-                <textarea id="micro-descr-<?=$id?>" name="micros[<?=$id?>][descr]" maxlength="2000" cols="30" rows="10" placeholder=" " required><?=$micro?->getDescr()?></textarea>
+                <textarea id="micro-descr-<?=$id?>" name="micros[<?=$id?>][descr]" maxlength="2000" cols="30" rows="10" placeholder=" " required><?=htmlspecialchars($micro?->getDescr()??"")?></textarea>
                 <label for="micro-descr-<?=$id?>">Description (2000 caractères max.)</label>
             </div>
             <fieldset>
@@ -316,7 +316,7 @@
                 <?php 
                     if(isset($micro)) :
                         $microId = $micro->getId();
-                        $name = implode(" - ", [$microCompagny->getName(), $microBrand->getName(), $microModel->getName(), $microController->getName()]);
+                        $name = htmlspecialchars(implode(" - ", [$microCompagny->getName(), $microBrand->getName(), $microModel->getName(), $microController->getName()]));
 
                         $path = glob(__DIR__ . "/../../public/img/micros/" . "$microId.*");
 
