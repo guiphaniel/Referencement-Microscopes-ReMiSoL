@@ -184,7 +184,7 @@
                     </div>
                     <div class="input-wrapper">
                         <input id="contact-email-<?=$id?>" type="email" name="contacts[<?=$id?>][email]" autocomplete="email" <?=$this->valueOf($contact?->getEmail())?> placeholder=" " required>
-                        <label for="contact-email-<?=$id?>">Email</label>
+                        <label for="contact-email-<?=$id?>">Courriel</label>
                     </div>
                     <div class="select-input">
                         <select name="contacts[<?=$id?>][phoneCode]" id="contact-phone-code-<?=$id?>" autocomplete="tel-country-code" required>
