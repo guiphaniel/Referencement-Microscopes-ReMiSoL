@@ -73,7 +73,7 @@
 
     private function valueOf($value) {
         if(isset($value))
-            return "value='$value'";
+            return "value='" . htmlspecialchars($value) . "'";
         else 
             return null;
     }
@@ -133,7 +133,7 @@
                     </div>
                     <div class="input-wrapper">
                         <input id="lab-address-school" type="text" name="lab[address][school]" <?=$this->valueOf($lab?->getAddress()->getSchool())?> placeholder=" ">
-                        <label for="lab-address-school">Université / École</label>
+                        <label for="lab-address-school">Université / École<span class="tooltip" data-tooltip-content="Si votre laboratoire / service est sous la tutelle d'une université / école, merci de préciser laquelle."></span></label>
                     </div>
                     <div class="input-wrapper">
                         <input id="lab-address-street" type="text" name="lab[address][street]" autocomplete="address-line1" <?=$this->valueOf($lab?->getAddress()->getStreet())?> placeholder=" " required>
@@ -183,7 +183,7 @@
                         <label for="contact-role-<?=$id?>">Titre</label>
                     </div>
                     <div class="input-wrapper">
-                        <input id="contact-email-<?=$id?>" type="text" name="contacts[<?=$id?>][email]" autocomplete="email" <?=$this->valueOf($contact?->getEmail())?> placeholder=" " required>
+                        <input id="contact-email-<?=$id?>" type="email" name="contacts[<?=$id?>][email]" autocomplete="email" <?=$this->valueOf($contact?->getEmail())?> placeholder=" " required>
                         <label for="contact-email-<?=$id?>">Email</label>
                     </div>
                     <div class="select-input">
@@ -308,7 +308,7 @@
                 </select>
             </div>
             <div class="input-wrapper">
-                <textarea id="micro-descr-<?=$id?>" name="micros[<?=$id?>][descr]" maxlength="2000" cols="30" rows="10" placeholder=" " required><?=$micro?->getDescr()?></textarea>
+                <textarea id="micro-descr-<?=$id?>" name="micros[<?=$id?>][descr]" maxlength="2000" cols="30" rows="10" placeholder=" " required><?=htmlspecialchars($micro?->getDescr()??"")?></textarea>
                 <label for="micro-descr-<?=$id?>">Description (2000 caractères max.)</label>
             </div>
             <fieldset>
@@ -316,7 +316,7 @@
                 <?php 
                     if(isset($micro)) :
                         $microId = $micro->getId();
-                        $name = implode(" - ", [$microCompagny->getName(), $microBrand->getName(), $microModel->getName(), $microController->getName()]);
+                        $name = htmlspecialchars(implode(" - ", [$microCompagny->getName(), $microBrand->getName(), $microModel->getName(), $microController->getName()]));
 
                         $path = glob(__DIR__ . "/../../public/img/micros/" . "$microId.*");
 

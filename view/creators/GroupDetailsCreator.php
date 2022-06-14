@@ -38,7 +38,7 @@
                             if($lab->getType() != "Autre")
                             $labName .= " (" . $this->group->getLab()->getType() . $this->group->getLab()->getCode() . ")"; 
                         ?> 
-                        <h2><?= $labName ?></h2>
+                        <h2><?=htmlspecialchars($labName)?></h2>
                         <?php $this->createEditBts() ?>
                     </div>
                     <?php if($this->showMap) : ?>
@@ -53,8 +53,8 @@
                     <?php else: ?>
                         <p>Coordonnées : <?= $this->group->getCoor()->getLat() . ", " . $this->group->getCoor()->getLon(); ?></p>
                     <?php endif; ?>
-                    <p><?= nl2br($this->group->getLab()->getAddress()->toString()); ?></p>
-                    <p>Site internet : <a href="<?= $this->group->getLab()->getWebsite(); ?>" target="_blank"><?= $this->group->getLab()->getWebsite(); ?></a></p>
+                    <p><?= nl2br(htmlspecialchars($this->group->getLab()->getAddress()->toString())); ?></p>
+                    <p>Site internet : <a href="<?=htmlspecialchars($this->group->getLab()->getWebsite())?>" target="_blank"><?= htmlspecialchars($this->group->getLab()->getWebsite())?></a></p>
                 </section>
                 <section>
                     <h2>Référent·e·s</h2>
@@ -62,10 +62,10 @@
                         <?php $nb = 1; foreach ($this->group->getContacts() as $id => $contact) : ?>
                             <address class="contact-wrapper">
                                 <h3>Référent·e n° <?=$nb++?></h3>
-                                <p><?= $contact->getFirstname() . ' ' . $contact->getLastname() . " (" . $contact->getRole() .")" ?></p>
-                                <p>Email : <a href="mailto:<?= $contact->getEmail() ?>"><?= $contact->getEmail() ?></a></p>
+                                <p><?=htmlspecialchars($contact->getFirstname() . ' ' . $contact->getLastname() . " (" . $contact->getRole() .")")?></p>
+                                <p>Email : <a href="mailto:<?=htmlspecialchars($contact->getEmail())?>"><?=htmlspecialchars($contact->getEmail())?></a></p>
                                 <?php $phone = $contact->getPhoneCode() . $contact->getPhoneNum(); ?>
-                                <p>Téléphone : <a href="tel:<?= $phone ?>"><?= $phone ?></a></p>
+                                <p>Téléphone : <a href="tel:<?=$phone ?>"><?= $phone ?></a></p>
                             </address>
                         <?php endforeach ?>
                     </div>
@@ -94,12 +94,12 @@
                         $imgPath = MicroscopeService::getInstance()->getImgPathById($micro->getId());
                         ?>
                         <section class="micro-section">
-                            <h3><?= sizeof($micros) > 1 && $this->microId === null ? "Microscope n°{$id} - " : ""?> <?= $name . " (" . $type . ")"; ?></h3>
-                            <img class="micro-img" src="<?=$imgPath?>" alt="Microscope <?=$name?>">
+                            <h3><?= sizeof($micros) > 1 && $this->microId === null ? "Microscope n°{$id} - " : ""?> <?= htmlspecialchars($name) . " (" . $type . ")"?></h3>
+                            <img class="micro-img" src="<?=$imgPath?>" alt="Microscope <?=htmlspecialchars($name)?>">
                             <div>
-                                <p>Description : <?= $micro->getDescr(); ?></p>
+                                <p>Description : <?=htmlspecialchars($micro->getDescr())?></p>
                                 <?php if(!empty($micro->getRate())) : ?>
-                                    <p>Tarification : <a href="<?= $micro->getRate(); ?>" target="_blank"><?= $micro->getRate(); ?></a></p>
+                                    <p>Tarification : <a href="<?=htmlspecialchars($micro->getRate())?>" target="_blank"><?=htmlspecialchars($micro->getRate())?></a></p>
                                 <?php endif; ?>
                                 <?php 
                                 $access = $micro->getAccess();
