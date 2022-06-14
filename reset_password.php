@@ -20,8 +20,13 @@
     // check the token's validity
     $token = $userService->getLockedUserToken($user);
 
+    if(empty($token)) {
+        $_SESSION["form"]["infoMsg"] = "Vous avez déjà mis votre mot de passe à jour.\n Vous pouvez désormais vous connecter.";
+        redirect("/login.php");
+    }
+
     if($token != $_GET["token"])
-        redirect("/index.php");
+        redirect("/errors/422.php");
 
     include_once("view/creators/HeaderCreator.php");
     include_once("view/creators/FooterCreator.php");
@@ -47,14 +52,19 @@
         <?php FormCreator::handleMsg(); ?>
         <div class="form-wrapper">
             <form action="processing/reset_password_processing.php?id=<?=$_GET["id"]?>&token=<?=$_GET["token"]?>" method="post">
-                <label for="password1">Nouveau mot de passe</label>
-                <input id="password1" type="password" autocomplete="new-password" name="password1" required>
-                <label for="password2">Vérification du mot de passe</label>
-                <input id="password2" type="password" name="password2" required>
+                <div class="input-wrapper">    
+                    <input id="password1" type="password" autocomplete="new-password" name="password1" placeholder=" " required>
+                    <label for="password1">Nouveau mot de passe</label>
+                </div>
+                <div class="input-wrapper">
+                    <input id="password2" type="password" name="password2" placeholder=" " required>
+                    <label for="password2">Vérification du mot de passe</label>
+                </div>
                 <input type="submit" class="bt">
             </form>
         </div>
     </main>
     <?php (new FooterCreator)->create() ?>
+    <script src="public/js/password_validation.js"></script>
 </body>
 </html>
