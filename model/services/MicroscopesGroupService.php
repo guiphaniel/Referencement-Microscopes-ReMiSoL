@@ -117,10 +117,11 @@
                 if(!$includeLocked)
                     $sql .= "where g.id not in (select microscopes_group_id from locked_microscopes_group)";
             } else {
-                $sqlFilters = "(" .  implode("|", array_map(function ($filter) use ($pdo) { $quote = preg_quote($filter); return $pdo->quote(strNormalize($quote)); }, $filters)) . ")";
+                $sqlFilters = implode("|", array_map(function ($filter) { $quote = preg_quote($filter); return strNormalize($quote); }, $filters));
+                $sqlFilters = $pdo->quote($sqlFilters);
                 $sql = "
                     SELECT groupId, coorId, labId, microId, concat from (
-                        select g.id as groupId, coordinates_id as coorId, lab.id as labId, mi.id as microId, CONCAT(GROUP_CONCAT(DISTINCT con.norm_lastname), GROUP_CONCAT(DISTINCT c.norm_name), GROUP_CONCAT(DISTINCT norm_tag), LOWER(mo.name), LOWER(ctr.name), LOWER(b.name), LOWER(cmp.name), mi.norm_descr) as concat
+                        select g.id as groupId, coordinates_id as coorId, lab.id as labId, mi.id as microId, CONCAT_WS(' ', GROUP_CONCAT(DISTINCT con.norm_lastname SEPARATOR ' '), GROUP_CONCAT(DISTINCT c.norm_name), GROUP_CONCAT(DISTINCT norm_tag), GROUP_CONCAT(DISTINCT LOWER(mo.name) SEPARATOR ' '),  GROUP_CONCAT(DISTINCT LOWER(ctr.name) SEPARATOR ' '), GROUP_CONCAT(DISTINCT LOWER(b.name) SEPARATOR ' '), GROUP_CONCAT(DISTINCT LOWER(cmp.name) SEPARATOR ' '), GROUP_CONCAT(DISTINCT mi.norm_descr SEPARATOR ' ')) as concat
                         from microscopes_group as g
                         join lab
                         on lab.id = g.lab_id
@@ -130,11 +131,11 @@
                         on con.id = mana.contact_id
                         join microscope as mi
                         on mi.microscopes_group_id = g.id
-                        join microscope_keyword as mk
+                        left join microscope_keyword as mk
                         on mk.microscope_id = mi.id
-                        join keyword as k
+                        left join keyword as k
                         on k.id = mk.keyword_id
-                        join category as c
+                        left join category as c
                         on c.id = k.category_id
                         join model as mo
                         on mo.id = mi.model_id
@@ -144,7 +145,7 @@
                         on b.id = mo.brand_id
                         join compagny as cmp
                         on cmp.id = b.compagny_id
-                        GROUP BY mi.id
+                        GROUP BY g.id
                     ) as groupsInfos where concat REGEXP $sqlFilters
                 ";
                 if(!$includeLocked)
