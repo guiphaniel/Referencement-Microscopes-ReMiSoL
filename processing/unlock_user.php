@@ -3,6 +3,7 @@
     include_once("../model/services/UserService.php");
     include_once("../view/creators/FormCreator.php");
     include_once("../view/creators/HeaderCreator.php");
+    include_once("../view/creators/FooterCreator.php");
     $header = new HeaderCreator("Validation du compte"); 
 
     if(!unlockUser())
