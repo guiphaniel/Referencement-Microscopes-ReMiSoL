@@ -45,13 +45,15 @@
     ?>
     <main>
         <?php FormCreator::handleMsg(); ?>
-        <form action="processing/reset_password_processing.php?id=<?=$_GET["id"]?>&token=<?=$_GET["token"]?>" method="post">
-            <label for="password1">Nouveau mot de passe</label>
-            <input id="password1" type="password" autocomplete="new-password" name="password1" required>
-            <label for="password2">Vérification du mot de passe</label>
-            <input id="password2" type="password" name="password2" required>
-            <input type="submit" class="bt">
-        </form>
+        <div class="form-wrapper">
+            <form action="processing/reset_password_processing.php?id=<?=$_GET["id"]?>&token=<?=$_GET["token"]?>" method="post">
+                <label for="password1">Nouveau mot de passe</label>
+                <input id="password1" type="password" autocomplete="new-password" name="password1" required>
+                <label for="password2">Vérification du mot de passe</label>
+                <input id="password2" type="password" name="password2" required>
+                <input type="submit" class="bt">
+            </form>
+        </div>
     </main>
     <?php (new FooterCreator)->create() ?>
 </body>
