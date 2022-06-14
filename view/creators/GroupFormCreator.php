@@ -133,7 +133,7 @@
                     </div>
                     <div class="input-wrapper">
                         <input id="lab-address-school" type="text" name="lab[address][school]" <?=$this->valueOf($lab?->getAddress()->getSchool())?> placeholder=" ">
-                        <label for="lab-address-school">Université / École</label>
+                        <label for="lab-address-school">Université / École<span class="tooltip" data-tooltip-content="Si votre laboratoire / service est sous la tutelle d'une université / école, merci de préciser laquelle."></span></label>
                     </div>
                     <div class="input-wrapper">
                         <input id="lab-address-street" type="text" name="lab[address][street]" autocomplete="address-line1" <?=$this->valueOf($lab?->getAddress()->getStreet())?> placeholder=" " required>
