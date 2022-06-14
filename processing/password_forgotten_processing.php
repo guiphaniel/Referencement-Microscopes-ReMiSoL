@@ -17,6 +17,12 @@
 
     if ($user) {
         $token = UserService::getInstance()->lockUser($user);
+
+        if(!isset($token)) {
+            $_SESSION["form"]["errorMsg"] = "Votre compte est actuellement en attente de validation.\n Merci de vous assurer que vous n'avez pas déjà reçu un précédent mail de notre part vous permettant de valider votre compte.\n Sinon, nous vous invitons à <a href='/contact.php'>nous contacter</a>.";
+            redirect("/password_forgotten.php");
+        }
+
         $id = $user->getId();
 
         // send reset mail
@@ -25,6 +31,6 @@
         sendEmail($user->getEmail(), $subject, $content);
     }
 
-    $_SESSION["form"]["infoMsg"] = "Nous avons bien enregistré votre demande de réinitialisation de mot de passe. Si le courriel que vous nous avez communiqué correspond à un compte enregistré sur " . WEBSITE_URL . ", un message vous a été envoyé.";
+    $_SESSION["form"]["infoMsg"] = "Nous avons bien enregistré votre demande de réinitialisation de mot de passe. Si le courriel que vous nous avez communiqué correspond à un compte existant, un message vous a été envoyé.";
     redirect("/password_forgotten.php");
 
