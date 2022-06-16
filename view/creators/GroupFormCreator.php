@@ -194,7 +194,7 @@
                                 <?php endforeach; ?>
                         </select>
                         <div class="input-wrapper">
-                            <input id="contact-phone-<?=$id?>" type="text" name="contacts[<?=$id?>][phoneNum]" autocomplete="tel-national" <?=$this->valueOf($contact?->getPhoneNum())?> placeholder=" " required>
+                            <input id="contact-phone-<?=$id?>" type="text" name="contacts[<?=$id?>][phoneNum]" autocomplete="tel-national" pattern="0?\d{9}" <?=$this->valueOf($contact?->getPhoneNum())?> placeholder=" " required>
                             <label for="contact-phone-<?=$id?>">Téléphone</label>
                         </div>
                     </div>
