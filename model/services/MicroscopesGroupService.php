@@ -4,6 +4,7 @@
     include_once(__DIR__ . "/../entities/User.php");
     include_once(__DIR__ . "/../services/ContactService.php");
     include_once(__DIR__ . "/../../utils/normalize_utf8_string.php");
+    include_once(__DIR__ . "/../../utils/send_email.php");
     
     spl_autoload_register(function ($class_name) {
         include $class_name . '.php';
@@ -299,6 +300,14 @@
 
             $id = $this->groupToId($group);
             $pdo->exec("DELETE FROM locked_microscopes_group WHERE microscopes_group_id = $id");
+
+            $owner = $this->findGroupOwner($group);
+
+            $subject = "[RéMiSoL] Validation de votre fiche";
+        
+            $content = "Bonjour,\n\nNous avons le plaisir de vous informer que votre fiche a été validée ! Elle est désormais visible pour tous les visiteurs du site.\n\nA bientôt,\n\nL'équipe de " . WEBSITE_URL;
+
+            sendEmail($owner->getEmail(), $subject, $content);
         }
 
         //override so images and coordinates (1-1) are deleted too
