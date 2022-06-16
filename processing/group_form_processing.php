@@ -193,8 +193,6 @@
     $subject = "[RéMiSoL] Nouvelle fiche";
     $content = "Bonjour,\n\nUne nouvelle fiche a été créée par {$_SESSION["user"]["firstname"]} {$_SESSION["user"]["lastname"]} ({$_SESSION["user"]["email"]}).\n\nPour l'administrer, suivez le lien suivant : https://" . WEBSITE_URL . "/group-details.php?id=$groupId.";
 
-    foreach (UserService::getInstance()->findAllAdmins() as $admin) {
-        sendEmail($admin->getEmail(), $subject, $content);
-    }
+    sendEmail(WEB_MASTER_EMAIL, $subject, $content);
     
     redirect("/account.php");
