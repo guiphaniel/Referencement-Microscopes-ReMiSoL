@@ -26,7 +26,7 @@
     }
 
     if($token != $_GET["token"])
-        redirect("/errors/422.php");
+        redirect("/status/422.php");
 
     include_once("view/creators/HeaderCreator.php");
     include_once("view/creators/FooterCreator.php");

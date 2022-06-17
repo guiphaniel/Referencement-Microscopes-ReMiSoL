@@ -7,7 +7,7 @@
     $header = new HeaderCreator("Validation du compte"); 
 
     if(!unlockUser())
-        redirect("/errors/422.php");
+        redirect("/status/422.php");
     
     function unlockUser() {
         if(empty($_GET["id"]) || empty($_GET["token"]))
