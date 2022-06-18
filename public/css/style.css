@@ -526,7 +526,7 @@ footer nav .active {
 }
 
 .form-wrapper a {
-    margin-bottom: var(--global-margin-2);
+    padding: var(--global-padding-2);
 }
 
 .form-wrapper form {
