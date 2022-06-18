@@ -139,10 +139,10 @@
                     continue;
                 }
 
-                $service = (get_class($entity) . "Service")::getInstance();
+                $service = ($class . "Service")::getInstance();
                 $id = $service->save($entity);
 
-                if($class == "Microscope") // microscope is a composition (with groups), so we need to bind it to the group
+                if($class == "Microscope") // microscope is a composition with group, but it doesn't know its group so we need to bind them
                     $service->bind($id, $parentId);
             }
 
@@ -154,12 +154,11 @@
 
             foreach ($toDelete as $entity) {
                 $class = get_class($entity);
-                if($class == "Contact" || $class == "Keyword" || $class == "Model" || $class == "Controller") { // those classes are aggregations...
-                    $service = (get_class($entity) . "Service")::getInstance();
+                $service = ($class . "Service")::getInstance();
+                if($class == "Contact" || $class == "Keyword") { // those classes are aggregations...
                     $service->unbind($entity->getId(), $parentId);
                 } else {
-                    $service = get_class($entity) . "Service";
-                    $service::getInstance()->delete($entity);
+                    $service->delete($entity);
                 }
             }
         }
@@ -167,7 +166,7 @@
         /** Use this function for aggregations. Save the entity in database if it doesn't exist yet, then bind the parent to it. */
         protected function saveAndBind($parentId, $entity) {
             $class = get_class($entity);
-            $service = (get_class($entity) . "Service")::getInstance();
+            $service = ($class . "Service")::getInstance();
             $method = "get" . $class . "Id";
             $id = call_user_func_array(array($service, $method), array($entity));
 
