@@ -50,28 +50,6 @@ function createContentElement(type, textContent) {
 	return elem;
 }
 
-function createInputWrapper(inputId, inputName, labelContent) {
-    let inputWrapper = document.createElement("div");
-    inputWrapper.className = "input-wrapper";    
-    
-    let input = document.createElement("input");
-    input.id = inputId;
-    input.className = "ucfirst";
-    input.type = "text";
-    input.name = inputName;
-    input.placeholder = " ";
-    input.required = true;
-
-    let label = document.createElement("label");
-    label.for = input.id;
-    label.textContent = labelContent;
-    
-    inputWrapper.appendChild(input);
-    inputWrapper.appendChild(label);
-
-    return inputWrapper;
-}
-
 function createModelInputWrapper(cmpId, brandId, modelId) {
     return createInputRmWrapper(`model-${cmpId}-${brandId}-${modelId}`, `models[${cmpId}][${brandId}][${modelId}]`, "Modèle");
 }
