@@ -571,6 +571,7 @@ footer nav .active {
 {
     top: -1.5em;
     color: white;
+    pointer-events: all;
     transition: all ease-in-out var(--trans-dur);
 }
 
