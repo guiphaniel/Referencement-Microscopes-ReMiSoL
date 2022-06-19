@@ -77,7 +77,7 @@
                 <div class="bt rm-bt">Supprimer le compte</div>
             </form>
             </div>
-            <script src="public/js/password_validation.js"></script>
+            <script src="public/js/password_validation.min.js"></script>
         <?php 
         }
     }

@@ -25,7 +25,7 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/style.min.css">
     <link rel="preload" as="font" href="/public/fonts/OpenSans-ExtraBold.woff2" type="font/woff2" crossorigin="anonymous">
     <link rel="preload" as="font" href="/public/fonts/MontSerrat.woff2" type="font/woff2" crossorigin="anonymous">
     <link rel="stylesheet" href="/public/css/MarkerCluster.css">
@@ -41,7 +41,7 @@
         ?>
     </main>
     <?php (new FooterCreator)->create() ?>
-    <script src="public/js/form.js"></script>
-    <script src="public/js/map.js"></script>
+    <script src="public/js/form.min.js"></script>
+    <script src="public/js/map.min.js"></script>
 </body>
 </html>
