@@ -46,7 +46,8 @@
     ?>
     <main>
         <div class="infos">
-            <p>Bienvenue sur notre site ! Que vous soyez chercheur, ingénieur, ou technicien, nous vous aiderons à référencer votre matériel à l'échelle nationale, et à trouver celui dont vous avez besoin.</p>
+            <p>Bienvenue sur notre site de référencement des microscopes champ proche des territoires Français, Belge et Suisse !</p>
+            <p>Que vous soyez chercheur, ingénieur, ou technicien, nous vous aiderons à référencer votre matériel, et à trouver une équipement ou une thématique proche de chez vous.</p>
         </div>
         <div class="aside-wrapper column-reverse">
             <aside>

@@ -68,7 +68,7 @@
         contrat est une licence de logiciel libre issue d'une
         concertation entre ses auteurs afin que le respect de deux grands
         principes préside à sa rédaction:</p>
-        <ul>
+        <ul class="decorated-list">
         <li>
         d'une part, le respect des principes de diffusion des logiciels libres:
         accès au code  source, droits étendus conférés
@@ -314,7 +314,7 @@
             par le Licencié des termes du Contrat est réputée
             acquise du fait du premier des faits suivants:
             </p>
-            <ul>
+            <ul class="decorated-list">
             <li> (i)
             le chargement du Logiciel par tout moyen notamment par
             téléchargement à partir d'un serveur
@@ -397,7 +397,7 @@
             Licencié est autorisé à utiliser le Logiciel,
             sans restriction quant aux domaines d'application, étant
             ci-après précisé que cela comporte:</p>
-            <ol>
+            <ol class="decorated-list">
             <li><p>la
             reproduction permanente ou provisoire du Logiciel en tout ou partie
             par tout moyen et sous toute forme. 
@@ -476,7 +476,7 @@
             conformes du Logiciel, sous forme de Code Source ou de Code Objet,
                 à condition que cette distribution respecte les
                 dispositions du Contrat dans leur totalité et soit accompagnée:</p>
-            <ol>
+            <ol class="decorated-list">
             <li><p>d'un
             exemplaire du Contrat,</p></li>
             <li><p>d'un
@@ -518,7 +518,7 @@
                 respecte les dispositions du Contrat dans leur totalité et soit
             accompagnée: 
             </p>
-            <ol>
+            <ol class="decorated-list">
             <li><p>d'un
                 exemplaire du Contrat,</p></li>
                 <li>
@@ -556,7 +556,7 @@
                 nécessité une modification du Code Source le licencié s'engage à ce
                 que:
                 </p>
-                <ol>
+                <ol class="decorated-list">
                 <li> le Logiciel Modifié 
                 correspondant à cette modification soit régi par le
                 présent Contrat,</li>
@@ -658,7 +658,7 @@
                 <div class="subclause">
             <p>
                 Le Licencié s'engage expressément:</p>
-            <ol>
+            <ol class="decorated-list">
                 <li>
         <p>à
             ne pas supprimer ou modifier de quelque manière que ce soit

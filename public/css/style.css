@@ -81,6 +81,16 @@ body {
 ol, ul {
 	list-style: none;
 }
+.decorated-list {
+    margin-left: 40px;
+    margin-bottom: var(--global-margin-1);
+}
+ul.decorated-list {
+    list-style: circle;
+}
+ol.decorated-list {
+    list-style: auto;
+}
 blockquote, q {
 	quotes: none;
 }
