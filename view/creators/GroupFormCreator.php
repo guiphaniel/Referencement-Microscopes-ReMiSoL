@@ -117,7 +117,7 @@
                 <address>
                     <div class="input-wrapper">
                         <input id="lab-name" type="text" name="lab[name]" autocomplete="organization" <?=$this->valueOf($lab?->getName())?> placeholder=" " required>
-                        <label for="lab-name">Nom du laboratoire</label>
+                        <label for="lab-name" class="label-tooltip">Nom du laboratoire<span class="tooltip" data-tooltip-content="En toutes lettres."></span></label>
                     </div>
                     <div class="select-input">
                         <select name="lab[type]" id="lab-type" required>
@@ -133,7 +133,7 @@
                     </div>
                     <div class="input-wrapper">
                         <input id="lab-address-school" type="text" name="lab[address][school]" <?=$this->valueOf($lab?->getAddress()->getSchool())?> placeholder=" ">
-                        <label for="lab-address-school">Université / École<span class="tooltip" data-tooltip-content="Si votre laboratoire / service est sous la tutelle d'une université / école, merci de préciser laquelle."></span></label>
+                        <label for="lab-address-school" class="label-tooltip">Université / École<span class="tooltip" data-tooltip-content="Si votre laboratoire / service est sous la tutelle d'une université / école, merci de préciser laquelle."></span></label>
                     </div>
                     <div class="input-wrapper">
                         <input id="lab-address-street" type="text" name="lab[address][street]" autocomplete="address-line1" <?=$this->valueOf($lab?->getAddress()->getStreet())?> placeholder=" " required>
@@ -157,7 +157,7 @@
                     </div>
                     <div class="input-wrapper">
                         <input id="lab-website" type="url" name="lab[website]" autocomplete="url" <?=$this->valueOf($lab?->getWebsite())?> placeholder=" " required>
-                        <label for="lab-website">Site web</label>
+                        <label for="lab-website" class="label-tooltip">Site web<span class="tooltip" data-tooltip-content="Renseignez le lien de votre laboratoire / service."></span></label>
                     </div>
                 </address>
             </fieldset>   
@@ -297,7 +297,7 @@
             </div>
             <div class="input-wrapper">
                 <input id="micro-rate-<?=$id?>" type="url" name="micros[<?=$id?>][rate]" <?=$this->valueOf($micro?->getRate())?> autocomplete="url" placeholder=" ">
-                <label for="micro-rate-<?=$id?>">Tarification<span class="tooltip" data-tooltip-content="Si vous proposez une tarification pour votre matériel, merci de fournir un lien internet vers celle-ci."></span></label>
+                <label for="micro-rate-<?=$id?>" class="label-tooltip">Tarification<span class="tooltip" data-tooltip-content="Si vous proposez une tarification pour votre matériel, merci de fournir un lien internet vers celle-ci."></span></label>
             </div>
             <div class="select-wrapper">
                 <label for="micro-access-<?=$id?>">Ouvert aux</label>
