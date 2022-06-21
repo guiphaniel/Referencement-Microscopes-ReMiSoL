@@ -20,7 +20,7 @@
 
     include_once("view/creators/HeaderCreator.php");
     include_once("view/creators/FooterCreator.php");
-    $header = new HeaderCreator("Recherche", htmlspecialchars($_GET["filters"]??""));
+    $header = new HeaderCreator("Recherche", $_GET["filters"]??"");
 ?>
 <!DOCTYPE html>
 <html lang="fr">
