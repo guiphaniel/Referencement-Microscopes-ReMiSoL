@@ -68,6 +68,14 @@
             </ul>
         </div>
         <div class="api-wrapper">
+            <h3>/list_compagnies</h3>
+            <p>Retourne toutes les sociétés.</p>
+            <h4>Paramètres</h4>
+            <p>Aucun</p>
+            <h4>Exemple</h4>
+            <code>/api/v1/list_compagnies.php</code>
+        </div>
+        <div class="api-wrapper">
             <h3>/list_brands</h3>
             <p>Retourne toutes les marques, ou les marques d'une société donnée.</p>
             <h4>Paramètres</h4>
