@@ -100,7 +100,7 @@
                             <h3><?= sizeof($micros) > 1 && $this->microId === null ? "Microscope n°{$id} - " : ""?> <?= htmlspecialchars($name) . " (" . $type . ")"?></h3>
                             <img class="micro-img" src="<?=$imgPath?>" alt="Microscope <?=htmlspecialchars($name)?>">
                             <div>
-                                <p>Description : <?=htmlspecialchars($micro->getDescr())?></p>
+                                <p>Description : <?=nl2br(htmlspecialchars($micro->getDescr()))?></p>
                                 <?php if(!empty($micro->getRate())) : ?>
                                     <p>Tarification : <a href="<?=htmlspecialchars($micro->getRate())?>" target="_blank"><?=htmlspecialchars($micro->getRate())?></a></p>
                                 <?php endif; ?>
