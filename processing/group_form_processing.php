@@ -50,10 +50,10 @@
         }
     }
 
-    //if the user is modify an existing group, check he's indeed the owner of it
+    //if the user is modify an existing group, check he's indeed the owner of it or an admin
     if(isset($_POST["id"])) {
         $user = MicroscopesGroupService::getInstance()->findGroupOwnerByGroupId($_POST["id"]);
-        if(!isset($user) || !($user->getId() == $_SESSION["user"]["id"] || $user->isAdmin())) {
+        if(!isset($user) || !($user->getId() == $_SESSION["user"]["id"] || $_SESSION["user"]["admin"])) {
             $_SESSION["form"]["errorMsg"] = "Vous n'êtes pas autorisé à modifier ce groupe";
             redirect("/form.php");
         }
