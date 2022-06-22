@@ -535,7 +535,7 @@ footer nav .active {
     align-items: center;
 }
 
-.form-wrapper a {
+.form-wrapper > a {
     padding: var(--global-padding-2);
 }
 
