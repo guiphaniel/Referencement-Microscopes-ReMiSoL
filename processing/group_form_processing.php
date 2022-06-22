@@ -183,10 +183,14 @@
     if(isset($_POST["id"])) {
         $groupId = $_POST["id"];
         // ...and edited by an admin, unlock the group
+        $microscopesGroupService = MicroscopesGroupService::getInstance();
         if($_SESSION["user"]["admin"])
-            MicroscopesGroupService::getInstance()->unlock($groupId);
+            $microscopesGroupService->unlock($groupId);
 
-        redirect("/group-details.php?id=$groupId");
+        if($microscopesGroupService->isLocked($groupId))
+            redirect("/account.php");
+        else
+            redirect("/group-details.php?id=$groupId");
     }
 
     // else, send an email to all the admins
