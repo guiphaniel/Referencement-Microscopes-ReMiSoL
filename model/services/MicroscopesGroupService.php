@@ -122,7 +122,7 @@
                 $sqlFilters = $pdo->quote($sqlFilters);
                 $sql = "
                     SELECT groupId, coorId, labId, microId, concat from (
-                        select g.id as groupId, coordinates_id as coorId, lab.id as labId, mi.id as microId, CONCAT_WS(' ', GROUP_CONCAT(DISTINCT con.norm_lastname SEPARATOR ' '), GROUP_CONCAT(DISTINCT c.norm_name), GROUP_CONCAT(DISTINCT norm_tag), GROUP_CONCAT(DISTINCT LOWER(mo.name) SEPARATOR ' '),  GROUP_CONCAT(DISTINCT LOWER(ctr.name) SEPARATOR ' '), GROUP_CONCAT(DISTINCT LOWER(b.name) SEPARATOR ' '), GROUP_CONCAT(DISTINCT LOWER(cmp.name) SEPARATOR ' '), GROUP_CONCAT(DISTINCT mi.norm_descr SEPARATOR ' ')) as concat
+                        select g.id as groupId, coordinates_id as coorId, lab.id as labId, mi.id as microId, CONCAT_WS(' ', GROUP_CONCAT(DISTINCT con.norm_lastname SEPARATOR ' '), GROUP_CONCAT(DISTINCT c.norm_name), GROUP_CONCAT(DISTINCT norm_tag), LOWER(mo.name),  LOWER(ctr.name), LOWER(b.name), LOWER(cmp.name), mi.norm_descr) as concat
                         from microscopes_group as g
                         join lab
                         on lab.id = g.lab_id
@@ -146,7 +146,7 @@
                         on b.id = mo.brand_id
                         join compagny as cmp
                         on cmp.id = b.compagny_id
-                        GROUP BY g.id
+                        GROUP BY mi.id
                     ) as groupsInfos where concat REGEXP $sqlFilters
                 ";
                 if(!$includeLocked)
