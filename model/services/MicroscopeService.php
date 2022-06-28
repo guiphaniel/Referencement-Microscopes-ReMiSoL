@@ -133,11 +133,11 @@
                     on con.id = mana.contact_id
                     join microscope as mi
                     on mi.microscopes_group_id = g.id
-                    join microscope_keyword as mk
+                    left join microscope_keyword as mk
                     on mk.microscope_id = mi.id
-                    join keyword as k
+                    left join keyword as k
                     on k.id = mk.keyword_id
-                    join category as c
+                    left join category as c
                     on c.id = k.category_id
                     join model as mo
                     on mo.id = mi.model_id
@@ -151,8 +151,8 @@
                     where concat REGEXP $sqlFilters
                 ";
                 if(MY_DBMS == DBMS::SQLite) {
-                    str_replace(" SEPARATOR", ",", $sql);
-                    str_replace("DISTINCT ", "", $sql);
+                    $sql = str_replace(" SEPARATOR", ",", $sql);
+                    $sql = str_replace("DISTINCT ", "", $sql);
                 }
                 if(!$includeLocked)
                     $sql .= " and microId not in (select m.id as microId
@@ -224,8 +224,8 @@
                     where concat REGEXP $sqlFilters
                 ";
                 if(MY_DBMS == DBMS::SQLite) {
-                    str_replace(" SEPARATOR", ",", $sql);
-                    str_replace("DISTINCT ", "", $sql);
+                    $sql = str_replace(" SEPARATOR", ",", $sql);
+                    $sql = str_replace("DISTINCT ", "", $sql);
                 }
                 if(!$includeLocked)
                     $sql .= " and microId not in (select m.id as microId

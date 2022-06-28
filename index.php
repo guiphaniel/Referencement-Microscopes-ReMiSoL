@@ -32,7 +32,7 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/style.min.css">
     <link rel="preload" as="font" href="/public/fonts/OpenSans-ExtraBold.woff2" type="font/woff2" crossorigin="anonymous">
     <link rel="preload" as="font" href="/public/fonts/MontSerrat.woff2" type="font/woff2" crossorigin="anonymous">
     <link rel="stylesheet" href="/public/css/MarkerCluster.css">
@@ -46,7 +46,8 @@
     ?>
     <main>
         <div class="infos">
-            <p>Bienvenue sur notre site ! Que vous soyez chercheur, ingénieur, ou technicien, nous vous aiderons à référencer votre matériel à l'échelle nationale, et à trouver celui dont vous avez besoin.</p>
+            <p>Bienvenue sur notre site de référencement des microscopes champ proche des territoires Français, Belge et Suisse !</p>
+            <p>Que vous soyez chercheur, ingénieur, ou technicien, nous vous aiderons à référencer votre matériel, et à trouver une équipement ou une thématique proche de chez vous.</p>
         </div>
         <div class="aside-wrapper column-reverse">
             <aside>
@@ -92,6 +93,6 @@
         </div>
     </main>
     <?php (new FooterCreator)->create() ?>
-    <script src="public/js/map.js"></script>
+    <script src="public/js/map.min.js"></script>
 </body>
 </html>

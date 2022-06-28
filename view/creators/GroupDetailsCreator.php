@@ -57,11 +57,14 @@
                     <p>Site internet : <a href="<?=htmlspecialchars($this->group->getLab()->getWebsite())?>" target="_blank"><?= htmlspecialchars($this->group->getLab()->getWebsite())?></a></p>
                 </section>
                 <section>
-                    <h2>Référent·e·s</h2>
+                    <?php $contacts = $this->group->getContacts() ?>
+                    <h2>Référent<?= sizeof($contacts) > 1 ? "·e·s" : ""?></h2>
                     <div class="contacts-wrapper">
-                        <?php $nb = 1; foreach ($this->group->getContacts() as $id => $contact) : ?>
+                        <?php $nb = 1; foreach ($contacts as $id => $contact) : ?>
                             <address class="contact-wrapper">
-                                <h3>Référent·e n° <?=$nb++?></h3>
+                                <?php if(sizeof($contacts) > 1): ?>
+                                    <h3>Référent·e n° <?=$nb++?></h3>
+                                <?php endif; ?>
                                 <p><?=htmlspecialchars($contact->getFirstname() . ' ' . $contact->getLastname() . " (" . $contact->getRole() .")")?></p>
                                 <p>Email : <a href="mailto:<?=htmlspecialchars($contact->getEmail())?>"><?=htmlspecialchars($contact->getEmail())?></a></p>
                                 <?php $phone = $contact->getPhoneCode() . $contact->getPhoneNum(); ?>
@@ -95,9 +98,11 @@
                         ?>
                         <section class="micro-section">
                             <h3><?= sizeof($micros) > 1 && $this->microId === null ? "Microscope n°{$id} - " : ""?> <?= htmlspecialchars($name) . " (" . $type . ")"?></h3>
-                            <img class="micro-img" src="<?=$imgPath?>" alt="Microscope <?=htmlspecialchars($name)?>">
+                            <?php if(!str_contains($imgPath, "default")): ?>
+                                <img class="micro-img" src="<?=$imgPath?>" alt="Microscope <?=htmlspecialchars($name)?>">
+                            <?php endif ?>
                             <div>
-                                <p>Description : <?=htmlspecialchars($micro->getDescr())?></p>
+                                <p>Description : <?=nl2br(htmlspecialchars($micro->getDescr()))?></p>
                                 <?php if(!empty($micro->getRate())) : ?>
                                     <p>Tarification : <a href="<?=htmlspecialchars($micro->getRate())?>" target="_blank"><?=htmlspecialchars($micro->getRate())?></a></p>
                                 <?php endif; ?>

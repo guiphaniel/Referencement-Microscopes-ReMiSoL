@@ -1,5 +1,6 @@
 # Default ignored files
 .vscode/
+.VSCodeCounter/
 .idea/
 /public/img/micros/*
 !/public/img/micros/default.*

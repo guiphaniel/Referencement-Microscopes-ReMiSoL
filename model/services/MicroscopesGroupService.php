@@ -4,6 +4,7 @@
     include_once(__DIR__ . "/../entities/User.php");
     include_once(__DIR__ . "/../services/ContactService.php");
     include_once(__DIR__ . "/../../utils/normalize_utf8_string.php");
+    include_once(__DIR__ . "/../../utils/send_email.php");
     
     spl_autoload_register(function ($class_name) {
         include $class_name . '.php';
@@ -117,10 +118,11 @@
                 if(!$includeLocked)
                     $sql .= "where g.id not in (select microscopes_group_id from locked_microscopes_group)";
             } else {
-                $sqlFilters = "(" .  implode("|", array_map(function ($filter) use ($pdo) { $quote = preg_quote($filter); return $pdo->quote(strNormalize($quote)); }, $filters)) . ")";
+                $sqlFilters = implode("|", array_map(function ($filter) { $quote = preg_quote($filter); return strNormalize($quote); }, $filters));
+                $sqlFilters = $pdo->quote($sqlFilters);
                 $sql = "
                     SELECT groupId, coorId, labId, microId, concat from (
-                        select g.id as groupId, coordinates_id as coorId, lab.id as labId, mi.id as microId, CONCAT(GROUP_CONCAT(DISTINCT con.norm_lastname), GROUP_CONCAT(DISTINCT c.norm_name), GROUP_CONCAT(DISTINCT norm_tag), LOWER(mo.name), LOWER(ctr.name), LOWER(b.name), LOWER(cmp.name), mi.norm_descr) as concat
+                        select g.id as groupId, coordinates_id as coorId, lab.id as labId, mi.id as microId, CONCAT_WS(' ', GROUP_CONCAT(DISTINCT con.norm_lastname SEPARATOR ' '), GROUP_CONCAT(DISTINCT c.norm_name), GROUP_CONCAT(DISTINCT norm_tag), LOWER(mo.name),  LOWER(ctr.name), LOWER(b.name), LOWER(cmp.name), mi.norm_descr) as concat
                         from microscopes_group as g
                         join lab
                         on lab.id = g.lab_id
@@ -130,11 +132,11 @@
                         on con.id = mana.contact_id
                         join microscope as mi
                         on mi.microscopes_group_id = g.id
-                        join microscope_keyword as mk
+                        left join microscope_keyword as mk
                         on mk.microscope_id = mi.id
-                        join keyword as k
+                        left join keyword as k
                         on k.id = mk.keyword_id
-                        join category as c
+                        left join category as c
                         on c.id = k.category_id
                         join model as mo
                         on mo.id = mi.model_id
@@ -147,6 +149,10 @@
                         GROUP BY mi.id
                     ) as groupsInfos where concat REGEXP $sqlFilters
                 ";
+                if(MY_DBMS == DBMS::SQLite) {
+                    $sql = str_replace(" SEPARATOR", ",", $sql);
+                    $sql = str_replace("DISTINCT ", "", $sql);
+                }
                 if(!$includeLocked)
                     $sql .= "and groupId not in (select microscopes_group_id from locked_microscopes_group)";
             }
@@ -298,6 +304,14 @@
 
             $id = $this->groupToId($group);
             $pdo->exec("DELETE FROM locked_microscopes_group WHERE microscopes_group_id = $id");
+
+            $owner = $this->findGroupOwner($group);
+
+            $subject = "[RéMiSoL] Validation de votre fiche";
+        
+            $content = "Bonjour,\n\nNous avons le plaisir de vous informer que votre fiche a été validée ! Elle est désormais visible pour tous les visiteurs du site.\n\nA bientôt,\n\nL'équipe de " . WEBSITE_URL;
+
+            sendEmail($owner->getEmail(), $subject, $content);
         }
 
         //override so images and coordinates (1-1) are deleted too

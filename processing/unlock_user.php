@@ -7,7 +7,7 @@
     $header = new HeaderCreator("Validation du compte"); 
 
     if(!unlockUser())
-        redirect("/errors/422.php");
+        redirect("/status/422.php");
     
     function unlockUser() {
         if(empty($_GET["id"]) || empty($_GET["token"]))
@@ -40,7 +40,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Page permettant de valider son compte suite à l'inscription.">
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/style.min.css">
     <link rel="preload" as="font" href="/public/fonts/OpenSans-ExtraBold.woff2" type="font/woff2" crossorigin="anonymous">
     <link rel="preload" as="font" href="/public/fonts/MontSerrat.woff2" type="font/woff2" crossorigin="anonymous">
     <title>Validation du compte</title>

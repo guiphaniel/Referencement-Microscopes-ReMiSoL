@@ -9,6 +9,10 @@ function CONCAT(...$strings) {
     return implode("", $strings);
 }
 
+function CONCAT_WS($separator, ...$strings) {
+    return implode($separator, $strings);
+}
+
 if(MY_DBMS == DBMS::SQLite) {
     $dsn = 'sqlite:' . __DIR__ . '/database.db';
 
@@ -22,6 +26,7 @@ if(MY_DBMS == DBMS::SQLite) {
     $pdo->exec( 'PRAGMA foreign_keys = ON;' );
     $pdo->sqliteCreateFunction("REGEXP", "REGEXP", 2);
     $pdo->sqliteCreateFunction("CONCAT", "CONCAT");
+    $pdo->sqliteCreateFunction("CONCAT_WS", "CONCAT_WS");
 }
 else if(MY_DBMS == DBMS::MySQL) {
     $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME;

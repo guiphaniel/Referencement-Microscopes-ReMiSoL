@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Documentation de l'API, avec les conditions d'utilisation et des exemples.">
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/style.min.css">
     <link rel="preload" as="font" href="/public/fonts/OpenSans-ExtraBold.woff2" type="font/woff2" crossorigin="anonymous">
     <link rel="preload" as="font" href="/public/fonts/MontSerrat.woff2" type="font/woff2" crossorigin="anonymous">
     <title>API</title>
@@ -66,6 +66,14 @@
                 <li><code>/api/v1/search.php?filters=Bruker</code></li>
                 <li><code>/api/v1/search.php?filters[]=Bruker&filters[]=basse temperature</code></li>
             </ul>
+        </div>
+        <div class="api-wrapper">
+            <h3>/list_compagnies</h3>
+            <p>Retourne toutes les sociétés.</p>
+            <h4>Paramètres</h4>
+            <p>Aucun</p>
+            <h4>Exemple</h4>
+            <code>/api/v1/list_compagnies.php</code>
         </div>
         <div class="api-wrapper">
             <h3>/list_brands</h3>

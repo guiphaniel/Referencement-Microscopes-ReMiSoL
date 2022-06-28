@@ -6,10 +6,15 @@ RewriteRule ^(.*)$ https://guilhem.davidalbertini.fr/$1 [R=301,L]
 # CheckSpelling off
 CheckSpelling off
 
-#Custom errors pages
+#Custom status pages
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-ErrorDocument 404 /errors/404.php
-ErrorDocument 422 /errors/422.php
+ErrorDocument 404 /status/404.php
+ErrorDocument 422 /status/422.php
 RemoveType x-mapp-php4 .html
+
+# gzip
+<ifmodule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
+</ifmodule>
