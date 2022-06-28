@@ -149,6 +149,10 @@
                         GROUP BY mi.id
                     ) as groupsInfos where concat REGEXP $sqlFilters
                 ";
+                if(MY_DBMS == DBMS::SQLite) {
+                    $sql = str_replace(" SEPARATOR", ",", $sql);
+                    $sql = str_replace("DISTINCT ", "", $sql);
+                }
                 if(!$includeLocked)
                     $sql .= "and groupId not in (select microscopes_group_id from locked_microscopes_group)";
             }

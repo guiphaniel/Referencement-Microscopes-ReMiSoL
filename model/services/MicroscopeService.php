@@ -151,8 +151,8 @@
                     where concat REGEXP $sqlFilters
                 ";
                 if(MY_DBMS == DBMS::SQLite) {
-                    str_replace(" SEPARATOR", ",", $sql);
-                    str_replace("DISTINCT ", "", $sql);
+                    $sql = str_replace(" SEPARATOR", ",", $sql);
+                    $sql = str_replace("DISTINCT ", "", $sql);
                 }
                 if(!$includeLocked)
                     $sql .= " and microId not in (select m.id as microId
@@ -224,8 +224,8 @@
                     where concat REGEXP $sqlFilters
                 ";
                 if(MY_DBMS == DBMS::SQLite) {
-                    str_replace(" SEPARATOR", ",", $sql);
-                    str_replace("DISTINCT ", "", $sql);
+                    $sql = str_replace(" SEPARATOR", ",", $sql);
+                    $sql = str_replace("DISTINCT ", "", $sql);
                 }
                 if(!$includeLocked)
                     $sql .= " and microId not in (select m.id as microId
