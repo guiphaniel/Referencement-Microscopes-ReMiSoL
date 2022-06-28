@@ -55,7 +55,7 @@
         </p>
         <h2>Droits d'auteur</h2>
         <p>
-            Ce site est protégé par la licence CECILL-C. Il doit rester open-souce et sous cette licence et vous devez citer Guilhem RICHAUD.
+            Ce site est protégé par la licence CECILL-C. Il doit rester open-source et sous cette licence et vous devez citer Guilhem RICHAUD.
         </p>
         <p>
             Le code source du site est accessible sur <a href="https://github.com/guiphaniel/Referencement-Microscopes-ReMiSoL">GitHub</a>
