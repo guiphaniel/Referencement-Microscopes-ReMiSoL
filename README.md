@@ -25,7 +25,7 @@ Ce site est protégé par la licence CECILL-C. Il doit rester open-source et sou
 
 Si vous souhaitez apporter votre contribution au projet ou utiliser le code source comme base d'un autre projet, référez-vous à la licence. 
 
-Afin de simplifier le développement en local, vous avez la possibilité d'utiliser une base de données SQLite : model/database.db. Afin de l'utiliser modifiez le fichier [config/config.php](config/config.php) en conséquence :
+Afin de simplifier le développement en local, vous avez la possibilité d'utiliser une base de données SQLite : [model/database.db](model/database.db). Afin de l'utiliser modifiez le fichier [config/config.php](config/config.php) en conséquence :
 
         const MY_DBMS = DBMS::SQLite;
 
