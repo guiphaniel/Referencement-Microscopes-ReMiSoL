@@ -98,7 +98,9 @@
                         ?>
                         <section class="micro-section">
                             <h3><?= sizeof($micros) > 1 && $this->microId === null ? "Microscope n°{$id} - " : ""?> <?= htmlspecialchars($name) . " (" . $type . ")"?></h3>
-                            <img class="micro-img" src="<?=$imgPath?>" alt="Microscope <?=htmlspecialchars($name)?>">
+                            <?php if(!str_contains($imgPath, "default")): ?>
+                                <img class="micro-img" src="<?=$imgPath?>" alt="Microscope <?=htmlspecialchars($name)?>">
+                            <?php endif ?>
                             <div>
                                 <p>Description : <?=nl2br(htmlspecialchars($micro->getDescr()))?></p>
                                 <?php if(!empty($micro->getRate())) : ?>
