@@ -16,6 +16,7 @@ Prérequis :
 
 Configuration :
 Modifiez les informations du fichier [config/config.php](config/config.php) de manière adaptée.
+Remplacez l'adresse présente dans le fichier [.htaccess](.htaccess) (ligne 4) par l'adresse de votre domaine.
 
 ## Licence
 
