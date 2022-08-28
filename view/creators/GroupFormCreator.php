@@ -140,7 +140,7 @@
                         <label for="lab-address-street">Adresse</label>
                     </div>
                     <div class="input-wrapper">
-                        <input id="lab-address-zip" type="text" name="lab[address][zipCode]"  pattern="[0-9]{5}" autocomplete="postal-code" <?=$this->valueOf($lab?->getAddress()->getZipCode())?> placeholder=" " required>
+                        <input id="lab-address-zip" type="text" name="lab[address][zipCode]"  pattern="[0-9]{4,5}" autocomplete="postal-code" <?=$this->valueOf($lab?->getAddress()->getZipCode())?> placeholder=" " required>
                         <label for="lab-address-zip">Code postal</label>
                     </div>
                     <div class="input-wrapper">
