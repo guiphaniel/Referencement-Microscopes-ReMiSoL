@@ -86,7 +86,7 @@ CREATE TABLE "address" (
 	"id"	INTEGER,
 	"school"	TEXT,
 	"street"	TEXT,
-	"zipCode"	TEXT,
+	"zip_code"	TEXT,
 	"city"	TEXT,
 	"country"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)

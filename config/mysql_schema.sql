@@ -48,7 +48,7 @@ CREATE TABLE address (
 	id	INTEGER AUTO_INCREMENT,
 	school	VARCHAR(400),
 	street	VARCHAR(400),
-	zipCode	VARCHAR(400),
+	zip_code	VARCHAR(400),
 	city	VARCHAR(400),
 	country	VARCHAR(400),
 	PRIMARY KEY(id)
