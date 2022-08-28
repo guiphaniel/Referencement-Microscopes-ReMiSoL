@@ -41,8 +41,6 @@
             } catch (\Throwable $th) {
                 if(str_contains($th->getMessage() ,"UNIQUE constraint failed"))
                     throw new Exception("Un groupe de microscopes existe déjà à cet emplacement.");
-                else
-                    throw $th;
             }
             
             // get the generated group id
