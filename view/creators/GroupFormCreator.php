@@ -324,7 +324,7 @@
                             if(browserSupportsWebp())
                                 $extension = ".webp"; 
                             else
-                                $extension = ".jpeg"; 
+                                $extension = ".jpg"; 
                 ?>
                             <div class="snapshot-wrapper">
                                 <img class="micro-snapshot" src="/public/img/micros/<?=$microId . $extension?>" alt="Microscope <?=$name?>">
