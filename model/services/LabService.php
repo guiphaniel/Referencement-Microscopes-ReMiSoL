@@ -36,7 +36,7 @@
             global $pdo;
 
             $sql = "
-                select lab.id as labId, a.id as addrId, name, type, code, website, school, street, zipCode, city, country
+                select lab.id as labId, a.id as addrId, name, type, code, website, school, street, zip_code, city, country
                 from lab
                 join address as a
                 on address_id = a.id
@@ -46,7 +46,7 @@
             $sth = $pdo->query($sql);
             $labInfos = $sth->fetch(PDO::FETCH_NAMED);
 
-            $address = (new Address($labInfos["school"], $labInfos["street"], $labInfos["zipCode"], $labInfos["city"], $labInfos["country"]))
+            $address = (new Address($labInfos["school"], $labInfos["street"], $labInfos["zip_code"], $labInfos["city"], $labInfos["country"]))
                 ->setId($labInfos["addrId"]);
             return (new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"], $labInfos["website"], $address))
                 ->setId($labInfos["labId"]);
@@ -56,7 +56,7 @@
             global $pdo;
 
             $sql = "
-                select lab.id as labId, a.id as addrId, name, type, code, website, school, street, zipCode, city, country
+                select lab.id as labId, a.id as addrId, name, type, code, website, school, street, zip_code, city, country
                 from microscopes_group as g
                 join lab
                 on lab.id = g.lab_id
@@ -68,7 +68,7 @@
             $sth = $pdo->query($sql);
             $labInfos = $sth->fetch(PDO::FETCH_NAMED);
 
-            $address = (new Address($labInfos["school"], $labInfos["street"], $labInfos["zipCode"], $labInfos["city"], $labInfos["country"]))
+            $address = (new Address($labInfos["school"], $labInfos["street"], $labInfos["zip_code"], $labInfos["city"], $labInfos["country"]))
                 ->setId($labInfos["addrId"]);
             return (new Lab($labInfos["name"], $labInfos["type"], $labInfos["code"], $labInfos["website"], $address))
                 ->setId($labInfos["labId"]);

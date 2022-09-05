@@ -259,7 +259,7 @@
             if(browserSupportsWebp())
                 $ext = ".webp"; 
             else
-                $ext = ".jpeg"; 
+                $ext = ".jpg"; 
 
             if(!$path)
                 return "/public/img/micros/default" . $ext;

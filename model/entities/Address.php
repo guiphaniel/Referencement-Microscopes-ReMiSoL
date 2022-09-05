@@ -45,7 +45,7 @@
 
         public function setZipCode($zipCode)
         {
-            if(!preg_match("/^\d{5}$/", $zipCode))
+            if(!preg_match("/^\d{4,5}$/", $zipCode))
                 throw new Exception("Veuillez saisir un code postal valide.");
 
             $this->zipCode = $zipCode;
