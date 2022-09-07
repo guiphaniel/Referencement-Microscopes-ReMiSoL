@@ -19,6 +19,13 @@ Modifiez les informations du fichier [config/config.php](config/config.php) de m
 
 Remplacez l'adresse présente dans le fichier [.htaccess](.htaccess) (ligne 4) par l'adresse de votre domaine.
 
+Exécutez le script SQL [config/mysql_schema.sql](config/mysql_schema.sql) dans votre interface SQL (phpMyAdmin...)
+
+Insérez un utilisateur administrateur dans votre base de données en executant le script suivant dans votre interface SQL (le mot de passe pour se connecter est `password`. Changez le à la première connexion dans l'onglet compte) :
+
+                INSERT INTO `user` VALUES (1,"admin","admin","admin","admin","admin@admin.fr","600000000","$2y$10$YIIBVDmuVFv7DzeJyc2ySOIIEBTOO9LieGBD6dIBHmLyLO4wgg1ym");
+                INSERT INTO `admin` VALUES (1)
+
 ## Licence
 
 Ce site est protégé par la licence CECILL-C. Il doit rester open-source et sous cette licence et vous devez citer Guilhem RICHAUD.
