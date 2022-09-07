@@ -23,8 +23,8 @@ Exécutez le script SQL [config/mysql_schema.sql](config/mysql_schema.sql) dans 
 
 Insérez un utilisateur administrateur dans votre base de données en executant le script suivant dans votre interface SQL (le mot de passe pour se connecter est `password`. Changez le à la première connexion dans l'onglet compte) :
 
-                INSERT INTO `user` VALUES (1,"admin","admin","admin","admin","admin@admin.fr","600000000","$2y$10$YIIBVDmuVFv7DzeJyc2ySOIIEBTOO9LieGBD6dIBHmLyLO4wgg1ym");
-                INSERT INTO `admin` VALUES (1)
+        INSERT INTO `user` VALUES (1,"admin","admin","admin","admin","admin@admin.fr","600000000","$2y$10$YIIBVDmuVFv7DzeJyc2ySOIIEBTOO9LieGBD6dIBHmLyLO4wgg1ym");
+        INSERT INTO `admin` VALUES (1)
 
 ## Licence
 
