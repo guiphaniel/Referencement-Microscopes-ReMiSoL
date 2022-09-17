@@ -39,7 +39,8 @@
             $this->end();
         }
 
-        function createInput($id, $name, $label, $value = null, $type="text", $required = true, $class=null) {  ?>
+        function createInput($id, $name, $label, $value = null, $type="text", $required = true, $class=null) {  
+            $value = htmlspecialchars($value)?>
             <div class="input-wrapper">
                 <input id="<?=$id?>" <?= isset($class) ? "class='$class'" : ""?> type="<?=$type?>" name="<?=$name?>" placeholder=" " <?= isset($value) ? "value='$value'" : ""?> <?=$required ? "required" : ""?>>
                 <label for="<?=$id?>"><?=$label?></label>
